@@ -1,9 +1,18 @@
 <img src="./images/logo.png" alt="Logo of the project" align="right">
 
-# 프로젝트 명
-> 프로젝트 한줄소개
+# 개발중
 
-소개...
+# valueFinder
+> 사용자의 물건에 가치를 찾아주는 개인간 경매 서비스
+
+## 소개:
+ValueFinder는 사용자들이 소유한 물건의 정확한 가치를 찾아주는 개인간 경매 서비스입니다. 많은 사람들이 소유한 물건의 가치를 모르거나 판매하기 어려워하는 경우가 있습니다. 우리는 이러한 문제를 해결하고자 ValueFinder를 개발하였습니다.
+
+>물품 등록과 경매: 사용자들은 물품을 등록하고 경매에 참여할 수 있습니다. 역경매 방식도 지원하여 판매자가 물품을 게시하면 구매자들이 경매 가격을 제시하고 최고 입찰자가 낙찰됩니다.
+
+>매물 노출과 카테고리 분류: 메인화면에서는 인기 경매 매물, 마감 임박 매물, 신규 매물 등을 볼 수 있으며, 카테고리 별로 매물을 분류하여 검색이 용이합니다.
+
+>낙찰 이후 과정: 낙찰된 사용자들은 판매자와의 거래 진행 상태를 확인하고 운송장번호를 등록할 수 있으며, 거래가 완료된 후 후기를 작성할 수 있습니다.
 
 
 
@@ -20,8 +29,11 @@
   </tbody>
 </table>
 <hr>
+
+### [요구사항 정의서](https://docs.google.com/spreadsheets/d/1c3k7rrJRm8aGR6yoAZmZ8RixZN8eySa9zoqF2jCsORs/edit#gid=0)
 ### [간트 차트](https://docs.google.com/spreadsheets/d/14Vpw906-2PBuaMtk_2xPcMcmKJ7Zt-6X10sSfAEXYeA/edit#gid=1115838130)
 ### [ERD](https://www.erdcloud.com/d/AJECkdDa5fRg4ioaw)
+
 <hr>
 
 ## 📚 목차
@@ -29,28 +41,40 @@
 * [작업 규칙](#작업-규칙)
 
 <hr>
+
 ## 작업 규칙
 
 ### 커밋, 브랜치 네이밍 룰
 
 #### 커밋
+
 :heavy_plus_sign:add : 새로운 기능에 대한 커밋
+
 :wrench:fix : 잘못된 부분 수정
+
 :bomb:build : 빌드 관련 파일 수정에 대한 커밋(application.properties, pom.xml ...)
+
 :pencil:chore : 그 외 자잘한 수정에 대한 커밋(기타 변경)
+
 :bookmark:docs : 문서 수정에 대한 커밋
+
 :boom:rm : 기능 삭제
+
 :ghost:refactor : 코드 리팩토링에 대한 커밋
+
 :cyclone:ing : 개발 중 커밋 (커밋 기준 ~~ 완료 / ~~ 미완료)
+
 :tada:complete : 기능 구현 완료에 대한 커밋
 
 ex)
 :heavy_plus_sign:add : 로그인 기능 add
+
 :cyclone:ing : 로그인 기능 완료 / redirect url 미완료
 <hr>
+
 #### 브랜치
 
-><strong>절대 main 브랜치에 push 하지 않습니다!! develop 브랜치에 push 합니다!!</strong>
+> <strong>절대 main 브랜치에 push 하지 않습니다!! develop 브랜치에 push 합니다!!</strong>
 
 ##### 브랜치 네이밍 규칙
 feature/#{리퀘스트 번호}-{기능분류}-{기능명}
@@ -105,8 +129,10 @@ git pull origin {내려받을 브랜치명}
 
 ### 코드 네이밍 룰
 
-####모든 자바 메소드명, 변수명은 카멜 케이스를 따릅니다. 
-####또한 누구나 알기 쉬운 단어를 사용합니다.
+#### 모든 자바 메소드명, 변수명은 카멜 케이스를 따릅니다. 
+
+#### 또한 누구나 알기 쉬운 단어를 사용합니다.
+
 메소드명은 동사로 네이밍합니다.
 
 :+1:
@@ -156,7 +182,4 @@ sampleCode.html
 ```
 #### 패키지명은 모두 소문자를 사용합니다.
 #### ENUM이나 상수는 대문자로 네이밍합니다.
-
-
-
 
