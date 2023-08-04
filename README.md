@@ -33,6 +33,7 @@ ValueFinder는 사용자들이 소유한 물건의 정확한 가치를 찾아주
 ### [요구사항 정의서](https://docs.google.com/spreadsheets/d/1c3k7rrJRm8aGR6yoAZmZ8RixZN8eySa9zoqF2jCsORs/edit#gid=0)
 ### [간트 차트](https://docs.google.com/spreadsheets/d/14Vpw906-2PBuaMtk_2xPcMcmKJ7Zt-6X10sSfAEXYeA/edit#gid=1115838130)
 ### [ERD](https://www.erdcloud.com/d/AJECkdDa5fRg4ioaw)
+### [화면설계](https://www.figma.com/file/4j0xwu1Sf5brnERaxpHHtr/valueFinder?type=design&mode=design&t=yU0yHCp2PAyd7yVh-0)
 
 <hr>
 
