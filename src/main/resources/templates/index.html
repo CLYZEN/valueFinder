@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 각 페이지의 CSS가 작성될 위치 -->
+<th:block layout:fragment="css">
+  <style>
+
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <!-- 배너 섹션 -->
+  <section class="py-3" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+
+          <div class="banner-blocks">
+
+            <div class="banner-ad large bg-info block-1">
+
+              <div class="swiper main-swiper">
+                <div class="swiper-wrapper">
+
+                  <div class="swiper-slide">
+                    <div class="row banner-content p-5">
+                      <div class="content-wrapper col-md-7">
+                        <div class="categories mb-3 pb-3">100% natural</div>
+                        <h3 class="banner-title">Fresh Smoothie & Summer Juice</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
+                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">shop collection</a>
+                      </div>
+                      <div class="img-wrapper col-md-5">
+                        <img src="images/product-thumb-1.png" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <div class="row banner-content p-5">
+                      <div class="content-wrapper col-md-7">
+                        <div class="categories mb-3 pb-3">100% natural</div>
+                        <h3 class="banner-title">Fresh Smoothie & Summer Juice</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
+                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">shop collection</a>
+                      </div>
+                      <div class="img-wrapper col-md-5">
+                        <img src="images/product-thumb-1.png" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="swiper-slide">
+                    <div class="row banner-content p-5">
+                      <div class="content-wrapper col-md-7">
+                        <div class="categories mb-3 pb-3">100% natural</div>
+                        <h3 class="banner-title">Heinz Tomato Ketchup</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Dignissim massa diam elementum.</p>
+                        <a href="#" class="btn btn-outline-dark btn-lg text-uppercase fs-6 rounded-1">shop collection</a>
+                      </div>
+                      <div class="img-wrapper col-md-5">
+                        <img src="images/product-thumb-2.png" class="img-fluid">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="swiper-pagination"></div>
+
+              </div>
+            </div>
+
+            <div class="banner-ad bg-success block-2" style="background:url('images/ad-image-1.png') no-repeat;background-position: right bottom">
+              <div class="row banner-content p-5">
+
+                <div class="content-wrapper col-md-7">
+                  <div class="categories sale mb-3 pb-3">20% off</div>
+                  <h3 class="banner-title">Fruits & Vegetables</h3>
+                  <a href="#" class="d-flex align-items-center nav-link">shop collection <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="banner-ad bg-danger block-3" style="background:url('images/ad-image-2.png') no-repeat;background-position: right bottom">
+              <div class="row banner-content p-5">
+
+                <div class="content-wrapper col-md-7">
+                  <div class="categories sale mb-3 pb-3">15% off</div>
+                  <h3 class="item-title">Baked Products</h3>
+                  <a href="#" class="d-flex align-items-center nav-link">shop collection <svg width="24" height="24"><use xlink:href="#arrow-right"></use></svg></a>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- 배너 섹션 -->
+
+  <!-- 인기 매물 Start -->
+  <section class="py-5">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bootstrap-tabs product-tabs">
+            <div class="tabs-header d-flex justify-content-between border-bottom my-5">
+              <h3>인기 매물</h3>
+              </nav>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+
+                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                  <!-- Card -->
+                  <div class="col">
+                    <div class="product-item">
+                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+                      <figure>
+                        <a href="product-single.html" title="Product Title">
+                          <img src="images/thumb-bananas.png"  class="tab-image">
+                        </a>
+                      </figure>
+                      <h3>Sunstar Fresh Melon Juice</h3>
+                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
+                      <span class="price">$18.00</span>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="input-group product-qty">
+                              <span class="input-group-btn">
+                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                                  </button>
+                              </span>
+                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
+                          <span class="input-group-btn">
+                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                                  </button>
+                              </span>
+                        </div>
+                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Card -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- 인기 매물 End -->
+
+  <!-- 마감 임박 매물 Start -->
+  <section class="py-5">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bootstrap-tabs product-tabs">
+            <div class="tabs-header d-flex justify-content-between border-bottom my-5">
+              <h3>마감 임박 매물</h3>
+              </nav>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+
+                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                  <!-- Card -->
+                  <div class="col">
+                    <div class="product-item">
+                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+                      <figure>
+                        <a href="product-single.html" title="Product Title">
+                          <img src="images/thumb-bananas.png"  class="tab-image">
+                        </a>
+                      </figure>
+                      <h3>Sunstar Fresh Melon Juice</h3>
+                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
+                      <span class="price">$18.00</span>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="input-group product-qty">
+                              <span class="input-group-btn">
+                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                                  </button>
+                              </span>
+                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
+                          <span class="input-group-btn">
+                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                                  </button>
+                              </span>
+                        </div>
+                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Card -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- 마감 임박 매물 End -->
+
+  <!-- 신규 매물 Start -->
+  <section class="py-5">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="bootstrap-tabs product-tabs">
+            <div class="tabs-header d-flex justify-content-between border-bottom my-5">
+              <h3>신규 매물</h3>
+              </nav>
+            </div>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
+
+                <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+                  <!-- Card -->
+                  <div class="col">
+                    <div class="product-item">
+                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+                      <figure>
+                        <a href="product-single.html" title="Product Title">
+                          <img src="images/thumb-bananas.png"  class="tab-image">
+                        </a>
+                      </figure>
+                      <h3>Sunstar Fresh Melon Juice</h3>
+                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
+                      <span class="price">$18.00</span>
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="input-group product-qty">
+                              <span class="input-group-btn">
+                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
+                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
+                                  </button>
+                              </span>
+                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
+                          <span class="input-group-btn">
+                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
+                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
+                                  </button>
+                              </span>
+                        </div>
+                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Card -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- 신규 매물 End -->
+</div>
+<!-- end s-content -->
+</div>
+
+<!-- 각 페이지의 스크립트가 작성될 위치 -->
+<th:block layout:fragment="script">
+  <script th:inline="javascript">
+  </script>
+</th:block>
+
+</html>

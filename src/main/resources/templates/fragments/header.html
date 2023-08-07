@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<!-- site header
+================================================== -->
+<header class="s-header header" th:fragment="header">
+    <div class="container-fluid">
+        <div class="row py-3 border-bottom">
+
+            <div class="col-sm-4 col-lg-3 text-center text-sm-start">
+                <div class="main-logo">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="logo" class="img-fluid">
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
+                <div class="search-bar row bg-light p-2 my-2 rounded-4">
+                    <div class="col-md-4 d-none d-md-block">
+                        <select class="form-select border-0 bg-transparent">
+                            <option>전체 카테고리</option>
+                            <option>디지털기기</option>
+                            <option>가구/인테리어</option>
+                            <option>여성의류</option>
+                            <option>남성패션/잡화</option>
+                            <option>생활가전</option>
+                            <option>생활/주방</option>
+                            <option>가공식품</option>
+                            <option>스포츠/레저</option>
+                            <option>취미/게임/음반</option>
+                            <option>뷰티/미용</option>
+                            <option>식물</option>
+                            <option>반려동물용품</option>
+                            <option>티켓/교환권</option>
+                            <option>도서</option>
+                            <option>유아도서</option>
+                            <option>기타</option>
+                        </select>
+                    </div>
+                    <div class="col-11 col-md-7">
+                        <form id="search-form" class="text-center" action="" method="">
+                            <input type="text" class="form-control border-0 bg-transparent" placeholder="검색어를 입력해주세요!"/>
+                        </form>
+                    </div>
+                    <div class="col-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                  d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
+                <div class="support-box text-end d-none d-xl-block">
+                    <h5 class="mb-0">로그인</h5>
+                </div>
+                <div class="support-box text-end d-none d-xl-block">
+                    <h5 class="mb-0">회원가입</h5>
+                </div>
+                <ul class="d-flex justify-content-end list-unstyled m-0">
+                    <li>
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <use xlink:href="#user"></use>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <use xlink:href="#heart"></use>
+                            </svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
+                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                <use xlink:href="#message"></use>
+                            </svg>
+                        </a>
+                    </li>
+
+                </ul>
+
+
+            </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row py-3">
+                <div class="d-flex  justify-content-center justify-content-sm-between align-items-center">
+                    <nav class="main-menu d-flex navbar navbar-expand-lg">
+
+                        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                                data-bs-target="#offcanvasNavbar"
+                                aria-controls="offcanvasNavbar">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                             aria-labelledby="offcanvasNavbarLabel">
+
+                            <div class="offcanvas-header justify-content-center">
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                        aria-label="Close"></button>
+                            </div>
+
+                            <div class="offcanvas-body">
+
+
+                                <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0">
+                                    <!-- 카테고리 버튼 -->
+                                    <li class="nav-item active">
+                                        <a href="#women" class="nav-link" data-bs-toggle="collapse"
+                                           data-bs-target="#collapseExample" aria-expanded="false"
+                                           aria-controls="collapseExample">카테고리 v</a>
+                                    </li>
+
+                                    <li class="nav-item active">
+                                        <a href="#women" class="nav-link">공개입찰경매</a>
+                                    </li>
+                                    <li class="nav-item dropdown">
+                                        <a href="#men" class="nav-link">비공개경매</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#kids" class="nav-link">실시간경매</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#accessories" class="nav-link">역경매</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#brand" class="nav-link">물픔등록</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="#sale" class="nav-link">관리자메뉴</a>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </nav>
+
+
+                </div>
+                <!-- 카테고리 버튼 누를 시 -->
+                <div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0 flex-row float-start"
+                            style="margin-left: 30px; padding-bottom: 3rem;">
+                            <li class="nav-item">
+                                <a href="#brand" class="nav-link">인기매물</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#sale" class="nav-link">디지털기기</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">가구/인테리어</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">여성의류</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">여성잡화</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">남성패션/잡화</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">생활가전</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">생활/주방</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">가공식품</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">스포츠/레저</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">취미/게임/음반</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">뷰티/미용</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">식물</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">반려동물용품</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">티켓/교횐권</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">도서</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">유아도서</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#blog" class="nav-link">기타</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</header>
+
+</html>
