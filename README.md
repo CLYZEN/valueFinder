@@ -30,6 +30,7 @@ ValueFinder는 사용자들이 소유한 물건의 정확한 가치를 찾아주
 </table>
 <hr>
 
+### [참고 HTML템플릿](https://s3.console.aws.amazon.com/s3/buckets/sampleview?region=ap-northeast-2&tab=properties)
 ### [요구사항 정의서](https://docs.google.com/spreadsheets/d/1c3k7rrJRm8aGR6yoAZmZ8RixZN8eySa9zoqF2jCsORs/edit#gid=0)
 ### [간트 차트](https://docs.google.com/spreadsheets/d/14Vpw906-2PBuaMtk_2xPcMcmKJ7Zt-6X10sSfAEXYeA/edit#gid=1115838130)
 ### [ERD](https://www.erdcloud.com/d/AJECkdDa5fRg4ioaw)
