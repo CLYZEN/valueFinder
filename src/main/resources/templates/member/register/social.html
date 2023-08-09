@@ -5,11 +5,25 @@
 
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
-<link rel="stylesheet" type="text/css" href="/css/memberRegister.css">
+	<link rel="stylesheet" type="text/css" href="/css/memberRegister.css">
 </th:block>
 
 <div layout:fragment="content">
-<div class="hoemtag">홈 > 카카오톡 회원가입</div>
+	<div class="sublogo">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+ 				<path
+				d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+		<a href="/" style="text-decoration: none;">홈</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+		<a href="/" style="text-decoration: none;">카카오톡연동 회원가입페이지</a>
+	</div>
 
 	<div class="form_content">
 		<div class="inner">
@@ -23,12 +37,12 @@
 				<div class="form_item adress2" id="divadress2">
 					<input type="text" id="sample6_postcode" placeholder="우편번호"><br>
 					<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-					<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+					<input type="text" id="sample6_extraAddress" placeholder="참고항목" style="width: 100px">
 				</div>
 				<div class="form_item bth" id="divbth">
 					<p>생년월일 :</p>
-					<input type="text" id="bth" name="bth" maxlength="8"
-						placeholder="생년월일 8자리를 입력해주세요 ex)19990101">
+					<input type="date" id="bth" name="bth" maxlength="8"
+						>
 				</div>
 				<div class="form_item gender" id="divgender">
 					<input type="checkbox" id="man" name="man" checked="checked"
@@ -63,6 +77,12 @@
 					</form>
 				</div>
 
+
+				<div class="form-group">
+					<div class="sign">
+						<button type="submit" class="btn btn-primary mb-3">회원가입</button>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
@@ -70,8 +90,62 @@
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
-	<script th:inline="javascript">
-		
+	<script
+		src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script>
+		function sample6_execDaumPostcode() {
+			new daum.Postcode(
+					{
+						oncomplete : function(data) {
+							// 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분.
+
+							// 각 주소의 노출 규칙에 따라 주소를 조합한다.
+							// 내려오는 변수가 값이 없는 경우엔 공백('')값을 가지므로, 이를 참고하여 분기 한다.
+							var addr = ''; // 주소 변수
+							var extraAddr = ''; // 참고항목 변수
+
+							//사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다.
+							if (data.userSelectedType === 'R') { // 사용자가 도로명 주소를 선택했을 경우
+								addr = data.roadAddress;
+							} else { // 사용자가 지번 주소를 선택했을 경우(J)
+								addr = data.jibunAddress;
+							}
+
+							// 사용자가 선택한 주소가 도로명 타입일때 참고항목을 조합한다.
+							if (data.userSelectedType === 'R') {
+								// 법정동명이 있을 경우 추가한다. (법정리는 제외)
+								// 법정동의 경우 마지막 문자가 "동/로/가"로 끝난다.
+								if (data.bname !== ''
+										&& /[동|로|가]$/g.test(data.bname)) {
+									extraAddr += data.bname;
+								}
+								// 건물명이 있고, 공동주택일 경우 추가한다.
+								if (data.buildingName !== ''
+										&& data.apartment === 'Y') {
+									extraAddr += (extraAddr !== '' ? ', '
+											+ data.buildingName
+											: data.buildingName);
+								}
+								// 표시할 참고항목이 있을 경우, 괄호까지 추가한 최종 문자열을 만든다.
+								if (extraAddr !== '') {
+									extraAddr = ' (' + extraAddr + ')';
+								}
+								// 조합된 참고항목을 해당 필드에 넣는다.
+								document.getElementById("sample6_extraAddress").value = extraAddr;
+
+							} else {
+								document.getElementById("sample6_extraAddress").value = '';
+							}
+
+							// 우편번호와 주소 정보를 해당 필드에 넣는다.
+							document.getElementById('sample6_postcode').value = data.zonecode;
+							document.getElementById("sample6_address").value = addr;
+							// 커서를 상세주소 필드로 이동한다.
+							document.getElementById("sample6_detailAddress")
+									.focus();
+						}
+					}).open();
+		}
 	</script>
 </th:block>
 

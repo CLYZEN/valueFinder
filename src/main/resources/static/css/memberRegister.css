@@ -5,6 +5,11 @@ p {
 	margin: 10px;
 }
 
+.sublogo {
+	margin: 0px 30px;
+}
+
+/* 모든 로고 css */
 
 .form_content {
 	flex: 1 1 auto;
@@ -18,7 +23,7 @@ p {
 	max-width: 100%;
 	min-height: 50px;
 	padding: 0 10px 0 45px;
-	border : 1px solid #52A8E0;
+	border : 1px solid ;
 }
 
 .content {
@@ -47,16 +52,17 @@ min-width
 768px)
 {
 .inner {
-	width: 850px;
+	width: 610px;
 	margin: 0 auto;
 }
 }
 
 
 input {
-	width: 500px;
+	width: 300px;
 	border: hidden;
-	text-align: center;
+	text-align: left;;
+	padding : 10px 10px;
 }
 
 
@@ -86,4 +92,59 @@ input {
 
 #divgender {
 	justify-content: end;
+}
+
+/* 회원가입 버튼 css */
+
+.sign {
+	text-align: center;
+}
+
+
+.sign button {
+	text-align: center;
+    width: 300px;
+    margin: 20px;
+}
+
+
+
+/* 비밀번호 찾기 css */
+
+.form_login {
+	min-height: 500px;
+	border: 1px solid #52A8E0;
+}
+
+
+ul {
+	font-size: x-small;
+	margin-top: 30px;
+}
+
+
+.find_password {
+	text-align: center;;
+	margin : 30px;
+	border : 1px solid #52A8E0;
+	border-left: hidden;
+	border-right: hidden;
+	font-size: 10px;
+	
+}
+
+
+.find_password th {
+	border : 1px solid #52A8E0;
+	background-color: #eef1f8;
+	width: 150px;
+}
+
+.find_password td {
+	border : 1px solid #52A8E0;;
+}
+
+
+.find_pw_poot {
+	text-align: center;
 }

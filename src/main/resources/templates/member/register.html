@@ -11,8 +11,24 @@
 </th:block>
 
 <div layout:fragment="content">
+	<div class="sublogo">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+ 				<path
+				d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+		<a href="/" style="text-decoration: none;">홈</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+		<a href="/" style="text-decoration: none;">회원가입</a>
+	</div>
 	<div class="form_content">
 		<div class="inner">
+
 
 
 			<div class="form_section">
@@ -53,12 +69,12 @@
 						<div class="form_item adress2" id="divadress2">
 							<input type="text" id="sample6_postcode" placeholder="우편번호"><br>
 							<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-							<input type="text" id="sample6_extraAddress" placeholder="참고항목">
+							<input type="text" id="sample6_extraAddress" placeholder="참고항목" style="width: 100px">
 						</div>
 						<div class="form_item bth" id="divbth">
 							<p>생년월일 :</p>
-							<input type="text" id="bth" name="bth" maxlength="8"
-								placeholder="생년월일 8자리를 입력해주세요 ex)19990101">
+							<input type="date" id="bth" name="bth" maxlength="8"
+								>
 						</div>
 						<div class="form_item gender" id="divgender">
 							<input type="checkbox" id="man" name="man" checked="checked"
@@ -76,8 +92,7 @@
 							<input type="text" id="bank" name="bank"
 								placeholder="계좌번호를 입력해주세요">
 							<form action="#">
-							<select name="bankadress"
-									id="bankadress">
+								<select name="bankadress" id="bankadress">
 									<option value="CHOICE">은행 선택</option>
 									<option value="KB">국민</option>
 									<option value="IBK">기업</option>
@@ -95,11 +110,16 @@
 									<option value="NJ">농협</option>
 									<option value="SU">수협</option>
 									<option value="EPOST">우체국</option>
-									
-								</select> 
+								</select>
 							</form>
 						</div>
 
+					</div>
+					
+					<div class="form-group">
+								<div class="sign">
+									<button type="submit" class="btn btn-primary mb-3">회원가입</button>
+								</div>
 					</div>
 				</div>
 			</div>
