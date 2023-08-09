@@ -1,0 +1,150 @@
+@charset "UTF-8";
+
+
+p {
+	margin: 10px;
+}
+
+.sublogo {
+	margin: 0px 30px;
+}
+
+/* 모든 로고 css */
+
+.form_content {
+	flex: 1 1 auto;
+}
+
+.form_item {
+	display: flex;
+	align-items: center;
+	position: relative;
+	box-sizing: border-box;
+	max-width: 100%;
+	min-height: 50px;
+	padding: 0 10px 0 45px;
+	border : 1px solid ;
+}
+
+.content {
+	flex: 1 1 auto;
+	padding-top: 30px;
+}
+
+.form {
+	display: flex;
+	box-sizing: border-box;
+	flex-direction: column;
+	height: 100%
+}
+
+.form_section {
+	margin-right: 20px;
+	margin-left: 20px;
+	padding-right: 0;
+	padding-left: 0;
+}
+
+@media
+(
+min-width
+:
+768px)
+{
+.inner {
+	width: 610px;
+	margin: 0 auto;
+}
+}
+
+
+input {
+	width: 300px;
+	border: hidden;
+	text-align: left;;
+	padding : 10px 10px;
+}
+
+
+.inner {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    height: 100%
+}
+
+.form_list {
+    position: relative;
+    margin-bottom: 10px;
+    border-radius: 6px;
+  
+ 
+}
+
+.form_item .id_value {
+    flex: none;
+    padding: 0 4px 0 6px;
+    font-size: 15px;
+    line-height: 22px;
+    letter-spacing: -.2px;
+    color: #767678
+}
+
+#divgender {
+	justify-content: end;
+}
+
+/* 회원가입 버튼 css */
+
+.sign {
+	text-align: center;
+}
+
+
+.sign button {
+	text-align: center;
+    width: 300px;
+    margin: 20px;
+}
+
+
+
+/* 비밀번호 찾기 css */
+
+.form_login {
+	min-height: 500px;
+	border: 1px solid #52A8E0;
+}
+
+
+ul {
+	font-size: x-small;
+	margin-top: 30px;
+}
+
+
+.find_password {
+	text-align: center;;
+	margin : 30px;
+	border : 1px solid #52A8E0;
+	border-left: hidden;
+	border-right: hidden;
+	font-size: 10px;
+	
+}
+
+
+.find_password th {
+	border : 1px solid #52A8E0;
+	background-color: #eef1f8;
+	width: 150px;
+}
+
+.find_password td {
+	border : 1px solid #52A8E0;;
+}
+
+
+.find_pw_poot {
+	text-align: center;
+}
