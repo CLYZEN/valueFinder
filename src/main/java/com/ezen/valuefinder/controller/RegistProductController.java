@@ -7,12 +7,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class RegistProductController {
 
 	@GetMapping(value = "/registproduct")
-	public String test() {
+	public String registproduct() {
 		return "/registproduct/registproduct";
 	}
 		
 	@GetMapping(value = "/reverseregistproduct")
-	public String test2() {
+	public String reverseregistproduct() {
 		return "/registproduct/reverseregistproduct";
 	}
 }
