@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+	<style>
+textarea {
+	height: 345px;
+	border: none;
+	resize: none;
+}
+
+.form-group {
+	border: solid 0.7px;
+}
+
+.form-control {
+	width: 1080px;
+}
+
+.col-sm-2 {
+	background-color: #D9D9D9;
+	text-align: center;
+	color: #000000;
+	font-size: 20px;
+}
+
+.btn-primary {
+	background-color: #355808;
+	opacity: 63%;
+	float: right;
+}
+</style>
+</th:block>
+
+<div layout:fragment="content">
+	<div class="jumbotron">
+		<div class="container">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-house-door-fill"
+				viewBox="0 0 16 16">
+ 				<path
+					d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">홈</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">역경매 등록</a> <br> <br>
+		</div>
+	</div>
+	<div class="container">
+		<h3>물품정보</h3>
+		<form name="newProduct" action="addProduct_process.jsp" method="post"
+			class="form-horizontal">
+
+			<div class="form-group row">
+				<label class="col-sm-2">카테고리</label>
+				<div class="col-sm-3">
+					<select class="form-select border-0 bg-transparent">
+						<option>카테고리</option>
+						<option>디지털기기</option>
+						<option>가구/인테리어</option>
+						<option>여성의류</option>
+						<option>남성패션/잡화</option>
+						<option>생활가전</option>
+						<option>생활/주방</option>
+						<option>가공식품</option>
+						<option>스포츠/레저</option>
+						<option>취미/게임/음반</option>
+						<option>뷰티/미용</option>
+						<option>식물</option>
+						<option>반려동물용품</option>
+						<option>티켓/교환권</option>
+						<option>도서</option>
+						<option>유아도서</option>
+						<option>기타</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">상품명</label>
+				<div class="col-sm-3">
+					<input type="text" name="pname" class="form-control"
+						placeholder="상품명을 입력해주세요" />
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">규격</label>
+				<div class="col-sm-3" style="width: 1000px;">
+					<input type="text" name="psize" class="form-control"
+						placeholder="가로"
+						style="width: 100px; float: left; margin-right: 10px" />
+					<p style="float: left">x</p>
+					<input type="text" name="psize" class="form-control"
+						placeholder="세로"
+						style="width: 100px; float: left; margin-right: 10px" />
+					<p style="float: left">x</p>
+					<input type="text" name="psize" class="form-control"
+						placeholder="높이"
+						style="width: 100px; float: left; margin-right: 10px" />
+					<p style="float: left">cm</p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2" style="height: 350px; line-height: 350px">상세정보</label>
+				<div class="col-sm-5">
+					<textarea name="description" class="form-control"
+						placeholder="상품 상세정보를 입력해주세요."></textarea>
+				</div>
+			</div>
+		</form>
+	</div>
+	<br>
+	<div class="container">
+		<h3>경매설정</h3>
+		<form name="newProduct" action="addProduct_process.jsp" method="post"
+			class="form-horizontal">
+
+			<div class="form-group row">
+				<label class="col-sm-2">희망가격</label>
+				<div class="col-sm-3">
+					<input type="text" name="pname" class="form-control"
+						placeholder="희망가격을 입력하세요." style="width: 250px; float: left" />
+					<p style="float: right;">원</p>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2" style="height: 110px; line-height: 110px;">경매기간</label>
+				<div class="col-sm-3">
+					<div style="width: 1000px; height: 100%; line-height: 110px;">
+						<span> 경매종료일 <input type="date"
+							style="width: 220px; border: 0px; margin-left: 30px;" /> <input
+							type="time" style="width: 220px; border: 0px; margin-left: 30px;" />
+						</span>
+					</div>
+				</div>
+			</div>
+
+			<div style="margin: 10px -10px 100px 30px;">
+				<input type="submit" class="btn btn-primary" value="등록"
+					/ style="margin-left: 20px;"> <input type="submit"
+					class="btn btn-primary" value="등록취소" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+		
+	</script>
+</th:block>
+</html>
