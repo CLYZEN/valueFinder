@@ -24,4 +24,11 @@ public class AuctionController {
 			return "auction/sealedbid"; 
 		}
 		
+		
+		//역경매 페이지
+		@GetMapping(value="/reversebid")
+		public String auctionReversebid() {
+					
+		return "auction/reversebid"; 
+		}	
 }

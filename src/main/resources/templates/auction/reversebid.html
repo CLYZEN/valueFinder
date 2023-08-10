@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+<head>
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+.category {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	padding: 0;
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
+
+.category_list {
+	list-style-type: none;
+	display: flex; /*메뉴 가로정렬*/
+	justify-content: space-between; /* 공간 균등 분배 */
+	font-family: var(--heading-font);
+	color: var(--dark-color);
+	font-weight: 700;
+	padding: 0;
+	margin-bottom: 0;
+}
+
+.category_list>li {
+	padding: 0;
+	margin: 0;
+	width: 12.5%;
+	text-align: left;
+}
+
+/* home>현재페이지 */
+.tabs_header {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	margin-bottom: 10px;
+}
+
+.location {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+}
+
+/* 경매 상태 박스. 
+그냥 btn은 다른버튼까지 다 적용되어 네이밍바꿈. */
+.btn2 {
+	border: none;
+	background: rgb(152, 194, 229);
+	font-weight: 600;
+	width: 200px;
+	padding: 6px 0;
+	text-align: center;
+	margin: 0 auto;
+}
+/* 시,분,초 */
+.time_action {
+	background: rgb(217, 217, 217);
+	padding: 5px 6px;
+	margin: 10px;
+}
+/* : */
+.time_action2 {
+	padding: 5px 6px;
+	margin: 10px;
+}
+
+.item_detail {
+	padding: 5px 6px;
+	margin: 10px;
+}
+
+.table {
+	margin-top: 30px;
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	margin-bottom : 30px;
+}
+
+.table td, .table th {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	text-align: center;
+}
+
+.table thead th {
+    border-bottom: 1px solid black;
+
+</style>
+</head>
+
+<div layout:fragment="content">
+	<!-- 현재위치 -->
+	<div class="tabs_header">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+ 				<path
+				d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+		<a href="/" style="text-decoration: none;">홈</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+		<a href="/">역경매</a>
+	</div>
+	<div class="location">
+		<h3 style="font-weight: 700;">역경매</h3>
+	</div>
+	<div class="category">
+		<ul class="category_list">
+			<li><a href="#women" class="nav-link" data-bs-toggle="collapse"
+				data-bs-target="#collapseExample" aria-expanded="false"
+				aria-controls="collapseExample">전체</a></li>
+			<li><a href="#popularItem" class="nav-link">인기매물</a></li>
+			<li><a href="#digitalDevice" class="nav-link">디지털기기</a></li>
+			<li><a href="#Interior" class="nav-link">가구/인테리어</a></li>
+			<li><a href="#womenClothing" class="nav-link">여성의류</a></li>
+			<li><a href="womenStuff" class="nav-link">여성잡화</a></li>
+			<li><a href="#menClothing" class="nav-link">남성패션/잡화</a></li>
+			<li><a href="homeAppliances" class="nav-link">생활가전</a></li>
+		</ul>
+
+		<ul class="category_list">
+			<li><a href="#life" class="nav-link">생활/주방</a></li>
+			<li><a href="#food" class="nav-link">가공식품</a></li>
+			<li><a href="#sports" class="nav-link">스포츠/레져</a></li>
+			<li><a href="#hobby" class="nav-link">취미/게임/음반</a></li>
+			<li><a href="#beauty" class="nav-link">뷰티/미용</a></li>
+			<li><a href="#plant" class="nav-link">식물</a></li>
+			<li><a href="#petStuff" class="nav-link">반려동물용품</a></li>
+			<li><a href="#ticket" class="nav-link">티켓/교환권</a></li>
+		</ul>
+
+		<ul class="category_list">
+			<li><a href="#books" class="nav-link">도서</a></li>
+			<li><a href="#childrenBooks" class="nav-link">유아도서</a></li>
+			<li><a href="#etc" class="nav-link">기타</a></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
+
+	<!-- 데이터 테이블 -->
+	<div class = "table">
+		<table style="width: 84%;">
+			<thead>
+				<tr>
+					<th style="width: 10%;">번호</th>
+					<th style="width: 10%;">카테고리</th>
+					<th style="width: 60%;">제목</th>
+					<th style="width: 10%;">닉네임</th>
+					<th style="width: 10%;">진행사항</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th style="width: 10%;">1</th>
+					<td style="width: 10%;">기타</td>
+					<td style="width: 60%;">기타 제목입니다.</td>
+					<td style="width: 10%;">닉네임1</td>
+					<td style="width: 10%;">거래성사</td>
+				</tr>
+				<tr>
+					<th style="width: 10%;">2</th>
+					<td style="width: 10%;">생활가전</td>
+					<td style="width: 60%;">생활가전 제목입니다.</td>
+					<td style="width: 10%;">닉네임2</td>
+					<td style="width: 10%;">입찰진행</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<!-- 데이터 테이블 -->
+
+	<!-- 페이징 버튼 -->
+	<div class="d-flex justify-content-center">
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<li class="page-item"><a class="page-link" href="#"
+					aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+				</a></li>
+				<li class="page-item"><a class="page-link" href="#">1</a></li>
+				<li class="page-item"><a class="page-link" href="#">2</a></li>
+				<li class="page-item"><a class="page-link" href="#">3</a></li>
+				<li class="page-item"><a class="page-link" href="#"
+					aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+				</a></li>
+			</ul>
+		</nav>
+	</div>
+	</section>
+
+
+
+</div>
+
+
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+		
+	</script>
+</th:block>
+
+</html>
