@@ -35,6 +35,11 @@ public class AuctionController {
 	public String reportAuction() {
 		return "/auction/report";
 	}
+	
+	@GetMapping(value ="/auction/reversebid/details")
+	public String reverAuction() {
+		return "/auction/reversebid/details";
+	}
 
 
 }

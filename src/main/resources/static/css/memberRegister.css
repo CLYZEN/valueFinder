@@ -138,10 +138,15 @@ ul {
 	border : 1px solid #52A8E0;
 	background-color: #eef1f8;
 	width: 150px;
+	padding-top: 30px;
+	padding-bottom: 30px;
 }
 
 .find_password td {
 	border : 1px solid #52A8E0;;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	
 }
 
 

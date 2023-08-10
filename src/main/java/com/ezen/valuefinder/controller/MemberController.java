@@ -11,7 +11,7 @@ public class MemberController {
 	 	return "member/login2";
 	 }
 
-	 @GetMapping(value = "/member/regist")
+	 @GetMapping(value = "/member/register")
 	 public String register() {
 		 return "member/register";
 	 }
