@@ -25,4 +25,9 @@ public class MemberController {
 	public String socialRegist() {
 		 return "member/social";
 	 }
+	 
+	 @GetMapping(value ="member/mypage") 
+	 public String myPage() {
+		 return "member/mypage";
+	 }
 }
