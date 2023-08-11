@@ -36,5 +36,18 @@ public class AuctionController {
 		return "/auction/report";
 	}
 
+	//실시간 경매 페이지
+	@GetMapping(value="/auction/realtime")
+	public String auctionRealtime() {
+
+		return "auction/realtime";
+	}
+
+	//비공개 경매 페이지
+	@GetMapping(value="/auction/sealedbid")
+	public String auctionSealedbid() {
+
+		return "auction/sealedbid";
+	}
 
 }
