@@ -36,6 +36,17 @@ public class AuctionController {
 		return "/auction/report";
 	}
 
+	@GetMapping(value = "/auction/reversebid/enter/add")
+	public String enterQuery() {
+		return "/auction/enter/enterForm";
+	}
+	
+	@GetMapping(value = "/auction/reversebid/enter")
+	public String enterDetail() {
+		return "/auction/enter/enter";
+	}
+
+
 	//실시간 경매 페이지
 	@GetMapping(value="/auction/realtime")
 	public String auctionRealtime() {
