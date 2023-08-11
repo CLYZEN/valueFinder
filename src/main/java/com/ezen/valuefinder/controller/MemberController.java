@@ -82,5 +82,10 @@ public class MemberController {
 	 public String myPage() {
 		 return "member/mypage";
 	 }
+	 
+	 @GetMapping(value ="member/mypage/bidding")
+	 public String bidding() {
+		 return "member/bidding";
+	 }
 }
 
