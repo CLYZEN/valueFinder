@@ -9,8 +9,8 @@
 
             <div class="col-sm-4 col-lg-3 text-center text-sm-start">
                 <div class="main-logo">
-                    <a href="/">
-                        <img src="/images/logo.png" alt="logo" class="img-fluid">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="logo" class="img-fluid">
                     </a>
                 </div>
             </div>
@@ -54,10 +54,10 @@
 
             <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
                 <div class="support-box text-end d-none d-xl-block">
-                  <a href="/member/login"><h5 class="mb-0">로그인</h5> </a>
+                    <h5 class="mb-0">로그인</h5>
                 </div>
                 <div class="support-box text-end d-none d-xl-block">
-                  <a href="/member/regist">  <h5 class="mb-0">회원가입</h5> </a>
+                    <h5 class="mb-0">회원가입</h5>
                 </div>
                 <ul class="d-flex justify-content-end list-unstyled m-0">
                     <li>
@@ -118,7 +118,7 @@
                                     </li>
 
                                     <li class="nav-item active">
-                                        <a href="/auction/realtime" class="nav-link">공개입찰경매</a>
+                                        <a href="#women" class="nav-link">공개입찰경매</a>
                                     </li>
                                     <li class="nav-item dropdown">
                                         <a href="#men" class="nav-link">비공개경매</a>
@@ -130,7 +130,7 @@
                                         <a href="#accessories" class="nav-link">역경매</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/registproduct/registproduct" class="nav-link">물등록</a>
+                                        <a href="#brand" class="nav-link">물픔등록</a>
                                     </li>
                                     <li class="nav-item">
                                         <a href="#sale" class="nav-link">관리자메뉴</a>
@@ -150,7 +150,7 @@
                 <div>
                     <div class="collapse" id="collapseExample">
                         <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0 flex-row float-start"
-                            style="margin-left: 30px; padding-bottom: 3rem; font-size :0.9em;">
+                            style="margin-left: 30px; padding-bottom: 3rem;">
                             <li class="nav-item">
                                 <a href="#brand" class="nav-link">인기매물</a>
                             </li>
@@ -208,9 +208,10 @@
                         </ul>
                     </div>
                 </div>
+
+                
             </div>
         </div>
-    </div>
 </header>
 
 </html>
