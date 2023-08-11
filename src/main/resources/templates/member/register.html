@@ -7,7 +7,10 @@
 <th:block layout:fragment="css">
 	<link rel="stylesheet" type="text/css" href="/css/memberRegister.css">
 	<style>
-</style>
+		.fieldError {
+			color: red;
+		}
+	</style>
 </th:block>
 
 <div layout:fragment="content">
@@ -27,33 +30,149 @@
 		<a href="/" style="text-decoration: none;">회원가입</a>
 	</div>
 	<div class="form_content">
+		<form action="/member/regist" method="post" th:object="${memberFormDto}">
 		<div class="inner">
+			<div class="col-md-12">
+				<h2 class="h3 mb-3 text-black">회원가입</h2>
+				<div class="p-3 p-lg-5 border">
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label th:for="name" class="text-black">이름</label>
+								<!-- th:field => id, name, value 속성을 자동으로 생성해준다 -->
+								<input type="text" class="form-control"
+									   placeholder="이름을 입력해주세요" th:field="*{name}">
+								<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+								   class="fieldError">Incorrect Data</p>
+							</div>
+						</div>
 
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label th:for="email" class="text-black">이메일</label>
+								<input type="email" class="form-control"
+									   placeholder="이메일을 입력해주세요" th:field="*{email}">
+								<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
+								   class="fieldError">Incorrect Data</p>
+							</div>
+						</div>
 
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label th:for="password" class="text-black">비밀번호</label>
+								<input type="password" class="form-control"
+									   placeholder="비밀번호를 입력해주세요" th:field="*{password}">
+								<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
+								   class="fieldError">Incorrect Data</p>
+							</div>
+						</div>
 
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label th:for="nickname" class="text-black">닉네임</label>
+								<!-- th:field => id, name, value 속성을 자동으로 생성해준다 -->
+								<input type="text" class="form-control"
+									   placeholder="닉네임을 입력해주세요" th:field="*{nickname}">
+								<p th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}"
+								   class="fieldError">Incorrect Data</p>
+							</div>
+						</div>
+						<div class="form-group row">
+							<div class="col-md-12">
+								<label th:for="address" class="text-black">주소</label>
+								<input type="button" class="btn btn-primary mb-3 " onclick="sample6_execDaumPostcode()"
+									   value="우편번호 찾기" style="width: 150px;"><br>
+								<div class="input-group">
+									<input type="text"
+										   th:field="*{addressNo}"
+										   aria-label="First name" class="form-control" placeholder="우편번호" style="width: 30%">
+									<input type="text"
+										   th:field="*{address}"
+										   aria-label="Last name" class="form-control" placeholder="주소" style="width: 70%">
+								</div>
+								<input type="text" class="form-control"
+									   placeholder="상세주소를 입력해주세요" th:field="*{addressDetail}">
+								<p th:if="${#fields.hasErrors('addressDetail') || #fields.hasErrors('address') || #fields.hasErrors('addressNo')}"
+								   th:errors="*{addressDetail}"
+								   class="fieldError">Incorrect Data</p>
+							</div>
+						</div>
+
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label th:for="phone" class="text-black">휴대폰번호</label>
+							<input type="text" class="form-control"
+								   placeholder="휴대폰번호를 입력해주세요" th:field="*{phone}">
+							<p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
+							   class="fieldError">Incorrect Data</p>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label th:for="bankAddress" class="text-black">계좌번호</label>
+								<div class="d-flex">
+									<input type="text" class="form-control"
+										   placeholder="계좌번호를 입력해주세요" th:field="*{bankAddress}" style="width:80%;">
+									<select class="form-select form-select-sm" th:field="*{bankCode}" style="width:20%;">
+										<option th:value="choice" selected disabled>은행</option>
+										<th:block th:each="bank, status:${bankList}">
+											<option th:value="${bank.bankCode}" th:text="${bank.bankName}">One</option>
+										</th:block>
+									</select>
+								</div>
+							<p th:if="${#fields.hasErrors('bankAddress')}" th:errors="*{bankAddress}"
+							   class="fieldError">Incorrect Data</p>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<div class="col-md-12">
+							<label th:for="birthday" class="text-black">생년월일</label>
+							<input type="date" class="form-control" th:field="*{birthday}">
+						</div>
+					</div>
+					<div class="form-group">
+							<div class="col-md-12">
+								<button type="submit" class="btn btn-primary mb-3">회원가입</button>
+							</div>
+						</div>
+
+						<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+				</div>
+			</div>
+		</div>
+
+		<!--
 			<div class="form_section">
-
-				<div class="form_content" action="" method="" object="">
+				<form method="post" action="/member/regist" th:object="${memberFormDto}">
+				<div class="form_content">
 					<div class="form_list">
 						<div class="form_item user error" id="divemail">
-							<p>email :</p>
-							<input type="text" id="email" name="email"
+							<p>아이디 :</p>
+							<input type="email" th:field="*{email}"
 								placeholder="이메일을 입력해 주세요" class="input" value="" maxlength="20"
 								autocapitalize="off">
-
+							<p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError"></p>
 						</div>
 						<div class="form_item lock password error" id="divPasswd">
-							<p>password :</p>
-							<input type="password" id="pswd" name="pswd"
+							<p>비밀번호 :</p>
+							<input type="password" th:field="*{password}"
 								placeholder="비밀번호를 입력해 주세요" class="input" value=""
 								maxlength="20" autocomplete="new-password">
+							<p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="fieldError"></p>
 							<div class="password_info">
 								<em class="how_secure" id="secureLevel"></em>
 							</div>
 						</div>
 						<div class="form_item name error" id="divname">
-							<p>name :</p>
-							<input type="text" id="name" name="name" placeholder="이름을 입력해주세요">
+							<p>이름 :</p>
+							<input type="text" th:field="*{name}" placeholder="이름을 입력해주세요">
+							<p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError"></p>
+						</div>
+						<div class="form_item name error">
+							<p>닉네임 :</p>
+							<input type="text" th:field="*{nickname}" placeholder="닉네임을 입력해주세요"
+								   th:if="${#fields.hasErrors('nickname')}" th:placeholder="">
 						</div>
 					</div>
 
@@ -61,69 +180,56 @@
 					<div class="form_lsit">
 						<div class="form_item adress address error" id="divadress">
 							<p>주소 :</p>
-							<input type="text" id="sample6_address" placeholder="주소">
-
 							<input type="button" onclick="sample6_execDaumPostcode()"
 								value="우편번호 찾기" style="width: 150px"><br>
 						</div>
 						<div class="form_item adress2" id="divadress2">
-							<input type="text" id="sample6_postcode" placeholder="우편번호"><br>
-							<input type="text" id="sample6_detailAddress" placeholder="상세주소">
-							<input type="text" id="sample6_extraAddress" placeholder="참고항목" style="width: 100px">
+							<input type="text" th:field="*{addressNo}"  placeholder="우편번호"><br>
+							<p th:if="${#fields.hasErrors('addressNo')}" th:errors="*{addressNo}" class="fieldError"></p>
+							<input type="text" th:field="*{address}" placeholder="주소">
+							<p th:if="${#fields.hasErrors('address')}" th:errors="*{address}" class="fieldError"></p>
+						</div>
+						<div class="form_item">
+							<input type="text" th:field="*{addressDetail}" placeholder="상세주소" style="width: 100%;">
+							<p th:if="${#fields.hasErrors('addressDetail')}" th:errors="*{addressDetail}" class="fieldError"></p>
 						</div>
 						<div class="form_item bth" id="divbth">
 							<p>생년월일 :</p>
-							<input type="date" id="bth" name="bth" maxlength="8"
-								>
-						</div>
-						<div class="form_item gender" id="divgender">
-							<input type="checkbox" id="man" name="man" checked="checked"
-								style="width: 100px"><label>남자</label> <input
-								type="checkbox" id="woman" name="woman" style="width: 100px"><label>여자</label>
+							<input type="date" th:field="*{birthday}" id="bth" name="bth" maxlength="8">
 						</div>
 						<div class="form_item phone" id="divphone">
 							<p>휴대폰 :</p>
-							<input type="text" id="phone" name="phone"
+							<input type="text" th:field="*{phone}"
 								placeholder="핸드폰 번호를 입력해주세요">
-
+							<p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="fieldError"></p>
 						</div>
 						<div class="form_item bankadress" id="divbank">
 							<p>계좌번호 :</p>
-							<input type="text" id="bank" name="bank"
+							<input type="text" th:field="*{bankAddress}"
 								placeholder="계좌번호를 입력해주세요">
-							<form action="#">
-								<select name="bankadress" id="bankadress">
-									<option value="CHOICE">은행 선택</option>
-									<option value="KB">국민</option>
-									<option value="IBK">기업</option>
-									<option value="HANA">하나</option>
-									<option value="KAKAOBANK">카카오뱅크</option>
-									<option value="SC">제일</option>
-									<option value="SOL">신한</option>
-									<option value="WORI">우리</option>
-									<option value="SITI">시티</option>
-									<option value="KN">경남</option>
-									<option value="KJ">광주</option>
-									<option value="DGB">대구</option>
-									<option value="BU">부산</option>
-									<option value="JEJU">제주</option>
-									<option value="NJ">농협</option>
-									<option value="SU">수협</option>
-									<option value="EPOST">우체국</option>
+							<p th:if="${#fields.hasErrors('bankAddress')}" th:errors="*{bankAddress}" class="fieldError"></p>
+								<select th:field="*{bankCode}">
+									<option value="CHOICE" selected disabled>은행 선택</option>
+									<th:block th:each="bank, status:${bankList}">
+										<option th:value="${bank.bankCode}" th:text="${bank.bankName}"></option>
+									</th:block>
 								</select>
-							</form>
+								<p th:if="${#fields.hasErrors('bankCode')}" th:errors="*{bankCode}" class="fieldError"></p>
 						</div>
 
 					</div>
 					
 					<div class="form-group">
-								<div class="sign">
-									<button type="submit" class="btn btn-primary mb-3">회원가입</button>
-								</div>
+							<div class="sign">
+								<button type="submit" class="btn btn-primary mb-3">회원가입</button>
+							</div>
 					</div>
 				</div>
+					<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+				</form>
 			</div>
-
+			-->
+		</form>
 		</div>
 	</div>
 </div>
@@ -172,17 +278,17 @@
 									extraAddr = ' (' + extraAddr + ')';
 								}
 								// 조합된 참고항목을 해당 필드에 넣는다.
-								document.getElementById("sample6_extraAddress").value = extraAddr;
+								document.getElementById("addressDetail").value = extraAddr;
 
 							} else {
-								document.getElementById("sample6_extraAddress").value = '';
+								document.getElementById("addressDetail").value = '';
 							}
 
 							// 우편번호와 주소 정보를 해당 필드에 넣는다.
-							document.getElementById('sample6_postcode').value = data.zonecode;
-							document.getElementById("sample6_address").value = addr;
+							document.getElementById('addressNo').value = data.zonecode;
+							document.getElementById("address").value = addr;
 							// 커서를 상세주소 필드로 이동한다.
-							document.getElementById("sample6_detailAddress")
+							document.getElementById("address")
 									.focus();
 						}
 					}).open();
