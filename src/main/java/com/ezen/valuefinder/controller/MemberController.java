@@ -76,4 +76,4 @@ public class MemberController {
 	public String socialRegist() {
 		 return "member/social";
 	 }
-}
+	}
