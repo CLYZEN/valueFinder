@@ -22,7 +22,7 @@ p {
 	box-sizing: border-box;
 	max-width: 100%;
 	min-height: 50px;
-	padding: 0 10px 0 45px;
+	padding: 0;
 	border : 1px solid ;
 }
 
@@ -117,10 +117,7 @@ input {
 }
 
 
-ul {
-	font-size: x-small;
-	margin-top: 30px;
-}
+
 
 
 .find_password {
