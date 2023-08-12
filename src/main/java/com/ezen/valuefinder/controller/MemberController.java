@@ -76,13 +76,14 @@ public class MemberController {
 	public String socialRegist() {
 		 return "member/social";
 	 }
-<<<<<<< HEAD
 	 
 	 @GetMapping(value ="member/mypage") 
 	 public String myPage() {
 		 return "member/mypage";
 	 }
+	 
+	 @GetMapping(value ="member/mypage/bidding")
+	 public String bidding() {
+		 return "member/bidding";
+	 }
 }
-=======
-	}
->>>>>>> 09062c6f36e1940fd4476263589694fcf453f2c4
