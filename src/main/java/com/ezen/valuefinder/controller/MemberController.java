@@ -86,4 +86,9 @@ public class MemberController {
 	 public String bidding() {
 		 return "member/bidding";
 	 }
+	 
+	 @GetMapping(value ="member/mypage/successfulbid")
+	 public String successfulbid() {
+		 return "member/successfulbid";
+	 }
 }
