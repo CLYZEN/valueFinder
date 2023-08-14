@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class ReverseBiddingJoin {
+public class ReverseBiddingJoin extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reverseBiddingJoinNo; // 역경매참가식별자

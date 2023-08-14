@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class Auction {
+public class Auction extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionNo; // 경매식별자

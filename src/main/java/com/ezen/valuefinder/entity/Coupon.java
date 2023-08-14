@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class Coupon {
+public class Coupon extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long couponNo; // 쿠폰식별자

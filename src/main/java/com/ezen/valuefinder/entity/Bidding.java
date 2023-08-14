@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class Bidding {
+public class Bidding extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long biddingNo; // 입찰식별자

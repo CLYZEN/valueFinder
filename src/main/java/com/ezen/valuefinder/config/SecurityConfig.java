@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,8 +34,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http,MvcRequestMatcher.Builder mvc) throws Exception {
 
+
         http.authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers(mvc.pattern("/css/**"),mvc.pattern("/js/**"), mvc.pattern("/images/**"),mvc.pattern("/assets/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/css/**"),mvc.pattern("/js/**"), mvc.pattern("/images/**"),mvc.pattern("/assets/**"),mvc.pattern("/img/**")).permitAll()
                         .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/**"),mvc.pattern("/auction/**")).permitAll()
                         .requestMatchers(mvc.pattern("/favicon.ico"), mvc.pattern("/error")).permitAll()
                         .requestMatchers(mvc.pattern("/admin/**")).hasRole("ADMIN")
@@ -63,7 +65,9 @@ public class SecurityConfig {
                                 .tokenRepository(tokenRepository())
                                 .userDetailsService(userDetailsService)
                         //.userDetailsService(remembermeUserDetailService)
-                );
+                )
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
 
 
         return http.build();
