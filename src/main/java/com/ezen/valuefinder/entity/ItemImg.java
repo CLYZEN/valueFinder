@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class ItemImg {
+public class ItemImg extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemImageNo; // 물품이미지식별자
@@ -29,5 +29,15 @@ public class ItemImg {
     private String itemImageUrl; // 물품이미지경로
 
     @Column(nullable = false)
-    private String repImageYn; // 대표이미지여부
+    private boolean repImageYn; // 대표이미지여부
+
+    public void saveItem(Item item) {
+        this.item = item;
+    }
+
+    public void updateItemImg(String oriImgName, String imgName, String imgUrl) {
+        this.itemOriImageName = oriImgName;
+        this.itemImageName = imgName;
+        this.itemImageUrl = imgUrl;
+    }
 }

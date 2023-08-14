@@ -53,10 +53,13 @@
             </div>
 
             <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-                <div class="support-box text-end d-none d-xl-block">
+                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAnonymous()">
                   <a href="/member/login"><h5 class="mb-0">로그인</h5> </a>
                 </div>
-                <div class="support-box text-end d-none d-xl-block">
+                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAuthenticated()">
+                    <a href="/member/logout"><h5 class="mb-0">로그아웃</h5> </a>
+                </div>
+                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAnonymous()">
                   <a href="/member/regist">  <h5 class="mb-0">회원가입</h5> </a>
                 </div>
                 <ul class="d-flex justify-content-end list-unstyled m-0">
@@ -130,9 +133,9 @@
                                         <a href="#accessories" class="nav-link">역경매</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/registproduct/registproduct" class="nav-link">물등록</a>
+                                        <a href="/auction/add" class="nav-link">물품등록</a>
                                     </li>
-                                    <li class="nav-item">
+                                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                                         <a href="#sale" class="nav-link">관리자메뉴</a>
                                     </li>
 

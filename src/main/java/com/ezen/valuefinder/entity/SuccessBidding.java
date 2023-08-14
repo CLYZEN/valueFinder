@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class SuccessBidding {
+public class SuccessBidding extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

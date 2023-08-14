@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class ReverseBidding {
+public class ReverseBidding extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reverseBiddingNo; // 역경매식별자
