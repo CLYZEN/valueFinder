@@ -76,4 +76,54 @@ public class MemberController {
 	public String socialRegist() {
 		 return "member/social";
 	 }
-	}
+	 
+	 @GetMapping(value ="member/mypage") 
+	 public String myPage() {
+		 return "member/mypage";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/bidding")
+	 public String bidding() {
+		 return "member/bidding";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/successfulbid")
+	 public String successfulbid() {
+		 return "member/successfulbid";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/myauction")
+	 public String myauction() {
+		 return "member/myauction";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/modify/checkpwd")
+	 public String checkpwd() {
+		 return "member/checkpwd";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/modify/password")
+	 public String changepwd() {
+		 return "member/changepwd";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/outmember")
+	 public String outmember() {
+		 return "member/outmember";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/coupon")
+	 public String coupon() {
+		 return "member/coupon";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/sentquery")
+	 public String sentquery() {
+		 return "member/sentquery";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/receivedquery")
+	 public String receivedquery() {
+		 return "member/receivedquery";
+	 }
+}
