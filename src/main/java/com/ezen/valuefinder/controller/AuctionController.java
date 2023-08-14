@@ -18,7 +18,17 @@ public class AuctionController {
 
 	@GetMapping(value = "/auction/public/detail")
 	public String publicBidDetail() {
-		return "/auction/details/publicdetail";
+		return "/auction/details/publicDetail";
+	}
+	
+	@GetMapping(value = "/auction/realtime/detail")
+	public String realtimeBidDetail() {
+		return "/auction/details/realtimeDetail";
+	}
+	
+	@GetMapping(value = "/auction/sealed/detail")
+	public String sealedBidDetail() {
+		return "/auction/details/sealedDetail";
 	}
 
 	@GetMapping(value = "/auction/query/add")
@@ -60,5 +70,6 @@ public class AuctionController {
 
 		return "auction/sealedbid";
 	}
+	
 
 }
