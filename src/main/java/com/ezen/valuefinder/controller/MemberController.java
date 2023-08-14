@@ -126,4 +126,15 @@ public class MemberController {
 	 public String receivedquery() {
 		 return "member/receivedquery";
 	 }
+	 
+	 @GetMapping(value ="member/mypage/like")
+	 public String like() {
+		 return "member/like";
+	 }
+	 
+	 @GetMapping(value ="member/mypage/modify")
+	 public String modify() {
+		 return "member/modify";
+	 }
+	 
 }
