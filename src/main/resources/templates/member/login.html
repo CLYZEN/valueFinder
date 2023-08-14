@@ -139,7 +139,7 @@
 							<div class="form-group">
 								<div>
 									<button type="submit" class="btn btn-primary mb-3"
-										id="loginbtn"
+										id="loginButton"
 										style="width: 120px; height: 87px; margin-top: 30px; margin-left: 35px; border-radius: inherit; font-size: 20px; font-weight: 900;">로그인</button>
 
 								</div>
@@ -152,7 +152,7 @@
 						<div class="form-group"
 							style="text-align-last: start; width: 600px;">
 							<a href="index.html"> <img alt="kakao"
-								src="images/kakao_login_medium_narrow.png"
+								src="/img/kakao_login_medium_narrow.png"
 								style="margin-top: 20px;">
 							</a>
 							<div style="margin-top: 30px; display: flex;">
@@ -191,10 +191,52 @@
 <!-- end s-content -->
 
 
+
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
+	<script type="text/javascript" src="/js/cookie.js"></script>
 	<script th:inline="javascript">
-		
+		// 이메일 기억
+		$(document).ready(function(){
+			var userInputId = getCookie("userInputId"); //쿠키값(이메일주소)을 가져온다.
+			var setCookieYN = getCookie("setCookieYN"); //쿠키값(이메일 저장 여부)을 가져온다.
+			var rememberMe = getCookie("remember-me");
+
+			if(rememberMe != null) {
+				$("remember-me").prop("checked",true);
+				location.href = "/";
+			}
+
+			if(setCookieYN == 'Y') { //이메일 저장 여부가 Y면
+				$("#id_save").prop("checked", true); //이메일 저장 체크박스를 체크한다
+				$("#email").val(userInputId); //이메일 input창에는 쿠키에서 가져온 이메일 주소를 넣는다.
+			} else {
+				$("#id_save").prop("checked", false);
+			}
+
+
+			//로그인 버튼 클릭시 쿠키에 이메일 저장여부, 이메일 저장
+			$("#loginButton").click(function(){
+
+				if($("#id_save").is(":checked")) { //이메일 저장에 체크가 되어있다면
+					var userInputId = $("#email").val(); //이메일 값을 가지고 온다.
+
+					//쿠키 생성
+					setCookie("userInputId", userInputId, 60); //이메일 저장
+					setCookie("setCookieYN", "Y", 60); //이메일 저장여부 저장
+				} else {
+					//쿠키 삭제
+					deleteCookie("userInputId");
+					deleteCookie("setCookieYN");
+				}
+
+				if($("#remember-me").is(":unchecked")) {
+					deleteCookie("remember-me");
+				}
+			});
+
+
+		});
 	</script>
 </th:block>
 
