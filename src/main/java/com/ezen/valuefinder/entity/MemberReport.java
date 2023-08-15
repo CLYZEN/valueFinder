@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class MemberReport {
+public class MemberReport extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

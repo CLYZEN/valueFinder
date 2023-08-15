@@ -34,3 +34,6 @@ build/
 
 ### DS Store ###
 .DS_Stroe
+
+## DB ##
+application-aws.properties

@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<!-- 각 페이지의 CSS가 작성될 위치 -->
+<th:block layout:fragment="css">
+	<style>
+table {
+	border-collapse: collapse;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+	width: 100%;
+} /*이중선 제거*/
+.item_box2 {
+	width: 800px;
+}
+
+.item_box {
+	width: 800px;
+}
+
+.item_box2 button {
+	margin: 0px 20px;
+}
+
+.reverseForm th {
+	width: 150px;
+	height: 50px;
+	text-align: center;
+	background-color: #D9D9D9;
+}
+
+.reverseForm td {
+	padding: 20px;
+	font-size: 15px;
+}
+
+.view_count {
+	text-align: end;
+	margin: 0px 20px;
+}
+
+.box_period {
+	display: flex;
+	justify-content: center;
+	padding: 20px;
+}
+
+.reverseForm {
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.item_box2 {
+	margin: 20px 0px;
+}
+
+#container {
+	display: grid;
+	grid-template-columns: 1fr 3fr 1fr;
+}
+
+#myTab {
+	margin: 0px 100px;
+}
+
+.tab-content {
+	margin: 0px 100px;
+	padding: 30px;
+}
+
+.tab-content h2 {
+	margin-top: 20px;
+	margin-bottom: 30px;
+}
+
+.wishful {
+	background-color: #D9D9D9;
+	height: 150px;
+}
+
+.form-group {
+	display: flex;
+	justify-content: end;
+	margin: 0px 130px;
+}
+
+.join_customer th {
+	background-color: #D9D9D9;
+	text-align: center;
+}
+
+.join_customer td {
+	text-align: center;
+}
+
+.sublogo {
+	margin: 0px 30px;
+}
+
+.pagination {
+ margin: 25px 0px;
+ justify-content: end;
+ 
+}
+</style>
+
+</th:block>
+
+<div layout:fragment="content">
+	<div class="sublogo">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+ 				<path
+				d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+		<a href="/static" style="text-decoration: none;">홈</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+		<a href="/static" style="text-decoration: none;">역경매</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+		<a href="/static" style="text-decoration: none;">카테고리</a>
+	</div>
+
+
+
+
+	<div class="view_count">
+		조회수 :<span> 30</span>
+	</div>
+	<div class="box_period">
+		남은시간<span>00시00분00초</span>
+	</div>
+	<section class="reverseForm">
+		<div class="item_box table-responsive">
+			<table class="table">
+
+				<tr>
+					<th scope="col">물품 이름</th>
+					<td>가방</td>
+				</tr>
+				<tr>
+					<th scope="col">경매 기간</th>
+					<td>08/07 00:00 ~ 08/00:00:00</td>
+				</tr>
+				<tr>
+					<th scope="col">예상가</th>
+					<td>15151</td>
+				</tr>
+				<tr>
+					<th scope="col">진행 상태</th>
+					<td>경매진행중</td>
+				</tr>
+
+			</table>
+		</div>
+
+		<div class="item_box2 table-responsive">
+			<table class="table">
+
+				<tr>
+					<th scope="col">구매자 닉네임</th>
+					<td>보부상
+						<button>후기</button>
+						<button>신고하기</button>
+					</td>
+
+				</tr>
+				<tr>
+					<th scope="col">구매자의 다른물품</th>
+					<td>12건
+						<button>더보기</button>
+					</td>
+				</tr>
+
+
+			</table>
+		</div>
+
+
+
+	</section>
+
+
+
+	<div class="tab col-mb-8" id="bthtab">
+		<ul class="nav nav-tabs" id="myTab" role="tablist">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+					data-bs-target="#home" type="button" role="tab"
+					aria-controls="home" aria-selected="true">구매자 희망사항</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+					data-bs-target="#profile" type="button" role="tab"
+					aria-controls="profile" aria-selected="false">참가 현황</button>
+			</li>
+
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="home" role="tabpanel"
+				aria-labelledby="home-tab">
+				<div class="wishful">
+					<span>구매자 희망사항</span>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="profile" role="tabpanel"
+				aria-labelledby="profile-tab">
+				<h2>참가자(*값을 받아야되는곳)</h2>
+				<div class="join_customer">
+					<table>
+						<tr>
+							<th scope="col">번호</th>
+							<th>제목</th>
+							<th>제시금액</th>
+							<th>등록자</th>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>2</td>
+							<td>3</td>
+							<td>4</td>
+						</tr>
+					</table>
+				</div>
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+						</a></li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</ul>
+				</nav>
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="form-group">
+		<div class="join">
+			<button type="submit" class="btn btn-primary mb-3"
+				style="background-color: #355808; width: 150px">참가신청</button>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+<!-- 각 페이지의 스크립트가 작성될 위치 -->
+<th:block layout:fragment="script">
+	<script th:inline="javascript">
+		
+	</script>
+</th:block>
+
+</html>
