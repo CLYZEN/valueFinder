@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.controller;
 
+import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
@@ -70,8 +71,30 @@ public class MemberController {
 	 }
 
 	 @GetMapping(value = "/member/findpw")
-	 public String findPw() {
+	 public String findPw(Model model) {
+		 model.addAttribute("findPwDto", new MemberFindPwDto());
+
 		 return "member/findpw";
+	 }
+
+	 @PostMapping(value = "/member/findpw")
+	 public String findPw(@Valid MemberFindPwDto memberFindPwDto,Model model) {
+
+		 if(memberService.findPwChkMember(memberFindPwDto) == null) {
+			 model.addAttribute("findPwDto", new MemberFindPwDto());
+			 model.addAttribute("errorMessage","일치하는 회원 정보가 없습니다.");
+			 return "member/findpw";
+		 }
+
+		 model.addAttribute("email", memberFindPwDto.getEmail());
+		 return "member/resetpw";
+	 }
+
+	 @PostMapping(value = "/member/updatepw")
+	 public String updatePw(@Valid String password, @Valid String email) {
+		memberService.updatePwd(password,email,passwordEncoder);
+
+		 return "member/login";
 	 }
 
 	 @GetMapping(value = "member/regist/social")
@@ -102,6 +125,17 @@ public class MemberController {
 	 @GetMapping(value ="member/mypage/modify/checkpwd")
 	 public String checkpwd() {
 		 return "member/checkpwd";
+	 }
+
+	 @PostMapping(value = "member/mypage/modify/checkpwd")
+	 public String checkpwd(Model model, Principal principal,@Valid String password) {
+		 boolean result = memberService.checkPwd(password,principal.getName(),passwordEncoder);
+		 if(result == true) {
+			 return "redirect:/member/mypage/modify";
+		 } else {
+			 model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+			 return "member/checkpwd";
+		 }
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify/password")

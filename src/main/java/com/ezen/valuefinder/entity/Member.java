@@ -99,4 +99,8 @@ public class Member extends BaseEntity {
         this.bankAddress = memberModifyDto.getBankAddress();
         this.birthday = memberModifyDto.getBirthday();
     }
+
+    public void updatePassword(String password,PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(password);
+    }
 }
