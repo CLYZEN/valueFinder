@@ -3,6 +3,7 @@ package com.ezen.valuefinder.entity;
 import com.ezen.valuefinder.constant.Role;
 import com.ezen.valuefinder.constant.Status;
 import com.ezen.valuefinder.dto.MemberFormDto;
+import com.ezen.valuefinder.dto.MemberModifyDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -85,5 +86,17 @@ public class Member extends BaseEntity {
         member.setCaution(0);
 
         return member;
+    }
+
+    public void updateMember(MemberModifyDto memberModifyDto,Bank bank) {
+        this.name = memberModifyDto.getName();
+        this.nickname = memberModifyDto.getNickName();
+        this.addressNo = memberModifyDto.getAddressNo();
+        this.address = memberModifyDto.getAddress();
+        this.addressDetail = memberModifyDto.getAddressDetail();
+        this.phone = memberModifyDto.getPhone();
+        this.bank = bank;
+        this.bankAddress = memberModifyDto.getBankAddress();
+        this.birthday = memberModifyDto.getBirthday();
     }
 }
