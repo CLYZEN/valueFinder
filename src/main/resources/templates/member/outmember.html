@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<th:block layout:fragment="css">
+	<style>
+a {
+	text-decoration: none;
+}
+
+p {
+	font-size: 25px;
+}
+
+.quickmenu, ul, li {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
+}
+
+.quickmenu {
+	position: absolute;
+	width: 180px;
+	top: 50%;
+	margin-top: -50px;
+	left: 30px;
+	background: #fff;
+	box-shadow: -2px 2px grey;
+}
+
+.quickmenu ul {
+	position: relative;
+	float: left;
+	width: 100%;
+	display: inline-block;
+	*display: inline;
+	border: 1px solid #ddd;
+}
+
+.quickmenu ul li {
+	float: left;
+	width: 100%;
+	border-bottom: 1px solid #ddd;
+	text-align: center;
+	display: inline-block;
+	*display: inline;
+}
+
+.quickmenu ul li a {
+	position: relative;
+	float: left;
+	width: 100%;
+	height: 30px;
+	line-height: 30px;
+	text-align: center;
+	color: #999;
+	font-size: 9.5pt;
+}
+
+.quickmenu ul li a:hover {
+	color: #000;
+}
+
+.quickmenu ul li:last-child {
+	border-bottom: 0;
+}
+
+.tb {
+	height: 150px;
+	border: 1px solid;
+	line-height: 70px;
+	font-size: 13px;
+}
+
+.tb>div {
+	border-top: 1px solid;
+}
+
+table {
+	font-weight: bold;
+}
+
+caption {
+	caption-side: top;
+}
+
+td {
+	width: 12.5%;
+}
+
+.tdnum {
+	border-right: 1px solid;
+	font-size: 20px;
+}
+
+.btn-primary {
+	background-color: #fcfcfc;
+	border-radius: 0%;
+	border: #000 1px solid;
+	color: #000;
+	width: 200px;
+}
+
+img {
+	height: 100px;
+}
+
+h3 {
+	text-align: center;
+}
+
+.text-black {
+	width: 150px;
+	margin-left: 20px;
+	line-height: 38px;
+	float: left;
+}
+
+.form-control {
+	width: 300px;
+	border-radius: inherit;
+	border: 1px solid #bbbbbb;
+	float: left;
+}
+</style>
+</th:block>
+
+<div layout:fragment="content" style="margin-bottom: 1100px;">
+	<div class="jumbotron" style="height: 100%">
+		<div class="container">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-house-door-fill"
+				viewBox="0 0 16 16">
+				<path
+					d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">홈</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
+				<path fill-rule="evenodd"
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">마이페이지</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
+				<path fill-rule="evenodd"
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">내정보 수정</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
+				<path fill-rule="evenodd"
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+			<a href="/" style="text-decoration: none;">비밀번호 확인</a> <br> <br>
+		</div>
+	</div>
+
+	<div class="wrap">
+		<div class="container"
+			style="width: 100%; height: 150px; border: 1px solid;">
+			<div
+				style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;">
+				~~~님 안녕하세요!</div>
+
+			<div class="container text-center">
+				<div class="row" style="height: 150px; border-left: 1px solid;">
+					<div class="col" style="margin-top: 25px;">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-justify"
+								viewBox="0 0 16 16">
+								<path fill-rule="evenodd"
+									d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
+								<p>내 문의사항</p>
+							</svg>
+						</a>
+					</div>
+
+					<div class="col" style="margin-top: 25px;">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-ticket-perforated"
+								viewBox="0 0 16 16">
+								<path
+									d="M4 4.85v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Z" />
+								<path
+									d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9V4.5Z" />
+							</svg>
+							<p>보유 쿠폰</p>
+						</a>
+					</div>
+
+					<div class="col" style="margin-top: 25px;">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-collection"
+								viewBox="0 0 16 16">
+								<path
+									d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z" />
+							</svg>
+							<p>오늘 본 상품</p>
+						</a>
+					</div>
+
+					<div class="col" style="margin-top: 25px;">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-chat-dots"
+								viewBox="0 0 16 16">
+								<path
+									d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
+								<path
+									d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z" />
+							</svg>
+							<p>받은 문의내역</p>
+						</a>
+					</div>
+					<div class="col" style="margin-top: 25px;">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-heart"
+								viewBox="0 0 16 16">
+								<path
+									d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
+							</svg>
+							<p>찜 목록</p>
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="container"
+				style="width: 100%; height: 600px; border: 1px solid; margin-top: 5%;">
+				<h3 style="margin-top: 5%;">회원탈퇴</h3>
+
+
+				<div class="form-group row">
+					<div class="col-md-123"
+						style="margin-top: 5%; display: flex; justify-content: center">
+						<h4>탈퇴사유</h4>
+						<textarea style="resize: none; width:60%; height: 200px; margin-left:20px" placeholder="탈퇴사유를 입력해주세요.">
+						</textarea>
+					</div>
+				</div>
+
+				<div class="d-grid gap-2 d-md-block"
+					style="margin-top: 7%; text-align: center;">
+					<button class="btn btn-primary" type="button"
+						style="margin-right: 25px;">확인</button>
+					<button class="btn btn-primary" type="button">취소</button>
+				</div>
+			</div>
+
+
+		</div>
+	</div>
+
+	<div class="quickmenu">
+		<ul>
+			<li><a href="#">내 정보 </a></li>
+			<li><a href="#">입찰 현황</a></li>
+			<li><a href="#">낙찰 현황</a></li>
+			<li><a href="#">내 물품 확인</a></li>
+			<li><a href="#">내 문의내역</a></li>
+			<li><a href="#">받은문의내역</a></li>
+			<li><a href="#">쿠폰함</a></li>
+			<li><a href="#">찜목록</a></li>
+			<li><a href="#">내정보 수정</a></li>
+			<li><a href="#">비밀번호 변경</a></li>
+			<li><a href="#">회원탈퇴</a></li>
+		</ul>
+	</div>
+
+
+</div>
+
+<th:block layout:fragment="script">
+	<script>
+		$(document).ready(function() {
+			var currentPosition = parseInt($(".quickmenu").css("top"));
+			$(window).scroll(function() {
+				var position = $(window).scrollTop();
+				$(".quickmenu").stop().animate({
+					"top" : position + currentPosition + "px"
+				}, 1000);
+			});
+		});
+	</script>
+</th:block>
+
+</html>
