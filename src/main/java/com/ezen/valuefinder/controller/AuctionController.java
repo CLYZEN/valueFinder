@@ -69,7 +69,17 @@ public class AuctionController {
 
 	@GetMapping(value = "/auction/public/detail")
 	public String publicBidDetail() {
-		return "/auction/details/publicdetail";
+		return "/auction/details/publicDetail";
+	}
+	
+	@GetMapping(value = "/auction/realtime/detail")
+	public String realtimeBidDetail() {
+		return "/auction/details/realtimeDetail";
+	}
+	
+	@GetMapping(value = "/auction/sealed/detail")
+	public String sealedBidDetail() {
+		return "/auction/details/sealedDetail";
 	}
 
 	@GetMapping(value = "/auction/query/add")
@@ -87,6 +97,17 @@ public class AuctionController {
 		return "/auction/report";
 	}
 
+	@GetMapping(value = "/auction/reversebid/enter/add")
+	public String enterQuery() {
+		return "/auction/enter/enterForm";
+	}
+	
+	@GetMapping(value = "/auction/reversebid/enter")
+	public String enterDetail() {
+		return "/auction/enter/enter";
+	}
+
+
 	//실시간 경매 페이지
 	@GetMapping(value="/auction/realtime")
 	public String auctionRealtime() {
@@ -102,10 +123,10 @@ public class AuctionController {
 	}
 	
 	//비공개 경매 페이지
-		@GetMapping(value="/auction/reversebid/details")
-		public String redetails() {
+	@GetMapping(value="/auction/reversebid/details")
+	public String redetails() {
 
-			return "auction/reversebid/details";
-		}
+		return "auction/reversebid/details";
+	}
 
 }
