@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.controller;
 
+import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
@@ -70,8 +71,23 @@ public class MemberController {
 	 }
 
 	 @GetMapping(value = "/member/findpw")
-	 public String findPw() {
+	 public String findPw(Model model) {
+		 model.addAttribute("findPwDto", new MemberFindPwDto());
+
 		 return "member/findpw";
+	 }
+
+	 @PostMapping(value = "/member/findpw")
+	 public String findPw(@Valid MemberFindPwDto memberFindPwDto,Model model) {
+
+		 if(memberService.findPwChkMember(memberFindPwDto) == null) {
+			 model.addAttribute("findPwDto", new MemberFindPwDto());
+			 model.addAttribute("errorMessage","일치하는 회원 정보가 없습니다.");
+			 return "member/findpw";
+		 }
+
+
+		 return "member/login";
 	 }
 
 	 @GetMapping(value = "member/regist/social")

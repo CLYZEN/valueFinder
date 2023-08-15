@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.service;
 
+import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
@@ -70,5 +71,9 @@ public class MemberService implements UserDetailsService {
         Bank bank = bankRepository.findById(memberModifyDto.getBankCode()).orElseThrow();
         Member member = memberRepository.findByEmail(email);
         member.updateMember(memberModifyDto,bank);
+    }
+
+    public Member findPwChkMember(MemberFindPwDto memberFindPwDto) {
+        return memberRepository.findByEmailAndPhone(memberFindPwDto.getEmail(),memberFindPwDto.getPhone());
     }
 }
