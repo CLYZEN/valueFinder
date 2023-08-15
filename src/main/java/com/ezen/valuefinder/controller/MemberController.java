@@ -86,6 +86,13 @@ public class MemberController {
 			 return "member/findpw";
 		 }
 
+		 model.addAttribute("email", memberFindPwDto.getEmail());
+		 return "member/resetpw";
+	 }
+
+	 @PostMapping(value = "/member/updatepw")
+	 public String updatePw(@Valid String password, @Valid String email) {
+		memberService.updatePwd(password,email,passwordEncoder);
 
 		 return "member/login";
 	 }
@@ -118,6 +125,17 @@ public class MemberController {
 	 @GetMapping(value ="member/mypage/modify/checkpwd")
 	 public String checkpwd() {
 		 return "member/checkpwd";
+	 }
+
+	 @PostMapping(value = "member/mypage/modify/checkpwd")
+	 public String checkpwd(Model model, Principal principal,@Valid String password) {
+		 boolean result = memberService.checkPwd(password,principal.getName(),passwordEncoder);
+		 if(result == true) {
+			 return "redirect:/member/mypage/modify";
+		 } else {
+			 model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+			 return "member/checkpwd";
+		 }
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify/password")
