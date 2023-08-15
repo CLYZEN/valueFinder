@@ -100,5 +100,12 @@ public class AuctionController {
 
 		return "auction/sealedbid";
 	}
+	
+	//비공개 경매 페이지
+		@GetMapping(value="/auction/reversebid/details")
+		public String redetails() {
+
+			return "auction/reversebid/details";
+		}
 
 }
