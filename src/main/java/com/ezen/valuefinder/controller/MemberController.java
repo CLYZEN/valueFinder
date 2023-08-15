@@ -1,6 +1,7 @@
 package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.dto.MemberFormDto;
+import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.service.MemberService;
@@ -14,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -133,8 +135,21 @@ public class MemberController {
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify")
-	 public String modify() {
+	 public String modify(Model model, Principal principal) {
+		 List<Bank> bankList = memberService.getBankList();
+		 Member member = memberService.findByEmail(principal.getName());
+
+		 model.addAttribute("memberModifyDto",new MemberModifyDto());
+		 model.addAttribute("member",member);
+		 model.addAttribute("bankList", bankList);
 		 return "member/modify";
 	 }
-	 
+
+	 // 에러메시지 구현 필요
+	@PostMapping(value = "member/mypage/modify")
+	 public String modify(@Valid MemberModifyDto memberModifyDto,BindingResult bindingResult,Model model,Principal principal) {
+		 memberService.updateMember(memberModifyDto,principal.getName());
+		 return "redirect:/";
+	 }
+
 }

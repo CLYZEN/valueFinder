@@ -1,6 +1,7 @@
 package com.ezen.valuefinder.service;
 
 import com.ezen.valuefinder.dto.MemberFormDto;
+import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.repository.BankRepository;
@@ -59,5 +60,15 @@ public class MemberService implements UserDetailsService {
         if (findMember != null) {
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
+    }
+
+    public Member findByEmail(String email) {
+        return memberRepository.findByEmail(email);
+    }
+
+    public void updateMember(MemberModifyDto memberModifyDto,String email) {
+        Bank bank = bankRepository.findById(memberModifyDto.getBankCode()).orElseThrow();
+        Member member = memberRepository.findByEmail(email);
+        member.updateMember(memberModifyDto,bank);
     }
 }
