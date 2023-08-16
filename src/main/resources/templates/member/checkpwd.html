@@ -280,7 +280,11 @@ h3 {
 
 <th:block layout:fragment="script">
 	<script>
+		let errorMessage = /*[[${errorMessage}]]*/ null;
 		$(document).ready(function() {
+			if (errorMessage != null) {
+				alert(errorMessage);
+			}
 			var currentPosition = parseInt($(".quickmenu").css("top"));
 			$(window).scroll(function() {
 				var position = $(window).scrollTop();
@@ -291,11 +295,9 @@ h3 {
 		});
 
 		//왜 안되는지 모르겠음
-		let errorMessage = /*[[${errorMessage}]]*/ null;
 
-		if (errorMessage != null) {
-			alert(errorMessage);
-		}
+
+
 	</script>
 </th:block>
 

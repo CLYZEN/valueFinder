@@ -37,7 +37,7 @@ public class SecurityConfig {
 
         http.authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers(mvc.pattern("/css/**"),mvc.pattern("/js/**"), mvc.pattern("/images/**"),mvc.pattern("/assets/**"),mvc.pattern("/img/**")).permitAll()
-                        .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/**"),mvc.pattern("/auction/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/login"),mvc.pattern("/member/regist"),mvc.pattern("/auction/**")).permitAll()
                         .requestMatchers(mvc.pattern("/favicon.ico"), mvc.pattern("/error")).permitAll()
                         .requestMatchers(mvc.pattern("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated()
