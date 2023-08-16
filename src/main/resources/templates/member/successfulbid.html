@@ -141,6 +141,17 @@ img {
 	font-size: 16px;
 	resize: none;
 }
+
+.star-rating {
+	display: flex;
+	align-items: center;
+	margin-top: 0;
+}
+
+.star-rating label {
+	margin-right: 5px;
+	font-size: 24px;
+}
 </style>
 </th:block>
 
@@ -397,7 +408,7 @@ img {
 	<!-- 모달창 -->
 	<div class="modal fade" id="reviewModal" tabindex="-1"
 		aria-labelledby="reviewModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog" style="max-width: 30%;">
 			<div class="modal-content">
 				<div class="modal-header">
 					<h5 class="modal-title">리뷰작성</h5>
@@ -405,49 +416,44 @@ img {
 				<div class="modal-body">
 					<div class="container">
 
-							<div class="form-group row col-sm-top" style="padding-top: 25px;">
-								<label class="col-sm-2">닉네임</label>
-								<div class="col-sm-3">
-									<input type="text" name="pname" class="form-control" />
-								</div>
+						<div class="form-group row col-sm-top" style="text-align: center;">
+							<label class="col-sm-2">닉네임</label>
+							<div class="col-sm" style="width: 60%;">
+								<input type="text" name="pname" class="form-control" />
 							</div>
+						</div>
 
-							<div class="form-group row">
-								<label class="col-sm-2">별점</label>
-								
-									<form class="mb-3" name="myform" id="myform" method="post">
-										<fieldset>
-											<input type="radio" name="reviewStar" value="5" id="rate1"
-												checked><label for="rate1">★</label> <input
-												type="radio" name="reviewStar" value="4" id="rate2" disabled><label
-												for="rate2">★</label> <input type="radio" name="reviewStar"
-												value="3" id="rate3" disabled><label for="rate3">★</label>
-											<input type="radio" name="reviewStar" value="2" id="rate4"
-												disabled><label for="rate4">★</label> <input
-												type="radio" name="reviewStar" value="1" id="rate5" disabled><label
-												for="rate5">★</label>
-										</fieldset>
-									</form>
-								
-								
+						<div class="form-group row"
+							style="text-align: center; padding-bottom: 20px;">
+							<label class="col-sm-2" style="height: 72px; line-height: 72px;">별점</label>
+							<div class="col-sm-8 star-rating">
+								<form class="mb-3" name="myform" id="myform" method="post"
+									style="height: 50px;">
+									<fieldset>
+										<input type="radio" name="reviewStar" value="5" id="rate1" checked><label for="rate1">★</label> 
+										<input type="radio" name="reviewStar" value="4" id="rate2" checked><label for="rate2">★</label> 
+										<input type="radio" name="reviewStar" value="3" id="rate3" checked><label for="rate3">★</label>
+										<input type="radio" name="reviewStar" value="2" id="rate4" checked><label for="rate4">★</label> 
+										<input type="radio" name="reviewStar" value="1" id="rate5" checked><label for="rate5">★</label>
+									</fieldset>
+								</form>
 							</div>
+						</div>
 
-
-
-							<div class="form-group row">
-								<label class="col-sm-2" style="line-height: 200px;">리뷰작성</label>
-								<div class="col-sm-5">
-									<textarea name="description" class="form-control"></textarea>
-								</div>
+						<div class="form-group row" style="text-align: center;">
+							<label class="col-sm-2">리뷰작성</label>
+							<div class="col-sm" style="width: 60%;">
+								<textarea name="description" class="form-control"
+									style="line-height: 100px;"></textarea>
 							</div>
+						</div>
 
-						
+
 					</div>
 
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary"
-						data-bs-dismiss="modal">등록취소</button>
+					<button type="button" class="btn btn-primary">등록취소</button>
 					<button type="button" class="btn btn-primary">등록</button>
 				</div>
 			</div>
