@@ -115,10 +115,15 @@ public class AuctionController {
 		return "auction/realtime";
 	}
 
-	//비공개 경매 페이지
-	@GetMapping(value="/auction/sealedbid")
-	public String auctionSealedbid() {
+	//역경매
+	@GetMapping(value="/auction/reversebid")
+	public String auctionReversebid() {
 
+		return "auction/reversebid";
+	}
+
+	@GetMapping(value = "/auction/sealedbid")
+	public String auctionSealedbid() {
 		return "auction/sealedbid";
 	}
 	

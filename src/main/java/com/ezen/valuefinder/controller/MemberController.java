@@ -103,27 +103,37 @@ public class MemberController {
 	 }
 	 
 	 @GetMapping(value ="member/mypage") 
-	 public String myPage() {
+	 public String myPage(Model model,Principal principal) {
+		Member member = memberService.findByEmail(principal.getName());
+		model.addAttribute("member",member);
 		 return "member/mypage";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/bidding")
-	 public String bidding() {
+	 public String bidding(Principal principal, Model model) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/bidding";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/successfulbid")
-	 public String successfulbid() {
+	 public String successfulbid(Principal principal, Model model) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/successfulbid";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/myauction")
-	 public String myauction() {
+	 public String myauction(Model model,Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/myauction";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify/checkpwd")
-	 public String checkpwd() {
+	 public String checkpwd(Model model, Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/checkpwd";
 	 }
 
@@ -137,34 +147,51 @@ public class MemberController {
 			 return "member/checkpwd";
 		 }
 	 }
-	 
+
+	 @GetMapping(value = "member/mypage/todayview")
+	 public String todayViewAuction() {
+		 return "member/todayviewauction";
+	 }
+
 	 @GetMapping(value ="member/mypage/modify/password")
-	 public String changepwd() {
+	 public String changepwd(Model model, Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/changepwd";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/outmember")
-	 public String outmember() {
+	 public String outmember(Model model, Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/outmember";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/coupon")
-	 public String coupon() {
+	 public String coupon(Model model,Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/coupon";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/sentquery")
-	 public String sentquery() {
+	 public String sentquery(Model model,Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/sentquery";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/receivedquery")
-	 public String receivedquery() {
+	 public String receivedquery(Model model, Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/receivedquery";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/like")
-	 public String like() {
+	 public String like(Model model, Principal principal) {
+		 Member member = memberService.findByEmail(principal.getName());
+		 model.addAttribute("member",member);
 		 return "member/like";
 	 }
 	 

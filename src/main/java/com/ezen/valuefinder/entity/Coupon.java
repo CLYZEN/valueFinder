@@ -38,4 +38,7 @@ public class Coupon extends BaseEntity {
 
     @Column(nullable = false)
     private String couponDetail; // 쿠폰설명
+
+    @Column(nullable = false)
+    private Long couponDiscount; // 쿠폰 할인율
 }
