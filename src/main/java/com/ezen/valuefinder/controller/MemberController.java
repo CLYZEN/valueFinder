@@ -166,6 +166,13 @@ public class MemberController {
 		 model.addAttribute("member",member);
 		 return "member/outmember";
 	 }
+
+	 @PostMapping(value = "member/mypage/outmember")
+	 public String outmember(@Valid String detail,Principal principal) {
+		memberService.memberOut(principal.getName(),detail);
+
+		 return "redirect:/member/logout";
+	 }
 	 
 	 @GetMapping(value ="member/mypage/coupon")
 	 public String coupon(Model model,Principal principal) {
@@ -213,4 +220,22 @@ public class MemberController {
 		 return "redirect:/";
 	 }
 
+	 //계정복구
+	@GetMapping(value = "repair")
+	public String repairMember() {
+		 return "member/repairmember";
+	}
+
+	@PostMapping(value = "repair")
+	public String repairMember(@Valid String email, @Valid String password,Model model) {
+		 Member member = memberService.findByEmail(email);
+		 boolean result = passwordEncoder.matches(password,member.getPassword());
+
+		 if (member == null || result == false) {
+			 model.addAttribute("errorMessage","아이디 또는 비밀번호가 틀렸습니다.");
+			 return "member/repairmember";
+		 }
+		 memberService.repairMember(email);
+		 return "redirect:/member/login";
+	}
 }

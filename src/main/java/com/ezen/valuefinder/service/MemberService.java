@@ -1,11 +1,15 @@
 package com.ezen.valuefinder.service;
 
+import com.ezen.valuefinder.config.PrincipalDetails;
+import com.ezen.valuefinder.constant.Status;
 import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.MemberOut;
 import com.ezen.valuefinder.repository.BankRepository;
+import com.ezen.valuefinder.repository.MemberOutRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
@@ -26,7 +30,7 @@ public class MemberService implements UserDetailsService {
 
     private final MemberRepository memberRepository;
     private final BankRepository bankRepository;
-
+    private final MemberOutRepository memberOutRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email);
@@ -34,12 +38,15 @@ public class MemberService implements UserDetailsService {
         if(member == null) {
             throw new UsernameNotFoundException(email);
         }
-
+        return new PrincipalDetails(member);
+        /*
         return User.builder()
                 .username(member.getEmail())
                 .password(member.getPassword())
                 .roles(member.getRole().toString())
                 .build();
+
+         */
     }
 
     public List<Bank> getBankList() {
@@ -86,5 +93,21 @@ public class MemberService implements UserDetailsService {
     public void updatePwd(String password, String email, PasswordEncoder passwordEncoder) {
         Member member = memberRepository.findByEmail(email);
         member.updatePassword(password,passwordEncoder);
+    }
+
+    public void memberOut(String email, String detail) {
+        Member outMember = memberRepository.findByEmail(email);
+
+        MemberOut memberOut = new MemberOut();
+
+        memberOut.setMember(outMember);
+        memberOut.setMemberOutDetail(detail);
+        memberOutRepository.save(memberOut);
+        outMember.setStatus(Status.DISABLE);
+    }
+
+    public void repairMember(String email) {
+        Member member = memberRepository.findByEmail(email);
+        member.setStatus(Status.ACTIVE);
     }
 }
