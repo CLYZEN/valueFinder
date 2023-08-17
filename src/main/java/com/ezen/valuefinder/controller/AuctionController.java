@@ -1,11 +1,13 @@
 package com.ezen.valuefinder.controller;
 
+import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.service.AuctionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -34,7 +36,9 @@ public class AuctionController {
 
 	@PostMapping(value = "/auction/add")
 	public String addItem(@Valid NormalAuctionFormDto normalAuctionFormDto, BindingResult bindingResult, Model model,
-						  @RequestParam("image")List<MultipartFile> itemImgFiles, Principal principal) {
+						  @RequestParam("image")List<MultipartFile> itemImgFiles, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
 		if(bindingResult.hasErrors()) {
 			List<Category> categoryList = auctionService.getCategoryList();
 			model.addAttribute("categoryList", categoryList);
@@ -50,7 +54,7 @@ public class AuctionController {
 			return "/auction/form/normalitemform";
 		}
 		try {
-			auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principal.getName());
+			auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principalDetails.getUsername());
 		} catch (Exception e) {
 			e.printStackTrace();
 			List<Category> categoryList = auctionService.getCategoryList();
