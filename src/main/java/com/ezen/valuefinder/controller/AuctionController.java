@@ -74,13 +74,15 @@ public class AuctionController {
 	
 	@GetMapping(value = "/auction/realtime/detail")
 	public String realtimeBidDetail() {
-		return "/auction/details/realtimeDetail";
+		return "auction/details/realtimeDetail";
 	}
 	
 	@GetMapping(value = "/auction/sealed/detail")
 	public String sealedBidDetail() {
 		return "/auction/details/sealedDetail";
 	}
+	
+	
 
 	@GetMapping(value = "/auction/query/add")
 	public String auctionQuery() {
