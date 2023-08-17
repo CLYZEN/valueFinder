@@ -18,27 +18,15 @@ public class Coupon extends BaseEntity {
     private Long couponNo; // 쿠폰식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_list_no")
+    private CouponList couponList;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 
     @Column(nullable = false)
-    private String couponTitle; // 쿠폰제목
-
-    @Column(nullable = false)
-    private String couponCode; // 쿠폰코드
-
-    @Column(nullable = false)
-    private LocalDateTime couponExpireStart; // 쿠폰유효기간 시작일
-
-    @Column(nullable = false)
-    private LocalDateTime couponExpire; // 쿠폰유효기간 종료일
-
-    @Column(nullable = false)
     private LocalDateTime couponRegistDate; // 쿠폰등록일
 
-    @Column(nullable = false)
-    private String couponDetail; // 쿠폰설명
-
-    @Column(nullable = false)
-    private Long couponDiscount; // 쿠폰 할인율
+    private LocalDateTime couponUsedDate; // 쿠폰사용일
 }
