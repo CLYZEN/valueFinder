@@ -36,7 +36,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http,MvcRequestMatcher.Builder mvc) throws Exception {
 
 
-        http.authorizeHttpRequests((authorize) -> authorize
+        http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvc.pattern("/css/**"),mvc.pattern("/js/**"), mvc.pattern("/images/**"),mvc.pattern("/assets/**"),mvc.pattern("/img/**")).permitAll()
                         .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/login"),mvc.pattern("/member/regist"),mvc.pattern("/auction/**")).permitAll()
                         .requestMatchers(mvc.pattern("/favicon.ico"), mvc.pattern("/error"),mvc.pattern("/repair")).permitAll()
@@ -69,7 +69,8 @@ public class SecurityConfig {
                         //.userDetailsService(remembermeUserDetailService)
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        ;
 
 
         return http.build();
