@@ -96,17 +96,7 @@ public class AuctionService {
     }
     
     @Transactional(readOnly = true)
-    public NormalAuctionFormDto getAuctionDetail(Long auctionNo) {
-    	List<ItemImg> itemImgList = itemImgRepository.findByItemItemNo(auctionNo);
-    	List<ItemImgDto> itemImgDtoList = new ArrayList<>();
-    	for(ItemImg itemImg : itemImgList) {
-    		ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
-    		itemImgDtoList.add(itemImgDto);
-    	}
-    	Auction auction = auctionRepository.findById(auctionNo).orElseThrow(EntityNotFoundException::new);
-    	
-    	NormalAuctionFormDto normalAuctionFormDto = NormalAuctionFormDto.of(auction);
-    	
-    	return normalAuctionFormDto;
+    public Auction getAuctionDetail(Long auctionNo) {
+    	return auctionRepository.findById(auctionNo).orElseThrow();
     }
 }

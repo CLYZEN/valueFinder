@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.config;
 
+import com.ezen.valuefinder.handler.CustomSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,8 +25,8 @@ import javax.sql.DataSource;
 public class SecurityConfig {
 
     private final UserDetailsService userDetailsService;
-
     private final DataSource dataSource;
+    private final CustomSuccessHandler customSuccessHandler;
 
     @Bean
     MvcRequestMatcher.Builder mvc(HandlerMappingIntrospector introspector) {
@@ -35,16 +36,17 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http,MvcRequestMatcher.Builder mvc) throws Exception {
 
 
-        http.authorizeHttpRequests((authorize) -> authorize
+        http.authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(mvc.pattern("/css/**"),mvc.pattern("/js/**"), mvc.pattern("/images/**"),mvc.pattern("/assets/**"),mvc.pattern("/img/**")).permitAll()
-                        .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/**"),mvc.pattern("/auction/**")).permitAll()
-                        .requestMatchers(mvc.pattern("/favicon.ico"), mvc.pattern("/error")).permitAll()
+                        .requestMatchers(mvc.pattern("/"),mvc.pattern("/member/login"),mvc.pattern("/member/regist"),mvc.pattern("/auction/**")).permitAll()
+                        .requestMatchers(mvc.pattern("/favicon.ico"), mvc.pattern("/error"),mvc.pattern("/repair")).permitAll()
                         .requestMatchers(mvc.pattern("/admin/**")).hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin(formLogin -> formLogin
+                                .successHandler(customSuccessHandler)
                                 .loginPage("/member/login")
-                                .defaultSuccessUrl("/")
+                                //.defaultSuccessUrl("/")
                                 .usernameParameter("email")
                                 .failureUrl("/member/login/error")
                         //.permitAll()
@@ -67,7 +69,8 @@ public class SecurityConfig {
                         //.userDetailsService(remembermeUserDetailService)
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
-                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS));
+                        .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+        ;
 
 
         return http.build();

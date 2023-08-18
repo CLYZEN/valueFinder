@@ -62,5 +62,6 @@ public class NormalAuctionFormDto {
         
         return dto;
     }
+    
 }
 

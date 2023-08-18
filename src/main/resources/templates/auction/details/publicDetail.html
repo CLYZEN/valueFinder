@@ -258,7 +258,7 @@ table {
 		</div> 
 	</section>
 
-	<h6 style="text-align: right;width: 1750px;padding: 10px;" th:text="${Auction?.auctionCount}"></h6>
+	<h6 style="text-align: right;width: 1750px;padding: 10px;" th:text="|조회수: ${auction.auctionCount}|"></h6>
 
 	<section class="py-3">
 		<div class="container-fluid">
@@ -268,18 +268,14 @@ table {
 					<div class="banner-blocks">
 
 
-						<div class="banner-ad block-1" style="place-self: center;">
-							<img alt="" src="/images/ad-image-1.png"
+						<div class="banner-ad block-1" style="place-self: center;" th:each="itemImg : ${auction.item.ItemImgList}" >
+							<img  th:src="${auction.item.itemImage.itemImageUrl}"
 								style="width: 100%; height: 100%">
 						</div>
-
-
-
-
 						<div class="block-2">
 						<div style="display: flex;">
 							<div>
-							<h4 >현재 금액 : 10,000원</h4>
+							<h4 th:text="|현재금액:${auction.auctionNowPrice}|"></h4>
 							</div>
 							<div style="width: 415px;">
 							<h4
@@ -289,27 +285,27 @@ table {
 						</div>
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
-								<div class="col-sm-3">가방</div>
+								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
 							</div>
 
 							<div class="form-group row" style="flex-flow: nowrap;width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3" style="border-right: 0px;width: 110px;">08/07 16:20</div>
+								<div class="col-sm-3" style="border-right: 0px;width: 110px;"  th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 								<div class="col-sm-3" style="width: 100px;border-right: 0px;text-align: center;">~</div>
-								<div class="col-sm-3" style="width: 240px;">08/07 16:20</div>
+								<div class="col-sm-3" style="width: 240px;" th:text="${#temporals.format(auction.auctionEndTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">시작가</label>
-								<div class="col-sm-3">10,000원</div>
+								<div class="col-sm-3" th:text="|${#numbers.formatInteger(auction.auctionStartPrice, 0, 'COMMA')}원|"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
-									<div id='price' type='text' value='500' name="price">500
+									<div id='price' type='text'  name="price">
 									</div>
-									<div>원</div>
+									<div th:text="|${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"></div>
 								</div>
 							</div>
 
@@ -329,7 +325,7 @@ table {
 								<label class="col-sm-2" style="line-height: 71px;">판매자
 									닉네임</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
-									<div style="width: 50px; text-align: center;">보부상</div>
+									<div style="width: 50px; text-align: center;" th:text="${auction.item.member.nickname}"></div>
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
 										<input type="submit" class="btn btn-primary" value="후기"
 											style="border-radius: inherit; width: 110px;" />
@@ -423,9 +419,9 @@ table {
 									</div>
 								</div>
 								<div style="text-align: right; width: 600px;">
-									<input type='button' onclick='count("minus")' value='- 500'
+									<input type='button' onclick='count("minus")' th:value="|-${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
 										style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-										type='button' onclick='count("plus")' value='+ 500'
+										type='button' onclick='count("plus")' th:value="|+ ${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
 										style="margin-top: 10px; width: 80px; height: 40px;" />
 								</div>
 								<div style="text-align: right; width: 600px;">
@@ -528,7 +524,7 @@ table {
 			<div class="tab-pane fade show active" id="home" role="tabpanel"
 				aria-labelledby="home-tab">
 				<div class="wishful">
-					<span>구매자 희망사항</span>
+					<span th:text="${auction.item.itemDetail}"></span>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="profile" role="tabpanel"
@@ -594,11 +590,14 @@ table {
 
 			// 현재 화면에 표시된 값
 			let number = resultElement.value;
+			
+			const percentage = auctionStartPrice * 0.05;
+			
 			// 더하기/빼기
 			if (type === 'plus') {
-				number = parseInt(number) + 500;
+				number = parseInt(number) += percentage;
 			} else if (type === 'minus') {
-				number = parseInt(number) - 500;
+				number = parseInt(number) -= percentage;
 			}
 
 			// 결과 출력
