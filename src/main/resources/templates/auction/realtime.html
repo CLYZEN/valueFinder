@@ -137,6 +137,10 @@ margin-left: 151.5px; /* 좌측 여백 */
 			</ul>
 		</div> 
 
+<div  th:tach="auctions, status : ${auctions.getContent()}">
+<div th:text="${auction.auctionStartPrice}"></div>
+</div>
+
 	<!-- 경매 물품 카드 -->
 	<section class="py-5">
   <div class="container-fluid">
@@ -148,8 +152,8 @@ margin-left: 151.5px; /* 좌측 여백 */
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
               <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                
-                <div class="col">
-                  <div class="product-item">
+                <div  class="col" th:action="@{'/items/' + ${items.number}}" method="get" th:object="${items}">
+                  <div class="product-item" th:each="items, status: ${items.getContent()}">
                     <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
                     <figure>
                       <a href="product-single.html" title="Product Title">
@@ -167,7 +171,7 @@ margin-left: 151.5px; /* 좌측 여백 */
                     </div>
                     
                     <div class = "item_detail">
-                    <h3>물건 이름 <span>바나나</span></h3>
+                    <h3>물건 이름 : <span th:text="${items.itemName}"></span></h3>
                     <h3>시작가 <span>10,000</span> <span>원</span></h3>
                     <h3>현재가 <span>10,000</span> <span>원</span></h3>
                     <h3>입찰수 <span>0</span> <span>회</span></h3>

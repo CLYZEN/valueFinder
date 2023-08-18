@@ -2,11 +2,15 @@ package com.ezen.valuefinder.service;
 
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.ItemSearchDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.*;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +30,9 @@ public class AuctionService {
     private final ReverseBiddingRepository reverseBiddingRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
+    }
+    public List<Auction> getAuctionList() {
+    	return auctionRepository.findAll();
     }
 
     public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception{
@@ -100,5 +107,11 @@ public class AuctionService {
         reverseBiddingRepository.save(reverseBidding);
 
         return reverseBidding.getReverseBiddingNo();
+    }
+    
+    @Transactional(readOnly = true)
+    public Page<Item> getAuctionPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+    	Page<Item> auctionPage = itemRepository.getAuctionPage(itemSearchDto, pageable);
+    	return auctionPage;
     }
 }

@@ -2,18 +2,26 @@ package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.ItemSearchDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Item;
 import com.ezen.valuefinder.service.AuctionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -128,9 +137,18 @@ public class AuctionController {
 
 
 	//실시간 경매 페이지
-	@GetMapping(value="/auction/realtime")
-	public String auctionRealtime() {
+	@GetMapping(value={"/auction/realtime", "items/{page}"})
+	public String auctionRealtime(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
 
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
+		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
+		List<Auction> auctions = auctionService.getAuctionList();
+		
+		model.addAttribute("items", items);
+		model.addAttribute("auctions",auctions);
+		model.addAttribute("itemSearchDto", itemSearchDto);
+		model.addAttribute("maxPage", 5);
+		
 		return "auction/realtime";
 	}
 
