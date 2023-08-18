@@ -10,10 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +69,10 @@ public class AuctionController {
 		return "/auction/form/reverseitemform";
 	}
 
-	@GetMapping(value = "/auction/public/detail")
-	public String publicBidDetail() {
+	@GetMapping(value = "auction/public/detail/{auctionNo}")
+	public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+		NormalAuctionFormDto normalAuctionFormDto = auctionService.getAuctionDetail(auctionNo);
+		model.addAttribute("auction",normalAuctionFormDto);
 		return "/auction/details/publicDetail";
 	}
 	

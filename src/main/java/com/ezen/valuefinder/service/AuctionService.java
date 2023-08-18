@@ -2,18 +2,25 @@ package com.ezen.valuefinder.service;
 
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.ItemImgDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
+import com.ezen.valuefinder.repository.ItemImgRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -25,6 +32,7 @@ public class AuctionService {
     private final ItemImgService itemImgService;
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
+    private final ItemImgRepository itemImgRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -85,5 +93,20 @@ public class AuctionService {
         }
 
         return auction.getAuctionNo();
+    }
+    
+    @Transactional(readOnly = true)
+    public NormalAuctionFormDto getAuctionDetail(Long auctionNo) {
+    	List<ItemImg> itemImgList = itemImgRepository.findByItemItemNo(auctionNo);
+    	List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+    	for(ItemImg itemImg : itemImgList) {
+    		ItemImgDto itemImgDto = ItemImgDto.of(itemImg);
+    		itemImgDtoList.add(itemImgDto);
+    	}
+    	Auction auction = auctionRepository.findById(auctionNo).orElseThrow(EntityNotFoundException::new);
+    	
+    	NormalAuctionFormDto normalAuctionFormDto = NormalAuctionFormDto.of(auction);
+    	
+    	return normalAuctionFormDto;
     }
 }
