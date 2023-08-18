@@ -1,9 +1,12 @@
 package com.ezen.valuefinder.service;
 
+import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.AuctionQueryRepository;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
@@ -25,6 +28,7 @@ public class AuctionService {
     private final ItemImgService itemImgService;
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
+    private final AuctionQueryRepository auctionQueryRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -43,6 +47,7 @@ public class AuctionService {
         item.setItemDepth(normalAuctionFormDto.getItemDepth());
         item.setItemHeight(normalAuctionFormDto.getItemHeight());
         item.setMember(member);
+        
 
         itemRepository.save(item);
 
@@ -85,5 +90,34 @@ public class AuctionService {
         }
 
         return auction.getAuctionNo();
+    }
+    
+    
+    public Long createdQuery(AuctionQueryDto auctionQueryDto , String email)throws Exception {
+    	
+    	Member member = memberRepository.findByEmail(email);
+    	
+    	
+    	AuctionQuery auctionQuery = new AuctionQuery();
+    	
+    	auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
+    	auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
+    	
+    	    	
+    	if(auctionQueryDto.getAuctionQueryDistinction() == 1) {
+    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
+    	} else if(auctionQueryDto.getAuctionQueryDistinction() == 2) {
+    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ITEM);
+    	} else if (auctionQueryDto.getAuctionQueryDistinction() == 3 ) {
+    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.SHIPPING);
+    	}
+    	
+    	auctionQueryRepository.save(auctionQuery);
+    	
+    	return 	auctionQuery.getAuctionQueryNo();
+    	
+    	
+    	
+    	
     }
 }

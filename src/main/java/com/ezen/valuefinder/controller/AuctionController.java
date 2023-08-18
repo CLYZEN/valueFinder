@@ -2,9 +2,13 @@ package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.service.AuctionService;
+import com.ezen.valuefinder.service.MemberService;
+
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
@@ -25,6 +29,7 @@ import java.util.List;
 public class AuctionController {
 
 	private final AuctionService auctionService;
+	private final MemberService memberService;
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -86,8 +91,37 @@ public class AuctionController {
 		return "/auction/details/sealedDetail";
 	}
 
+	@PostMapping(value = "/auction/query/add")
+	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Principal principal   , BindingResult bindingResult , Model model  ) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("auctionQueryDto",auctionQueryDto);
+			return "/auction/query/add";
+		}
+		
+		
+		try {
+			auctionService.createdQuery(auctionQueryDto , principal.getName() );
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
+			
+			return "/auction/query/add";
+		}
+		
+		
+		
+	return "redirect:/";
+	}
+	
+	
 	@GetMapping(value = "/auction/query/add")
-	public String auctionQuery() {
+	public String auctionQuery(Model model,Authentication authentication) {
+		model.addAttribute("auctionQueryDto",new AuctionQueryDto());
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member",member);
+		
 		return "/auction/query/queryform";
 	}
 

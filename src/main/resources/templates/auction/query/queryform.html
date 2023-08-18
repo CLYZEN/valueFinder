@@ -56,29 +56,36 @@
       </div>
    </div>
    <div class="container">
-      <form name="newProduct" action="addProduct_process.jsp" method="post" class="form-horizontal">
+     <form name="newProduct" action="/auction/query/add" method="post" class="form-horizontal"
+     th:object="${auctionQueryDto}">
+     
+     
+     
        <div class="form-group row col-sm-top" style="padding-top: 25px;">
           <label class="col-sm-2">질문구분</label>
           <div class="col-sm-3" style="line-height: 37px;">
-             <select style="width: 100%;border: 0px;">
-                    <option>구분선택</option>
-                    <option>뉴스</option>
-                    <option>잡담</option>
+         
+             <select style="width: 100%;border: 0px;" th:field="*{auctionQueryDistinction}">
+                    <option value = "0" disabled>구분선택</option>
+                    <option value = "1" >물품</option>
+                    <option value = "2" >배송</option>
+                    <option value = "3" >기타</option>
                 </select>
+     
           </div>
        </div>
        
        <div class="form-group row">
           <label class="col-sm-2">등록자</label>
           <div class="col-sm-3">
-             <input type="text" name="pname" class="form-control" />          
+             <input type="text" class="form-control" th:value="${member.nickname}" disabled/>          
           </div>
        </div>
        
            <div class="form-group row col-sm-cet">
-          <label class="col-sm-2">제목</label>
+          <label class="col-sm-2" >제목</label>
           <div class="col-sm-3">
-             <input type="text" name="uniPrice" class="form-control" />          
+             <input type="text" th:field="*{auctionQueryTitle}" class="form-control" />          
           </div>
        </div>
        
@@ -86,7 +93,7 @@
            <div class="form-group row">
           <label class="col-sm-2" style="line-height: 299px;">상세설명</label>
           <div class="col-sm-5">
-             <textarea name="description" class="form-control" style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit;border: 1px solid;"></textarea>          
+             <textarea th:field="*{auctionQueryDtail}" class="form-control" style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit;border: 1px solid;"></textarea>          
           </div>
        </div>
        
@@ -95,6 +102,8 @@
          <div class="col-sm-offset-2 col-sm-10" style="width: 1320px; text-align: right;" >
             <input type="submit" class="btn btn-primary" value="등록" style="border-radius: inherit;" />
          </div>
+         
+          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
       </div>
    </form>
    </div>
