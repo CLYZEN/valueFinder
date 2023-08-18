@@ -86,4 +86,11 @@ public class AuctionService {
 
         return auction.getAuctionNo();
     }
+    
+    public Auction wish(Long auctionNo) {
+    	
+    	Auction auction = auctionRepository.findByAuctionNo(auctionNo);
+    	
+    	return auction;
+    }
 }

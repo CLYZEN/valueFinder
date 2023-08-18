@@ -40,6 +40,7 @@ public class Auction extends BaseEntity {
     private LocalDateTime auctionEndTime; // 경매종료일
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AuctionStatus auctionStatus; // 경매상태
 
     @Column(nullable = false)

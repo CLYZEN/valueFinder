@@ -1,11 +1,8 @@
 package com.ezen.valuefinder.controller;
 
-import com.ezen.valuefinder.constant.AuctionType;
-import com.ezen.valuefinder.dto.NormalAuctionFormDto;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.service.AuctionService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
+import java.security.Principal;
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,9 +11,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.service.AuctionService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
@@ -73,17 +74,23 @@ public class AuctionController {
 	}
 	
 	@GetMapping(value = "/auction/realtime/detail")
-	public String realtimeBidDetail() {
+	public String realtimeBidDetail(Long auctionNo,Model model) {
+		//찜기능
+		Auction auction = auctionService.wish(1L);
+		model.addAttribute("auction", auction);
+		
 		return "auction/details/realtimeDetail";
 	}
+	
 	
 	@GetMapping(value = "/auction/sealed/detail")
 	public String sealedBidDetail() {
 		return "/auction/details/sealedDetail";
+		
+		
 	}
 	
 	
-
 	@GetMapping(value = "/auction/query/add")
 	public String auctionQuery() {
 		return "/auction/query/queryform";
