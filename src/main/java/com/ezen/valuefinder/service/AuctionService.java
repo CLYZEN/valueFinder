@@ -3,11 +3,9 @@ package com.ezen.valuefinder.service;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
-import com.ezen.valuefinder.repository.AuctionRepository;
-import com.ezen.valuefinder.repository.CategoryRepository;
-import com.ezen.valuefinder.repository.ItemRepository;
-import com.ezen.valuefinder.repository.MemberRepository;
+import com.ezen.valuefinder.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +23,7 @@ public class AuctionService {
     private final ItemImgService itemImgService;
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
+    private final ReverseBiddingRepository reverseBiddingRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -60,7 +59,7 @@ public class AuctionService {
         auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
         auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
         if(normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
-         || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
+                || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
             auction.setAuctionStatus(AuctionStatus.PROGRESS);
         } else {
             auction.setAuctionStatus(AuctionStatus.PENDING);
@@ -85,5 +84,21 @@ public class AuctionService {
         }
 
         return auction.getAuctionNo();
+    }
+
+    public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
+        ReverseBidding reverseBidding = new ReverseBidding();
+        reverseBidding.setReverseBiddingTitle(reverseAuctionFormDto.getReverseBiddingTitle());
+        reverseBidding.setReverseBiddingDetail(reverseAuctionFormDto.getReverseBiddingDetail());
+        reverseBidding.setHopePrice(reverseAuctionFormDto.getHopePrice());
+        reverseBidding.setReverseBiddingExpireDate(reverseAuctionFormDto.getReverseBiddingExpireDate());
+        reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
+
+        Member member = memberRepository.findByEmail(email);
+
+        reverseBidding.setMember(member);
+        reverseBiddingRepository.save(reverseBidding);
+
+        return reverseBidding.getReverseBiddingNo();
     }
 }

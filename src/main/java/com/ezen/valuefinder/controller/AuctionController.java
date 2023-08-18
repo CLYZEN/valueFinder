@@ -3,6 +3,8 @@ package com.ezen.valuefinder.controller;
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.service.AuctionService;
 import jakarta.validation.Valid;
@@ -67,8 +69,21 @@ public class AuctionController {
 	}
 
 	@GetMapping(value = "/auction/reverse/add")
-	public String addReverseItem() {
+	public String addReverseItem(Model model) {
+		List<Category> categoryList = auctionService.getCategoryList();
+		model.addAttribute("reverseAuctionFromDto", new ReverseAuctionFormDto());
+		model.addAttribute("categoryList", categoryList);
 		return "/auction/form/reverseitemform";
+	}
+
+	@PostMapping(value = "/auction/reverse/add")
+	public String addReverseItem(@Valid ReverseAuctionFormDto reverseAuctionFormDto, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		String email = principalDetails.getUsername();
+
+		auctionService.createReverseAuction(reverseAuctionFormDto,email);
+
+		return "redirect:/";
 	}
 
 	@GetMapping(value = "/auction/public/detail")
