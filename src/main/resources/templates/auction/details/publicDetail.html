@@ -279,35 +279,35 @@ table {
 						<div class="block-2">
 						<div style="display: flex;">
 							<div>
-							<h4>현재 금액 : 10,000원</h4>
+							<h4 th:text="|현재 금액 : ${auction.auctionNowPrice} 원|">현재 금액 : 10,000원</h4>
 							</div>
 							<div style="width: 415px;">
 							<h4
-								style="text-align: right; margin-right: 60px; margin-bottom: 15px; ">남은
-								시간 0시간 54분 20초</h4>
+								style="text-align: right; margin-right: 60px; margin-bottom: 15px; " th:text="${remainTime}">남은
+								</h4>
 							</div>
 						</div>
 							<div class="form-group row">
-								<label class="col-sm-2">물품 이름</label>
-								<div class="col-sm-3">가방</div>
+								<label class="col-sm-2" >물품 이름</label>
+								<div class="col-sm-3" th:text="${auction.item.itemName}">가방</div>
 							</div>
 
 							<div class="form-group row" style="flex-flow: nowrap;width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3" style="border-right: 0px;width: 110px;">08/07 16:20</div>
+								<div class="col-sm-3" style="border-right: 0px;width: 110px;" th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}">08/07 16:20</div>
 								<div class="col-sm-3" style="width: 100px;border-right: 0px;text-align: center;">~</div>
-								<div class="col-sm-3" style="width: 240px;">08/07 16:20</div>
+								<div class="col-sm-3" style="width: 240px;" th:text="${#temporals.format(auction.auctionEndTime,'yyyy-MM-dd HH:mm')}">08/07 16:20</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">시작가</label>
-								<div class="col-sm-3">10,000원</div>
+								<div class="col-sm-3" th:text="${auction.auctionStartPrice}">10,000원</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
-									<div id='price' type='text' value='500' name="price">500
+									<div id='price' type='text' value='500' name="price" th:text="${#numbers.formatDecimal(auction.auctionStartPrice * 0.05, 1,-3)}">500
 									</div>
 									<div>원</div>
 								</div>

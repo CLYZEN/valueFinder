@@ -4,6 +4,7 @@ import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.service.AuctionService;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +89,11 @@ public class AuctionController {
 	}
 
 	@GetMapping(value = "/auction/public/detail")
-	public String publicBidDetail() {
+	public String publicBidDetail(Model model) {
+		Auction auction = auctionService.getAuction(1L);
+		model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction",auction);
+		model.addAttribute("nowTime", LocalDateTime.now());
 		return "/auction/details/publicDetail";
 	}
 	
