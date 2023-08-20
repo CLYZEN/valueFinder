@@ -23,7 +23,8 @@ import com.ezen.valuefinder.entity.Category;
 	
 	import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 	import java.security.Principal;
-	import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 	import java.util.List;
 	
 	@Controller
@@ -79,18 +80,33 @@ import com.ezen.valuefinder.entity.Category;
 	
 		@GetMapping(value = "auction/public/detail/{auctionNo}")
 		public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
-			Auction auction = auctionService.getAuctionDetail(auctionNo);
-			model.addAttribute("auction",auction);
-			return "/auction/details/publicDetail";
+		    Auction auction = auctionService.getAuctionDetail(auctionNo);
+		    auctionService.auctionCount(auctionNo);
+			model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+		    model.addAttribute("auction", auction);
+		    model.addAttribute("nowTime", LocalDateTime.now());
+
+		    return "/auction/details/publicDetail";
 		}
+
 		
-		@GetMapping(value = "/auction/realtime/detail")
-		public String realtimeBidDetail() {
+		@GetMapping(value = "/auction/realtime/detail/{auctionNo}")
+		public String realtimeBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+			   Auction auction = auctionService.getAuctionDetail(auctionNo);
+			    auctionService.auctionCount(auctionNo);
+				model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+			    model.addAttribute("auction", auction);
+			    model.addAttribute("nowTime", LocalDateTime.now());
 			return "/auction/details/realtimeDetail";
 		}
 		
-		@GetMapping(value = "/auction/sealed/detail")
-		public String sealedBidDetail() {
+		@GetMapping(value = "/auction/sealed/detail/{auctionNo}")
+		public String sealedBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+			   Auction auction = auctionService.getAuctionDetail(auctionNo);
+			    auctionService.auctionCount(auctionNo);
+				model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+			    model.addAttribute("auction", auction);
+			    model.addAttribute("nowTime", LocalDateTime.now());
 			return "/auction/details/sealedDetail";
 		}
 	

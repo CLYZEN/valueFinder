@@ -29,6 +29,6 @@ public class CouponService {
     }
 
     public List<CouponList> getCouponList() {
-       return couponListRepository.findAll();
+        return couponListRepository.findAll();
     }
 }

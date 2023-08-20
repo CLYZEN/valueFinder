@@ -21,6 +21,10 @@ public class ReverseBidding extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "category_code")
+    private Category category;
+
     @Column(nullable = false)
     private String reverseBiddingTitle; // 역경매제목
 
