@@ -4,21 +4,34 @@ import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import java.security.Principal;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -26,6 +39,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final PasswordEncoder passwordEncoder;
+	private final AuctionService auctionService;
 
 	 @GetMapping(value = "/member/login")
 	 public String login() {
@@ -201,11 +215,17 @@ public class MemberController {
 		 return "member/sentquery";
 	 }
 	 
+
+	 
+	 
 	 @GetMapping(value ="member/mypage/receivedquery")
-	 public String receivedquery(Model model, Authentication authentication) {
+	 public String receivedquery(Model model, Authentication authentication ) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
 		 model.addAttribute("member",member);
+		 
+		
+		 
 		 return "member/receivedquery";
 	 }
 	 
