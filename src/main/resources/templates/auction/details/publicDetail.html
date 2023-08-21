@@ -324,10 +324,9 @@
 					<div class="banner-blocks">
 
 
-						<div class="banner-ad block-1" style="place-self: center;"
-							th:each="itemImg : ${auction.item.itemImgList}">
-							<img th:if="${not #strings.isEmpty(itemImg.itemImageUrl)}"
-								th:src="${itemImg.itemImageUrl[0]}" style="width: 100%; height: 100%">
+						<div class="banner-ad block-1" style="place-self: center;">
+							<img th:src = "${auction.item.itemImgList[0].itemImageUrl}" th:alt="${auction.item.itemName}" 
+							style="width: 100%; height: 100%">
 						</div>
 						<div class="block-2">
 							<div style="display: flex;">
