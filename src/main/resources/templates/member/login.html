@@ -160,7 +160,7 @@
 									style="font-size: 16px; margin-bottom: 0px; color: black; font-weight: 700; line-height: 37px;">아직
 									회원이 아니신가요?</p>
 								<div>
-									<button type="submit" class="btnfinder" id="loginbtn"
+									<button type="submit" class="btnfinder" id="loginbtn" onclick="moveRegister()"
 										style="margin-left: 60px; width: 150px; text-align-last: center; background-color: white;border: 1px solid #bbbbbb;">회원가입</button>
 								</div>
 							</div>
@@ -169,7 +169,7 @@
 									style="font-size: 16px; margin-bottom: 0px; color: black; font-weight: 700; line-height: 37px;">
 									비밀번호를 잊어버리셨나요?</p>
 								<div>
-									<button type="submit" class="btnfinder" id="loginbtn"
+									<button type="submit" class="btnfinder" id="loginbtn" onclick="movePage()"
 										style="margin-left: 32px; width: 150px; text-align-last: center; background-color: white;border: 1px solid #bbbbbb;">비밀번호 찾기</button>
 								</div>
 							</div>
@@ -237,6 +237,14 @@
 
 
 		});
+
+		function movePage() {
+			location.href='/member/findpw';
+		}
+
+		function moveRegister() {
+			location.href='/member/regist';
+		}
 	</script>
 </th:block>
 
