@@ -4,6 +4,7 @@ import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.ItemSearchDto;
+import com.ezen.valuefinder.dto.ItemsListDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -159,6 +160,10 @@ public class AuctionService {
     	return auctionPage;
     }
 
+    @Transactional(readOnly = true)
+    public List<ItemsListDto> getItemsList() {
+    	return itemRepository.getItemsList();
+    }
 
     public Auction getAuction(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();

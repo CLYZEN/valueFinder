@@ -3,6 +3,7 @@ package com.ezen.valuefinder.controller;
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.ItemSearchDto;
+import com.ezen.valuefinder.dto.ItemsListDto;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
@@ -181,10 +182,10 @@ public class AuctionController {
 
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
 		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
-		List<Auction> auctions = auctionService.getAuctionList();
+		List<ItemsListDto> auctions = auctionService.getItemsList();
 		
 		model.addAttribute("items", items);
-		model.addAttribute("auctions",auctions);
+		model.addAttribute("auctions",auctions); 		
 		model.addAttribute("itemSearchDto", itemSearchDto);
 		model.addAttribute("maxPage", 5);
 		
