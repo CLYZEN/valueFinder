@@ -176,13 +176,28 @@ public class AuctionController {
 	}
 
 
+	@GetMapping(value={"/auction/public", "items/{page}"})
+	public String auctionPublic(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
+
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
+		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
+		List<ItemsListDto> auctions = auctionService.getPublicAuctionList();
+		
+		model.addAttribute("items", items);
+		model.addAttribute("auctions",auctions); 		
+		model.addAttribute("itemSearchDto", itemSearchDto);
+		model.addAttribute("maxPage", 5);
+		
+		return "auction/public";
+	}
+	
 	//실시간 경매 페이지
 	@GetMapping(value={"/auction/realtime", "items/{page}"})
 	public String auctionRealtime(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
 
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
 		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
-		List<ItemsListDto> auctions = auctionService.getItemsList();
+		List<ItemsListDto> auctions = auctionService.getRealtimeAuctionList();
 		
 		model.addAttribute("items", items);
 		model.addAttribute("auctions",auctions); 		
@@ -199,8 +214,17 @@ public class AuctionController {
 		return "auction/reversebid";
 	}
 
-	@GetMapping(value = "/auction/sealedbid")
-	public String auctionSealedbid() {
+	@GetMapping(value = {"/auction/sealedbid", "items/{page}"})
+	public String auctionSealedbid(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
+		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
+		List<ItemsListDto> auctions = auctionService.getSealedAuctionList();
+		
+		model.addAttribute("items", items);
+		model.addAttribute("auctions",auctions); 		
+		model.addAttribute("itemSearchDto", itemSearchDto);
+		model.addAttribute("maxPage", 5);
+		
 		return "auction/sealedbid";
 	}
 	

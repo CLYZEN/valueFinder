@@ -161,8 +161,18 @@ public class AuctionService {
     }
 
     @Transactional(readOnly = true)
-    public List<ItemsListDto> getItemsList() {
-    	return itemRepository.getItemsList();
+    public List<ItemsListDto> getRealtimeAuctionList() {
+    	return itemRepository.getRealtimeAuctionList();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ItemsListDto> getPublicAuctionList() {
+    	return itemRepository.getPublicAuctionList();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ItemsListDto> getSealedAuctionList() {
+    	return itemRepository.getSealedAuctionList();
     }
 
     public Auction getAuction(Long auctionId) {

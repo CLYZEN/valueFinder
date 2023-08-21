@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.dto;
 
+
 public interface ItemsListDto {
 	long getId();
 	String getName();
@@ -10,4 +11,9 @@ public interface ItemsListDto {
 	String getNowTime();
 	int getCount();
 	String getStatus();
+	int getDay();
+	int getHour();
+	int getMinute();
+	int getSecond();
+
 }
