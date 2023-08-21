@@ -7,7 +7,7 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="" />
 <meta name="author" content="" />
-<title>Dashboard - SB Admin</title>
+<title>valueFinder</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css"
 	rel="stylesheet" />
@@ -81,6 +81,26 @@
 								<i class="fas fa-tachometer-alt"></i>
 							</div> 관리자 메뉴
 						</a>
+						<div class="sb-sidenav-menu-heading">쿠폰 관리</div>
+						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+						   data-bs-target="#coupon" aria-expanded="false"
+						   aria-controls="collapseLayouts">
+							<div class="sb-nav-link-icon">
+								<i class="fas fa-columns"></i>
+							</div> 쿠폰 관리 리스트
+							<div class="sb-sidenav-collapse-arrow">
+								<i class="fas fa-angle-down"></i>
+							</div>
+						</a>
+						<div class="collapse" id="coupon"
+							 aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="/admin/coupon"> 등록 쿠폰 관리 </a>
+							</nav>
+							<nav class="sb-sidenav-menu-nested nav">
+								<a class="nav-link" href="/admin/coupon/create"> 쿠폰 생성 </a>
+							</nav>
+						</div>
 						<div class="sb-sidenav-menu-heading">매물 관리</div>
 						<a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
 							data-bs-target="#collapseLayouts" aria-expanded="false"
@@ -144,7 +164,7 @@
 						<li class="breadcrumb-item active">관리자 메뉴</li>
 					</ol>
 					<div class="row">
-						<div class="col-xl-3 col-md-6">
+						<div class="col-xl-2 col-md-6">
 							<div class="card bg-primary text-white mb-4">
 								<div class="card-body">매물 관리 리스트</div>
 								<div
@@ -157,7 +177,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-3 col-md-6">
+						<div class="col-xl-2 col-md-6">
 							<div class="card bg-warning text-white mb-4">
 								<div class="card-body">회원 관리 리스트</div>
 								<div
@@ -170,7 +190,8 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-3 col-md-6">
+
+						<div class="col-xl-2 col-md-6">
 							<div class="card bg-success text-white mb-4">
 								<div class="card-body">고객 통계</div>
 								<div
@@ -183,13 +204,39 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-3 col-md-6">
+						<div class="col-xl-2 col-md-6">
 							<div class="card bg-danger text-white mb-4">
 								<div class="card-body">경매 매물</div>
 								<div
 									class="card-footer d-flex align-items-center justify-content-between">
 									<a class="small text-white stretched-link"
 										href="/admin/itemStatus">매물 통계</a>
+									<div class="small text-white">
+										<i class="fas fa-angle-right"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-2 col-md-6">
+							<div class="card bg-dark text-white mb-4">
+								<div class="card-body">쿠폰</div>
+								<div
+										class="card-footer d-flex align-items-center justify-content-between">
+									<a class="small text-white stretched-link"
+									   href="/admin/coupon/create">쿠폰 생성</a>
+									<div class="small text-white">
+										<i class="fas fa-angle-right"></i>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-xl-2 col-md-6">
+							<div class="card bg-info text-white mb-4">
+								<div class="card-body">쿠폰</div>
+								<div
+										class="card-footer d-flex align-items-center justify-content-between">
+									<a class="small text-white stretched-link"
+									   href="/admin/coupon">쿠폰 관리</a>
 									<div class="small text-white">
 										<i class="fas fa-angle-right"></i>
 									</div>

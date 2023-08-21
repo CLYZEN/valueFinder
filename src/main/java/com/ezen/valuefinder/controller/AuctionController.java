@@ -1,7 +1,20 @@
 package com.ezen.valuefinder.controller;
 
-import java.security.Principal;
-import java.util.List;
+
+import com.ezen.valuefinder.config.PrincipalDetails;
+import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Bank;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.service.AuctionService;
+import com.ezen.valuefinder.service.MemberService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,19 +24,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.ezen.valuefinder.dto.NormalAuctionFormDto;
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.service.AuctionService;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequiredArgsConstructor
 public class AuctionController {
 
 	private final AuctionService auctionService;
+	private final MemberService memberService;
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -35,7 +47,9 @@ public class AuctionController {
 
 	@PostMapping(value = "/auction/add")
 	public String addItem(@Valid NormalAuctionFormDto normalAuctionFormDto, BindingResult bindingResult, Model model,
-						  @RequestParam("image")List<MultipartFile> itemImgFiles, Principal principal) {
+						  @RequestParam("image")List<MultipartFile> itemImgFiles, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
 		if(bindingResult.hasErrors()) {
 			List<Category> categoryList = auctionService.getCategoryList();
 			model.addAttribute("categoryList", categoryList);
@@ -51,7 +65,7 @@ public class AuctionController {
 			return "/auction/form/normalitemform";
 		}
 		try {
-			auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principal.getName());
+			auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principalDetails.getUsername());
 		} catch (Exception e) {
 			e.printStackTrace();
 			List<Category> categoryList = auctionService.getCategoryList();
@@ -64,12 +78,29 @@ public class AuctionController {
 	}
 
 	@GetMapping(value = "/auction/reverse/add")
-	public String addReverseItem() {
+	public String addReverseItem(Model model) {
+		List<Category> categoryList = auctionService.getCategoryList();
+		model.addAttribute("reverseAuctionFromDto", new ReverseAuctionFormDto());
+		model.addAttribute("categoryList", categoryList);
 		return "/auction/form/reverseitemform";
 	}
 
+	@PostMapping(value = "/auction/reverse/add")
+	public String addReverseItem(@Valid ReverseAuctionFormDto reverseAuctionFormDto, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		String email = principalDetails.getUsername();
+
+		auctionService.createReverseAuction(reverseAuctionFormDto,email);
+
+		return "redirect:/";
+	}
+
 	@GetMapping(value = "/auction/public/detail")
-	public String publicBidDetail() {
+	public String publicBidDetail(Model model) {
+		Auction auction = auctionService.getAuction(1L);
+		model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction",auction);
+		model.addAttribute("nowTime", LocalDateTime.now());
 		return "/auction/details/publicDetail";
 	}
 	
@@ -88,9 +119,40 @@ public class AuctionController {
 		return "/auction/details/sealedDetail";
 		
 	}
+
+
+	@PostMapping(value = "/auction/query/add")
+	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Principal principal   , BindingResult bindingResult , Model model  ) {
+		
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("auctionQueryDto",auctionQueryDto);
+			return "/auction/query/add";
+		}
+		
+		
+		try {
+			auctionService.createdQuery(auctionQueryDto , principal.getName() );
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
+			
+			return "/auction/query/add";
+		}
+		
+		
+		
+	return "redirect:/";
+	}
+	
+
 	
 	@GetMapping(value = "/auction/query/add")
-	public String auctionQuery() {
+	public String auctionQuery(Model model,Authentication authentication) {
+		model.addAttribute("auctionQueryDto",new AuctionQueryDto());
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member",member);
+		
 		return "/auction/query/queryform";
 	}
 
@@ -122,10 +184,15 @@ public class AuctionController {
 		return "auction/realtime";
 	}
 
-	//비공개 경매 페이지
-	@GetMapping(value="/auction/sealedbid")
-	public String auctionSealedbid() {
+	//역경매
+	@GetMapping(value="/auction/reversebid")
+	public String auctionReversebid() {
 
+		return "auction/reversebid";
+	}
+
+	@GetMapping(value = "/auction/sealedbid")
+	public String auctionSealedbid() {
 		return "auction/sealedbid";
 	}
 	

@@ -1,23 +1,37 @@
 package com.ezen.valuefinder.controller;
 
+import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Principal;
+
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +39,7 @@ public class MemberController {
 
 	private final MemberService memberService;
 	private final PasswordEncoder passwordEncoder;
+	private final AuctionService auctionService;
 
 	 @GetMapping(value = "/member/login")
 	 public String login() {
@@ -103,33 +118,50 @@ public class MemberController {
 	 }
 	 
 	 @GetMapping(value ="member/mypage") 
-	 public String myPage() {
+	 public String myPage(Model model, Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		model.addAttribute("member",member);
 		 return "member/mypage";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/bidding")
-	 public String bidding() {
+	 public String bidding(Authentication authentication, Model model) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/bidding";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/successfulbid")
-	 public String successfulbid() {
+	 public String successfulbid(Authentication authentication, Model model) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/successfulbid";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/myauction")
-	 public String myauction() {
+	 public String myauction(Model model,Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/myauction";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify/checkpwd")
-	 public String checkpwd() {
+	 public String checkpwd(Model model, Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/checkpwd";
 	 }
 
 	 @PostMapping(value = "member/mypage/modify/checkpwd")
-	 public String checkpwd(Model model, Principal principal,@Valid String password) {
-		 boolean result = memberService.checkPwd(password,principal.getName(),passwordEncoder);
+	 public String checkpwd(Model model, Authentication authentication,@Valid String password) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+		 boolean result = memberService.checkPwd(password,principalDetails.getUsername(),passwordEncoder);
 		 if(result == true) {
 			 return "redirect:/member/mypage/modify";
 		 } else {
@@ -137,41 +169,79 @@ public class MemberController {
 			 return "member/checkpwd";
 		 }
 	 }
-	 
+
+	 @GetMapping(value = "member/mypage/todayview")
+	 public String todayViewAuction() {
+		 return "member/todayviewauction";
+	 }
+
 	 @GetMapping(value ="member/mypage/modify/password")
-	 public String changepwd() {
+	 public String changepwd(Model model, Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/changepwd";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/outmember")
-	 public String outmember() {
+	 public String outmember(Model model, Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/outmember";
+	 }
+
+	 @PostMapping(value = "member/mypage/outmember")
+	 public String outmember(@Valid String detail,Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		memberService.memberOut(principalDetails.getUsername(),detail);
+
+		 return "redirect:/member/logout";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/coupon")
-	 public String coupon() {
+	 public String coupon(Model model,Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/coupon";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/sentquery")
-	 public String sentquery() {
+	 public String sentquery(Model model,Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/sentquery";
 	 }
 	 
+
+	 
+	 
 	 @GetMapping(value ="member/mypage/receivedquery")
-	 public String receivedquery() {
+	 public String receivedquery(Model model, Authentication authentication ) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
+		 
+		
+		 
 		 return "member/receivedquery";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/like")
-	 public String like() {
+	 public String like(Model model, Authentication authentication) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+		 model.addAttribute("member",member);
 		 return "member/like";
 	 }
 	 
 	 @GetMapping(value ="member/mypage/modify")
-	 public String modify(Model model, Principal principal) {
+	 public String modify(Model model, Authentication authentication) {
 		 List<Bank> bankList = memberService.getBankList();
-		 Member member = memberService.findByEmail(principal.getName());
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
 
 		 model.addAttribute("memberModifyDto",new MemberModifyDto());
 		 model.addAttribute("member",member);
@@ -181,9 +251,29 @@ public class MemberController {
 
 	 // 에러메시지 구현 필요
 	@PostMapping(value = "member/mypage/modify")
-	 public String modify(@Valid MemberModifyDto memberModifyDto,BindingResult bindingResult,Model model,Principal principal) {
-		 memberService.updateMember(memberModifyDto,principal.getName());
+	 public String modify(@Valid MemberModifyDto memberModifyDto,BindingResult bindingResult,Model model,Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+		 memberService.updateMember(memberModifyDto,principalDetails.getUsername());
 		 return "redirect:/";
 	 }
 
+	 //계정복구
+	@GetMapping(value = "repair")
+	public String repairMember() {
+		 return "member/repairmember";
+	}
+
+	@PostMapping(value = "repair")
+	public String repairMember(@Valid String email, @Valid String password,Model model) {
+		 Member member = memberService.findByEmail(email);
+		 boolean result = passwordEncoder.matches(password,member.getPassword());
+
+		 if (member == null || result == false) {
+			 model.addAttribute("errorMessage","아이디 또는 비밀번호가 틀렸습니다.");
+			 return "member/repairmember";
+		 }
+		 memberService.repairMember(email);
+		 return "redirect:/member/login";
+	}
 }

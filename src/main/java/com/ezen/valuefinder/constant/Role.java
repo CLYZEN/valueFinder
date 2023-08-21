@@ -1,5 +1,5 @@
 package com.ezen.valuefinder.constant;
 
 public enum Role {
-    ADMIN, USER
+    ROLE_ADMIN, ROLE_USER
 }

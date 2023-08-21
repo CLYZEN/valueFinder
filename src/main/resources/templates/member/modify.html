@@ -164,14 +164,14 @@
              style="width: 100%; height: 150px; border: 1px solid;">
             <form action="/member/mypage/modify" th:object="${memberModifyDto}" method="post">
                 <div
-                        style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;">
-                    ~~~님 안녕하세요!
+                        style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;"
+                        th:text="|${member.nickname}님 안녕하세요!|">
                 </div>
 
                 <div class="container text-center">
                     <div class="row" style="height: 150px; border-left: 1px solid;">
                         <div class="col" style="margin-top: 25px;">
-                            <a href="">
+                            <a href="/member/mypage/sentquery">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60"
                                      height="60" fill="currentColor" class="bi bi-justify"
                                      viewBox="0 0 16 16">
@@ -183,7 +183,7 @@
                         </div>
 
                         <div class="col" style="margin-top: 25px;">
-                            <a href="">
+                            <a href="/member/mypage/coupon">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60"
                                      height="60" fill="currentColor" class="bi bi-ticket-perforated"
                                      viewBox="0 0 16 16">
@@ -197,7 +197,7 @@
                         </div>
 
                         <div class="col" style="margin-top: 25px;">
-                            <a href="">
+                            <a href="/member/mypage/todayview">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60"
                                      height="60" fill="currentColor" class="bi bi-collection"
                                      viewBox="0 0 16 16">
@@ -209,7 +209,7 @@
                         </div>
 
                         <div class="col" style="margin-top: 25px;">
-                            <a href="">
+                            <a href="/member/mypage/receivedquery">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="60"
                                      height="60" fill="currentColor" class="bi bi-chat-dots"
                                      viewBox="0 0 16 16">
@@ -327,17 +327,17 @@
 
     <div class="quickmenu">
         <ul>
-            <li><a href="#">내 정보 </a></li>
-            <li><a href="#">입찰 현황</a></li>
-            <li><a href="#">낙찰 현황</a></li>
-            <li><a href="#">내 물품 확인</a></li>
-            <li><a href="#">내 문의내역</a></li>
-            <li><a href="#">받은문의내역</a></li>
-            <li><a href="#">쿠폰함</a></li>
-            <li><a href="#">찜목록</a></li>
-            <li><a href="#">내정보 수정</a></li>
-            <li><a href="#">비밀번호 변경</a></li>
-            <li><a href="#">회원탈퇴</a></li>
+            <li><a href="/member/mypage">내 정보 </a></li>
+            <li><a href="/member/mypage/bidding">입찰 현황</a></li>
+            <li><a href="/member/mypage/successfulbid">낙찰 현황</a></li>
+            <li><a href="/member/mypage/myauction">내 물품 확인</a></li>
+            <li><a href="/member/mypage/sentquery">내 문의내역</a></li>
+            <li><a href="/member/mypage/receivedquery">받은문의내역</a></li>
+            <li><a href="/member/mypage/coupon">쿠폰함</a></li>
+            <li><a href="/member/mypage/like">찜목록</a></li>
+            <li><a href="/member/mypage/modify/checkpwd">내정보 수정</a></li>
+            <li><a href="/member/mypage/modify/password">비밀번호 변경</a></li>
+            <li><a href="/member/mypage/outmember">회원탈퇴</a></li>
         </ul>
     </div>
 

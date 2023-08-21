@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Entity
 @Table(name = "auction_query")
 @ToString
@@ -34,4 +37,13 @@ public class AuctionQuery extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionQueryDistinction auctionQueryDistinction; // 경매문의구분
 
+    @Column(nullable = false)
+    private boolean readOk; // 읽음 안읽음
+
+    private LocalDateTime readOkTime; // 읽은 시간
+    
+    
+  
+    
+   
 }
