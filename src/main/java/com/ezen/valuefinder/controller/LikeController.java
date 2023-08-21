@@ -5,10 +5,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.ezen.valuefinder.dto.LikeRequestDto;
+import com.ezen.valuefinder.service.LikeService;
 
 
 public class LikeController {
-	 private final LikeServiceImpl likeService;
+	 private final LikeService likeService;
 	 
 	// 경매 글에 찜 추가
 	    @PostMapping("/addLike")
