@@ -43,6 +43,6 @@ public class Auction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionStatus auctionStatus; // 경매상태
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "integer default 0", nullable = false)	
     private Integer auctionCount; // 경매조회수
 }

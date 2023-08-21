@@ -1,5 +1,9 @@
 package com.ezen.valuefinder.dto;
 
+import org.modelmapper.ModelMapper;
+
+import com.ezen.valuefinder.entity.ItemImg;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,4 +17,10 @@ public class ItemImgDto {
     private String itemImageUrl;
 
     private String repImgYn;
+    
+    private static ModelMapper modelMapper = new ModelMapper();
+    
+    public static ItemImgDto of(ItemImg itemImg) {
+    	return modelMapper.map(itemImg, ItemImgDto.class);
+    }
 }

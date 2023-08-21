@@ -3,6 +3,7 @@ package com.ezen.valuefinder.service;
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.ItemImgDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -15,6 +16,13 @@ import com.ezen.valuefinder.repository.MemberRepository;
 
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.AuctionRepository;
+import com.ezen.valuefinder.repository.CategoryRepository;
+import com.ezen.valuefinder.repository.ItemImgRepository;
+import com.ezen.valuefinder.repository.ItemRepository;
+import com.ezen.valuefinder.repository.MemberRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 
 import lombok.RequiredArgsConstructor;
@@ -22,9 +30,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -37,6 +48,7 @@ public class AuctionService {
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
     private final AuctionQueryRepository auctionQueryRepository;
+    private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
 
     public List<Category> getCategoryList() {
@@ -101,6 +113,12 @@ public class AuctionService {
 
         return auction.getAuctionNo();
     }
+    
+    @Transactional(readOnly = true)
+    public Auction getAuctionDetail(Long auctionNo) {
+    	return auctionRepository.findById(auctionNo).orElseThrow();
+    }
+
 
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
@@ -147,10 +165,19 @@ public class AuctionService {
     }
 
 
+
     public Auction getAuction(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
         return auction;
     }
+
+
+    
+    @Transactional
+    public int auctionCount(Long id) {
+    	return auctionRepository.auctionCount(id);
+    }
+    
 
     public String getRemainTime(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -168,7 +195,4 @@ public class AuctionService {
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
 }
-
-
-
 
