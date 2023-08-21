@@ -373,6 +373,7 @@ table {
 							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">진행상태</label>
 								<div class="col-sm-3"
+<<<<<<< HEAD
 									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행 중</div>
 								<div class="col-sm-3"
 									th:if="${auction.auctionStatus.toString().equals('END')}">마감</div>
@@ -380,6 +381,16 @@ table {
 									th:if="${auction.auctionStatus.toString().equals('LAST')}">지난 경매</div>
 								<div class="col-sm-3"
 									th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류 중</div>
+=======
+									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}"></div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('END')}">종료</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('LAST')}"></div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PENDING')}">진행
+									중</div>
+>>>>>>> 703414d4d33cd305b8f3248d87181ed435b68e2d
 							</div>
 
 
