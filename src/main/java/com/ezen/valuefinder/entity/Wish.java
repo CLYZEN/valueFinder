@@ -5,11 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "wish")
-@ToString
 @Getter
 @Setter
+@ToString
+@Entity
+@Table(name = "wish")
 public class Wish extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

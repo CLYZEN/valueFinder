@@ -87,9 +87,7 @@ public class AuctionController {
 	public String sealedBidDetail() {
 		return "/auction/details/sealedDetail";
 		
-		
 	}
-	
 	
 	@GetMapping(value = "/auction/query/add")
 	public String auctionQuery() {

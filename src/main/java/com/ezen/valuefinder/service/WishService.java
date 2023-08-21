@@ -1,13 +1,10 @@
 package com.ezen.valuefinder.service;
 
-import java.util.concurrent.CompletableFuture;
+public interface WishService {
+    void addWish(Long auctionNo, Long memberId);
 
-public interface LikeService {
-    void addLike(Long postNo, Long memberId);
+    void deleteWish(Long auctionNo, Long memberId);
 
-    void deleteLike(Long postNo, Long memberId);
-
-    boolean checkLike(Long postNo, Long memberId);
-
-    CompletableFuture<Long> countLike(Long postNo);
+	boolean checkWish(Long auctionNo, Long memberId);  //이미 체크 되어있는지 아닌지 확인
+	 
 }
