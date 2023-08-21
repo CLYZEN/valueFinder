@@ -207,6 +207,11 @@ table {
 </style>
 </th:block>
 
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
 <div layout:fragment="content">
 	
 	<section>
@@ -434,13 +439,16 @@ table {
 								</div>
 								<div style="text-align: right; width: 600px;">
 									<div> 
-									<!-- 찜하기 버튼 -->
-									<button class="heartbutton">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-  										<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-										</svg>
-									</button> <!--  th:class="${likeStatusList[__${status.index}__]} ? 'bi bi-heart' : be bi-heart'" -->
-									 <i class="bi bi-heart" id="heartIcon" th:data-auctionno="${auction.auctionNo}" onclick="pushWish(this)"></i>
+									<!-- 찜하기 버튼 -->									
+									<button class="heartbutton" onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
+   									 <i class="bi bi-heart" id="heartIcon" ></i>
+   									 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
+        							<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 
+        							3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 
+        							4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+   									 </svg>
+									</button> 
+									
 									<input type='button' value='입찰'
 										style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
@@ -581,9 +589,9 @@ table {
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
-	//찜버튼에 대한 기능
+	//찜 버튼에 대한 기능
 	 function pushWish(heartIcon) {
-        var isWished = heartIcon.classList.contains('bi'); //아이콘 상태 판단
+        var isWished = heartIcon.classList.contains('bi-heart'); //아이콘 상태 판단
         var auctionNo = heartIcon.getAttribute('data-auctionno');
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -602,13 +610,13 @@ table {
                 // 요청 성공 처리
                 console.log("찜 " + (isWished ? "취소" : "추가") + " 성공");
                 // 찜 상태 토글
-                heartIcon.classList.toggle('bi');
+                heartIcon.classList.toggle('bi-heart');
                 /* heartIcon.classList.toggle('be'); */
             },
             error: function(jqXHR, status, error) {
                 // 오류 처리
                 alert("에러가 발생했습니다. 다시 시도해 주세요.");
-                console.error("찜 " + (isWished ? "취소" : "추가") + " 오류: " + error);
+               
             }
         });
     }
