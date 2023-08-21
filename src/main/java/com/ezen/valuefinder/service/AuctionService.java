@@ -15,6 +15,9 @@ import com.ezen.valuefinder.repository.MemberRepository;
 import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -141,4 +144,19 @@ public class AuctionService {
 
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
+
+	public int itemCount(Long memberId) {
+		return itemRepository.countItemsByMemberId(memberId);	
+	}
+
+
+	public Page<Auction> getAuctionList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return auctionRepository.findByItemMember(member, pageable);
+	}
+	
+
+
+    
+    
 }
