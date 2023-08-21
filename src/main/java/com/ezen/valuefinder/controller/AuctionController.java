@@ -11,7 +11,10 @@ import com.ezen.valuefinder.entity.Category;
 	
 	import jakarta.validation.Valid;
 	import lombok.RequiredArgsConstructor;
-	import org.springframework.security.core.Authentication;
+
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 	import org.springframework.stereotype.Controller;
 	import org.springframework.ui.Model;
 	import org.springframework.validation.BindingResult;
@@ -26,6 +29,7 @@ import com.ezen.valuefinder.entity.Category;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 	import java.util.List;
+import java.util.Optional;
 	
 	@Controller
 	@RequiredArgsConstructor
@@ -79,13 +83,16 @@ import java.util.ArrayList;
 		}
 	
 		@GetMapping(value = "auction/public/detail/{auctionNo}")
-		public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+		public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
 		    Auction auction = auctionService.getAuctionDetail(auctionNo);
 		    auctionService.auctionCount(auctionNo);
 			model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
 		    model.addAttribute("auction", auction);
 		    model.addAttribute("nowTime", LocalDateTime.now());
-
+		    model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+		    Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+		    model.addAttribute("auctionList", auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+		    
 		    return "/auction/details/publicDetail";
 		}
 

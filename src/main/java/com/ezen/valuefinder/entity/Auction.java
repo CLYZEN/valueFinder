@@ -45,4 +45,5 @@ public class Auction extends BaseEntity {
 
     @Column(columnDefinition = "integer default 0", nullable = false)	
     private Integer auctionCount; // 경매조회수
+    
 }
