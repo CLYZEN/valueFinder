@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
 
 <!-- 각 페이지의 CSS가 작성될 위치 -->
@@ -8,268 +7,280 @@
 	<link rel="stylesheet" href="/css/splide.min.css">
 
 	<style>
-.container-fluid {
-	max-width: 1600px;
-}
+		.container-fluid {
+			max-width: 1600px;
+		}
 
-.banner-blocks {
-	display: grid;
-	grid-template-columns: repeat(12, 1fr);
-	grid-template-rows: repeat(2, 1fr);
-	grid-gap: 2rem;
-}
+		.banner-blocks {
+			display: grid;
+			grid-template-columns: repeat(12, 1fr);
+			grid-template-rows: repeat(2, 1fr);
+			grid-gap: 2rem;
+		}
 
-.block-1 {
-	grid-area: 2/2/18/8;
-	border: 1px solid gray;
-	width: 500px;
-	height: 500px;
-}
+		.block-1 {
+			grid-area: 2/2/18/8;
+			border: 1px solid gray;
+			width: 500px;
+			height: 500px;
+		}
 
-.block-2 {
-	grid-area: 2/8/18/13;
-}
+		.block-2 {
+			grid-area: 2/8/18/13;
+		}
 
-.block-3 {
-	grid-area: 18/2/18/8;
-}
+		.block-3 {
+			grid-area: 18/2/18/8;
+		}
 
-.block-4 {
-	grid-area: 18/8/18/13;
-}
+		.block-4 {
+			grid-area: 18/8/18/13;
+		}
 
-.col-sm-2 {
-	background-color: #D9D9D9;
-	font-weight: 900;
-	color: black;
-	text-align: center;
-	border: 1px solid gray;
-	border-left: 0px;
-	border-right: 0px;
-	/*line-height: 39px;*/
-	width: 140px;
-}
+		.col-sm-2 {
+			background-color: #D9D9D9;
+			font-weight: 900;
+			color: black;
+			text-align: center;
+			border: 1px solid gray;
+			border-left: 0px;
+			border-right: 0px;
+			/*line-height: 39px;*/
+			width: 140px;
+		}
 
 
-.col-sm-3 {
-	border: 1px solid gray;
-	border-left: 0px;
-	width: 450px;
-	line-height: 35px; 
-}
+		.col-sm-3 {
+			border: 1px solid gray;
+			border-left: 0px;
+			width: 450px;
+			line-height: 35px;
+		}
 
-.col-sm-cet {
-	margin-bottom: 65px;
-}
+		.col-sm-cet {
+			margin-bottom: 65px;
+		}
 
-.splide__arrow--prev {
-	left: -50px;
-}
+		.splide__arrow--prev {
+			left: -50px;
+		}
 
-.splide__arrow--next {
-	right: -50px;
-}
+		.splide__arrow--next {
+			right: -50px;
+		}
 
-.splide__pagination--ltr {
-	top: 190px;
-}
+		.splide__pagination--ltr {
+			top: 190px;
+		}
 
-.btn-primary {
-	background-color: #355808;
-	opacity: 63%;
-	border: 0px;
-}
+		.btn-primary {
+			background-color: #355808;
+			opacity: 63%;
+			border: 0px;
+		}
 
-/* 
+		/* 
 상단 css
 */
 
-.category {
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	padding: 0;  
-	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
- 	text-align: center; /* 내용 가운데 정렬 */
-} 
+		.category {
+			border-top: 1px solid black;
+			border-bottom: 1px solid black;
+			padding: 0;
+			margin-left: 151.5px;
+			/* 좌측 여백 */
+			margin-right: 151.5px;
+			/* 우측 여백 */
+			text-align: center;
+			/* 내용 가운데 정렬 */
+		}
 
-.category_list {
-	list-style-type: none;
-	display: flex; /*메뉴 가로정렬*/
-	justify-content: space-between; /* 공간 균등 분배 */
-	font-family: var(--heading-font);
-	color: var(--dark-color);
-	font-weight: 700;
-	padding: 0;
-	margin-bottom : 0;
-	
-} 
+		.category_list {
+			list-style-type: none;
+			display: flex;
+			/*메뉴 가로정렬*/
+			justify-content: space-between;
+			/* 공간 균등 분배 */
+			font-family: var(--heading-font);
+			color: var(--dark-color);
+			font-weight: 700;
+			padding: 0;
+			margin-bottom: 0;
 
-/* home>현재페이지 */
-.tabs_header{
-	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
-	margin-bottom: 10px;
-}
+		}
 
-.location{
-margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
-}
+		/* home>현재페이지 */
+		.tabs_header {
+			margin-left: 151.5px;
+			/* 좌측 여백 */
+			margin-right: 151.5px;
+			/* 우측 여백 */
+			margin-bottom: 10px;
+		}
 
-
-.category_list > li {
-	padding: 0;
-	margin : 0;
-	width:12.5%;
-	text-align:left;
-}
-
-.nav-link {
-	padding: 0.5rem 1rem;
-}
+		.location {
+			margin-left: 151.5px;
+			/* 좌측 여백 */
+			margin-right: 151.5px;
+			/* 우측 여백 */
+		}
 
 
-/* 
+		.category_list>li {
+			padding: 0;
+			margin: 0;
+			width: 12.5%;
+			text-align: left;
+		}
+
+		.nav-link {
+			padding: 0.5rem 1rem;
+		}
+
+
+		/* 
 하단 css
   */
-table {
-	border-collapse: collapse;
-	border-top: 1px solid;
-	border-bottom: 1px solid;
-	width: 100%;
+		table {
+			border-collapse: collapse;
+			border-top: 1px solid;
+			border-bottom: 1px solid;
+			width: 100%;
 
-} 
-
-
-
-#myTab {
-	margin: 0px 100px;
-}
-
-.tab-content {
-	margin: 0px 100px;
-	padding: 30px;
-}
+		}
 
 
-.wishful {
-	background-color: #D9D9D9;
-	height: 150px;
-	padding: 15px 20px;
-}
 
-.join_customer th {
-	background-color: #D9D9D9;
-	text-align: center;
+		#myTab {
+			margin: 0px 100px;
+		}
 
-}
+		.tab-content {
+			margin: 0px 100px;
+			padding: 30px;
+		}
 
-.join_customer td {
 
-	text-align: center;
+		.wishful {
+			background-color: #D9D9D9;
+			height: 150px;
+			padding: 15px 20px;
+		}
 
-}
+		.join_customer th {
+			background-color: #D9D9D9;
+			text-align: center;
 
-.box2 th {
-	background-color: #D9D9D9;
-	text-align: center;
-}
+		}
 
-.box2 td {
-	text-align: center;
-}
+		.join_customer td {
 
-.active {
-	border-color: #52A8E0 #52A8E0 white !important;
-}
+			text-align: center;
 
-.box2{
-    top:0;
-    left:0;
-    height: 150px;
-    overflow-y: scroll;
-    margin:0 auto;
-    width: 100%;
-    float:left;
-    border-collapse: collapse;
-    border: 2px solid #52A8E0;
-}
+		}
 
-#myform fieldset {
-	display: inline-block;
-	direction: rtl;
-	border: 0;
-}
+		.box2 th {
+			background-color: #D9D9D9;
+			text-align: center;
+		}
 
-#myform fieldset legend {
-	text-align: right;
-}
+		.box2 td {
+			text-align: center;
+		}
 
-#myform input[type=radio] {
-	display: none;
-}
+		.active {
+			border-color: #52A8E0 #52A8E0 white !important;
+		}
 
-#myform label {
-	font-size: 3em;
-	color: transparent;
-	text-shadow: 0 0 0 #f0f0f0;
-}
+		.box2 {
+			top: 0;
+			left: 0;
+			height: 150px;
+			overflow-y: scroll;
+			margin: 0 auto;
+			width: 100%;
+			float: left;
+			border-collapse: collapse;
+			border: 2px solid #52A8E0;
+		}
 
-#myform input[type=radio]:checked ~ label {
-	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
-}
+		#myform fieldset {
+			display: inline-block;
+			direction: rtl;
+			border: 0;
+		}
 
-#reviewContents {
-	width: 100%;
-	height: 150px;
-	padding: 10px;
-	box-sizing: border-box;
-	border: solid 1.5px #D3D3D3;
-	border-radius: 5px;
-	font-size: 16px;
-	resize: none;
-}
+		#myform fieldset legend {
+			text-align: right;
+		}
 
-.review-message{
-    margin: 10px 0; /* 여백을 위 아래 10px, 좌 우 0px로 조절 */
-    font-size: 16px; /* 필요한 폰트 사이즈로 조절 */
-}
+		#myform input[type=radio] {
+			display: none;
+		}
 
-  .custom-pagination .page-item .page-link {
-	  padding: 8px 12px; /* 원하는 패딩 값으로 조절 */
-	  line-height: 1; /* 텍스트 센터 정렬을 위한 라인 높이 조절 */
-	  margin-bottom: 15px;
-  }
+		#myform label {
+			font-size: 3em;
+			color: transparent;
+			text-shadow: 0 0 0 #f0f0f0;
+		}
 
-</style>
+		#myform input[type=radio]:checked~label {
+			text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+		}
+
+		#reviewContents {
+			width: 100%;
+			height: 150px;
+			padding: 10px;
+			box-sizing: border-box;
+			border: solid 1.5px #D3D3D3;
+			border-radius: 5px;
+			font-size: 16px;
+			resize: none;
+		}
+
+		.review-message {
+			margin: 10px 0;
+			/* 여백을 위 아래 10px, 좌 우 0px로 조절 */
+			font-size: 16px;
+			/* 필요한 폰트 사이즈로 조절 */
+		}
+
+		.custom-pagination .page-item .page-link {
+			padding: 8px 12px;
+			/* 원하는 패딩 값으로 조절 */
+			line-height: 1;
+			/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
+			margin-bottom: 15px;
+		}
+	</style>
 </th:block>
 
 <div layout:fragment="content">
-	
+
 	<section>
 		<div class="tabs_header">
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
- 				<path
-			d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+				class="bi bi-house-door-fill" viewBox="0 0 16 16">
+				<path
+					d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
 			</svg>
-	<a href="/" style="text-decoration: none;">홈</a>
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-chevron-compact-right"
-		viewBox="0 0 16 16">
- 			 <path fill-rule="evenodd"
-			d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			<a href="/" style="text-decoration: none;">홈</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+				class="bi bi-chevron-compact-right" viewBox="0 0 16 16">
+				<path fill-rule="evenodd"
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-	<a href="/">비공개경매</a>
-	</div>
-	<div class="location"> <h3 style="font-weight: 700;">비공개경매</h3> </div>	
+			<a href="/">비공개경매</a>
+		</div>
+		<div class="location">
+			<h3 style="font-weight: 700;">비공개경매</h3>
+		</div>
 
 		<div class="category">
 			<ul class="category_list">
-				<li><a href="#women" class="nav-link"
-					data-bs-toggle="collapse" data-bs-target="#collapseExample"
-					aria-expanded="false" aria-controls="collapseExample">전체</a></li>
+				<li><a href="#women" class="nav-link" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+						aria-expanded="false" aria-controls="collapseExample">전체</a></li>
 				<li><a href="#women" class="nav-link">인기매물</a></li>
 				<li><a href="#men" class="nav-link">디지털기기</a></li>
 				<li><a href="#kids" class="nav-link">가구/인테리어</a></li>
@@ -279,7 +290,7 @@ table {
 				<li><a href="#sale" class="nav-link">생활가전</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">생활/주방</a></li>
 				<li><a href="#sale" class="nav-link">가공식품</a></li>
 				<li><a href="#sale" class="nav-link">스포츠/레져</a></li>
@@ -290,7 +301,7 @@ table {
 				<li><a href="#sale" class="nav-link">티켓/교환권</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">도서</a></li>
 				<li><a href="#sale" class="nav-link">유아도서</a></li>
 				<li><a href="#sale" class="nav-link">기타</a></li>
@@ -300,11 +311,11 @@ table {
 				<li></li>
 				<li></li>
 			</ul>
-		</div> 
+		</div>
 	</section>
 
-	<h6 style="text-align: right;width: 1750px;padding: 10px;">조회수 : 20</h6>
-	
+	<h6 style="text-align: right;width: 1750px;padding: 10px;" th:text="|조회수: ${auction.auctionCount}|"></h6>
+
 	<section class="py-3">
 		<div class="container-fluid">
 			<div class="row">
@@ -313,41 +324,46 @@ table {
 					<div class="banner-blocks">
 
 
-						<div class="banner-ad block-1" style="place-self: center;">
-							<img alt="" src="/images/ad-image-1.png"
-								style="width: 100%; height: 100%">
+						<div class="banner-ad block-1" style="place-self: center;"
+							th:each="itemImg : ${auction.item.itemImgList}">
+							<img th:if="${not #strings.isEmpty(itemImg.itemImageUrl)}"
+								th:src="${itemImg.itemImageUrl[0]}" style="width: 100%; height: 100%">
 						</div>
 
 
 
 
 						<div class="block-2">
-						<h4
-								style="text-align: right; margin-right: 60px; margin-bottom: 15px;">남은
-								시간 0시간 54분 20초</h4>
+							<h4 style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
+								th:text="|남은시간 : ${remainTime}|"></h4>
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
-								<div class="col-sm-3">가방</div>
+								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
 							</div>
 
 							<div class="form-group row" style="flex-flow: nowrap;width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3" style="border-right: 0px;width: 110px;">08/07 16:20</div>
+								<div class="col-sm-3" style="border-right: 0px;width: 110px;"
+									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 								<div class="col-sm-3" style="width: 100px;border-right: 0px;text-align: center;">~</div>
-								<div class="col-sm-3" style="width: 240px;">08/07 16:20</div>
+								<div class="col-sm-3" style="width: 240px;"
+									th:text="${#temporals.format(auction.auctionEndTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">시작가</label>
-								<div class="col-sm-3">10,000원</div>
+								<div class="col-sm-3"
+									th:text="|${#numbers.formatInteger(auction.auctionStartPrice, 0, 'COMMA')}원|"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
-									<div id='price' type='text' value='500' name="price">500
+									<div id='price' type='text' name="price">
 									</div>
-									<div>원</div>
+									<div
+										th:text="|${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|">
+									</div>
 								</div>
 							</div>
 
@@ -358,21 +374,22 @@ table {
 
 							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">진행상태</label>
-								<div class="col-sm-3">경매대기중</div>
+								<div class="col-sm-3" th:text="${auction.auctionStatus}"></div>
 							</div>
 
-							
+
 
 							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2" style="line-height: 71px;">판매자
 									닉네임</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
-									<div style="width: 50px; text-align: center;">보부상</div>
+									<div style="width: 50px; text-align: center;"
+										th:text="${auction.item.member.nickname}"></div>
 
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
 										<button type="button" class="btn btn-primary"
-											style="border-radius: inherit; width: 110px;"
-											data-bs-toggle="modal" data-bs-target="#reviewModal">
+											style="border-radius: inherit; width: 110px;" data-bs-toggle="modal"
+											data-bs-target="#reviewModal">
 											후기</button>
 									</div>
 
@@ -384,11 +401,11 @@ table {
 												<div class="modal-header">
 													<h5 class="modal-title" id="reviewModalLabel">(판매자
 														닉네임)님의 후기 리스트</h5>
-													<button type="button" class="btn-close"
-														data-bs-dismiss="modal" aria-label="Close"></button>
+													<button type="button" class="btn-close" data-bs-dismiss="modal"
+														aria-label="Close"></button>
 												</div>
-												<div class="modal-body " >
-														<p class="review-message">후기가 n건 검색되었습니다.</p>
+												<div class="modal-body ">
+													<p class="review-message">후기가 n건 검색되었습니다.</p>
 													<table class="table">
 														<thead>
 															<tr>
@@ -406,16 +423,21 @@ table {
 																	<form class="mb-3" name="myform" id="myform"
 																		method="post">
 																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" checked><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" disabled><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="5" id="rate1" checked><label
+																				for="rate1">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="4" id="rate2" disabled><label
+																				for="rate2">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="3" id="rate3" disabled><label
+																				for="rate3">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="2" id="rate4" disabled><label
+																				for="rate4">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="1" id="rate5" disabled><label
+																				for="rate5">★</label>
 																		</fieldset>
 																	</form>
 
@@ -426,24 +448,29 @@ table {
 															<tr>
 																<th scope="row">뽀로로</th>
 																<td>
-																
-																<!-- 별점 -->
+
+																	<!-- 별점 -->
 																	<form class="mb-3" name="myform" id="myform"
 																		method="post">
 																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" disabled><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" checked><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="5" id="rate1" disabled><label
+																				for="rate1">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="4" id="rate2" checked><label
+																				for="rate2">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="3" id="rate3" disabled><label
+																				for="rate3">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="2" id="rate4" disabled><label
+																				for="rate4">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="1" id="rate5" disabled><label
+																				for="rate5">★</label>
 																		</fieldset>
 																	</form>
-																
+
 																</td>
 																<td>너무 좋아요</td>
 
@@ -451,24 +478,29 @@ table {
 															<tr>
 																<th scope="row">루피</th>
 																<td>
-																
-																<!-- 별점 -->
+
+																	<!-- 별점 -->
 																	<form class="mb-3" name="myform" id="myform"
 																		method="post">
 																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" disabled><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" checked><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="5" id="rate1" disabled><label
+																				for="rate1">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="4" id="rate2" checked><label
+																				for="rate2">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="3" id="rate3" disabled><label
+																				for="rate3">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="2" id="rate4" disabled><label
+																				for="rate4">★</label>
+																			<input type="radio" name="reviewStar"
+																				value="1" id="rate5" disabled><label
+																				for="rate5">★</label>
 																		</fieldset>
 																	</form>
-																
+
 																</td>
 																<td>너무 좋아요</td>
 															</tr>
@@ -481,19 +513,24 @@ table {
 													<nav aria-label="Page navigation example">
 														<ul class="pagination custom-pagination">
 															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-															</a></li>
-															<li class="page-item"><a class="page-link" href="#">1</a></li>
-															<li class="page-item"><a class="page-link" href="#">2</a></li>
-															<li class="page-item"><a class="page-link" href="#">3</a></li>
+																	aria-label="Previous"> <span
+																		aria-hidden="true">&laquo;</span>
+																</a></li>
+															<li class="page-item"><a class="page-link" href="#">1</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">2</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">3</a>
+															</li>
 															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-															</a></li>
+																	aria-label="Next"> <span
+																		aria-hidden="true">&raquo;</span>
+																</a></li>
 														</ul>
 													</nav>
 												</div>
 
-												<div class="modal-footer d-flex justify-content-center" >
+												<div class="modal-footer d-flex justify-content-center">
 													<button type="button" class="btn btn-secondary "
 														data-bs-dismiss="modal">닫기</button>
 
@@ -531,13 +568,11 @@ table {
 
 						<div class="banner-ad large block-3" style="place-self: center;">
 
-							<section class="splide" id="main-img" aria-label="main"
-								style="width: 560px;">
+							<section class="splide" id="main-img" aria-label="main" style="width: 560px;">
 								<div class="splide__track">
 									<ul class="splide__list">
 										<li class="splide__slide" style="flex: auto;">
-											<div class="splide__slide__container"
-												style="background-size: contain;">
+											<div class="splide__slide__container" style="background-size: contain;">
 												<img src="/images/ad-image-1.png"
 													style="width: 180px; height: 180px; margin-right: 10px; border: 1px solid gray;">
 											</div>
@@ -575,43 +610,44 @@ table {
 
 						<div class="banner-ad block-4" style="justify-self: right;">
 							<div class="row banner-content" style="margin-right: 0px; flex-wrap: nowrap;">
-								
+
 								<div style="width: 80px;">
 									<img alt="" src="/images/badge.png"
-									style="width: 150px;margin-left: 100px;height: 150px;">
+										style="width: 150px;margin-left: 100px;height: 150px;">
 								</div>
-								
-								<div style="width: 670px;">
-								<div
-									style="display: flex; width: 600px; justify-content: right;">
-									<div style="line-height: 40px; margin-right: 20px;">입찰금액
-									</div>
-									<div>
-										<input id='sum' type='text' value='0' name="sum"
-											style="width: 165px; height: 40px; text-align: end;" />
-									</div>
-								</div>
-								<div style="text-align: right; width: 600px;">
-									<input type='button' onclick='count("minus")' value='- 500'
-										style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-										type='button' onclick='count("plus")' value='+ 500'
-										style="margin-top: 10px; width: 80px; height: 40px;" />
-								</div>
-								<div style="text-align: right; width: 600px;">
-									<div>
 
-										<button>
-											<svg xmlns="http://www.w3.org/2000/svg" width="16"
-												height="16" fill="currentColor" class="bi bi-chat-heart"
-												viewBox="0 0 16 16">
-  <path fill-rule="evenodd"
-													d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
-</svg>
-										</button>
-										<input type='button' value='입찰'
+								<div style="width: 670px;">
+									<div style="display: flex; width: 600px; justify-content: right;">
+										<div style="line-height: 40px; margin-right: 20px;">입찰금액
+										</div>
+										<div>
+											<input id='sum' type='text' th:value="${auction.auctionNowPrice}" name="sum"
+												style="width: 165px; height: 40px; text-align: end;" />
+										</div>
+									</div>
+									<div style="text-align: right; width: 600px;">
+										<input type='button' onclick='count("minus")'
+											th:value="|-${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
+											style="margin-top: 10px; width: 80px; height: 40px;" /> <input type='button'
+											onclick='count("plus")'
+											th:value="|+ ${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
-								</div>
+									<div style="text-align: right; width: 600px;">
+										<div>
+
+											<button
+												style="margin-top: 10px;width: 80px;height: 40px;border: 1px solid gray;border-radius: 2px;">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+													fill="currentColor" class="bi bi-chat-heart" viewBox="0 0 16 16">
+													<path fill-rule="evenodd"
+														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
+												</svg>
+											</button>
+											<input type='button' value='입찰'
+												style="margin-top: 10px; width: 80px; height: 40px;" />
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -629,60 +665,53 @@ table {
 
 	<section style="margin-top: 100px;">
 		<div class="tab col-mb-8" id="bthtab">
-		<ul class="nav nav-tabs" id="myTab" role="tablist" style="
+			<ul class="nav nav-tabs" id="myTab" role="tablist" style="
     border-bottom: 1px solid #52A8E0;">
-			<li class="nav-item" role="presentation">
-				<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-					data-bs-target="#home" type="button" role="tab"
-					aria-controls="home" aria-selected="true" >물품정보</button>
-			</li>
-			<li class="nav-item" role="presentation">
-				<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-					data-bs-target="#profile" type="button" role="tab"
-					aria-controls="profile" aria-selected="false" >물품문의</button>
-			</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home"
+						type="button" role="tab" aria-controls="home" aria-selected="true">물품정보</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
+						type="button" role="tab" aria-controls="profile" aria-selected="false">물품문의</button>
+				</li>
 
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="home" role="tabpanel"
-				aria-labelledby="home-tab">
-				<div class="wishful">
-					<span>구매자 희망사항</span>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+					<div class="wishful">
+						<span th:utext="${auction.item.itemDetail}"></span>
+					</div>
 				</div>
-			</div>
-			<div class="tab-pane fade" id="profile" role="tabpanel"
-				aria-labelledby="profile-tab">
-				<div class="join_customer">
-					<table>
-						<tr>
-							<th scope="col">번호</th>
-							<th>질문구분</th>
-							<th>제목</th>
-							<th>등록자</th>
-							<th>등록일자</th>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>제품문의</td>
-							<td>상품관련 질문이요~</td>
-							<td>뽀로로</td>
-							<td>08/07 12:20</td>
-						</tr>
-					</table>
+				<div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+					<div class="join_customer">
+						<table>
+							<tr>
+								<th scope="col">번호</th>
+								<th>질문구분</th>
+								<th>제목</th>
+								<th>등록자</th>
+								<th>등록일자</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>제품문의</td>
+								<td>상품관련 질문이요~</td>
+								<td>뽀로로</td>
+								<td>08/07 12:20</td>
+							</tr>
+						</table>
+					</div>
+					<div class="form-group row" style="padding-top: 20px;">
+						<div class="col-sm-offset-2" style="text-align: right;">
+							<input type="submit" class="btn btn-primary" value="문의하기" style="border-radius: inherit;" />
+						</div>
+					</div>
 				</div>
-			<div class="form-group row"
-				style="padding-top: 20px;">
-				<div class="col-sm-offset-2"
-					style="text-align: right;">
-					<input type="submit" class="btn btn-primary" value="문의하기"
-						style="border-radius: inherit;" />
-				</div>
-			</div>
-			</div>
 
+			</div>
 		</div>
-	</div>
-		
+
 	</section>
 
 
@@ -693,13 +722,13 @@ table {
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
-		
+
 	</script>
 
 	<script src="/js/splide.min.js"></script>
 
 	<script>
-		document.addEventListener('DOMContentLoaded', function() {
+		document.addEventListener('DOMContentLoaded', function () {
 			var splide = new Splide('.splide');
 			splide.mount();
 		});
