@@ -44,7 +44,6 @@ public class NormalAuctionFormDto {
     @NotNull(message = "경매 시작 일자를 입력해주세요.")
     private LocalDateTime auctionStartTime;
 
-    @NotNull(message = "경매 종료 일자를 입력해주세요.")
     private LocalDateTime auctionEndTime;
 
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();

@@ -26,6 +26,8 @@ import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -85,7 +87,12 @@ public class AuctionService {
         auction.setAuctionStartPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
-        auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+        auction.setBiddingCount(0);
+        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionStartTime().plusMinutes(5));
+        } else{
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+        }
         if (normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
                 || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
             auction.setAuctionStatus(AuctionStatus.PROGRESS);
@@ -194,5 +201,10 @@ public class AuctionService {
 
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
+
+    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
+        return auctionRepository.findByAuctionType(auctionType,pageable);
+    }
+
 }
 
