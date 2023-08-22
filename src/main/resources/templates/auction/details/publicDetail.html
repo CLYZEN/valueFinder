@@ -359,8 +359,14 @@ table {
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price"></div>
+<<<<<<< HEAD
 									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|" />
+=======
+									<div
+										th:text="|${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|">
+									</div>
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 								</div>
 							</div>
 
@@ -372,6 +378,7 @@ table {
 							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">진행상태</label>
 								<div class="col-sm-3"
+<<<<<<< HEAD
 									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행
 									중</div>
 								<div class="col-sm-3"
@@ -382,6 +389,26 @@ table {
 								<div class="col-sm-3"
 									th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기
 								</div>
+=======
+<<<<<<< HEAD
+									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행 중</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('END')}">마감</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('LAST')}">지난 경매</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류 중</div>
+=======
+									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}"></div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('END')}">종료</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('LAST')}"></div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PENDING')}">진행
+									중</div>
+>>>>>>> 703414d4d33cd305b8f3248d87181ed435b68e2d
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 							</div>
 
 
@@ -569,6 +596,7 @@ table {
 															<tr th:each="auction: ${auctionList} ">
 																<th scope="row" th:text="${auction.item.itemName}"></th>
 																<td th:text="${auction.auctionNowPrice}"></td>
+<<<<<<< HEAD
 																<td
 																	th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중</td>
 																<td
@@ -578,6 +606,12 @@ table {
 																	경매</td>
 																<td
 																	th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류중</td>
+=======
+																<td th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중</td>
+																<td th:if="${auction.auctionStatus.toString().equals('END')}">마감</td>
+																<td th:if="${auction.auctionStatus.toString().equals('LAST')}">지난 경매</td>
+																<td th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류중</td>
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 															</tr>
 														</tbody>
 													</table>
@@ -681,19 +715,30 @@ table {
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
+<<<<<<< HEAD
 											<input id='sum' type='text' disabled
+=======
+											<input id='sum' type='text'
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 												th:value="${auction.auctionNowPrice}" name="sum"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
 									<div style="text-align: right; width: 600px;">
 										<input type='button' onclick='count("minus")'
+<<<<<<< HEAD
 											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
 											type='button' onclick='count("plus")'
 											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
+=======
+											th:value="|-${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
+											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
+											type='button' onclick='count("plus")'
+											th:value="|+ ${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
 									<div style="text-align: right; width: 600px;">
@@ -794,11 +839,14 @@ table {
 					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 						data-bs-target="#profile" type="button" role="tab"
 						aria-controls="profile" aria-selected="false">물품문의</button>
+<<<<<<< HEAD
 				</li>
 				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
 					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 						data-bs-target="#standard" type="button" role="tab"
 						aria-controls="standard" aria-selected="false">규격</button>
+=======
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 				</li>
 
 			</ul>
@@ -870,6 +918,7 @@ table {
 	</script>
 
 	<script type="text/javascript">
+<<<<<<< HEAD
 	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
 	function count(type) {
 	    // 결과를 표시할 element
@@ -886,6 +935,29 @@ table {
 	    // 결과 출력
 	    resultElement.value = number;
 	}
+=======
+		function count(type) {
+			// 결과를 표시할 element
+			const resultElement = document.getElementById('sum');
+			const resultElement2 = document.getElementById('price');
+
+			// 현재 화면에 표시된 값
+			let number = resultElement.value;
+
+			const percentage = auction.auctionStartPrice * 0.05;
+
+			// 더하기/빼기
+			if (type === 'plus') {
+				number = parseInt(number) + percentage;
+
+			} else if (type === 'minus') {
+				number = parseInt(number) - percentage;
+			}
+
+			// 결과 출력
+			resultElement.value = number;
+		}
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 	</script>
 
 </th:block>

@@ -7,15 +7,24 @@ import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Category;
+<<<<<<< HEAD
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.MemberService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+=======
+	import com.ezen.valuefinder.service.AuctionService;
+	import com.ezen.valuefinder.service.MemberService;
+	
+	import jakarta.validation.Valid;
+	import lombok.RequiredArgsConstructor;
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+<<<<<<< HEAD
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -52,11 +61,38 @@ public class AuctionController {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
 		if (bindingResult.hasErrors()) {
+=======
+	import org.springframework.stereotype.Controller;
+	import org.springframework.ui.Model;
+	import org.springframework.validation.BindingResult;
+	import org.springframework.web.bind.annotation.GetMapping;
+	import org.springframework.web.bind.annotation.PathVariable;
+	import org.springframework.web.bind.annotation.PostMapping;
+	import org.springframework.web.bind.annotation.RequestParam;
+	import org.springframework.web.multipart.MultipartFile;
+	
+	import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+	import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+	import java.util.List;
+import java.util.Optional;
+	
+	@Controller
+	@RequiredArgsConstructor
+	public class AuctionController {
+	
+		private final AuctionService auctionService;
+	
+		@GetMapping(value = "/auction/add")
+		public String addItem(Model model) {
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 			List<Category> categoryList = auctionService.getCategoryList();
 			model.addAttribute("categoryList", categoryList);
 			model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
 			return "/auction/form/normalitemform";
 		}
+<<<<<<< HEAD
 
 		if (itemImgFiles.get(0).isEmpty()) {
 			model.addAttribute("errorMessage", "게시글 첫번째 이미지는 필수입니다.");
@@ -64,6 +100,58 @@ public class AuctionController {
 			model.addAttribute("categoryList", categoryList);
 			model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
 			return "/auction/form/normalitemform";
+=======
+	
+		@PostMapping(value = "/auction/add")
+		public String addItem(@Valid NormalAuctionFormDto normalAuctionFormDto, BindingResult bindingResult, Model model,
+							  @RequestParam("image")List<MultipartFile> itemImgFiles, Authentication authentication) {
+			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+	
+			if(bindingResult.hasErrors()) {
+				List<Category> categoryList = auctionService.getCategoryList();
+				model.addAttribute("categoryList", categoryList);
+				model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
+				return "/auction/form/normalitemform";
+			}
+	
+			if(itemImgFiles.get(0).isEmpty()) {
+				model.addAttribute("errorMessage", "게시글 첫번째 이미지는 필수입니다.");
+				List<Category> categoryList = auctionService.getCategoryList();
+				model.addAttribute("categoryList", categoryList);
+				model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
+				return "/auction/form/normalitemform";
+			}
+			try {
+				auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principalDetails.getUsername());
+			} catch (Exception e) {
+				e.printStackTrace();
+				List<Category> categoryList = auctionService.getCategoryList();
+				model.addAttribute("categoryList", categoryList);
+				model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
+				model.addAttribute("errorMessage", "등록 중 오류 발생");
+				return "/auction/form/normalitemform";
+			}
+			return "redirect:/";
+		}
+	
+		@GetMapping(value = "/auction/reverse/add")
+		public String addReverseItem() {
+			return "/auction/form/reverseitemform";
+		}
+	
+		@GetMapping(value = "auction/public/detail/{auctionNo}")
+		public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
+		    Auction auction = auctionService.getAuctionDetail(auctionNo);
+		    auctionService.auctionCount(auctionNo);
+			model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
+		    model.addAttribute("auction", auction);
+		    model.addAttribute("nowTime", LocalDateTime.now());
+		    model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+		    Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+		    model.addAttribute("auctionList", auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+		    
+		    return "/auction/details/publicDetail";
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
 		}
 		try {
 			auctionService.createAuction(normalAuctionFormDto, itemImgFiles, principalDetails.getUsername());

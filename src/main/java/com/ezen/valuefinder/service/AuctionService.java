@@ -156,6 +156,7 @@ public class AuctionService {
 	}
 	
 
+<<<<<<< HEAD
 	 public void updateAuctionStatusToProgress(Long auctionId) {
 	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
 	        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
@@ -181,3 +182,9 @@ public class AuctionService {
     
     
 
+=======
+
+    
+    
+}
+>>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
