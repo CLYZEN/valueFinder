@@ -106,6 +106,7 @@ public class MemberService implements UserDetailsService {
 		outMember.setStatus(Status.DISABLE);
 	}
 
+
 	public void repairMember(String email) {
 		Member member = memberRepository.findByEmail(email);
 		member.setStatus(Status.ACTIVE);
@@ -114,3 +115,4 @@ public class MemberService implements UserDetailsService {
 	
 	
 }
+

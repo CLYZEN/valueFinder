@@ -4,6 +4,7 @@ import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+
 import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.dto.AuctionQueryResponseDto;
 import com.ezen.valuefinder.entity.*;
@@ -14,7 +15,12 @@ import com.ezen.valuefinder.repository.CategoryRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
-import jakarta.validation.Valid;
+
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.*;
+
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -23,13 +29,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class AuctionService {
+
 	private final CategoryRepository categoryRepository;
 	private final MemberRepository memberRepository;
 	private final ItemImgService itemImgService;
@@ -37,7 +46,9 @@ public class AuctionService {
 	private final AuctionRepository auctionRepository;
 	private final AuctionQueryRepository auctionQueryRepository;
 	private final AuctionQueryResponseRepository auctionQueryResponseRepository;
-
+	private final ReverseBiddingRepository reverseBiddingRepository;	
+	
+	
 	public List<Category> getCategoryList() {
 		return categoryRepository.findAll();
 	}
@@ -46,7 +57,9 @@ public class AuctionService {
 			throws Exception {
 		Category category;
 
+
 		Member member = memberRepository.findByEmail(email);
+
 
 		// item entity create
 		Item item = new Item();
@@ -58,7 +71,9 @@ public class AuctionService {
 		item.setItemHeight(normalAuctionFormDto.getItemHeight());
 		item.setMember(member);
 
+
 		itemRepository.save(item);
+
 
 		Auction auction = new Auction();
 		auction.setItem(item);
@@ -81,7 +96,10 @@ public class AuctionService {
 		}
 		auction.setAuctionCount(0);
 
+
 		auctionRepository.save(auction);
+
+
 
 		for (int i = 0; i < itemImgFiles.size(); i++) {
 
@@ -123,22 +141,21 @@ public class AuctionService {
 		return auctionQuery.getAuctionQueryNo();
 
 	}
-	
-	public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto , String email) throws Exception {
+
+	public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto, String email) throws Exception {
 		Member member = memberRepository.findByEmail(email);
-		
+
 		AuctionQueryResponse auctionQueryResponse = new AuctionQueryResponse();
 		auctionQueryResponse.setAuctionQueryResponseTitle(auctionQueryResponseDto.getAuctionQueryResponseTitle());
 		auctionQueryResponse.setAuctionQueryResponseDetail(auctionQueryResponseDto.getAuctionQueryResponseDetail());
 		auctionQueryResponse.setMember(member);
-		
+
 		auctionQueryResponseRepository.save(auctionQueryResponse);
-		
+
 		return auctionQueryResponse.getAuctionQueryResponseNo();
-		
-		
+
 	}
-	
+
 	public Long updateQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
 		AuctionQuery auctionQuery = new AuctionQuery();
 		Member member = memberRepository.findByEmail(email);
@@ -157,9 +174,48 @@ public class AuctionService {
 	}
 
 
-	
-	
-	
+
+
+
+
+
+	public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
+		ReverseBidding reverseBidding = new ReverseBidding();
+		reverseBidding.setReverseBiddingTitle(reverseAuctionFormDto.getReverseBiddingTitle());
+		reverseBidding.setReverseBiddingDetail(reverseAuctionFormDto.getReverseBiddingDetail());
+		reverseBidding.setHopePrice(reverseAuctionFormDto.getHopePrice());
+		reverseBidding.setReverseBiddingExpireDate(reverseAuctionFormDto.getReverseBiddingExpireDate());
+		reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
+
+		Member member = memberRepository.findByEmail(email);
+
+		reverseBidding.setMember(member);
+		reverseBiddingRepository.save(reverseBidding);
+
+		return reverseBidding.getReverseBiddingNo();
+	}
+
+	public Auction getAuction(Long auctionId) {
+		Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+		return auction;
+	}
+
+	public String getRemainTime(LocalDateTime dateTime) {
+		LocalDateTime now = LocalDateTime.now();
+		Duration remainingDuration = Duration.between(now, dateTime);
+
+		return formatDuration(remainingDuration);
+	}
+
+	private String formatDuration(Duration duration) {
+		long days = duration.toDays();
+		long hours = duration.toHoursPart();
+		long minutes = duration.toMinutesPart();
+		long seconds = duration.toSecondsPart();
+
+		return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+	}
+
 	public Page<AuctionQueryResponse> auctionQueryResponseList(Pageable pageable, Member member) {
 		return auctionQueryResponseRepository.findByMember(pageable, member);
 	}
