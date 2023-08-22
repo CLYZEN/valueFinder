@@ -5,14 +5,13 @@ import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.*;
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Bidding;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
 
+import com.ezen.valuefinder.service.ReversebidService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -44,6 +43,7 @@ public class AuctionController {
 
     private final AuctionService auctionService;
     private final BiddingService biddingService;
+    private final ReversebidService reversebidService;
     @GetMapping(value = "/auction/add")
     public String addItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
@@ -138,7 +138,8 @@ public class AuctionController {
 
 
     @PostMapping(value = "/auction/query/add")
-    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult, Model model) {
+    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult, Model model
+    ) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("auctionQueryDto", auctionQueryDto);
@@ -221,12 +222,47 @@ public class AuctionController {
     }
 
 
-    @GetMapping(value = "/auction/reversebid/enter/add")
-    public String enterQuery() {
+    @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
+    public String enterReversebid(Authentication authentication,Model model,@PathVariable Long bidno) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+
+
+
+        model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+        model.addAttribute("bid",reverseBidding);
+        model.addAttribute("member",member);
+
         return "/auction/enter/enterForm";
     }
+    @PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
+    public String enterReversebid(Authentication authentication, Model model, @Valid ReversebidEnterDto reversebidEnterDto
+    ,@RequestParam("image") List<MultipartFile> itemImgFiles,@PathVariable Long bidno) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+        if (itemImgFiles.get(0).isEmpty()) {
+            model.addAttribute("errorMessage","첫번째 이미지는 필수입니다.");
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            model.addAttribute("bid",reverseBidding);
+            model.addAttribute("member",member);
+            return "/auction/enter/enterForm";
+        }
+        try {
+            reversebidService.saveReversebidEnter(reversebidEnterDto,member,bidno,itemImgFiles);
+        }catch (Exception e) {
+            model.addAttribute("errorMessage","첫번째 이미지는 필수입니다.");
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            model.addAttribute("bid",reverseBidding);
+            model.addAttribute("member",member);
+            return "/auction/enter/enterForm";
+        }
 
-    @GetMapping(value = "/auction/reversebid/enter")
+        return "redirect:/auction/reversebid/enter/" + bidno;
+    }
+
+    @GetMapping(value = "/auction/reversebid/enter/{bidno}")
     public String enterDetail() {
         return "/auction/enter/enter";
     }
