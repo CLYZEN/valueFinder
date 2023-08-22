@@ -202,6 +202,38 @@ public class AuctionService {
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
 
+	public int itemCount(Long memberId) {
+		return itemRepository.countItemsByMemberId(memberId);	
+	}
+
+
+	public Page<Auction> getAuctionList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return auctionRepository.findByItemMember(member, pageable);
+	}
+	
+
+	 public void updateAuctionStatusToProgress(Long auctionId) {
+	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
+	        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
+	            if (auction.getAuctionStartTime().isBefore(LocalDateTime.now())) {
+	                auction.setAuctionStatus(AuctionStatus.PROGRESS);
+	                auctionRepository.save(auction);
+	            }
+	        }
+	    }
+	
+	 public void updateAuctionStatusToEnd(Long auctionId) {
+	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
+	        if (!auction.getAuctionStatus().equals(AuctionStatus.END)) {
+	            if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
+	                auction.setAuctionStatus(AuctionStatus.END);
+	                auctionRepository.save(auction);
+	            }
+	        }
+	    }
+	 
+    
     public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
         return auctionRepository.findByAuctionType(auctionType,pageable);
     }
