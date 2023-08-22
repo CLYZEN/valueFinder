@@ -122,7 +122,7 @@ td {
 }
 
 .table-hover {
-	width:80%;
+	width: 80%;
 }
 </style>
 </th:block>
@@ -143,15 +143,14 @@ td {
  			 <path fill-rule="evenodd"
 					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-			<a href="/" style="text-decoration: none;">마이페이지</a> 
+			<a href="/" style="text-decoration: none;">마이페이지</a>
 			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 				fill="currentColor" class="bi bi-chevron-compact-right"
 				viewBox="0 0 16 16">
  			 <path fill-rule="evenodd"
 					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-			<a href="/" style="text-decoration: none;">내 문의내역</a>
-			<br> <br>
+			<a href="/" style="text-decoration: none;">내 문의내역</a> <br> <br>
 		</div>
 	</div>
 
@@ -159,70 +158,65 @@ td {
 		<div class="container"
 			style="width: 100%; height: 150px; border: 1px solid;">
 			<div
-					style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;"
-					th:text="|${member.nickname}님 안녕하세요!|">
-			</div>
+				style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;"
+				th:text="|${member.nickname}님 안녕하세요!|"></div>
 
 			<div class="container text-center">
 				<div class="row" style="height: 150px; border-left: 1px solid;">
 					<div class="col" style="margin-top: 25px;">
-						<a href="/member/mypage/sentquery">
-							<svg xmlns="http://www.w3.org/2000/svg" width="60"
-								 height="60" fill="currentColor" class="bi bi-justify"
-								 viewBox="0 0 16 16">
+						<a href="/member/mypage/sentquery"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+								fill="currentColor" class="bi bi-justify" viewBox="0 0 16 16">
 								<path fill-rule="evenodd"
-									  d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+									d="M2 12.5a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5zm0-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z" />
 								<p>내 문의사항</p>
 							</svg>
 						</a>
 					</div>
 
 					<div class="col" style="margin-top: 25px;">
-						<a href="/member/mypage/coupon">
-							<svg xmlns="http://www.w3.org/2000/svg" width="60"
-								 height="60" fill="currentColor" class="bi bi-ticket-perforated"
-								 viewBox="0 0 16 16">
+						<a href="/member/mypage/coupon"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+								fill="currentColor" class="bi bi-ticket-perforated"
+								viewBox="0 0 16 16">
 								<path
-										d="M4 4.85v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Z"/>
+									d="M4 4.85v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Zm-7 1.8v.9h1v-.9H4Zm7 0v.9h1v-.9h-1Z" />
 								<path
-										d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9V4.5Z"/>
+									d="M1.5 3A1.5 1.5 0 0 0 0 4.5V6a.5.5 0 0 0 .5.5 1.5 1.5 0 1 1 0 3 .5.5 0 0 0-.5.5v1.5A1.5 1.5 0 0 0 1.5 13h13a1.5 1.5 0 0 0 1.5-1.5V10a.5.5 0 0 0-.5-.5 1.5 1.5 0 0 1 0-3A.5.5 0 0 0 16 6V4.5A1.5 1.5 0 0 0 14.5 3h-13ZM1 4.5a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v1.05a2.5 2.5 0 0 0 0 4.9v1.05a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-1.05a2.5 2.5 0 0 0 0-4.9V4.5Z" />
 							</svg>
 							<p>보유 쿠폰</p>
 						</a>
 					</div>
 
 					<div class="col" style="margin-top: 25px;">
-						<a href="/member/mypage/todayview">
-							<svg xmlns="http://www.w3.org/2000/svg" width="60"
-								 height="60" fill="currentColor" class="bi bi-collection"
-								 viewBox="0 0 16 16">
+						<a href="/member/mypage/todayview"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+								fill="currentColor" class="bi bi-collection" viewBox="0 0 16 16">
 								<path
-										d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z"/>
+									d="M2.5 3.5a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-11zm2-2a.5.5 0 0 1 0-1h7a.5.5 0 0 1 0 1h-7zM0 13a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 16 13V6a1.5 1.5 0 0 0-1.5-1.5h-13A1.5 1.5 0 0 0 0 6v7zm1.5.5A.5.5 0 0 1 1 13V6a.5.5 0 0 1 .5-.5h13a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-13z" />
 							</svg>
 							<p>오늘 본 상품</p>
 						</a>
 					</div>
 
 					<div class="col" style="margin-top: 25px;">
-						<a href="/member/mypage/receivedquery">
-							<svg xmlns="http://www.w3.org/2000/svg" width="60"
-								 height="60" fill="currentColor" class="bi bi-chat-dots"
-								 viewBox="0 0 16 16">
+						<a href="/member/mypage/receivedquery"> <svg
+								xmlns="http://www.w3.org/2000/svg" width="60" height="60"
+								fill="currentColor" class="bi bi-chat-dots" viewBox="0 0 16 16">
 								<path
-										d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+									d="M5 8a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm4 0a1 1 0 1 1-2 0 1 1 0 0 1 2 0zm3 1a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
 								<path
-										d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z"/>
+									d="m2.165 15.803.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125zm.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2z" />
 							</svg>
 							<p>받은 문의내역</p>
 						</a>
 					</div>
 					<div class="col" style="margin-top: 25px;">
-						<a href="">
-							<svg xmlns="http://www.w3.org/2000/svg" width="60"
-								 height="60" fill="currentColor" class="bi bi-heart"
-								 viewBox="0 0 16 16">
+						<a href=""> <svg xmlns="http://www.w3.org/2000/svg" width="60"
+								height="60" fill="currentColor" class="bi bi-heart"
+								viewBox="0 0 16 16">
 								<path
-										d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
+									d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z" />
 							</svg>
 							<p>찜 목록</p>
 						</a>
@@ -231,132 +225,62 @@ td {
 			</div>
 
 			<div class="container"
-				style="width: 100%; height: 1000px; border: 1px solid; margin-top: 5%;">
+				style="width: 100%; height: 1000px; border: 1px solid; margin-top: 5%;" >
+
+	
 				
-				<div style="display:flex; justify-content:center;">
-				<table class="table table-hover"
-					style="border: 1px solid; margin: auto 0; margin-top: 4%; text-align: center;">
-					<tbody>
-						<tr>
-							<td style="border-right: 1px solid;">물품번호</td>
-							<td style="border-right: 1px solid;">물품명</td>
-							<td style="border-right: 1px solid; width: 30%">문의내용</td>
-							<td style="border-right: 1px solid; width: 10%">판매자</td>
-							<td style="border-right: 1px solid;">등록일자</td>
-						</tr>
-						<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum>a123456789</td>
-								<td class=tdnum>아이패드 에어 5</td>
-								<td class=tdnum style="width: 30%">이거 구성품, 박스 있나요? </td>
-								<td class=tdnum style="width: 10%">아무개</td>
-								<td class=tdnum>08/20 04:21</td>
-							</tr>
-					</tbody>
-				</table>
-				</div>
-				<div style="display:flex; justify-content:center;">
-				<table class="table table-hover"
-					style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-					<tbody>
-						<tr>
-							<td style="border-right: 1px solid;">물품번호</td>
-							<td style="border-right: 1px solid;">물품명</td>
-							<td style="border-right: 1px solid; width: 30%">문의내용</td>
-							<td style="border-right: 1px solid; width: 10%">판매자</td>
-							<td style="border-right: 1px solid;">등록일자</td>
-						</tr>
-					<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum>a123456789</td>
-								<td class=tdnum>아이패드 에어 5</td>
-								<td class=tdnum style="width: 30%">이거 구성품, 박스 있나요? </td>
-								<td class=tdnum style="width: 10%">아무개</td>
-								<td class=tdnum>08/20 04:21</td>
-							</tr>
-					</tbody>
-				</table>
-				</div>
-				<div style="display:flex; justify-content:center;">
-				<table class="table table-hover"
-					style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-					<tbody>
-						<tr>
-							<td style="border-right: 1px solid;">물품번호</td>
-							<td style="border-right: 1px solid;">물품명</td>
-							<td style="border-right: 1px solid; width: 30%">문의내용</td>
-							<td style="border-right: 1px solid; width: 10%">판매자</td>
-							<td style="border-right: 1px solid;">등록일자</td>
-						</tr>
-						<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum>a123456789</td>
-								<td class=tdnum>아이패드 에어 5</td>
-								<td class=tdnum style="width: 30%">이거 구성품, 박스 있나요? </td>
-								<td class=tdnum style="width: 10%">아무개</td>
-								<td class=tdnum>08/20 04:21</td>
-							</tr>
-					</tbody>
-				</table>
-				</div>
-				<div style="display:flex; justify-content:center;">
-				<table class="table table-hover"
-					style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-					<tbody>
-						<tr>
-							<td style="border-right: 1px solid;">물품번호</td>
-							<td style="border-right: 1px solid;">물품명</td>
-							<td style="border-right: 1px solid; width: 30%">문의내용</td>
-							<td style="border-right: 1px solid; width: 10%">판매자</td>
-							<td style="border-right: 1px solid;">등록일자</td>
-						</tr>
-						<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum>a123456789</td>
-								<td class=tdnum>아이패드 에어 5</td>
-								<td class=tdnum style="width: 30%">이거 구성품, 박스 있나요? </td>
-								<td class=tdnum style="width: 10%">아무개</td>
-								<td class=tdnum>08/20 04:21</td>
-							</tr>
-					</tbody>
-				</table>
-				</div>
-				<div style="display:flex; justify-content:center;">
-				<table class="table table-hover"
-					style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-					<tbody>
-						<tr>
-							<td style="border-right: 1px solid;">물품번호</td>
-							<td style="border-right: 1px solid;">물품명</td>
-							<td style="border-right: 1px solid; width: 30%">문의내용</td>
-							<td style="border-right: 1px solid; width: 10%">판매자</td>
-							<td style="border-right: 1px solid;">등록일자</td>
-						</tr>
-					<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum>a123456789</td>
-								<td class=tdnum>아이패드 에어 5</td>
-								<td class=tdnum style="width: 30%">이거 구성품, 박스 있나요? </td>
-								<td class=tdnum style="width: 10%">아무개</td>
-								<td class=tdnum>08/20 04:21</td>
-							</tr>
-					</tbody>
-				</table>
-				</div>
+					<div style="display: flex; justify-content: center;" th:each="auctionQuery : ${auctionQueryList}">
+						<table class="table table-hover"
+							style="border: 1px solid; margin: auto 0; margin-top: 4%; text-align: center;">
+							<tbody>
+								<tr>
+									<td style="border-right: 1px solid;">물품번호</td>
+									<td style="border-right: 1px solid;">물품명</a></td>
+									<td style="border-right: 1px solid; width: 30%">문의내용</td>
+									<td style="border-right: 1px solid; width: 10%">판매자</td>
+									<td style="border-right: 1px solid;">등록일자</td>
+
+								</tr>
+								<tr style="height: 100px; line-height: 100px;">
+									<td class=tdnum id="itemNo" name="itemNo"
+										>a123456789</td>
+									<td class=tdnum id="itemName" name="itemName"
+										><a href="'/auction/query/'  + ${auctionQuery.auciton.auctionNo}">아이패드 에어 5</a></td>
+									<td class=tdnum style="width: 30%" id="auctionQueryDetail"
+										name="auctionQueryDetail"
+										th:text="${auctionQuery.auctionQueryDetail}">이거 구성품, 박스
+										있나요?</td>
+									<td class=tdnum style="width: 10%" id="nickname"
+										name="nickname" th:text="${auctionQuery.member.nickname}">아무개</td>
+									<td type=date class=tdnum  id="data1"></td>
+								</tr>
+							</tbody>
+						</table>	
+					</div>
+
+					
 
 				
+
+
+
 			</div>
-				<!-- 페이징 버튼 -->
-				<div class="d-flex justify-content-center" style=" margin-top: 1%;">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item"><a class="page-link" href="#"
-								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li class="page-item"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#"
-								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
-						</ul>
-					</nav>
-				</div>
+			<!-- 페이징 버튼 -->
+			<div class="d-flex justify-content-center" style="margin-top: 1%;">
+				<nav aria-label="Page navigation example">
+					<ul class="pagination">
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+						</a></li>
+						<li class="page-item"><a class="page-link" href="#">1</a></li>
+						<li class="page-item"><a class="page-link" href="#">2</a></li>
+						<li class="page-item"><a class="page-link" href="#">3</a></li>
+						<li class="page-item"><a class="page-link" href="#"
+							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+						</a></li>
+					</ul>
+				</nav>
+			</div>
 		</div>
 	</div>
 
@@ -390,6 +314,13 @@ td {
 				}, 1000);
 			});
 		});
+		
+		$(document).ready(function () {
+	        var date = new Date();
+		
+			$("#date1").text(moment(date).format('MM/DD HH:mm'));
+		});
+	
 	</script>
 </th:block>
 </html>

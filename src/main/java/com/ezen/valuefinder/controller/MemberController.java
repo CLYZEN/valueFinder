@@ -5,8 +5,14 @@ import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.AuctionQueryResponseDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.AuctionQuery;
+import com.ezen.valuefinder.entity.AuctionQueryResponse;
 import com.ezen.valuefinder.entity.Bank;
+import com.ezen.valuefinder.entity.Item;
 import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.MemberService;
 import jakarta.validation.Valid;
@@ -29,7 +35,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
 import java.util.List;
 import java.util.Optional;
 
@@ -40,240 +45,284 @@ public class MemberController {
 	private final MemberService memberService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuctionService auctionService;
+	private final ItemRepository itemRepository;
 
-	 @GetMapping(value = "/member/login")
-	 public String login() {
-	 	return "member/login";
-	 }
+	@GetMapping(value = "/member/login")
+	public String login() {
+		return "member/login";
+	}
 
-	 @GetMapping(value = "/member/login/error")
-	 public String loginError(Model model) {
-		 model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요,");
-		 return "member/login";
-	 }
+	@GetMapping(value = "/member/login/error")
+	public String loginError(Model model) {
+		model.addAttribute("loginErrorMsg", "아이디 또는 비밀번호를 확인해주세요,");
+		return "member/login";
+	}
 
-	 @GetMapping(value = "/member/regist")
-	 public String register(Model model) {
-		 List<Bank> bankList = memberService.getBankList();
-
-		 model.addAttribute("bankList", bankList);
-		 model.addAttribute("memberFormDto", new MemberFormDto());
-
-		 return "member/register";
-	 }
-
-	 @PostMapping(value = "/member/regist")
-	 public String register(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model) {
+	@GetMapping(value = "/member/regist")
+	public String register(Model model) {
 		List<Bank> bankList = memberService.getBankList();
-		 if(bindingResult.hasErrors()) {
-			 model.addAttribute("registChk","Check");
-			 model.addAttribute("bankList",bankList);
-			 model.addAttribute("memberFromDto", new MemberFormDto());
-			 return "member/register";
-		 }
 
-		 try {
-			 Member member = memberService.createMember(memberFormDto,passwordEncoder);
-		 } catch (Exception e) {
-			 model.addAttribute("registChk", "Check");
-			 model.addAttribute("errorMessage", e.getMessage());
-			 model.addAttribute("bankList",bankList);
-			 model.addAttribute("memberFromDto", new MemberFormDto());
-			 return "member/register";
-		 }
+		model.addAttribute("bankList", bankList);
+		model.addAttribute("memberFormDto", new MemberFormDto());
 
-		 return "member/login";
-	 }
+		return "member/register";
+	}
 
-	 @GetMapping(value = "/member/findpw")
-	 public String findPw(Model model) {
-		 model.addAttribute("findPwDto", new MemberFindPwDto());
+	@PostMapping(value = "/member/regist")
+	public String register(@Valid MemberFormDto memberFormDto, BindingResult bindingResult, Model model) {
+		List<Bank> bankList = memberService.getBankList();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("registChk", "Check");
+			model.addAttribute("bankList", bankList);
+			model.addAttribute("memberFromDto", new MemberFormDto());
+			return "member/register";
+		}
 
-		 return "member/findpw";
-	 }
+		try {
+			Member member = memberService.createMember(memberFormDto, passwordEncoder);
+		} catch (Exception e) {
+			model.addAttribute("registChk", "Check");
+			model.addAttribute("errorMessage", e.getMessage());
+			model.addAttribute("bankList", bankList);
+			model.addAttribute("memberFromDto", new MemberFormDto());
+			return "member/register";
+		}
 
-	 @PostMapping(value = "/member/findpw")
-	 public String findPw(@Valid MemberFindPwDto memberFindPwDto,Model model) {
+		return "member/login";
+	}
 
-		 if(memberService.findPwChkMember(memberFindPwDto) == null) {
-			 model.addAttribute("findPwDto", new MemberFindPwDto());
-			 model.addAttribute("errorMessage","일치하는 회원 정보가 없습니다.");
-			 return "member/findpw";
-		 }
+	@GetMapping(value = "/member/findpw")
+	public String findPw(Model model) {
+		model.addAttribute("findPwDto", new MemberFindPwDto());
 
-		 model.addAttribute("email", memberFindPwDto.getEmail());
-		 return "member/resetpw";
-	 }
+		return "member/findpw";
+	}
 
-	 @PostMapping(value = "/member/updatepw")
-	 public String updatePw(@Valid String password, @Valid String email) {
-		memberService.updatePwd(password,email,passwordEncoder);
+	@PostMapping(value = "/member/findpw")
+	public String findPw(@Valid MemberFindPwDto memberFindPwDto, Model model) {
 
-		 return "member/login";
-	 }
+		if (memberService.findPwChkMember(memberFindPwDto) == null) {
+			model.addAttribute("findPwDto", new MemberFindPwDto());
+			model.addAttribute("errorMessage", "일치하는 회원 정보가 없습니다.");
+			return "member/findpw";
+		}
 
-	 @GetMapping(value = "member/regist/social")
+		model.addAttribute("email", memberFindPwDto.getEmail());
+		return "member/resetpw";
+	}
+
+	@PostMapping(value = "/member/updatepw")
+	public String updatePw(@Valid String password, @Valid String email) {
+		memberService.updatePwd(password, email, passwordEncoder);
+
+		return "member/login";
+	}
+
+	@GetMapping(value = "member/regist/social")
 	public String socialRegist() {
-		 return "member/social";
-	 }
-	 
-	 @GetMapping(value ="member/mypage") 
-	 public String myPage(Model model, Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		model.addAttribute("member",member);
-		 return "member/mypage";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/bidding")
-	 public String bidding(Authentication authentication, Model model) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/bidding";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/successfulbid")
-	 public String successfulbid(Authentication authentication, Model model) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/successfulbid";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/myauction")
-	 public String myauction(Model model,Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/myauction";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/modify/checkpwd")
-	 public String checkpwd(Model model, Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/checkpwd";
-	 }
+		return "member/social";
+	}
 
-	 @PostMapping(value = "member/mypage/modify/checkpwd")
-	 public String checkpwd(Model model, Authentication authentication,@Valid String password) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+	@GetMapping(value = "member/mypage")
+	public String myPage(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/mypage";
+	}
 
-		 boolean result = memberService.checkPwd(password,principalDetails.getUsername(),passwordEncoder);
-		 if(result == true) {
-			 return "redirect:/member/mypage/modify";
-		 } else {
-			 model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
-			 return "member/checkpwd";
-		 }
-	 }
+	@GetMapping(value = "member/mypage/bidding")
+	public String bidding(Authentication authentication, Model model) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/bidding";
+	}
 
-	 @GetMapping(value = "member/mypage/todayview")
-	 public String todayViewAuction() {
-		 return "member/todayviewauction";
-	 }
+	@GetMapping(value = "member/mypage/successfulbid")
+	public String successfulbid(Authentication authentication, Model model) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/successfulbid";
+	}
 
-	 @GetMapping(value ="member/mypage/modify/password")
-	 public String changepwd(Model model, Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/changepwd";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/outmember")
-	 public String outmember(Model model, Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/outmember";
-	 }
+	@GetMapping(value = "member/mypage/myauction")
+	public String myauction(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/myauction";
+	}
 
-	 @PostMapping(value = "member/mypage/outmember")
-	 public String outmember(@Valid String detail,Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		memberService.memberOut(principalDetails.getUsername(),detail);
+	@GetMapping(value = "member/mypage/modify/checkpwd")
+	public String checkpwd(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/checkpwd";
+	}
 
-		 return "redirect:/member/logout";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/coupon")
-	 public String coupon(Model model,Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/coupon";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/sentquery")
-	 public String sentquery(Model model,Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/sentquery";
-	 }
-	 
-
-	 
-	 
-	 @GetMapping(value ="member/mypage/receivedquery")
-	 public String receivedquery(Model model, Authentication authentication ) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 
-		
-		 
-		 return "member/receivedquery";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/like")
-	 public String like(Model model, Authentication authentication) {
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-		 model.addAttribute("member",member);
-		 return "member/like";
-	 }
-	 
-	 @GetMapping(value ="member/mypage/modify")
-	 public String modify(Model model, Authentication authentication) {
-		 List<Bank> bankList = memberService.getBankList();
-		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		 Member member = principalDetails.getMember();
-
-		 model.addAttribute("memberModifyDto",new MemberModifyDto());
-		 model.addAttribute("member",member);
-		 model.addAttribute("bankList", bankList);
-		 return "member/modify";
-	 }
-
-	 // 에러메시지 구현 필요
-	@PostMapping(value = "member/mypage/modify")
-	 public String modify(@Valid MemberModifyDto memberModifyDto,BindingResult bindingResult,Model model,Authentication authentication) {
+	@PostMapping(value = "member/mypage/modify/checkpwd")
+	public String checkpwd(Model model, Authentication authentication, @Valid String password) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-		 memberService.updateMember(memberModifyDto,principalDetails.getUsername());
-		 return "redirect:/";
-	 }
+		boolean result = memberService.checkPwd(password, principalDetails.getUsername(), passwordEncoder);
+		if (result == true) {
+			return "redirect:/member/mypage/modify";
+		} else {
+			model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
+			return "member/checkpwd";
+		}
+	}
 
-	 //계정복구
+	@GetMapping(value = "member/mypage/todayview")
+	public String todayViewAuction() {
+		return "member/todayviewauction";
+	}
+
+	@GetMapping(value = "member/mypage/modify/password")
+	public String changepwd(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/changepwd";
+	}
+
+	@GetMapping(value = "member/mypage/outmember")
+	public String outmember(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/outmember";
+	}
+
+	@PostMapping(value = "member/mypage/outmember")
+	public String outmember(@Valid String detail, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		memberService.memberOut(principalDetails.getUsername(), detail);
+
+		return "redirect:/member/logout";
+	}
+
+	@GetMapping(value = "member/mypage/coupon")
+	public String coupon(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/coupon";
+	}
+
+	@GetMapping(value = "member/mypage/sentquery")
+	public String sentquery(Model model, Authentication authentication, @PathVariable("page") Optional<Integer> page,
+			Pageable pageable) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+
+		Page<AuctionQuery> auctionQueryList = auctionService.auctionQueryList(pageable, member);
+
+		Pageable pageable2 = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+
+		model.addAttribute("member", member);
+		model.addAttribute("auctionQueryList", auctionQueryList);
+		model.addAttribute("maxPage", 5);
+
+		return "member/sentquery";
+	}
+
+	@GetMapping(value = "member/mypage/receivedquery")
+	public String receivedquery(Model model, Authentication authentication,
+			@PathVariable("page") Optional<Integer> page, Pageable pageable) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+
+		Page<AuctionQueryResponse> auctionQueryResponseList = auctionService.auctionQueryResponseList(pageable, member);
+		Pageable pageable2 = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+		model.addAttribute("member", member);
+		model.addAttribute("auctionQueryResponseList", auctionQueryResponseList);
+		model.addAttribute("maxPage", 5);
+
+		return "member/receivedquery";
+	}
+
+	@GetMapping(value = "member/mypage/like")
+	public String like(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		model.addAttribute("member", member);
+		return "member/like";
+	}
+
+	@GetMapping(value = "member/mypage/modify")
+	public String modify(Model model, Authentication authentication) {
+		List<Bank> bankList = memberService.getBankList();
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+
+		model.addAttribute("memberModifyDto", new MemberModifyDto());
+		model.addAttribute("member", member);
+		model.addAttribute("bankList", bankList);
+		return "member/modify";
+	}
+
+	// 에러메시지 구현 필요
+	@PostMapping(value = "member/mypage/modify")
+	public String modify(@Valid MemberModifyDto memberModifyDto, BindingResult bindingResult, Model model,
+			Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+		memberService.updateMember(memberModifyDto, principalDetails.getUsername());
+		return "redirect:/";
+	}
+
+	// 계정복구
 	@GetMapping(value = "repair")
 	public String repairMember() {
-		 return "member/repairmember";
+		return "member/repairmember";
 	}
 
 	@PostMapping(value = "repair")
-	public String repairMember(@Valid String email, @Valid String password,Model model) {
-		 Member member = memberService.findByEmail(email);
-		 boolean result = passwordEncoder.matches(password,member.getPassword());
+	public String repairMember(@Valid String email, @Valid String password, Model model) {
+		Member member = memberService.findByEmail(email);
+		boolean result = passwordEncoder.matches(password, member.getPassword());
 
-		 if (member == null || result == false) {
-			 model.addAttribute("errorMessage","아이디 또는 비밀번호가 틀렸습니다.");
-			 return "member/repairmember";
-		 }
-		 memberService.repairMember(email);
-		 return "redirect:/member/login";
+		if (member == null || result == false) {
+			model.addAttribute("errorMessage", "아이디 또는 비밀번호가 틀렸습니다.");
+			return "member/repairmember";
+		}
+		memberService.repairMember(email);
+		return "redirect:/member/login";
+	}
+
+	@PostMapping(value = "/member/mypage/answer")
+	public String addQuery(@Valid AuctionQueryResponseDto auctionQueryResponseDto, Authentication authentication,
+			BindingResult bindingResult, Model model) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("errorMessage" , "답변하기중 오류가 발생했습니다.");
+			model.addAttribute("auctionQueryResponseDto", auctionQueryResponseDto);
+			return "/member/answer";
+		}
+
+		try {
+			auctionService.createdQueryResponse(auctionQueryResponseDto, principalDetails.getUsername());
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("auctionQueryResponseDto", new AuctionQueryResponseDto());
+
+			return "/member/answer";
+		}
+
+		return "redirect:/";
+	}
+
+	@GetMapping(value = "member/mypage/answer")
+	public String answerList(Model model, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		model.addAttribute("auctionQueryResponseDto",new AuctionQueryResponseDto());
+		Member member = principalDetails.getMember();
+		
+	
+		return "member/answer";
 	}
 }

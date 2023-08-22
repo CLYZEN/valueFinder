@@ -6,6 +6,10 @@ package com.ezen.valuefinder.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import org.modelmapper.ModelMapper;
+
+import com.ezen.valuefinder.constant.AuctionQueryDistinction;
+import com.ezen.valuefinder.entity.AuctionQuery;
 
 import jakarta.validation.constraints.NotNull;
 
@@ -23,5 +27,6 @@ public class AuctionQueryDto {
 	private String auctionQueryDtail;
 	
 	
-	
-}
+
+	}
+

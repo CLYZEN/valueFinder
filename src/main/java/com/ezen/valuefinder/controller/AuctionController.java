@@ -4,6 +4,7 @@ import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.entity.AuctionQuery;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.service.AuctionService;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,10 +92,10 @@ public class AuctionController {
 	public String sealedBidDetail() {
 		return "/auction/details/sealedDetail";
 	}
-
+	//문의하기 insery
 	@PostMapping(value = "/auction/query/add")
-	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Principal principal   , BindingResult bindingResult , Model model  ) {
-		
+	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Authentication authentication , BindingResult bindingResult , Model model  ) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("auctionQueryDto",auctionQueryDto);
 			return "/auction/query/add";
@@ -101,7 +103,7 @@ public class AuctionController {
 		
 		
 		try {
-			auctionService.createdQuery(auctionQueryDto , principal.getName() );
+			auctionService.createdQuery(auctionQueryDto , principalDetails.getUsername());
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
@@ -122,11 +124,43 @@ public class AuctionController {
 		Member member = principalDetails.getMember();
 		model.addAttribute("member",member);
 		
+		
+		
 		return "/auction/query/queryform";
 	}
-
-	@GetMapping(value = "/auction/query")
-	public String queryDetail() {
+	
+	@PostMapping(value = "/auction/query/{auctionQueryNo}")
+	public String queryUpdate(@Valid AuctionQueryDto auctionQueryDto, Model model , Authentication authentication , BindingResult bindingResult) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("errorMessage" , "상품을 불러오지못했습니다");
+			return "auction/query/{auctionQueryNo}";
+		}
+		
+		
+		try {
+			auctionService.updateQuery(auctionQueryDto, principalDetails.getUsername() );
+		} catch (Exception e) {
+			model.addAttribute("errorMessage" , "상품 수정 중 에러가 발생했습니다");
+			return "auction/query";
+			
+		}
+		
+		return "redirect:/";
+	}
+	
+	
+	//문의 하기 수정페이지
+	@GetMapping(value = "/auction/query/{auctionQueryNo}")
+	public String queryDetail(@PathVariable("quctionQueryNo") Long auctionQueryNo , Model model , Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		
+		
+	
+		
+		
+		
 		return "/auction/query/query";
 	}
 

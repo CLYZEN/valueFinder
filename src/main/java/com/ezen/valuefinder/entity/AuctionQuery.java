@@ -1,6 +1,8 @@
 package com.ezen.valuefinder.entity;
 
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -41,6 +43,18 @@ public class AuctionQuery extends BaseEntity {
     private boolean readOk; // 읽음 안읽음
 
     private LocalDateTime readOkTime; // 읽은 시간
+    
+    public void updateQuery(AuctionQueryDto auctionQueryDto) {
+    	this.auctionQueryTitle = auctionQueryDto.getAuctionQueryTitle();
+    	this.auctionQueryDetail = auctionQueryDto.getAuctionQueryDtail();
+    	
+    }
+    
+    
+    
+    
+   
+    
     
     
   

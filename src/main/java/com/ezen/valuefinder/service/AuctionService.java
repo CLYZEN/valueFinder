@@ -5,13 +5,20 @@ import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.AuctionQueryResponseDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
+import com.ezen.valuefinder.repository.AuctionQueryResponseRepository;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,101 +30,138 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class AuctionService {
-    private final CategoryRepository categoryRepository;
-    private final MemberRepository memberRepository;
-    private final ItemImgService itemImgService;
-    private final ItemRepository itemRepository;
-    private final AuctionRepository auctionRepository;
-    private final AuctionQueryRepository auctionQueryRepository;
-    public List<Category> getCategoryList() {
-        return categoryRepository.findAll();
-    }
+	private final CategoryRepository categoryRepository;
+	private final MemberRepository memberRepository;
+	private final ItemImgService itemImgService;
+	private final ItemRepository itemRepository;
+	private final AuctionRepository auctionRepository;
+	private final AuctionQueryRepository auctionQueryRepository;
+	private final AuctionQueryResponseRepository auctionQueryResponseRepository;
 
-    public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception{
-        Category category;
+	public List<Category> getCategoryList() {
+		return categoryRepository.findAll();
+	}
 
-        Member member = memberRepository.findByEmail(email);
+	public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email)
+			throws Exception {
+		Category category;
 
-        // item entity create
-        Item item = new Item();
-        item.setCategory(categoryRepository.findById(normalAuctionFormDto.getCategory()).orElseThrow());
-        item.setItemName(normalAuctionFormDto.getItemName());
-        item.setItemDetail(normalAuctionFormDto.getItemDetail());
-        item.setItemWidth(normalAuctionFormDto.getItemWidth());
-        item.setItemDepth(normalAuctionFormDto.getItemDepth());
-        item.setItemHeight(normalAuctionFormDto.getItemHeight());
-        item.setMember(member);
-        
+		Member member = memberRepository.findByEmail(email);
 
-        itemRepository.save(item);
+		// item entity create
+		Item item = new Item();
+		item.setCategory(categoryRepository.findById(normalAuctionFormDto.getCategory()).orElseThrow());
+		item.setItemName(normalAuctionFormDto.getItemName());
+		item.setItemDetail(normalAuctionFormDto.getItemDetail());
+		item.setItemWidth(normalAuctionFormDto.getItemWidth());
+		item.setItemDepth(normalAuctionFormDto.getItemDepth());
+		item.setItemHeight(normalAuctionFormDto.getItemHeight());
+		item.setMember(member);
 
-        Auction auction = new Auction();
-        auction.setItem(item);
-        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
-            auction.setAuctionType(AuctionType.REALTIME);
-        } else if (normalAuctionFormDto.getAuctionDistinction() == 2) {
-            auction.setAuctionType(AuctionType.PUBLIC);
-        } else if (normalAuctionFormDto.getAuctionDistinction() == 3) {
-            auction.setAuctionType(AuctionType.SEALED);
-        }
-        auction.setAuctionStartPrice(normalAuctionFormDto.getAuctionStartPrice());
-        auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
-        auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
-        auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
-        if(normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
-         || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
-            auction.setAuctionStatus(AuctionStatus.PROGRESS);
-        } else {
-            auction.setAuctionStatus(AuctionStatus.PENDING);
-        }
-        auction.setAuctionCount(0);
+		itemRepository.save(item);
 
-        auctionRepository.save(auction);
+		Auction auction = new Auction();
+		auction.setItem(item);
+		if (normalAuctionFormDto.getAuctionDistinction() == 1) {
+			auction.setAuctionType(AuctionType.REALTIME);
+		} else if (normalAuctionFormDto.getAuctionDistinction() == 2) {
+			auction.setAuctionType(AuctionType.PUBLIC);
+		} else if (normalAuctionFormDto.getAuctionDistinction() == 3) {
+			auction.setAuctionType(AuctionType.SEALED);
+		}
+		auction.setAuctionStartPrice(normalAuctionFormDto.getAuctionStartPrice());
+		auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
+		auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
+		auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+		if (normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
+				|| normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
+			auction.setAuctionStatus(AuctionStatus.PROGRESS);
+		} else {
+			auction.setAuctionStatus(AuctionStatus.PENDING);
+		}
+		auction.setAuctionCount(0);
 
-        for(int i=0; i<itemImgFiles.size(); i++) {
+		auctionRepository.save(auction);
 
-            ItemImg itemImg = new ItemImg();
-            itemImg.saveItem(item);
+		for (int i = 0; i < itemImgFiles.size(); i++) {
+
+			ItemImg itemImg = new ItemImg();
+			itemImg.saveItem(item);
+
+			if (i == 0) {
+				itemImg.setRepImageYn(true);
+			} else {
+				itemImg.setRepImageYn(false);
+			}
+
+			itemImgService.saveItemImg(itemImg, itemImgFiles.get(i));
+		}
+
+		return auction.getAuctionNo();
+	}
+
+	public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
+
+		Member member = memberRepository.findByEmail(email);
+
+		AuctionQuery auctionQuery = new AuctionQuery();
+
+		auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
+		auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
+		auctionQuery.setMember(member);
+
+		if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
+			auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
+		} else if (auctionQueryDto.getAuctionQueryDistinction() == 2) {
+			auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ITEM);
+		} else if (auctionQueryDto.getAuctionQueryDistinction() == 3) {
+			auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.SHIPPING);
+		}
+
+		auctionQueryRepository.save(auctionQuery);
+
+		return auctionQuery.getAuctionQueryNo();
+
+	}
+	
+	public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto , String email) throws Exception {
+		Member member = memberRepository.findByEmail(email);
+		
+		AuctionQueryResponse auctionQueryResponse = new AuctionQueryResponse();
+		auctionQueryResponse.setAuctionQueryResponseTitle(auctionQueryResponseDto.getAuctionQueryResponseTitle());
+		auctionQueryResponse.setAuctionQueryResponseDetail(auctionQueryResponseDto.getAuctionQueryResponseDetail());
+		auctionQueryResponse.setMember(member);
+		
+		auctionQueryResponseRepository.save(auctionQueryResponse);
+		
+		return auctionQueryResponse.getAuctionQueryResponseNo();
+		
+		
+	}
+	
+	public Long updateQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
+		AuctionQuery auctionQuery = new AuctionQuery();
+		Member member = memberRepository.findByEmail(email);
+
+		auctionQuery.updateQuery(auctionQueryDto);
+		auctionQuery.setMember(member);
+
+		return auctionQuery.getAuctionQueryNo();
+
+	}
+
+	public Page<AuctionQuery> auctionQueryList(Pageable pageable, Member member) {
+
+		return auctionQueryRepository.findByMember(pageable, member);
+
+	}
 
 
-            if(i == 0) {
-                itemImg.setRepImageYn(true);
-            } else {
-                itemImg.setRepImageYn(false);
-            }
+	
+	
+	
+	public Page<AuctionQueryResponse> auctionQueryResponseList(Pageable pageable, Member member) {
+		return auctionQueryResponseRepository.findByMember(pageable, member);
+	}
 
-            itemImgService.saveItemImg(itemImg, itemImgFiles.get(i));
-        }
-
-        return auction.getAuctionNo();
-    }
-    
-    
-    public Long createdQuery(AuctionQueryDto auctionQueryDto , String email)throws Exception {
-    	
-    	Member member = memberRepository.findByEmail(email);
-    	
-    	
-    	AuctionQuery auctionQuery = new AuctionQuery();
-    	
-    	auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
-    	auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
-    	
-    	    	
-    	if(auctionQueryDto.getAuctionQueryDistinction() == 1) {
-    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
-    	} else if(auctionQueryDto.getAuctionQueryDistinction() == 2) {
-    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ITEM);
-    	} else if (auctionQueryDto.getAuctionQueryDistinction() == 3 ) {
-    		auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.SHIPPING);
-    	}
-    	
-    	auctionQueryRepository.save(auctionQuery);
-    	
-    	return 	auctionQuery.getAuctionQueryNo();
-    	
-    	
-    	
-    	
-    }
 }
