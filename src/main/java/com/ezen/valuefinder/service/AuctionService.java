@@ -1,9 +1,19 @@
 package com.ezen.valuefinder.service;
 
+import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.ItemImgDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+
+import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.AuctionQueryRepository;
+import com.ezen.valuefinder.repository.AuctionRepository;
+import com.ezen.valuefinder.repository.CategoryRepository;
+import com.ezen.valuefinder.repository.ItemRepository;
+import com.ezen.valuefinder.repository.MemberRepository;
+
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionRepository;
@@ -14,8 +24,8 @@ import com.ezen.valuefinder.repository.MemberRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
-import lombok.RequiredArgsConstructor;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +37,7 @@ import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -38,13 +49,15 @@ public class AuctionService {
     private final ItemImgService itemImgService;
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
+    private final AuctionQueryRepository auctionQueryRepository;
     private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
+
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
 
-    public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception{
+    public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception {
         Category category;
 
         Member member = memberRepository.findByEmail(email);
@@ -59,11 +72,12 @@ public class AuctionService {
         item.setItemHeight(normalAuctionFormDto.getItemHeight());
         item.setMember(member);
 
+
         itemRepository.save(item);
 
         Auction auction = new Auction();
         auction.setItem(item);
-        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
+        if (normalAuctionFormDto.getAuctionDistinction() == 1) {
             auction.setAuctionType(AuctionType.REALTIME);
         } else if (normalAuctionFormDto.getAuctionDistinction() == 2) {
             auction.setAuctionType(AuctionType.PUBLIC);
@@ -73,8 +87,13 @@ public class AuctionService {
         auction.setAuctionStartPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
-        auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
-        if(normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
+        auction.setBiddingCount(0);
+        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionStartTime().plusMinutes(5));
+        } else{
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+        }
+        if (normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
                 || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
             auction.setAuctionStatus(AuctionStatus.PROGRESS);
         } else {
@@ -84,13 +103,13 @@ public class AuctionService {
 
         auctionRepository.save(auction);
 
-        for(int i=0; i<itemImgFiles.size(); i++) {
+        for (int i = 0; i < itemImgFiles.size(); i++) {
 
             ItemImg itemImg = new ItemImg();
             itemImg.saveItem(item);
 
 
-            if(i == 0) {
+            if (i == 0) {
                 itemImg.setRepImageYn(true);
             } else {
                 itemImg.setRepImageYn(false);
@@ -105,6 +124,34 @@ public class AuctionService {
     @Transactional(readOnly = true)
     public Auction getAuctionDetail(Long auctionNo) {
     	return auctionRepository.findById(auctionNo).orElseThrow();
+    }
+
+
+
+    public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
+
+        Member member = memberRepository.findByEmail(email);
+
+
+        AuctionQuery auctionQuery = new AuctionQuery();
+
+        auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
+        auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
+
+
+        if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
+            auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
+        } else if (auctionQueryDto.getAuctionQueryDistinction() == 2) {
+            auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ITEM);
+        } else if (auctionQueryDto.getAuctionQueryDistinction() == 3) {
+            auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.SHIPPING);
+        }
+
+        auctionQueryRepository.save(auctionQuery);
+
+        return auctionQuery.getAuctionQueryNo();
+
+
     }
 
 
@@ -123,12 +170,22 @@ public class AuctionService {
 
         return reverseBidding.getReverseBiddingNo();
     }
+
+
+
+    public Auction getAuction(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+        return auction;
+    }
+
+
     
     @Transactional
     public int auctionCount(Long id) {
     	return auctionRepository.auctionCount(id);
     }
     
+
     public String getRemainTime(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
         Duration remainingDuration = Duration.between(now, dateTime);
@@ -156,7 +213,6 @@ public class AuctionService {
 	}
 	
 
-<<<<<<< HEAD
 	 public void updateAuctionStatusToProgress(Long auctionId) {
 	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
 	        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
@@ -177,14 +233,10 @@ public class AuctionService {
 	        }
 	    }
 	 
-	}
+    
+    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
+        return auctionRepository.findByAuctionType(auctionType,pageable);
+    }
 
-    
-    
-
-=======
-
-    
-    
 }
->>>>>>> f9cd23f27d0bdc693f4412fa7dd68e577890ef5e
+

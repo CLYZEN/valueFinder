@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns=""
       layout:decorate="~{layouts/layout1}">
 
 <th:block layout:fragment="css">
@@ -68,7 +68,8 @@
                 <div class="col-sm-3">
                     <select class="form-select border-0 bg-transparent" th:field="*{category}">
                         <option value="0" disabled>카테고리</option>
-                        <option th:each="category:${categoryList}" th:value="${category.categoryCode}" th:text="${category.categoryName}"></option>
+                        <option th:each="category:${categoryList}" th:value="${category.categoryCode}"
+                                th:text="${category.categoryName}"></option>
                     </select>
                 </div>
             </div>
@@ -105,7 +106,8 @@
                 <div class="col-sm-5">
                     <div id="image_container"
                          style="width: 1000px; height:400px; border:1px solid; margin:10px 0 10px 0;"></div>
-                    <input type="file" id="image" name="image" accept="image/*" onchange="setThumbnail(event);" multiple/>
+                    <input type="file" id="image" name="image" accept="image/*" onchange="setThumbnail(event);"
+                           multiple/>
                     <p>(이미지 등록은 최소 1장 최대 10장까지 등록 가능합니다.)</p>
                 </div>
             </div>
@@ -128,7 +130,7 @@
             <div class="form-group row">
                 <label class="col-sm-2">경매종류</label>
                 <div class="col-sm-3">
-                    <select class="form-select border-0 bg-transparent" th:field="*{auctionDistinction}">
+                    <select id="auctionDistinction" class="form-select border-0 bg-transparent" th:field="*{auctionDistinction}">
                         <option value="0" disabled>경매종류 선택</option>
                         <option value="1" selected>실시간경매</option>
                         <option value="2">공개입찰경매</option>
@@ -150,12 +152,14 @@
                 <label class="col-sm-2" style="height: 150px; line-height: 150px;">경매기간</label>
                 <div class="col-sm-3">
                     <div style="width: 1000px; height: 100%; line-height: 150px; display: flex">
-						<span> <strong>경매시작일</strong> <input type="datetime-local"
-                                            style="width: 220px; border: 0px; margin-left: 30px;" th:field="*{auctionStartTime}"/>
+						<span> <strong>경매시작일</strong> <input type="datetime-local" id="auctionStartTimeInput"
+                                                             style="width: 220px; border: 0px; margin-left: 30px;"
+                                                             th:field="*{auctionStartTime}"/>
 						</span>
                         &nbsp; ~ &nbsp;
-                        <span> <strong>경매마감일</strong> <input type="datetime-local"
-                                            style="width: 220px; border: 0px; margin-left: 30px;" th:field="*{auctionEndTime}"/>
+                        <span> <strong>경매마감일</strong> <input type="datetime-local" id="auctionEndTimeInput"
+                                                             style="width: 220px; border: 0px; margin-left: 30px;"
+                                                             th:field="*{auctionEndTime}"/>
 						</span>
                     </div>
                 </div>
@@ -173,11 +177,50 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script
-            src="https://cdn.tiny.cloud/1/wbp6amz0uk92ml3i2koa8kum1gthp9eiebu0ynmvboph9x2j/tinymce/5/tinymce.min.js"></script>
+    <script src="https://cdn.tiny.cloud/1/wbp6amz0uk92ml3i2koa8kum1gthp9eiebu0ynmvboph9x2j/tinymce/5/tinymce.min.js"></script>
+    <script th:inline="javascript">
 
-    <!-- textarea를 리치 텍스트 에디터로 변환 -->
-    <script>
+        var auctionDistinction = document.getElementById("auctionDistinction");
+        var auctionStartTimeInput = document.getElementById("auctionStartTimeInput");
+        var auctionEndTimeInput = document.getElementById("auctionEndTimeInput");
+        $(document).ready(function () {
+            if (auctionDistinction.value === "1") {
+                auctionEndTimeInput.disabled = true;
+            } else {
+                auctionEndTimeInput.disabled = false;
+            }
+        });
+
+
+        auctionDistinction.addEventListener("change", function () {
+            if (this.value === "1") {
+                auctionEndTimeInput.disabled = true;
+            } else {
+                auctionEndTimeInput.disabled = false;
+            }
+        });
+
+
+        auctionStartTimeInput.addEventListener("change", function () {
+            var selectedDateTime = new Date(this.value);
+            var now = new Date();
+
+            if (selectedDateTime < now) {
+                auctionStartTimeInput.value = ""; // Clear the value if it's invalid
+                alert("경매 시작일은 현재 날짜 이후로 선택해주세요.");
+            }
+        });
+
+        auctionEndTimeInput.addEventListener("change", function () {
+            var selectedDateTime = new Date(this.value);
+            var now = new Date();
+
+            if (selectedDateTime < now) {
+                auctionEndTimeInput.value = ""; // Clear the value if it's invalid
+                alert("경매 종료일은 현재 날짜 이후로 선택해주세요.");
+            }
+        });
+        <!-- textarea를 리치 텍스트 에디터로 변환 -->
 
         tinymce.init({
             selector: 'textarea', // 리치 텍스트 에디터로 변환할 textarea 선택자
@@ -192,9 +235,6 @@
         });
 
 
-    </script>
-
-    <script>
         function setThumbnail(event) {
             for (var image of event.target.files) {
                 var reader = new FileReader();
@@ -207,6 +247,7 @@
                 reader.readAsDataURL(image);
             }
         }
+
     </script>
 </th:block>
 </html>
