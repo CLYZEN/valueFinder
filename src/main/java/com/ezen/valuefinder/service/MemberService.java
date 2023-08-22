@@ -52,7 +52,7 @@ public class MemberService implements UserDetailsService {
     public List<Bank> getBankList() {
         return bankRepository.findAll();
     }
-
+    
     public Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
 
         Bank bank = bankRepository.findById(memberFormDto.getBankCode()).orElseThrow();

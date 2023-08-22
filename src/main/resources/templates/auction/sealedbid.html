@@ -155,14 +155,21 @@ margin-left: 151.5px; /* 좌측 여백 */
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
               <div class="product-grid row row-cols-1 " style="width: 1600px;">
                
+<<<<<<< HEAD
                 <div  class="col" th:action="@{'/items/' + ${items.number}}" method="get" th:object="${items}" style="display: flex; flex-wrap: wrap; justify-content: center;">
                   <div class="product-item"th:each=" item, status : ${auctions}" style="margin: 20px;">
                     <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
+=======
+                <!-- Card (인기 매물 아이템) -->
+                <div class="col" th:each="auction:${auctionList}">
+                  <div class="product-item">
+>>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
                     <figure>
                       <a th:href="product-single.html" title="Product Title">
                         <img th:src="${item.Url}"  class="tab-image">
                       </a>
                     </figure>
+<<<<<<< HEAD
                     <button class="btn2 d-flex justify-content-center" th:text="${item.Status}"></button>
 				
 					<div class = "d-flex justify-content-center"> 
@@ -173,13 +180,36 @@ margin-left: 151.5px; /* 좌측 여백 */
 					<span class="time_action" th:text="${item.Minute}" ></span>
 					<span class="time_action2" >:</span>
 					<span class="time_action" th:text="${item.Second}"></span>                  
+=======
+					  <button class="btn2 d-flex justify-content-center"
+							  th:if="${auction.auctionStatus.toString()} == 'PENDING'" th:text="대기중" disabled></button>
+					  <button class="btn2 d-flex justify-content-center"
+							  th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료" disabled></button>
+					  <button class="btn2 d-flex justify-content-center"
+							  th:if="${auction.auctionStatus.toString()} == 'LAST'" th:text="마감임박"></button>
+					  <button class="btn2 d-flex justify-content-center"
+							  th:if="${auction.auctionStatus.toString()} == 'PROGRESS'" th:text="진행중"></button>
+				
+					<div class = "d-flex justify-content-center"> 
+                    <span class="time_action" th:text="${auction.remainingTime}"></span>
+
+>>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
                     </div>
                     <div class = "item_detail">
+<<<<<<< HEAD
                     <h3 class="detail">물건 이름 : <span th:text="${item.Name}"></span></h3>
                     <h3 class="detail">시작가 <span th:text="${item.StartPrice}"></span> <span>원</span></h3>
                     <h3 class="detail">입찰수 <span th:text="${item.Count}"></span> <span>회</span></h3>
                   	<h3 class="detail">마감  <span th:text="${item.EndTime}" ></span></h3>
                   	<h3 class="detail">마감  <span th:text="${item.NowTime}" ></span></h3>
+=======
+                    <h3>물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
+                    <h3>시작가 : <span th:text="${auction.auctionStartPrice}"></span> <span>원</span></h3>
+                    <h3>입찰수 : <span th:text="${auction.biddingCount}">0</span> <span>회</span></h3>
+                  	<h3>마감
+                  	<span th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+					</h3>
+>>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                       <div class="input-group product-qty">
@@ -199,23 +229,30 @@ margin-left: 151.5px; /* 좌측 여백 */
   </div>
   <!-- 페이징 버튼 -->
   <div class="d-flex justify-content-center">
-  <nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item">
-      <a class="page-link" href="#" aria-label="Previous">
-        <span aria-hidden="true">&laquo;</span>
-      </a>
-    </li>
-    <li class="page-item"><a class="page-link" href="#">1</a></li>
-    <li class="page-item"><a class="page-link" href="#">2</a></li>
-    <li class="page-item"><a class="page-link" href="#">3</a></li>
-    <li class="page-item">
-      <a class="page-link" href="#" aria-label="Next">
-        <span aria-hidden="true">&raquo;</span>
-      </a>
-    </li>
-  </ul>
-</nav>
+	  <nav
+			  th:with="start=${(auctionList.number/maxPage)*maxPage + 1}
+			                 ,end=(${(auctionList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionList.totalPages ? start + (maxPage - 1) : auctionList.totalPages)})"
+			  aria-label="Page navigation example">
+		  <ul class="pagination d-flex justify-content-center">
+			  <li class="page-item" th:classappend="${auctionList.first}?'disabled'">
+				  <a class="page-link"
+					 th:href="@{'/auction/sealedbid/'+ ${auctionList.number - 1}}">이전</a>
+			  </li>
+
+			  <li class="page-item"
+				  th:each="page: ${#numbers.sequence(start, end)}"
+				  th:classappend="${auctionList.number eq page - 1}?'active':''">
+				  <a
+						  class="page-link" th:inline="text"
+						  th:href="@{'/auction/sealedbid/' + ${page - 1}}">[[${page}]]</a>
+			  </li>
+
+			  <li class="page-item" th:classappend="${auctionList.last}?'disabled'">
+				  <a class="page-link"
+					 th:href="@{'/auction/sealedbid/' + ${auctionList.number + 1}}">다음</a>
+			  </li>
+		  </ul>
+	  </nav>
   </div>
 </section>
 

@@ -66,7 +66,6 @@ public class SecurityConfig {
                                 .alwaysRemember(false)
                                 .tokenRepository(tokenRepository())
                                 .userDetailsService(userDetailsService)
-                        //.userDetailsService(remembermeUserDetailService)
                 )
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.ALWAYS))

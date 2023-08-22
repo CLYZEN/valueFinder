@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -43,6 +44,11 @@ public class Auction extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AuctionStatus auctionStatus; // 경매상태
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "integer default 0", nullable = false)	
     private Integer auctionCount; // 경매조회수
+
+    private String remainingTime; // 남은시간
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Integer biddingCount; // 입찰횟수
 }

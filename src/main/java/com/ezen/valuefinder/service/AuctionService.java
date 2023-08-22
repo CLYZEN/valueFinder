@@ -3,8 +3,12 @@ package com.ezen.valuefinder.service;
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
+<<<<<<< HEAD
 import com.ezen.valuefinder.dto.ItemSearchDto;
 import com.ezen.valuefinder.dto.ItemsListDto;
+=======
+import com.ezen.valuefinder.dto.ItemImgDto;
+>>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -17,19 +21,32 @@ import com.ezen.valuefinder.repository.MemberRepository;
 
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.AuctionRepository;
+import com.ezen.valuefinder.repository.CategoryRepository;
+import com.ezen.valuefinder.repository.ItemImgRepository;
+import com.ezen.valuefinder.repository.ItemRepository;
+import com.ezen.valuefinder.repository.MemberRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 
 import lombok.RequiredArgsConstructor;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+
 import java.util.List;
 
 @Service
@@ -42,6 +59,7 @@ public class AuctionService {
     private final ItemRepository itemRepository;
     private final AuctionRepository auctionRepository;
     private final AuctionQueryRepository auctionQueryRepository;
+    private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
 
     public List<Category> getCategoryList() {
@@ -81,7 +99,12 @@ public class AuctionService {
         auction.setAuctionStartPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
-        auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+        auction.setBiddingCount(0);
+        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionStartTime().plusMinutes(5));
+        } else{
+            auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
+        }
         if (normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
                 || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
             auction.setAuctionStatus(AuctionStatus.PROGRESS);
@@ -109,6 +132,12 @@ public class AuctionService {
 
         return auction.getAuctionNo();
     }
+    
+    @Transactional(readOnly = true)
+    public Auction getAuctionDetail(Long auctionNo) {
+    	return auctionRepository.findById(auctionNo).orElseThrow();
+    }
+
 
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
@@ -175,10 +204,19 @@ public class AuctionService {
     	return itemRepository.getSealedAuctionList();
     }
 
+
     public Auction getAuction(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
         return auction;
     }
+
+
+    
+    @Transactional
+    public int auctionCount(Long id) {
+    	return auctionRepository.auctionCount(id);
+    }
+    
 
     public String getRemainTime(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
@@ -195,8 +233,10 @@ public class AuctionService {
 
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
+
+    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
+        return auctionRepository.findByAuctionType(auctionType,pageable);
+    }
+
 }
-
-
-
 
