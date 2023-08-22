@@ -361,9 +361,8 @@
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price">
 									</div>
-									<div
-										th:text="|${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|">
-									</div>
+									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|" />
 								</div>
 							</div>
 
@@ -372,11 +371,21 @@
 								<div class="col-sm-3">0회</div>
 							</div>
 
+						
 							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">진행상태</label>
-								<div class="col-sm-3" th:text="${auction.auctionStatus}"></div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행
+									중</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('END')}">마감</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('LAST')}">1분
+									남음</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기
+								</div>
 							</div>
-
 
 
 							<div class="form-group row" style="height: 72px;">
@@ -551,11 +560,81 @@
 									style="line-height: 71px; padding-right: 0px; padding-left: 0px;">판매자
 									다른물품</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
-									<div style="width: 50px; text-align: center;">12건</div>
+									<div style="width: 50px; text-align: center;"
+										th:text=|${itemCount}건|></div>
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
 										<input type="submit" class="btn btn-primary" value="더보기"
-											style="border-radius: inherit; width: 110px;" />
+											style="border-radius: inherit; width: 110px;"
+											data-bs-toggle="modal" data-bs-target="#otherItemModal" />
 									</div>
+
+									<div class="modal fade" id="otherItemModal" tabindex="-1"
+										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
+														th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
+													<button type="button" class="btn-close"
+														data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body ">
+													<table class="table">
+														<thead>
+															<tr>
+																<th scope="col">물품이름</th>
+																<th scope="col">가격</th>
+																<th scope="col">진행상태</th>
+
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="auction: ${auctionList} ">
+																<th scope="row" th:text="${auction.item.itemName}"></th>
+																<td th:text="${auction.auctionNowPrice}"></td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('END')}">마감</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('LAST')}">지난
+																	경매</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류중</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<!-- 페이징 버튼 -->
+												<div class="d-flex justify-content-center">
+													<nav aria-label="Page navigation example">
+														<ul class="pagination custom-pagination">
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+															</a></li>
+															<li class="page-item"><a class="page-link" href="#">1</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">2</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">3</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+															</a></li>
+														</ul>
+													</nav>
+												</div>
+
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
+														data-bs-dismiss="modal">닫기</button>
+
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달종료 -->
 								</div>
 							</div>
 						</div>
@@ -621,16 +700,18 @@
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
-											<input id='sum' type='text' th:value="${auction.auctionNowPrice}" name="sum"
+											<input id='sum' type='text' disabled th:value="${auction.auctionStartPrice}" name="sum"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
 									<div style="text-align: right; width: 600px;">
 										<input type='button' onclick='count("minus")'
-											th:value="|-${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
-											style="margin-top: 10px; width: 80px; height: 40px;" /> <input type='button'
-											onclick='count("plus")'
-											th:value="|+ ${#numbers.formatInteger(auction.auctionStartPrice * 0.05, 0, 'COMMA')}원|"
+											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
+											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
+											type='button' onclick='count("plus")'
+											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
 									<div style="text-align: right; width: 600px;">
@@ -675,6 +756,11 @@
 					<button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile"
 						type="button" role="tab" aria-controls="profile" aria-selected="false">물품문의</button>
 				</li>
+				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#standard" type="button" role="tab"
+						aria-controls="standard" aria-selected="false">규격</button>
+				</li>
 
 			</ul>
 			<div class="tab-content" id="myTabContent">
@@ -708,6 +794,14 @@
 						</div>
 					</div>
 				</div>
+				<div class="tab-pane fade" id="standard" role="tabpanel"
+					aria-labelledby="standard-tab">
+					<div class="standard wishful">
+						<p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
+						<p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
+						<p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
+					</div>
+				</div>
 
 			</div>
 		</div>
@@ -734,25 +828,23 @@
 		});
 	</script>
 
-	<script type="text/javascript">
-		function count(type) {
-			// 결과를 표시할 element
-			const resultElement = document.getElementById('sum');
-			const resultElement2 = document.getElementById('price');
-
-			// 현재 화면에 표시된 값
-			let number = resultElement.value;
-			// 더하기/빼기
-			if (type === 'plus') {
-				number = parseInt(number) + 500;
-			} else if (type === 'minus') {
-				number = parseInt(number) - 500;
-			}
-
-			// 결과 출력
-			resultElement.value = number;
-
-		}
+<script type="text/javascript">
+	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
+	function count(type) {
+	    // 결과를 표시할 element
+	    const resultElement = document.getElementById('sum');
+	    const resultElement2 = document.getElementById('price');
+	    // 현재 화면에 표시된 값
+	    let number = resultElement.value;
+	    // 더하기/빼기
+	    if (type === 'plus') {
+	        number = parseInt(number) + auctionPrice;
+	    } else if (type === 'minus') {
+	        number = parseInt(number) - auctionPrice;
+	    }
+	    // 결과 출력
+	    resultElement.value = number;
+	}
 	</script>
 </th:block>
 
