@@ -55,17 +55,14 @@ margin-left: 151.5px; /* 좌측 여백 */
 /* 시,분,초 */
 .time_action{ 
 	background : rgb(217,217,217);
-	margin: 5px;
-    width: 30px;
-    height: 30px;
-    text-align: center;
-    line-height: 30px;
+	padding : 5px 6px;
+	margin : 10px;
 
 }
 /* : */
 .time_action2{
-	align-self: center;
-
+	padding : 5px 6px;
+	margin : 10px;
 
 }
 
@@ -81,9 +78,6 @@ margin-left: 151.5px; /* 좌측 여백 */
 	text-align:left;
 }
 
-.detail {
-	font-size : 12px !important;
-}
 
 </style>
 </head>
@@ -143,7 +137,6 @@ margin-left: 151.5px; /* 좌측 여백 */
 			</ul>
 		</div> 
 
-
 	<!-- 경매 물품 카드 -->
 	<section class="py-5">
   <div class="container-fluid">
@@ -153,40 +146,15 @@ margin-left: 151.5px; /* 좌측 여백 */
          
           <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-all" role="tabpanel" aria-labelledby="nav-all-tab">
-              <div class="product-grid row row-cols-1 " style="width: 1600px;">
+              <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                
-<<<<<<< HEAD
-                <div  class="col" th:action="@{'/items/' + ${items.number}}" method="get" th:object="${items}" style="display: flex; flex-wrap: wrap; justify-content: center;">
-                  <div class="product-item"th:each=" item, status : ${auctions}" style="margin: 20px;">
-                    <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-=======
                 <div class="col" th:each="auction:${auctionList}">
                   <div class="product-item">
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
                     <figure>
-                      <a th:href="product-single.html" title="Product Title">
-                        <img th:src="${item.Url}"  class="tab-image">
+                      <a href="product-single.html" title="Product Title">
+                        <img src="images/thumb-bananas.png"  class="tab-image">
                       </a>
                     </figure>
-<<<<<<< HEAD
-                    <button class="btn2 d-flex justify-content-center" th:text="${item.Status}"></button>
-				
-					<div class = "d-flex justify-content-center"> 
-                    <span class="time_action" th:text="${item.Day}" ></span>
-					<span class="time_action2" >:</span>
-                    <span class="time_action" th:text="${item.Hour}" ></span>
-					<span class="time_action2" >:</span>
-					<span class="time_action" th:text="${item.Minute}" ></span>
-					<span class="time_action2" >:</span>
-					<span class="time_action" th:text="${item.Second}"></span>                  
-                    </div>
-                    <div class = "item_detail">
-                    <h3 class="detail">물건 이름 : <span th:text="${item.Name}"></span></h3>
-                    <h3 class="detail">시작가 <span th:text="${item.StartPrice}"></span> <span>원</span></h3>
-                    <h3 class="detail">현재가 <span th:text="${item.NowPrice}"></span> <span>원</span></h3>
-                    <h3 class="detail">입찰수 <span th:text="${item.Count}"></span> <span>회</span></h3>
-                  	<h3 class="detail">마감  <span th:text="${item.EndTime}" ></span></h3>
-=======
                     <button class="btn2 d-flex justify-content-center"
 							th:if="${auction.auctionStatus.toString()} == 'PENDING'" th:text="대기중" disabled></button>
 					  <button class="btn2 d-flex justify-content-center"
@@ -206,7 +174,6 @@ margin-left: 151.5px; /* 좌측 여백 */
                   	<h3>마감 
                   	<span th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
 					</h3>
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
                     </div>
                     <div class="d-flex align-items-center justify-content-between">
                       <div class="input-group product-qty">

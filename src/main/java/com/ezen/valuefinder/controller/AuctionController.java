@@ -4,51 +4,27 @@ package com.ezen.valuefinder.controller;
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
-<<<<<<< HEAD
-import com.ezen.valuefinder.dto.ItemSearchDto;
-import com.ezen.valuefinder.dto.ItemsListDto;
-import com.ezen.valuefinder.dto.AuctionQueryDto;
-import com.ezen.valuefinder.dto.NormalAuctionFormDto;
-import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
-=======
 import com.ezen.valuefinder.dto.*;
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Bidding;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.entity.Item;
-import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
 
+import com.ezen.valuefinder.service.ReversebidService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-=======
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-<<<<<<< HEAD
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-=======
 import org.springframework.web.bind.annotation.*;
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
@@ -58,10 +34,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-<<<<<<< HEAD
-=======
 import java.util.Map;
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import java.util.Optional;
 
 @Controller
@@ -70,6 +43,7 @@ public class AuctionController {
 
     private final AuctionService auctionService;
     private final BiddingService biddingService;
+    private final ReversebidService reversebidService;
     @GetMapping(value = "/auction/add")
     public String addItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
@@ -111,38 +85,6 @@ public class AuctionController {
     }
 
 
-<<<<<<< HEAD
-	@GetMapping(value={"/auction/public", "items/{page}"})
-	public String auctionPublic(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
-
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
-		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
-		List<ItemsListDto> auctions = auctionService.getPublicAuctionList();
-		
-		model.addAttribute("items", items);
-		model.addAttribute("auctions",auctions); 		
-		model.addAttribute("itemSearchDto", itemSearchDto);
-		model.addAttribute("maxPage", 5);
-		
-		return "auction/public";
-	}
-	
-	//실시간 경매 페이지
-	@GetMapping(value={"/auction/realtime", "items/{page}"})
-	public String auctionRealtime(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
-
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
-		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
-		List<ItemsListDto> auctions = auctionService.getRealtimeAuctionList();
-		
-		model.addAttribute("items", items);
-		model.addAttribute("auctions",auctions); 		
-		model.addAttribute("itemSearchDto", itemSearchDto);
-		model.addAttribute("maxPage", 5);
-		
-		return "auction/realtime";
-	}
-=======
     @GetMapping(value = "/auction/reverse/add")
     public String addReverseItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
@@ -155,33 +97,12 @@ public class AuctionController {
     public String addReverseItem(@Valid ReverseAuctionFormDto reverseAuctionFormDto, Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         String email = principalDetails.getUsername();
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 
         auctionService.createReverseAuction(reverseAuctionFormDto, email);
 
         return "redirect:/";
     }
 
-<<<<<<< HEAD
-	@GetMapping(value = {"/auction/sealedbid", "items/{page}"})
-	public String auctionSealedbid(Model model, ItemSearchDto itemSearchDto,@PathVariable("page") Optional<Integer> page) {
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 3);
-		Page<Item> items = auctionService.getAuctionPage(itemSearchDto, pageable);
-		List<ItemsListDto> auctions = auctionService.getSealedAuctionList();
-		
-		model.addAttribute("items", items);
-		model.addAttribute("auctions",auctions); 		
-		model.addAttribute("itemSearchDto", itemSearchDto);
-		model.addAttribute("maxPage", 5);
-		
-		return "auction/sealedbid";
-	}
-	
-	//비공개 경매 페이지
-	@GetMapping(value="/auction/reversebid/details")
-	public String redetails() {
-=======
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 
     @GetMapping(value = "auction/public/detail/{auctionNo}")
     public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
@@ -217,7 +138,8 @@ public class AuctionController {
 
 
     @PostMapping(value = "/auction/query/add")
-    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult, Model model) {
+    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult, Model model
+    ) {
 
         if (bindingResult.hasErrors()) {
             model.addAttribute("auctionQueryDto", auctionQueryDto);
@@ -300,12 +222,47 @@ public class AuctionController {
     }
 
 
-    @GetMapping(value = "/auction/reversebid/enter/add")
-    public String enterQuery() {
+    @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
+    public String enterReversebid(Authentication authentication,Model model,@PathVariable Long bidno) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+
+
+
+        model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+        model.addAttribute("bid",reverseBidding);
+        model.addAttribute("member",member);
+
         return "/auction/enter/enterForm";
     }
+    @PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
+    public String enterReversebid(Authentication authentication, Model model, @Valid ReversebidEnterDto reversebidEnterDto
+    ,@RequestParam("image") List<MultipartFile> itemImgFiles,@PathVariable Long bidno) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+        if (itemImgFiles.get(0).isEmpty()) {
+            model.addAttribute("errorMessage","첫번째 이미지는 필수입니다.");
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            model.addAttribute("bid",reverseBidding);
+            model.addAttribute("member",member);
+            return "/auction/enter/enterForm";
+        }
+        try {
+            reversebidService.saveReversebidEnter(reversebidEnterDto,member,bidno,itemImgFiles);
+        }catch (Exception e) {
+            model.addAttribute("errorMessage","첫번째 이미지는 필수입니다.");
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            model.addAttribute("bid",reverseBidding);
+            model.addAttribute("member",member);
+            return "/auction/enter/enterForm";
+        }
 
-    @GetMapping(value = "/auction/reversebid/enter")
+        return "redirect:/auction/reversebid/enter/" + bidno;
+    }
+
+    @GetMapping(value = "/auction/reversebid/enter/{bidno}")
     public String enterDetail() {
         return "/auction/enter/enter";
     }

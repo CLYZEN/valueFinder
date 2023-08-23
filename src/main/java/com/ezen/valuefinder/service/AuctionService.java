@@ -3,12 +3,9 @@ package com.ezen.valuefinder.service;
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
-<<<<<<< HEAD
 import com.ezen.valuefinder.dto.ItemSearchDto;
 import com.ezen.valuefinder.dto.ItemsListDto;
-=======
 import com.ezen.valuefinder.dto.ItemImgDto;
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -31,10 +28,7 @@ import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
 
-=======
->>>>>>> 50ca6534f644840f8a277c1de18d08554e58c73e
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
