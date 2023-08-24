@@ -14,4 +14,7 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 	int auctionCount(Long id);
 
 	Page<Auction> findByAuctionType(AuctionType auctionType, Pageable pageable);
+	
+	
+	
 }

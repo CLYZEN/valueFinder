@@ -213,16 +213,15 @@ public class MemberController {
 		return "member/coupon";
 	}
 
-	@GetMapping(value = "member/mypage/sentquery")
-	public String sentquery(Model model, Authentication authentication, @PathVariable("page") Optional<Integer> page,
-			Pageable pageable) {
+	@GetMapping(value = {"/member/mypage/sentquery" , "/member/mypage/sentquery{page}"})
+	public String sentquery(Model model, Authentication authentication, @PathVariable("page") Optional<Integer> page
+		) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 
 		Page<AuctionQuery> auctionQueryList = auctionService.auctionQueryList(pageable, member);
-
-		Pageable pageable2 = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
-
+		
 		model.addAttribute("member", member);
 		model.addAttribute("auctionQueryList", auctionQueryList);
 		model.addAttribute("maxPage", 5);
@@ -230,14 +229,13 @@ public class MemberController {
 		return "member/sentquery";
 	}
 
-	@GetMapping(value = "member/mypage/receivedquery")
+	@GetMapping(value = {"/member/mypage/receivedquery" , "/member/mypage/receivedquery/{page}"})
 	public String receivedquery(Model model, Authentication authentication,
-			@PathVariable("page") Optional<Integer> page, Pageable pageable) {
+			@PathVariable("page") Optional<Integer> page) {
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
-
 		Page<AuctionQueryResponse> auctionQueryResponseList = auctionService.auctionQueryResponseList(pageable, member);
-		Pageable pageable2 = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
 		model.addAttribute("member", member);
 		model.addAttribute("auctionQueryResponseList", auctionQueryResponseList);
 		model.addAttribute("maxPage", 5);

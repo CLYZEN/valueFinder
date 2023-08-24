@@ -141,15 +141,18 @@ public class AuctionService {
 
 
 
-	public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
-
+	public Long createdQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionNo ) throws Exception {
+		
 		Member member = memberRepository.findByEmail(email);
-
+		Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
+		
 		AuctionQuery auctionQuery = new AuctionQuery();
-
+		
+		auctionQuery.setAuction(auction);
 		auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
 		auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
 		auctionQuery.setMember(member);
+		auctionQuery.setReadOk(false);
 
 		if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
 			auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);

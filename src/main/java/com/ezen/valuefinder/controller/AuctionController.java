@@ -147,22 +147,28 @@ public class AuctionController {
 		return "/auction/details/sealedDetail";
 	}
 	//문의하기 insery
-	@PostMapping(value = "/auction/query/add")
-	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Authentication authentication , BindingResult bindingResult , Model model  ) {
+	@PostMapping(value = "/auction/query/add/{auctionNo}")
+	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Authentication authentication , BindingResult bindingResult , Model model ,@PathVariable("auctionNo") Long auctionNo 
+			) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		
+		
 		if (bindingResult.hasErrors()) {
+			
 			model.addAttribute("auctionQueryDto",auctionQueryDto);
-			return "/auction/query/add";
+			return "auction/query/add/{auctionNo}";
 		}
 		
 		
 		try {
-			auctionService.createdQuery(auctionQueryDto , principalDetails.getUsername());
+			auctionService.createdQuery(auctionQueryDto , principalDetails.getUsername() , auctionNo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
 			
-			return "/auction/query/add";
+			
+			
+			return "auction/query/add/{auctionNo}";
 		}
 		
 		
@@ -171,13 +177,13 @@ public class AuctionController {
 	}
 	
 	
-	@GetMapping(value = "/auction/query/add")
-	public String auctionQuery(Model model,Authentication authentication) {
+	@GetMapping(value = "/auction/query/add/{auctionNo}")
+	public String auctionQuery(Model model,Authentication authentication , @PathVariable("auctionNo") Long auctionNo) {
 		model.addAttribute("auctionQueryDto",new AuctionQueryDto());
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
 		model.addAttribute("member",member);
-		
+		model.addAttribute("auctionNo",auctionNo);
 		
 		
 		return "/auction/query/queryform";
@@ -270,28 +276,6 @@ public class AuctionController {
         return "/auction/details/sealedDetail";
     }
 
-
-    @PostMapping(value = "/auction/query/add")
-    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult, Model model) {
-
-        if (bindingResult.hasErrors()) {
-            model.addAttribute("auctionQueryDto", auctionQueryDto);
-            return "/auction/query/add";
-        }
-
-
-        try {
-            auctionService.createdQuery(auctionQueryDto, principal.getName());
-        } catch (Exception e) {
-            e.printStackTrace();
-            model.addAttribute("auctionQueryDto", new AuctionQueryDto());
-
-            return "/auction/query/add";
-        }
-
-
-        return "redirect:/";
-    }
 
 
 
