@@ -1,17 +1,17 @@
+
 package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.*;
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Bidding;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
 
+import com.ezen.valuefinder.service.ReversebidService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +43,7 @@ public class AuctionController {
 
 	private final AuctionService auctionService;
 	private final BiddingService biddingService;
+	private final ReversebidService reversebidService;
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -102,53 +103,43 @@ public class AuctionController {
 		return "redirect:/";
 	}
 
-	@GetMapping(value = "auction/public/detail/{auctionNo}")
-	public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
+	@GetMapping(value = "auction/detail/{auctionNo}")
+	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
 		Auction auction = auctionService.getAuctionDetail(auctionNo);
-		auctionService.auctionCount(auctionNo);
-		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-		model.addAttribute("auction", auction);
-		model.addAttribute("nowTime", LocalDateTime.now());
-		model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-		model.addAttribute("auctionList",
-				auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-		auctionService.updateAuctionStatusToProgress(auctionNo);
-		auctionService.updateAuctionStatusToEnd(auctionNo);
+		auctionService.addAuctionView(auctionNo);
+		
+		if (auction.getAuctionType() == AuctionType.PUBLIC) {
+			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+			model.addAttribute("auction", auction);
+			model.addAttribute("nowTime", LocalDateTime.now());
+			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+			model.addAttribute("auctionList",
+					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			auctionService.updateAuction(auctionNo);
+			return "/auction/details/publicDetail";
+		} else if (auction.getAuctionType() == AuctionType.REALTIME) {
+			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+			model.addAttribute("auction", auction);
+			model.addAttribute("nowTime", LocalDateTime.now());
+			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+			model.addAttribute("auctionList",
+					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			auctionService.updateAuction(auctionNo);
+			return "/auction/details/realtimeDetail";
+		} else {
+			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+			model.addAttribute("auction", auction);
+			model.addAttribute("nowTime", LocalDateTime.now());
+			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+			model.addAttribute("auctionList",
+					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			auctionService.updateAuction(auctionNo);
+		}
 
 		return "/auction/details/publicDetail";
-	}
-
-	@GetMapping(value = "/auction/realtime/detail/{auctionNo}")
-	public String realtimeBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
-		Auction auction = auctionService.getAuctionDetail(auctionNo);
-		auctionService.auctionCount(auctionNo);
-		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-		model.addAttribute("auction", auction);
-		model.addAttribute("nowTime", LocalDateTime.now());
-		model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-		model.addAttribute("auctionList",
-				auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-		auctionService.updateAuctionStatusToProgress(auctionNo);
-		auctionService.updateAuctionStatusToEnd(auctionNo);
-		return "/auction/details/realtimeDetail";
-	}
-
-	@GetMapping(value = "/auction/sealed/detail/{auctionNo}")
-	public String sealedBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
-		Auction auction = auctionService.getAuctionDetail(auctionNo);
-		auctionService.auctionCount(auctionNo);
-		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-		model.addAttribute("auction", auction);
-		model.addAttribute("nowTime", LocalDateTime.now());
-		model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-		model.addAttribute("auctionList",
-				auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-		auctionService.updateAuctionStatusToProgress(auctionNo);
-		auctionService.updateAuctionStatusToEnd(auctionNo);
-		return "/auction/details/sealedDetail";
 	}
 
 	@PostMapping(value = "/auction/query/add")
@@ -233,12 +224,47 @@ public class AuctionController {
 		return "/auction/query/query";
 	}
 
-	@GetMapping(value = "/auction/reversebid/enter/add")
-	public String enterQuery() {
+	@GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
+	public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+
+		model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+		model.addAttribute("bid", reverseBidding);
+		model.addAttribute("member", member);
+
 		return "/auction/enter/enterForm";
 	}
 
-	@GetMapping(value = "/auction/reversebid/enter")
+	@PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
+	public String enterReversebid(Authentication authentication, Model model,
+			@Valid ReversebidEnterDto reversebidEnterDto, @RequestParam("image") List<MultipartFile> itemImgFiles,
+			@PathVariable Long bidno) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+		if (itemImgFiles.get(0).isEmpty()) {
+			model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
+			model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+			model.addAttribute("bid", reverseBidding);
+			model.addAttribute("member", member);
+			return "/auction/enter/enterForm";
+		}
+		try {
+			reversebidService.saveReversebidEnter(reversebidEnterDto, member, bidno, itemImgFiles);
+		} catch (Exception e) {
+			model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
+			model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+			model.addAttribute("bid", reverseBidding);
+			model.addAttribute("member", member);
+			return "/auction/enter/enterForm";
+		}
+
+		return "redirect:/auction/reversebid/enter/" + bidno;
+	}
+
+	@GetMapping(value = "/auction/reversebid/enter/{bidno}")
 	public String enterDetail() {
 		return "/auction/enter/enter";
 	}
@@ -295,9 +321,15 @@ public class AuctionController {
 	}
 
 	// 비공개 경매 페이지
-	@GetMapping(value = "/auction/reversebid/details")
-	public String redetails() {
-
+	@GetMapping(value = "/auction/reversebid/detail/{reverseBiddingNo}")
+	public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,
+			Optional<Integer> page) {
+		ReverseBidding reverseBidding = reversebidService.getReversebidById(reverseBiddingNo);
+		reversebidService.addReverseBiddingView(reverseBiddingNo);
+		model.addAttribute("nowTime", LocalDateTime.now());
+		model.addAttribute("remainTime", auctionService.getRemainTime(reverseBidding.getReverseBiddingExpireDate()));
+		model.addAttribute("reverseBidding", reverseBidding);
+		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
 		return "auction/reversebid/details";
 	}
 

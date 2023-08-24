@@ -79,20 +79,17 @@
 	border: 0px;
 }
 
-
-
 /* 
 상단 css
 */
-
 .category {
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
-	padding: 0;  
+	padding: 0;
 	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
- 	text-align: center; /* 내용 가운데 정렬 */
-} 
+	margin-right: 151.5px; /* 우측 여백 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
 
 .category_list {
 	list-style-type: none;
@@ -102,34 +99,31 @@
 	color: var(--dark-color);
 	font-weight: 700;
 	padding: 0;
-	margin-bottom : 0;
-	
-} 
+	margin-bottom: 0;
+}
 
 /* home>현재페이지 */
-.tabs_header{
+.tabs_header {
 	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
 	margin-bottom: 10px;
 }
 
-.location{
-margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
+.location {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
 }
 
-
-.category_list > li {
+.category_list>li {
 	padding: 0;
-	margin : 0;
-	width:12.5%;
-	text-align:left;
+	margin: 0;
+	width: 12.5%;
+	text-align: left;
 }
 
 .nav-link {
 	padding: 0.5rem 1rem;
 }
-
 
 /* 
 하단 css
@@ -139,10 +133,7 @@ table {
 	border-top: 1px solid;
 	border-bottom: 1px solid;
 	width: 100%;
-
-} 
-
-
+}
 
 #myTab {
 	margin: 0px 100px;
@@ -153,7 +144,6 @@ table {
 	padding: 30px;
 }
 
-
 .wishful {
 	background-color: #D9D9D9;
 	height: 150px;
@@ -163,13 +153,10 @@ table {
 .join_customer th {
 	background-color: #D9D9D9;
 	text-align: center;
-
 }
 
 .join_customer td {
-
 	text-align: center;
-
 }
 
 .box2 th {
@@ -185,17 +172,18 @@ table {
 	border-color: #52A8E0 #52A8E0 white !important;
 }
 
-.box2{
-    top:0;
-    left:0;
-    height: 150px;
-    overflow-y: scroll;
-    margin:0 auto;
-    width: 100%;
-    float:left;
-    border-collapse: collapse;
-    border: 2px solid #52A8E0;
+.box2 {
+	top: 0;
+	left: 0;
+	height: 150px;
+	overflow-y: scroll;
+	margin: 0 auto;
+	width: 100%;
+	float: left;
+	border-collapse: collapse;
+	border: 2px solid #52A8E0;
 }
+
 #myform fieldset {
 	display: inline-block;
 	direction: rtl;
@@ -245,35 +233,37 @@ table {
 	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
 	margin-bottom: 15px;
 }
-
 </style>
 </th:block>
 
 <div layout:fragment="content">
-	
+
 	<section>
 		<div class="tabs_header">
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-house-door-fill"
+				viewBox="0 0 16 16">
  				<path
-			d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+					d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
 			</svg>
-	<a href="/" style="text-decoration: none;">홈</a>
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-chevron-compact-right"
-		viewBox="0 0 16 16">
+			<a href="/" style="text-decoration: none;">홈</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
  			 <path fill-rule="evenodd"
-			d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-	<a href="/">실시간경매</a>
-	</div>
-	<div class="location"> <h3 style="font-weight: 700;">실시간경매</h3> </div>	
+			<a href="/">실시간경매</a>
+		</div>
+		<div class="location">
+			<h3 style="font-weight: 700;">실시간경매</h3>
+		</div>
 
 		<div class="category">
 			<ul class="category_list">
-				<li><a href="#women" class="nav-link"
-					data-bs-toggle="collapse" data-bs-target="#collapseExample"
-					aria-expanded="false" aria-controls="collapseExample">전체</a></li>
+				<li><a href="#women" class="nav-link" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample" aria-expanded="false"
+					aria-controls="collapseExample">전체</a></li>
 				<li><a href="#women" class="nav-link">인기매물</a></li>
 				<li><a href="#men" class="nav-link">디지털기기</a></li>
 				<li><a href="#kids" class="nav-link">가구/인테리어</a></li>
@@ -283,7 +273,7 @@ table {
 				<li><a href="#sale" class="nav-link">생활가전</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">생활/주방</a></li>
 				<li><a href="#sale" class="nav-link">가공식품</a></li>
 				<li><a href="#sale" class="nav-link">스포츠/레져</a></li>
@@ -294,7 +284,7 @@ table {
 				<li><a href="#sale" class="nav-link">티켓/교환권</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">도서</a></li>
 				<li><a href="#sale" class="nav-link">유아도서</a></li>
 				<li><a href="#sale" class="nav-link">기타</a></li>
@@ -304,7 +294,7 @@ table {
 				<li></li>
 				<li></li>
 			</ul>
-		</div> 
+		</div>
 	</section>
 
 	<h6 style="text-align: right; width: 1750px; padding: 10px;"
@@ -319,7 +309,7 @@ table {
 					<div class="banner-blocks">
 
 
-					<div class="banner-ad block-1" style="place-self: center;">
+						<div class="banner-ad block-1" style="place-self: center;">
 							<img th:src="${auction.item.itemImgList[0].itemImageUrl}"
 								th:alt="${auction.item.itemName}"
 								style="width: 100%; height: 100%">
@@ -328,25 +318,26 @@ table {
 
 
 						<div class="block-2">
-								<div style="display: flex;">
-							<div>
-							<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
-							</div>
-							<div style="width: 415px;">
-							<h4
+							<div style="display: flex;">
+								<div>
+									<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
+								</div>
+								<div style="width: 415px;">
+									<h4
 										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
 										th:text="|남은시간 : ${remainTime}|"></h4>
+								</div>
 							</div>
-						</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
 								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
 							</div>
 
-						<div class="form-group row">
+							<div class="form-group row">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3" th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
+								<div class="col-sm-3"
+									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
 
 							<div class="form-group row">
@@ -359,7 +350,8 @@ table {
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price"></div>
-									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									<span
+										th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|" />
 								</div>
 							</div>
@@ -386,10 +378,10 @@ table {
 
 							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">카운트</label>
-								<div class="col-sm-3">01:00</div>
+								  <div class="col-sm-3" id="count1"></div>
 							</div>
 
-									<div class="form-group row" style="height: 72px;">
+							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2" style="line-height: 71px;">판매자
 									닉네임</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
@@ -535,7 +527,7 @@ table {
 									</div>
 								</div>
 							</div>
-									<div class="form-group row" style="height: 72px;">
+							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2"
 									style="line-height: 71px; padding-right: 0px; padding-left: 0px;">판매자
 									다른물품</label>
@@ -670,30 +662,28 @@ table {
 						</div>
 
 						<div class="banner-ad block-4" style="justify-self: right;">
-							<div class="row banner-content" style="margin-right: 0px; flex-wrap: nowrap;">
-								
+							<div class="row banner-content"
+								style="margin-right: 0px; flex-wrap: nowrap;">
+
 								<div style="width: 80px;">
-									<div style="
-    height: 115px;
-">
-									<img alt="" src="/images/timer.png"
-									style="width: 100px;margin-left: 100px;height: 100px;">
+									<div style="height: 115px;">
+										<img alt="" src="/images/timer.png"
+											style="width: 100px; margin-left: 100px; height: 100px;">
 									</div>
-									<div style="
-    width: 300px;
-    text-align: -webkit-center;">
-									<h2>01:00</h2>
+									<div style="width: 300px; text-align: -webkit-center;">
+										<h2 id="count2"></h2>
 									</div>
 								</div>
-								
+
 								<div style="width: 670px;">
-								<div
+									<div
 										style="display: flex; width: 600px; justify-content: right;">
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
 											<input id='sum' type='text' disabled
-												th:value="${auction.auctionNowPrice}" name="sum"
+												th:value="${(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP) * 100) + auction.auctionNowPrice }"
+												name="sum"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
@@ -707,17 +697,21 @@ table {
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
-								<div style="text-align: right; width: 600px;">
-									<div>
-									<button style="margin-top: 10px;width: 80px;height: 40px;border: 1px solid gray;border-radius: 2px;">
-										<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chat-heart" viewBox="0 0 16 16">
-  											<path fill-rule="evenodd" d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z"/>
+									<div style="text-align: right; width: 600px;">
+										<div>
+											<button
+												style="margin-top: 10px; width: 80px; height: 40px; border: 1px solid gray; border-radius: 2px;">
+												<svg xmlns="http://www.w3.org/2000/svg" width="16"
+													height="16" fill="currentColor" class="bi bi-chat-heart"
+													viewBox="0 0 16 16">
+  											<path fill-rule="evenodd"
+														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
 										</svg>
-									</button>
-									<input type='button' value='입찰'
-										style="margin-top: 10px; width: 80px; height: 40px;" />
+											</button>
+											<input type='button' value='입찰'
+												style="margin-top: 10px; width: 80px; height: 40px;" />
+										</div>
 									</div>
-								</div>
 								</div>
 							</div>
 						</div>
@@ -731,59 +725,60 @@ table {
 	</section>
 
 
-	<section style="margin-top: 50px;text-align: -webkit-center; height: 250px; padding-top: 50px;" >
-		<div class="middlebox" id="myTabContent" style="
-    width: 950px;">
-					<h1 style="margin-bottom: 20px;">입찰현황</h1>
-				<div class="box2 scrollnone">
-					<table class="colr_table2" style="border-bottom: none; border-top: none;">
-						<tr>
-							<th scope="col">번호</th>
-							<th>입찰자</th>
-							<th>입찰날짜</th>
-							<th>입찰금액</th>
-							<th>결과</th>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td>에디</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>루피</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>크롱</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>포비</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>뽀로로</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-					</table>
-				</div>
+	<section
+		style="margin-top: 50px; text-align: -webkit-center; height: 250px; padding-top: 50px;">
+		<div class="middlebox" id="myTabContent" style="width: 950px;">
+			<h1 style="margin-bottom: 20px;">입찰현황</h1>
+			<div class="box2 scrollnone">
+				<table class="colr_table2"
+					style="border-bottom: none; border-top: none;">
+					<tr>
+						<th scope="col">번호</th>
+						<th>입찰자</th>
+						<th>입찰날짜</th>
+						<th>입찰금액</th>
+						<th>결과</th>
+					</tr>
+					<tr>
+						<td>5</td>
+						<td>에디</td>
+						<td>08/07 18:15</td>
+						<td>10,500원</td>
+						<td>유찰</td>
+					</tr>
+					<tr>
+						<td>4</td>
+						<td>루피</td>
+						<td>08/07 18:15</td>
+						<td>10,500원</td>
+						<td>유찰</td>
+					</tr>
+					<tr>
+						<td>3</td>
+						<td>크롱</td>
+						<td>08/07 18:15</td>
+						<td>10,500원</td>
+						<td>유찰</td>
+					</tr>
+					<tr>
+						<td>2</td>
+						<td>포비</td>
+						<td>08/07 18:15</td>
+						<td>10,500원</td>
+						<td>유찰</td>
+					</tr>
+					<tr>
+						<td>1</td>
+						<td>뽀로로</td>
+						<td>08/07 18:15</td>
+						<td>10,500원</td>
+						<td>유찰</td>
+					</tr>
+				</table>
+			</div>
 
 		</div>
-		
+
 	</section>
 
 
@@ -801,7 +796,8 @@ table {
 						data-bs-target="#profile" type="button" role="tab"
 						aria-controls="profile" aria-selected="false">물품문의</button>
 				</li>
-				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+				<li class="nav-item" role="presentation"
+					th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
 					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 						data-bs-target="#standard" type="button" role="tab"
 						aria-controls="standard" aria-selected="false">규격</button>
@@ -874,7 +870,7 @@ table {
 		});
 	</script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
 	function count(type) {
 	    // 결과를 표시할 element
@@ -892,6 +888,36 @@ table {
 	    resultElement.value = number;
 	}
 	</script>
+	
+	 <script>
+        window.onload = function() {
+            var divCountElement = document.getElementById("count1");
+            var h2CountElement = document.getElementById("count2");
+            var duration = 60; // 1 minute in seconds
+
+            function updateCountdown() {
+                var minutes = Math.floor(duration / 60);
+                var seconds = duration % 60;
+
+                divCountElement.innerText = minutes + "분 " + seconds + "초";
+                h2CountElement.innerText = formatTime(minutes) + ":" + formatTime(seconds);
+                
+                if (duration > 0) {
+                    duration--;
+                    setTimeout(updateCountdown, 1000); // Update every second
+                } else {
+                    divCountElement.innerText = "시간 종료";
+                    h2CountElement.innerText = "시간 종료";
+                }
+            }
+
+            function formatTime(time) {
+                return time < 10 ? "0" + time : time;
+            }
+
+            updateCountdown();
+        }
+    </script>
 </th:block>
 
 </html>

@@ -359,7 +359,8 @@ table {
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price"></div>
-									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									<span
+										th:text="|${#numbers.formatInteger(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|" />
 								</div>
 							</div>
@@ -682,17 +683,18 @@ table {
 										</div>
 										<div>
 											<input id='sum' type='text' disabled
-												th:value="${auction.auctionNowPrice}" name="sum"
+												th:value="${(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP) * 100) + auction.auctionNowPrice }"
+												name="sum"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
 									<div style="text-align: right; width: 600px;">
 										<input type='button' onclick='count("minus")'
-											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+											th:value="|-${#numbers.formatInteger(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
 											type='button' onclick='count("plus")'
-											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+											th:value="|+${#numbers.formatInteger(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
@@ -707,7 +709,7 @@ table {
 														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
 												</svg>
 											</button>
-											<input type='button' value='입찰'
+											<input type='button' onclick="bidding()" value='입찰'
 												style="margin-top: 10px; width: 80px; height: 40px;" />
 										</div>
 									</div>
@@ -795,7 +797,8 @@ table {
 						data-bs-target="#profile" type="button" role="tab"
 						aria-controls="profile" aria-selected="false">물품문의</button>
 				</li>
-				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+				<li class="nav-item" role="presentation"
+					th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
 					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
 						data-bs-target="#standard" type="button" role="tab"
 						aria-controls="standard" aria-selected="false">규격</button>
@@ -856,38 +859,77 @@ table {
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
-	<script th:inline="javascript">
-		
-	</script>
-
 	<script src="/js/splide.min.js"></script>
+	<script th:inline="javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+            var splide = new Splide('.splide');
+            splide.mount();
+        });
 
-	<script>
-		document.addEventListener('DOMContentLoaded', function() {
-			var splide = new Splide('.splide');
-			splide.mount();
-		});
-	</script>
+        let auctionNo = [[${auction.auctionNo}]];
+        let auctionPrice = [[${auction.auctionStartPrice}]];
+        function count(type) {
+            // 결과를 표시할 element
+            const resultElement = document.getElementById('sum');
+            const resultElement2 = document.getElementById('price');
 
-	<script type="text/javascript">
-	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
-	function count(type) {
-	    // 결과를 표시할 element
-	    const resultElement = document.getElementById('sum');
-	    const resultElement2 = document.getElementById('price');
-	    // 현재 화면에 표시된 값
-	    let number = resultElement.value;
-	    // 더하기/빼기
-	    if (type === 'plus') {
-	        number = parseInt(number) + auctionPrice;
-	    } else if (type === 'minus') {
-	        number = parseInt(number) - auctionPrice;
-	    }
-	    // 결과 출력
-	    resultElement.value = number;
-	}
-	</script>
+            // 현재 화면에 표시된 값
+            let number = resultElement.value;
 
+            const percentage = auctionPrice * 0.05;
+
+            // 더하기/빼기
+            if (type === 'plus') {
+                number = parseInt(number) + percentage;
+
+            } else if (type === 'minus') {
+                number = parseInt(number) - percentage;
+            }
+
+            // 결과 출력
+            resultElement.value = number;
+        }
+
+
+        function bidding() {
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+
+            var price = $("#sum").val();
+            var url = '/auction/bidding';
+            var method = "POST";
+
+            $.ajax({
+                url: url,
+                type: method,
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                data: JSON.stringify({
+                    auctionNo : auctionNo,
+                    price : price
+                }),
+                contentType: "application/json",
+                success: function(result,status,jqXHR) {
+                    // 요청 성공 처리
+                    alert('등록 완료');
+                    location.href= document.referrer;
+                },
+                error: function(jqXHR, status, error) {
+                    if(jqXHR.status == '401') {
+                        alert('로그인 후 이용해주세요.');
+                        location.href = '/member/login';
+                    } else {
+                        alert(jqXHR.responseText);
+                        location.href= document.referrer;
+                    }
+
+                }
+            });
+        }
+
+    </script>
 </th:block>
 
 </html>

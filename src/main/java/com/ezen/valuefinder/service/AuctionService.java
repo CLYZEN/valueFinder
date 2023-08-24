@@ -127,7 +127,6 @@ public class AuctionService {
     }
 
 
-
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
 
         Member member = memberRepository.findByEmail(email);
@@ -178,14 +177,6 @@ public class AuctionService {
         return auction;
     }
 
-
-    
-    @Transactional
-    public int auctionCount(Long id) {
-    	return auctionRepository.auctionCount(id);
-    }
-    
-
     public String getRemainTime(LocalDateTime dateTime) {
         LocalDateTime now = LocalDateTime.now();
         Duration remainingDuration = Duration.between(now, dateTime);
@@ -207,36 +198,68 @@ public class AuctionService {
 	}
 
 
-	public Page<Auction> getAuctionList(Long memberId, Pageable pageable) {
+	public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		return auctionRepository.findByItemMember(member, pageable);
 	}
 	
 
-	 public void updateAuctionStatusToProgress(Long auctionId) {
-	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
-	        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
-	            if (auction.getAuctionStartTime().isBefore(LocalDateTime.now())) {
-	                auction.setAuctionStatus(AuctionStatus.PROGRESS);
-	                auctionRepository.save(auction);
-	            }
-	        }
-	    }
-	
-	 public void updateAuctionStatusToEnd(Long auctionId) {
-	        Auction auction = auctionRepository.findById(auctionId).orElse(null);
-	        if (!auction.getAuctionStatus().equals(AuctionStatus.END)) {
-	            if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
-	                auction.setAuctionStatus(AuctionStatus.END);
-	                auctionRepository.save(auction);
-	            }
-	        }
-	    }
+	private void updateAuctionStatus(Auction auction) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime endTime = auction.getAuctionEndTime();
+        Duration duration = Duration.between(now, endTime);
+
+
+        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
+
+            if (auction.getAuctionStartTime().isBefore(LocalDateTime.now())) {
+                auction.setAuctionStatus(AuctionStatus.PROGRESS);
+            }
+
+        }
+        if (!auction.getAuctionStatus().equals(AuctionStatus.END)) {
+
+            if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
+                auction.setAuctionStatus(AuctionStatus.END);
+            }
+            if (duration.getSeconds() <= 60) { // 남은 시간이 1분 이하일 경우
+                auction.setAuctionStatus(AuctionStatus.LAST);
+            }
+        }
+
+    }
+
+    public void updateAuction(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+        updateAuctionStatus(auction);
+        updateAuctionReaminTime(auction);
+    }
+
+    private void updateAuctionReaminTime(Auction auction) {
+        Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
+        long hours = remainingDuration.toHours();
+        long minutes = remainingDuration.minusHours(hours).toMinutes();
+        long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
+        if (remainingDuration.isNegative() || remainingDuration.isZero()) {
+            auction.setRemainingTime("종료된 경매입니다.");
+        } else if (hours == 0) {
+            if (minutes == 0) {
+                auction.setRemainingTime(seconds + "초");
+            } else {
+                auction.setRemainingTime(minutes + "분 " + seconds + "초");
+            }
+        } else {
+            auction.setRemainingTime(hours + "시간 " + minutes + "분 " + seconds + "초");
+        }
+    }
 	 
-    
     public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
         return auctionRepository.findByAuctionType(auctionType,pageable);
     }
 
+    public void addAuctionView(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow();
+        auction.setAuctionCount(auction.getAuctionCount()+1);
+    }
 }
 
