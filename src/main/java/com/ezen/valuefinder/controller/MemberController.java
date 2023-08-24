@@ -161,10 +161,12 @@ public class MemberController {
 	 public String checkpwd(Model model, Authentication authentication,@Valid String password) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
+
 		 boolean result = memberService.checkPwd(password,principalDetails.getUsername(),passwordEncoder);
 		 if(result == true) {
 			 return "redirect:/member/mypage/modify";
 		 } else {
+			 model.addAttribute("member",principalDetails.getMember());
 			 model.addAttribute("errorMessage", "비밀번호가 일치하지 않습니다.");
 			 return "member/checkpwd";
 		 }

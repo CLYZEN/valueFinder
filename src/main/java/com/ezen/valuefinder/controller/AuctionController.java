@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -104,53 +105,44 @@ public class AuctionController {
         return "redirect:/";
     }
 
-    @GetMapping(value = "auction/public/detail/{auctionNo}")
-    public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
+
+    @GetMapping(value = "auction/detail/{auctionNo}")
+    public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
         Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-        model.addAttribute("auctionList",
-                auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-        auctionService.updateAuctionStatusToProgress(auctionNo);
-        auctionService.updateAuctionStatusToEnd(auctionNo);
+        auctionService.addAuctionView(auctionNo);
+
+        if(auction.getAuctionType() == AuctionType.PUBLIC) {
+            model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+            model.addAttribute("auction", auction);
+            model.addAttribute("nowTime", LocalDateTime.now());
+            model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+            model.addAttribute("auctionList",
+                    auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+            auctionService.updateAuction(auctionNo);
+            return "/auction/details/publicDetail";
+        } else if (auction.getAuctionType() == AuctionType.REALTIME) {
+            model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+            model.addAttribute("auction", auction);
+            model.addAttribute("nowTime", LocalDateTime.now());
+            model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+            model.addAttribute("auctionList",
+                    auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+            auctionService.updateAuction(auctionNo);
+            return "/auction/details/realtimeDetail";
+        } else {
+            model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+            model.addAttribute("auction", auction);
+            model.addAttribute("nowTime", LocalDateTime.now());
+            model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
+            Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+            model.addAttribute("auctionList",
+                    auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+            auctionService.updateAuction(auctionNo);
+        }
 
         return "/auction/details/publicDetail";
-    }
-
-    @GetMapping(value = "/auction/realtime/detail/{auctionNo}")
-    public String realtimeBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
-        Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-        model.addAttribute("auctionList",
-                auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-        auctionService.updateAuctionStatusToProgress(auctionNo);
-        auctionService.updateAuctionStatusToEnd(auctionNo);
-        return "/auction/details/realtimeDetail";
-    }
-
-    @GetMapping(value = "/auction/sealed/detail/{auctionNo}")
-    public String sealedBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
-        Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-        model.addAttribute("auctionList",
-                auctionService.getAuctionList(auction.getItem().getMember().getMemberId(), pageable));
-        auctionService.updateAuctionStatusToProgress(auctionNo);
-        auctionService.updateAuctionStatusToEnd(auctionNo);
-        return "/auction/details/sealedDetail";
     }
 
     @PostMapping(value = "/auction/query/add")
@@ -236,27 +228,7 @@ public class AuctionController {
         return "/auction/enter/enter";
     }
 
-    // 실시간 경매 페이지
-    @GetMapping(value = {"/auction/realtime", "/auction/realtime/{page}"})
-    public String auctionRealtime(Optional<Integer> page, Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
-        Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.REALTIME);
-        auctionList.forEach(auction -> {
-            Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
-            long hours = remainingDuration.toHours();
-            long minutes = remainingDuration.minusHours(hours).toMinutes();
-            long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
-            if (remainingDuration.isNegative() || remainingDuration.isZero()) {
-                auction.setRemainingTime("종료된 경매입니다.");
-            } else {
-                auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
-            }
-        });
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("auctionList", auctionList);
-        model.addAttribute("maxPage", 5);
-        return "auction/realtime";
-    }
+
 
 
     @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
@@ -306,27 +278,55 @@ public class AuctionController {
 
         return "auction/reversebid";
     }
-
-    @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
-    public String auctionSealedbid(Optional<Integer> page, Model model) {
+    // 실시간 경매 페이지
+    @GetMapping(value = {"/auction/realtime", "/auction/realtime/{page}"})
+    public String auctionRealtime(Optional<Integer> page, Model model,@RequestParam Long category) {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
-        Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.SEALED);
-        auctionList.forEach(auction -> {
-            Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
-            long hours = remainingDuration.toHours();
-            long minutes = remainingDuration.minusHours(hours).toMinutes();
-            long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
-            if (remainingDuration.isNegative() || remainingDuration.isZero()) {
-                auction.setRemainingTime("종료된 경매입니다.");
-            } else {
-                auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
-            }
-        });
+        Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.REALTIME,category);
+
+        for (Auction auction : auctionList) {
+            auctionService.updateAuction(auction.getAuctionNo());
+        }
+
+        model.addAttribute("nowTime", LocalDateTime.now());
+        model.addAttribute("auctionList", auctionList);
+        model.addAttribute("maxPage", 5);
+        return "auction/realtime";
+    }
+    @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
+    public String auctionSealedbid(Optional<Integer> page, Model model,@RequestParam Long category) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.SEALED,category);
+
+        for (Auction auction : auctionList) {
+            auctionService.updateAuction(auction.getAuctionNo());
+        }
+
+
         model.addAttribute("nowTime", LocalDateTime.now());
         model.addAttribute("auctionList", auctionList);
         model.addAttribute("maxPage", 5);
 
         return "auction/sealedbid";
+    }
+
+    @GetMapping(value = {"/auction/publicbid", "/auction/publicbid/{page}"})
+    public String auctionPublicbid(Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+        Page<Auction> auctionList;
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+
+        auctionList = auctionService.getAuctionList(pageable, AuctionType.PUBLIC,category);
+
+
+        for (Auction auction : auctionList) {
+            auctionService.updateAuction(auction.getAuctionNo());
+        }
+
+        model.addAttribute("nowTime", LocalDateTime.now());
+        model.addAttribute("auctionList", auctionList);
+        model.addAttribute("maxPage", 5);
+
+        return "auction/publicbid";
     }
 
     //비공개 경매 페이지
