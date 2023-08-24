@@ -109,6 +109,8 @@ public class AuctionService {
     	
     	return auction;
     }
+    
+    
 
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {

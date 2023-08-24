@@ -1,21 +1,12 @@
 package com.ezen.valuefinder.controller;
 
 
-import com.ezen.valuefinder.config.PrincipalDetails;
-import com.ezen.valuefinder.constant.AuctionType;
-import com.ezen.valuefinder.dto.AuctionQueryDto;
-import com.ezen.valuefinder.dto.NormalAuctionFormDto;
-import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Bank;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.entity.Member;
-import com.ezen.valuefinder.service.AuctionService;
-import com.ezen.valuefinder.service.MemberService;
-import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,10 +15,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import com.ezen.valuefinder.config.PrincipalDetails;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.service.AuctionService;
+import com.ezen.valuefinder.service.MemberService;
+import com.ezen.valuefinder.service.WishService;
+
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
 
 @Controller
@@ -36,6 +36,8 @@ public class AuctionController {
 
 	private final AuctionService auctionService;
 	private final MemberService memberService;
+	private final WishService wishService;
+	
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -105,11 +107,13 @@ public class AuctionController {
 	}
 	
 	@GetMapping(value = "/auction/realtime/detail")
-	public String realtimeBidDetail(Long auctionNo,Model model) {
+	public String realtimeBidDetail(Long auctionNo, Model model, Authentication authentication) {
 		//찜기능
-		Auction auction = auctionService.wish(1L);
-		model.addAttribute("auction", auction);
-		
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Auction auction = auctionService.wish(auctionNo);
+		boolean checkWish = wishService.checkWish(auctionNo, principalDetails.getMember().getMemberId());
+		model.addAttribute("auction", auction); 		
+		model.addAttribute("checkWish", checkWish);
 		return "auction/details/realtimeDetail";
 	}
 	

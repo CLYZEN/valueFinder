@@ -42,5 +42,5 @@ public class WishServiceImpl implements WishService{
 		
 		return wishRepository.existsByAuctionAuctionNoAndMemberMemberId(auctionNo, memberId);
 	}
-	
+		
 }

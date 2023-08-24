@@ -211,6 +211,7 @@ table {
 	<meta name="_csrf" th:content="${_csrf.token}" />
 	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div layout:fragment="content">
 	
@@ -438,16 +439,28 @@ table {
 										style="margin-top: 10px; width: 80px; height: 40px;" />
 								</div>
 								<div style="text-align: right; width: 600px;">
+									<!--  th:class="${wished != null && wished ? 'be bi-heart' : 'bi bi-heart'}"-->		
+									<!--  th:class="${wished ? 'be bi-heart' : 'bi bi-heart'}"-->
+									<!-- th:data-auctionno="${auction.auctionNo}" -->
 									<div> 
-									<!-- 찜하기 버튼 -->									
-									<button class="heartbutton" onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
-   									 <i class="bi bi-heart" id="heartIcon" ></i>
+									<!-- <button class="heartbutton" onclick="pushWish(this)">
+   									<i class="bi bi-heart" id="heartIcon" style="color: black;"></i>
    									 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
         							<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 
         							3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 
         							4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
    									 </svg>
-									</button> 
+									</button>  -->
+									<button class="heartbutton" th:if="${auction != null}" onclick="pushWish(this)" data-auctionno="${auction.auctionNo}">
+									<i class="bi bi-heart" id="heartIcon"></i>
+									</button>
+									
+									<form th:action="@{/auction/wish}" method="post">
+								    <input type="hidden" th:name="auctionNo" th:value="${auction.auctionNo}" />
+								    <input type="hidden" th:name="memberId" th:value="${member.memberId}" /> <!-- 로그인한 사용자의 memberId를 가져와서 설정-->
+								    <button type="submit" th:if="${!wished}">좋아요</button>
+								    <button type="submit" th:if="${wished}">좋아요 취소</button>
+</form>
 									
 									<input type='button' value='입찰'
 										style="margin-top: 10px; width: 80px; height: 40px;" />
@@ -589,15 +602,16 @@ table {
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
-	//찜 버튼에 대한 기능
-	 function pushWish(heartIcon) {
-        var isWished = heartIcon.classList.contains('bi-heart'); //아이콘 상태 판단
+	 //찜 버튼에 대한 기능
+	function pushWish(heartIcon) {
+    /* var isWished = heartIcon.classList.contains('bi'); //아이콘 상태 판단 : 빈 하트.
         var auctionNo = heartIcon.getAttribute('data-auctionno');
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
         var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
         var method = isWished ? "DELETE" : "POST";
 
+        
         $.ajax({
             url: url,
             type: method,
@@ -608,18 +622,43 @@ table {
             contentType: "application/json",
             success: function(result) {
                 // 요청 성공 처리
-                console.log("찜 " + (isWished ? "취소" : "추가") + " 성공");
+                console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
                 // 찜 상태 토글
-                heartIcon.classList.toggle('bi-heart');
-                /* heartIcon.classList.toggle('be'); */
+                heartIcon.classList.toggle('be'); //찜 완료
+                heartIcon.classList.toggle('bi'); // 찜 미완료
             },
             error: function(jqXHR, status, error) {
                 // 오류 처리
+                console.log(jqXHR.responseText);
                 alert("에러가 발생했습니다. 다시 시도해 주세요.");
                
             }
         });
+        
+    }  */
+    heartButton.classList.toggle('be'); // 채워진 하트
+    heartButton.classList.toggle('bi'); // 빈 하트
+    
+    var auctionNo = heartButton.getAttribute('data-auctionno');
+    
+    $.ajax({
+        url: "/wish", 
+        method: "POST", 
+        data: JSON.stringify({ auctionNo: auctionNo }),
+        contentType: "application/json",
+        success: function(result) {
+          console.log("좋아요가 완료되었습니다.!");
+        },
+        error: function(jqXHR, status, error) {
+          // 오류 처리
+          console.error("좋아요 중 오류 발생:", error);
+          // 하트 버튼을 원래 상태로 복원
+          heartButton.classList.toggle('be');
+          heartButton.classList.toggle('bi');
+        }
+      });
     }
+    
 	</script>
 
 	<script src="/js/splide.min.js"></script>
