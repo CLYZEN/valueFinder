@@ -271,6 +271,27 @@ public class AuctionService {
         return auctionRepository.findByItemMember(member, pageable);
     }
 
+    public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
+        if(categoryCode==0) {
+            return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
+        }
+        Category category = categoryRepository.findById(categoryCode).orElseThrow();
+        if(category == null) {
+            return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
+        } else {
+            return auctionRepository.findByItemCategoryOrderByAuctionEndTimeDesc(category,pageable);
+        }
+
+    }
+
+    public Page<Auction> getSearchValList(Pageable pageable, Long categoryCode, String searchVal) {
+        if (categoryCode == 0) {
+            return auctionRepository.findByItemItemNameContainingOrderByAuctionEndTimeDesc(pageable,searchVal);
+        }
+        Category category = categoryRepository.findById(categoryCode).orElseThrow();
+
+        return auctionRepository.findByItemItemNameContainingAndItemCategoryOrderByAuctionEndTimeDesc(pageable,searchVal,category);
+    }
 
 }
 

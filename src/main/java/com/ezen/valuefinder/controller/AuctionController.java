@@ -6,11 +6,8 @@ import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.*;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.ReverseBiddingRepository;
-import com.ezen.valuefinder.service.AuctionService;
-import com.ezen.valuefinder.service.BiddingService;
-import com.ezen.valuefinder.service.MemberService;
+import com.ezen.valuefinder.service.*;
 
-import com.ezen.valuefinder.service.ReversebidService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -45,6 +42,7 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final BiddingService biddingService;
     private final ReversebidService reversebidService;
+    private final CategoryService categoryService;
 
     @GetMapping(value = "/auction/add")
     public String addItem(Model model) {
@@ -329,11 +327,53 @@ public class AuctionController {
         return "auction/publicbid";
     }
 
+    @GetMapping(value = {"/auction/search","/auction/search/{page}"})
+    public String searchView(Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+        Page<Auction> auctionList;
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        if(category != 0) {
+            Category categorys = categoryService.getCategory(category);
+            model.addAttribute("category",categorys);
+        }
+
+        auctionList = auctionService.getSearchList(pageable,category);
+
+
+        for (Auction auction : auctionList) {
+            auctionService.updateAuction(auction.getAuctionNo());
+        }
+
+        model.addAttribute("nowTime", LocalDateTime.now());
+        model.addAttribute("auctionList", auctionList);
+        model.addAttribute("maxPage", 5);
+
+        return "auction/searchview";
+    }
+
     //비공개 경매 페이지
     @GetMapping(value = "/auction/reversebid/details")
     public String redetails() {
 
         return "auction/reversebid/details";
+    }
+
+    @PostMapping(value = "/auction/searched")
+    public String searchAuction(@Valid Long category, @Valid String searchVal,Model model,Optional<Integer> page) {
+        Page<Auction> auctionList;
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        if(category != 0) {
+            Category categorys = categoryService.getCategory(category);
+            model.addAttribute("category",categorys);
+        }
+        auctionList = auctionService.getSearchValList(pageable,category,searchVal);
+        for (Auction auction : auctionList) {
+            auctionService.updateAuction(auction.getAuctionNo());
+        }
+        model.addAttribute("nowTime", LocalDateTime.now());
+        model.addAttribute("auctionList", auctionList);
+        model.addAttribute("maxPage", 5);
+
+        return "auction/searchview";
     }
 
 }

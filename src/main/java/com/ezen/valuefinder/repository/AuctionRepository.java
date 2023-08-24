@@ -21,4 +21,10 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 
 	Page<Auction> findByAuctionTypeAndItemCategoryOrderByAuctionEndTimeDesc(AuctionType auctionType, Pageable pageable, Category category);
 
+	Page<Auction> findByItemCategoryOrderByAuctionEndTimeDesc(Category category, Pageable pageable);
+	Page<Auction> findAllByOrderByAuctionEndTimeDescAuctionCountDesc(Pageable pageable);
+
+	Page<Auction> findByItemItemNameContainingAndItemCategoryOrderByAuctionEndTimeDesc(Pageable pageable, String name, Category category);
+
+	Page<Auction> findByItemItemNameContainingOrderByAuctionEndTimeDesc(Pageable pageable, String name);
 }

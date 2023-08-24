@@ -201,20 +201,20 @@ margin-left: 151.5px; /* 좌측 여백 */
 		  <ul class="pagination d-flex justify-content-center">
 			  <li class="page-item" th:classappend="${auctionList.first}?'disabled'">
 				  <a class="page-link"
-					 th:href="@{'/auction/sealedbid/'+ ${auctionList.number - 1}}">이전</a>
+					 th:onclick="'javascript:page(' + ${auctionList.number - 1} +')'">이전</a>
 			  </li>
 
 			  <li class="page-item"
 				  th:each="page: ${#numbers.sequence(start, end)}"
-				  th:classappend="${auctionList.number eq page - 1}?'active':''">
+				  th:classappend="${auctionList.number eq page-1}?'active':''">
 				  <a
 						  class="page-link" th:inline="text"
-						  th:href="@{'/auction/sealedbid/' + ${page - 1}}">[[${page}]]</a>
+						  th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
 			  </li>
 
 			  <li class="page-item" th:classappend="${auctionList.last}?'disabled'">
 				  <a class="page-link"
-					 th:href="@{'/auction/sealedbid/' + ${auctionList.number + 1}}">다음</a>
+					 th:onclick="'javascript:page(' + ${auctionList.number + 1} +')'">다음</a>
 			  </li>
 		  </ul>
 	  </nav>
@@ -228,7 +228,18 @@ margin-left: 151.5px; /* 좌측 여백 */
 
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
-		
+		var url_href = window.location.href;
+
+		var url = new URL(url_href);
+		var category = url.searchParams.get("category");
+
+		function page(page) {
+			//입력한 값을 전부 가지고 온다.
+
+			//주소 이동
+			location.href = "/auction/sealedbid/" + page
+					+ "?category=" + category;
+		}
 	</script>
 </th:block>
 
