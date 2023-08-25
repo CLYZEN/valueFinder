@@ -149,7 +149,7 @@ public class AuctionService {
 		AuctionQuery auctionQuery = new AuctionQuery();
 		
 		auctionQuery.setAuction(auction);
-		auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
+		auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDetail());
 		auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
 		auctionQuery.setMember(member);
 		auctionQuery.setReadOk(false);
@@ -168,29 +168,36 @@ public class AuctionService {
 
 	}
 
-	public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto, String email) throws Exception {
+	public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto, String email , Long auctionQueryNo) throws Exception {
 		Member member = memberRepository.findByEmail(email);
-
+		AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+		
 		AuctionQueryResponse auctionQueryResponse = new AuctionQueryResponse();
+		auctionQueryResponse.setAuctionQuery(auctionQuery);
 		auctionQueryResponse.setAuctionQueryResponseTitle(auctionQueryResponseDto.getAuctionQueryResponseTitle());
 		auctionQueryResponse.setAuctionQueryResponseDetail(auctionQueryResponseDto.getAuctionQueryResponseDetail());
 		auctionQueryResponse.setMember(member);
-
+	
 		auctionQueryResponseRepository.save(auctionQueryResponse);
 
 		return auctionQueryResponse.getAuctionQueryResponseNo();
 
 	}
 
-	public Long updateQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
-		AuctionQuery auctionQuery = new AuctionQuery();
+	public Long updateQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionQueryNo) throws Exception {
+	
 		Member member = memberRepository.findByEmail(email);
-
+		AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+		
+		
+		
 		auctionQuery.updateQuery(auctionQueryDto);
 		auctionQuery.setMember(member);
-
+		
+	
+		
+		
 		return auctionQuery.getAuctionQueryNo();
-
 	}
 
 	public Page<AuctionQuery> auctionQueryList(Pageable pageable, Member member) {
@@ -200,7 +207,10 @@ public class AuctionService {
 	}
 
 
-
+	@Transactional
+	public AuctionQuery getAuctionDtl(Long auctionQueryNo) {
+		return auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+	}
 
 
     public Auction getAuction(Long auctionId) {
@@ -261,6 +271,14 @@ public class AuctionService {
 
     public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
         return auctionRepository.findByAuctionType(auctionType,pageable);
+    }
+    
+    public void deleteQuery(Long auctionQueryNo) {
+    	AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+    	
+    	
+    	
+    	auctionQueryRepository.delete(auctionQuery);
     }
 
 }

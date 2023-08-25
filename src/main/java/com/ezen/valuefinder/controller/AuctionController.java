@@ -60,37 +60,37 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AuctionController {
 
-    private final AuctionService auctionService;
-    private final BiddingService biddingService;
-    @GetMapping(value = "/auction/add")
-    public String addItem(Model model) {
-        List<Category> categoryList = auctionService.getCategoryList();
-        model.addAttribute("categoryList", categoryList);
-        model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-        return "/auction/form/normalitemform";
-    }
+	private final AuctionService auctionService;
+	private final BiddingService biddingService;
 
-    @PostMapping(value = "/auction/add")
-    public String addItem(@Valid NormalAuctionFormDto normalAuctionFormDto, BindingResult bindingResult, Model model,
-                          @RequestParam("image") List<MultipartFile> itemImgFiles, Authentication authentication) {
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+	@GetMapping(value = "/auction/add")
+	public String addItem(Model model) {
+		List<Category> categoryList = auctionService.getCategoryList();
+		model.addAttribute("categoryList", categoryList);
+		model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
+		return "/auction/form/normalitemform";
+	}
 
-        if (bindingResult.hasErrors()) {
-            List<Category> categoryList = auctionService.getCategoryList();
-            model.addAttribute("categoryList", categoryList);
-            model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-            return "/auction/form/normalitemform";
-        }
+	@PostMapping(value = "/auction/add")
+	public String addItem(@Valid NormalAuctionFormDto normalAuctionFormDto, BindingResult bindingResult, Model model,
+			@RequestParam("image") List<MultipartFile> itemImgFiles, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-
-		if(bindingResult.hasErrors()) {
+		if (bindingResult.hasErrors()) {
 			List<Category> categoryList = auctionService.getCategoryList();
 			model.addAttribute("categoryList", categoryList);
 			model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
 			return "/auction/form/normalitemform";
 		}
 
-		if(itemImgFiles.get(0).isEmpty()) {
+		if (bindingResult.hasErrors()) {
+			List<Category> categoryList = auctionService.getCategoryList();
+			model.addAttribute("categoryList", categoryList);
+			model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
+			return "/auction/form/normalitemform";
+		}
+
+		if (itemImgFiles.get(0).isEmpty()) {
 			model.addAttribute("errorMessage", "게시글 첫번째 이미지는 필수입니다.");
 			List<Category> categoryList = auctionService.getCategoryList();
 			model.addAttribute("categoryList", categoryList);
@@ -98,7 +98,7 @@ public class AuctionController {
 			return "/auction/form/normalitemform";
 		}
 		try {
-			auctionService.createAuction(normalAuctionFormDto,itemImgFiles,principalDetails.getUsername());
+			auctionService.createAuction(normalAuctionFormDto, itemImgFiles, principalDetails.getUsername());
 		} catch (Exception e) {
 			e.printStackTrace();
 			List<Category> categoryList = auctionService.getCategoryList();
@@ -123,7 +123,7 @@ public class AuctionController {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		String email = principalDetails.getUsername();
 
-		auctionService.createReverseAuction(reverseAuctionFormDto,email);
+		auctionService.createReverseAuction(reverseAuctionFormDto, email);
 
 		return "redirect:/";
 	}
@@ -131,95 +131,96 @@ public class AuctionController {
 	@GetMapping(value = "/auction/public/detail")
 	public String publicBidDetail(Model model) {
 		Auction auction = auctionService.getAuction(1L);
-		model.addAttribute("remainTime",auctionService.getRemainTime(auction.getAuctionEndTime()));
-		model.addAttribute("auction",auction);
+		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction", auction);
 		model.addAttribute("nowTime", LocalDateTime.now());
 		return "/auction/details/publicDetail";
 	}
-	
+
 	@GetMapping(value = "/auction/realtime/detail")
 	public String realtimeBidDetail() {
 		return "/auction/details/realtimeDetail";
 	}
-	
+
 	@GetMapping(value = "/auction/sealed/detail")
 	public String sealedBidDetail() {
 		return "/auction/details/sealedDetail";
 	}
-	//문의하기 insery
+
+	// 문의하기 insery
 	@PostMapping(value = "/auction/query/add/{auctionNo}")
-	public String addQuery(@Valid AuctionQueryDto auctionQueryDto ,Authentication authentication , BindingResult bindingResult , Model model ,@PathVariable("auctionNo") Long auctionNo 
-			) {
+	public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Authentication authentication,
+			BindingResult bindingResult, Model model, @PathVariable("auctionNo") Long auctionNo) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		
-		
+
 		if (bindingResult.hasErrors()) {
-			
-			model.addAttribute("auctionQueryDto",auctionQueryDto);
+
+			model.addAttribute("auctionQueryDto", auctionQueryDto);
 			return "auction/query/add/{auctionNo}";
 		}
-		
-		
+
 		try {
-			auctionService.createdQuery(auctionQueryDto , principalDetails.getUsername() , auctionNo);
+			auctionService.createdQuery(auctionQueryDto, principalDetails.getUsername(), auctionNo);
 		} catch (Exception e) {
 			e.printStackTrace();
-			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
-			
-			
-			
+			model.addAttribute("auctionQueryDto", new AuctionQueryDto());
+
 			return "auction/query/add/{auctionNo}";
 		}
-		
-		
-		
-	return "redirect:/";
+
+		return "redirect:/";
 	}
-	
-	
+
 	@GetMapping(value = "/auction/query/add/{auctionNo}")
-	public String auctionQuery(Model model,Authentication authentication , @PathVariable("auctionNo") Long auctionNo) {
-		model.addAttribute("auctionQueryDto",new AuctionQueryDto());
+	public String auctionQuery(Model model, Authentication authentication, @PathVariable("auctionNo") Long auctionNo) {
+		model.addAttribute("auctionQueryDto", new AuctionQueryDto());
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
-		model.addAttribute("member",member);
-		model.addAttribute("auctionNo",auctionNo);
-		
+		model.addAttribute("member", member);
+		model.addAttribute("auctionNo", auctionNo);
 		
 		return "/auction/query/queryform";
 	}
-	
+
 	@PostMapping(value = "/auction/query/{auctionQueryNo}")
-	public String queryUpdate(@Valid AuctionQueryDto auctionQueryDto, Model model , Authentication authentication , BindingResult bindingResult) {
+	public String queryUpdate(@Valid AuctionQueryDto auctionQueryDto, Model model, Authentication authentication,
+			BindingResult bindingResult , AuctionQuery auctionQuery , @PathVariable("auctionQueryNo") Long auctionQueryNo) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		model.addAttribute("auctionQuery " , auctionQuery);
 		
-		if(bindingResult.hasErrors()) {
-			model.addAttribute("errorMessage" , "상품을 불러오지못했습니다");
-			return "auction/query/{auctionQueryNo}";
+		
+		if (bindingResult.hasErrors()) {
+		 model.addAttribute("auctinoQueryNo" , auctionQueryNo);
+			return "auction/query/queryform";
 		}
-		
-		
+
 		try {
-			auctionService.updateQuery(auctionQueryDto, principalDetails.getUsername() );
+			auctionService.updateQuery(auctionQueryDto, principalDetails.getUsername() , auctionQueryNo);
 		} catch (Exception e) {
-			model.addAttribute("errorMessage" , "상품 수정 중 에러가 발생했습니다");
-			return "auction/query";
-			
+			model.addAttribute("errorMessage", "문의 글 수정중 에러가 발생했습니다");
+			return "auction/query/queryform";
+
 		}
-		
+
 		return "redirect:/";
 	}
-	
-	
-	//문의 하기 수정페이지
+
+	// 문의 하기 수정페이지
 	@GetMapping(value = "/auction/query/{auctionQueryNo}")
-	public String queryDetail(@PathVariable("quctionQueryNo") Long auctionQueryNo , Model model , Authentication authentication) {
+	public String queryDetail(@PathVariable("auctionQueryNo") Long auctionQueryNo, Model model,
+			Authentication authentication) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
 		
-		
-	
-		
-		
+		try {
+			AuctionQuery auctionQuery  = auctionService.getAuctionDtl(auctionQueryNo);
+			model.addAttribute("auctionQuery",auctionQuery);
+		} catch (Exception e) {
+			model.addAttribute("errorMessage" , "상품정보를 가져올때 에러가 발생했습니다.");
+			
+			model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
+			return "auction/query/queryForm";
+		}
 		
 		return "/auction/query/query";
 	}
@@ -233,159 +234,156 @@ public class AuctionController {
 	public String enterQuery() {
 		return "/auction/enter/enterForm";
 	}
-	
+
 	@GetMapping(value = "/auction/reversebid/enter")
 	public String enterDetail() {
 		return "/auction/enter/enter";
 	}
 
-        
+	@GetMapping(value = "auction/public/detail/{auctionNo}")
+	public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+		Auction auction = auctionService.getAuctionDetail(auctionNo);
+		auctionService.auctionCount(auctionNo);
+		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction", auction);
+		model.addAttribute("nowTime", LocalDateTime.now());
 
+		return "/auction/details/publicDetail";
+	}
 
+	@GetMapping(value = "/auction/realtime/detail/{auctionNo}")
+	public String realtimeBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+		Auction auction = auctionService.getAuctionDetail(auctionNo);
+		auctionService.auctionCount(auctionNo);
+		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction", auction);
+		model.addAttribute("nowTime", LocalDateTime.now());
+		return "/auction/details/realtimeDetail";
+	}
 
+	@GetMapping(value = "/auction/sealed/detail/{auctionNo}")
+	public String sealedBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
+		Auction auction = auctionService.getAuctionDetail(auctionNo);
+		auctionService.auctionCount(auctionNo);
+		model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
+		model.addAttribute("auction", auction);
+		model.addAttribute("nowTime", LocalDateTime.now());
+		return "/auction/details/sealedDetail";
+	}
 
-    @GetMapping(value = "auction/public/detail/{auctionNo}")
-    public String publicBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
-        Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
+	@PostMapping(value = "/auction/bidding")
+	public @ResponseBody ResponseEntity bidding(@RequestBody Map<String, Object> requestBody,
+			Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
-        return "/auction/details/publicDetail";
-    }
+		try {
+			Long auctionNo = Long.parseLong(requestBody.get("auctionNo").toString());
+			Long price = Long.parseLong(requestBody.get("price").toString());
 
+			Auction auction = auctionService.getAuction(auctionNo);
 
-    @GetMapping(value = "/auction/realtime/detail/{auctionNo}")
-    public String realtimeBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
-        Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
-        return "/auction/details/realtimeDetail";
-    }
+			switch (auction.getAuctionStatus()) {
+			case PENDING -> {
+				return new ResponseEntity("경매 시작 전입니다.", HttpStatus.LOCKED);
+			}
+			case PROGRESS -> {
+				if (price <= auction.getAuctionNowPrice()) {
+					return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
+				}
+				biddingService.chkStatus(auction);
+				return new ResponseEntity("등록 완료", HttpStatus.OK);
+			}
+			case END -> {
+				return new ResponseEntity("종료된 경매입니다.", HttpStatus.LOCKED);
+			}
+			case LAST -> {
+				if (price <= auction.getAuctionNowPrice()) {
+					return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
+				}
+				biddingService.chkStatus(auction);
+				return new ResponseEntity("등록 완료", HttpStatus.OK);
+			}
+			}
 
-    @GetMapping(value = "/auction/sealed/detail/{auctionNo}")
-    public String sealedBidDetail(Model model, @PathVariable("auctionNo") Long auctionNo) {
-        Auction auction = auctionService.getAuctionDetail(auctionNo);
-        auctionService.auctionCount(auctionNo);
-        model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
-        model.addAttribute("auction", auction);
-        model.addAttribute("nowTime", LocalDateTime.now());
-        return "/auction/details/sealedDetail";
-    }
+			biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
+		} catch (Exception e) {
+			return new ResponseEntity(HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity(HttpStatus.OK);
+	}
 
+	@GetMapping(value = "/auction/query")
+	public String queryDetail() {
+		return "/auction/query/query";
+	}
 
+	// 실시간 경매 페이지
+	@GetMapping(value = { "/auction/realtime", "/auction/realtime/{page}" })
+	public String auctionRealtime(Optional<Integer> page, Model model) {
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+		Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.REALTIME);
+		auctionList.forEach(auction -> {
+			Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
+			long hours = remainingDuration.toHours();
+			long minutes = remainingDuration.minusHours(hours).toMinutes();
+			long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
+			if (remainingDuration.isNegative() || remainingDuration.isZero()) {
+				auction.setRemainingTime("종료된 경매입니다.");
+			} else {
+				auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
+			}
+		});
+		model.addAttribute("nowTime", LocalDateTime.now());
+		model.addAttribute("auctionList", auctionList);
+		model.addAttribute("maxPage", 5);
+		return "auction/realtime";
+	}
 
+	// 역경매
+	@GetMapping(value = "/auction/reversebid")
+	public String auctionReversebid() {
 
+		return "auction/reversebid";
+	}
 
+	@GetMapping(value = { "/auction/sealedbid", "/auction/sealedbid/{page}" })
+	public String auctionSealedbid(Optional<Integer> page, Model model) {
+		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+		Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.SEALED);
+		auctionList.forEach(auction -> {
+			Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
+			long hours = remainingDuration.toHours();
+			long minutes = remainingDuration.minusHours(hours).toMinutes();
+			long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
+			if (remainingDuration.isNegative() || remainingDuration.isZero()) {
+				auction.setRemainingTime("종료된 경매입니다.");
+			} else {
+				auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
+			}
+		});
+		model.addAttribute("nowTime", LocalDateTime.now());
+		model.addAttribute("auctionList", auctionList);
+		model.addAttribute("maxPage", 5);
 
-    @PostMapping(value = "/auction/bidding")
-    public @ResponseBody ResponseEntity bidding(@RequestBody Map<String, Object> requestBody, Authentication authentication) {
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		return "auction/sealedbid";
+	}
 
-        try {
-            Long auctionNo = Long.parseLong(requestBody.get("auctionNo").toString());
-            Long price = Long.parseLong(requestBody.get("price").toString());
+	// 비공개 경매 페이지
+	@GetMapping(value = "/auction/reversebid/details")
+	public String redetails() {
 
-            Auction auction = auctionService.getAuction(auctionNo);
-
-            switch (auction.getAuctionStatus()) {
-                case PENDING -> {
-                    return  new ResponseEntity("경매 시작 전입니다.", HttpStatus.LOCKED);
-                } case PROGRESS -> {
-                    if(price <= auction.getAuctionNowPrice()) {
-                        return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
-                    }
-                    biddingService.chkStatus(auction);
-                    return new ResponseEntity("등록 완료", HttpStatus.OK);
-                } case END -> {
-                    return new ResponseEntity("종료된 경매입니다.", HttpStatus.LOCKED);
-                } case LAST -> {
-                    if(price <= auction.getAuctionNowPrice()) {
-                        return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
-                    }
-                    biddingService.chkStatus(auction);
-                    return new ResponseEntity("등록 완료",HttpStatus.OK);
-                }
-            }
-
-            biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
-        } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
- 
-
-
-    @GetMapping(value = "/auction/query")
-    public String queryDetail() {
-        return "/auction/query/query";
-    }
-
-
-
-  
-
-    //실시간 경매 페이지
-    @GetMapping(value = {"/auction/realtime","/auction/realtime/{page}"})
-    public String auctionRealtime(Optional<Integer> page,Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 30);
-        Page<Auction> auctionList = auctionService.getAuctionList(pageable,AuctionType.REALTIME);
-        auctionList.forEach(auction -> {
-            Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
-            long hours = remainingDuration.toHours();
-            long minutes = remainingDuration.minusHours(hours).toMinutes();
-            long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
-            if (remainingDuration.isNegative() || remainingDuration.isZero()) {
-                auction.setRemainingTime("종료된 경매입니다.");
-            } else {
-                auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
-            }
-        });
-        model.addAttribute("nowTime",LocalDateTime.now());
-        model.addAttribute("auctionList", auctionList);
-        model.addAttribute("maxPage",5);
-        return "auction/realtime";
-    }
-
-    //역경매
-    @GetMapping(value = "/auction/reversebid")
-    public String auctionReversebid() {
-
-        return "auction/reversebid";
-    }
-
-    @GetMapping(value = {"/auction/sealedbid","/auction/sealedbid/{page}"})
-    public String auctionSealedbid(Optional<Integer> page,Model model) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0 , 30);
-        Page<Auction> auctionList = auctionService.getAuctionList(pageable,AuctionType.SEALED);
-        auctionList.forEach(auction -> {
-            Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
-            long hours = remainingDuration.toHours();
-            long minutes = remainingDuration.minusHours(hours).toMinutes();
-            long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
-            if (remainingDuration.isNegative() || remainingDuration.isZero()) {
-                auction.setRemainingTime("종료된 경매입니다.");
-            } else {
-                auction.setRemainingTime(hours + "시간" + minutes + "분" + seconds + "초");
-            }
-        });
-        model.addAttribute("nowTime",LocalDateTime.now());
-        model.addAttribute("auctionList", auctionList);
-        model.addAttribute("maxPage",5);
-
-        return "auction/sealedbid";
-    }
-
-    //비공개 경매 페이지
-    @GetMapping(value = "/auction/reversebid/details")
-    public String redetails() {
-
-        return "auction/reversebid/details";
-    }
+		return "auction/reversebid/details";
+	}
+	
+	@DeleteMapping("/auction/query/{auctionQueryNo}/delete")
+	public @ResponseBody ResponseEntity<Long> deleteQuery(@PathVariable("auctionQueryNo") Long auctionQueryNo
+			, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		
+		
+		auctionService.deleteQuery(auctionQueryNo);
+		
+		return new ResponseEntity<Long>(auctionQueryNo , HttpStatus.OK);
+	}
 
 }

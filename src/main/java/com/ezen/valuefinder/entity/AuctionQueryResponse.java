@@ -28,4 +28,7 @@ public class AuctionQueryResponse extends BaseEntity {
 
     @Column(nullable = false)
     private String auctionQueryResponseDetail; // 문의답변
+    
+    
+    
 }

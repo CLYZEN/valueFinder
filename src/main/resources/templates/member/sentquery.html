@@ -248,11 +248,10 @@ td {
 									href="'/auction/query/'  + ${auctionQuery.auciton.auctionNo}" th:test="${auctionQuery.auction.item.itemName}"></a></td>
 								<td class=tdnum style="width: 30%" id="auctionQueryDetail"
 									name="auctionQueryDetail"
-									th:text="${auctionQuery.auctionQueryDetail}">이거 구성품, 박스
-									있나요?</td>
+									th:text="${auctionQuery.auctionQueryDetail}"></td>
 								<td class=tdnum style="width: 10%" id="nickname" name="nickname"
-									th:text="${auctionQuery.member.nickname}">아무개</td>
-								<td type=date class=tdnum id="data1"></td>
+									th:text="${auctionQuery.member.nickname}"></td>
+								<td type=date class=tdnum id="data1" th:text="${auctionQuery.regTime(yy-MM-dd-HH)}"></td>
 							</tr>
 						</tbody>
 					</table>

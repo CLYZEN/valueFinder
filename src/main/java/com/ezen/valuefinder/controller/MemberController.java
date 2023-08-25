@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;
@@ -213,15 +214,14 @@ public class MemberController {
 		return "member/coupon";
 	}
 
-	@GetMapping(value = {"/member/mypage/sentquery" , "/member/mypage/sentquery{page}"})
-	public String sentquery(Model model, Authentication authentication, @PathVariable("page") Optional<Integer> page
-		) {
+	@GetMapping(value = { "/member/mypage/sentquery", "/member/mypage/sentquery{page}" })
+	public String sentquery(Model model, Authentication authentication, @PathVariable("page") Optional<Integer> page) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 
 		Page<AuctionQuery> auctionQueryList = auctionService.auctionQueryList(pageable, member);
-		
+
 		model.addAttribute("member", member);
 		model.addAttribute("auctionQueryList", auctionQueryList);
 		model.addAttribute("maxPage", 5);
@@ -229,13 +229,14 @@ public class MemberController {
 		return "member/sentquery";
 	}
 
-	@GetMapping(value = {"/member/mypage/receivedquery" , "/member/mypage/receivedquery/{page}"})
+	@GetMapping(value = { "/member/mypage/receivedquery", "/member/mypage/receivedquery/{page}" })
 	public String receivedquery(Model model, Authentication authentication,
 			@PathVariable("page") Optional<Integer> page) {
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
 		Page<AuctionQueryResponse> auctionQueryResponseList = auctionService.auctionQueryResponseList(pageable, member);
+	
 		model.addAttribute("member", member);
 		model.addAttribute("auctionQueryResponseList", auctionQueryResponseList);
 		model.addAttribute("maxPage", 5);
@@ -292,35 +293,43 @@ public class MemberController {
 		return "redirect:/member/login";
 	}
 
-	@PostMapping(value = "/member/mypage/answer")
-	public String addQuery(@Valid AuctionQueryResponseDto auctionQueryResponseDto, Authentication authentication,
-			BindingResult bindingResult, Model model) {
+	
+	@GetMapping(value = "member/mypage/answer/{auctionQueryNo}")
+	public String answerList(Model model, Authentication authentication,
+			@PathVariable("auctionQueryNo") Long auctionQueryNo) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		model.addAttribute("auctionQueryResponseDto", new AuctionQueryResponseDto());
+
+		Member member = principalDetails.getMember();
+
+		model.addAttribute("auctionQueryNo", auctionQueryNo);
+		
+		return "member/answer";
+	}
+	
+	
+	@PostMapping(value = "/member/mypage/answer/{auctionQueryNo}")
+	public String addQueryResponse(@Valid AuctionQueryResponseDto auctionQueryResponseDto,
+			Authentication authentication, BindingResult bindingResult, Model model,
+			@PathVariable("auctionQueryNo") Long auctionQueryNo) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		if (bindingResult.hasErrors()) {
-			model.addAttribute("errorMessage" , "답변하기중 오류가 발생했습니다.");
+			model.addAttribute("errorMessage", "답변하기중 오류가 발생했습니다.");
 			model.addAttribute("auctionQueryResponseDto", auctionQueryResponseDto);
-			return "/member/answer";
+			return "member/mypage/answer";
 		}
-
+		
 		try {
-			auctionService.createdQueryResponse(auctionQueryResponseDto, principalDetails.getUsername());
+			auctionService.createdQueryResponse(auctionQueryResponseDto, principalDetails.getUsername(),
+					auctionQueryNo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			model.addAttribute("auctionQueryResponseDto", new AuctionQueryResponseDto());
-
-			return "/member/answer";
+			
+			
+			return "member/mypage/answer";
 		}
-
-		return "redirect:/";
-	}
-
-	@GetMapping(value = "member/mypage/answer")
-	public String answerList(Model model, Authentication authentication) {
-		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-		model.addAttribute("auctionQueryResponseDto",new AuctionQueryResponseDto());
-		Member member = principalDetails.getMember();
 		
-	
-		return "member/answer";
+		return "redirect:/";
 	}
 }

@@ -9,6 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -46,9 +47,15 @@ public class AuctionQuery extends BaseEntity {
     
     public void updateQuery(AuctionQueryDto auctionQueryDto) {
     	this.auctionQueryTitle = auctionQueryDto.getAuctionQueryTitle();
-    	this.auctionQueryDetail = auctionQueryDto.getAuctionQueryDtail();
+    	this.auctionQueryDetail = auctionQueryDto.getAuctionQueryDetail();
+    	
     	
     }
+    
+    @OneToMany(mappedBy = "auctionQuery" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuctionQueryResponse> auctionQueryResponses = new ArrayList<>();
+    
     
     
     

@@ -3,6 +3,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
 
+<head>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 	<style>
@@ -70,21 +75,9 @@
 	<div class="container">
 		<form name="newProduct" action="addProduct_process.jsp" method="post"
 			class="form-horizontal"
-			th:action="@{'/auction/query' + ${auctionQuery.auctionQueryNo}}"
-			th:object="${auctionQueryDto}">
-			<div class="form-group row col-sm-top" style="padding-top: 25px;">
-				<label class="col-sm-2">질문구분</label>
-				<div class="col-sm-3" style="line-height: 37px;">
-					<select style="width: 100%; border: 0px;"
-						th:field="*{auctionQueryDistinction}">
-						<option value="0" disabled>구분선택</option>
-						<option value="1">물품</option>
-						<option value="2">배송</option>
-						<option value="3">기타</option>
-					</select>
-				</div>
-			</div>
-
+			th:action="'/auction/query/' + ${auctionQueryNo}"
+			th:object="${auctionQuery}">
+			
 			<div class="form-group row">
 				<label class="col-sm-2">등록자</label>
 				<div class="col-sm-3">
@@ -107,7 +100,7 @@
 				<div class="col-sm-5">
 					<textarea name="description" class="form-control"
 						style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit; border: 1px solid;"
-						th:field="*{auctionQueryDetails}"></textarea>
+						th:field="*{auctionQueryDetail}"></textarea>
 				</div>
 			</div>
 
@@ -117,19 +110,24 @@
 				<div style="display: flex;">
 					<div class="col-sm-offset-2 col-10"
 						style="text-align: right; width: 1035px;">
-						<input type="submit" class="btn" value="수정"
-							style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: blue;" />
+						<button type="submit" class="btn"  id="modify_Btn"
+							style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: blue;" >수정하기</button>
 					</div>
 					<div class="col-sm-offset-2" style="margin-left: 20px;">
-						<input type="submit" class="btn" value="삭제"
-							style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: red;" />
+						<button type="button" class="btn btn-primary"
+							th:value="${auctionQueryNo}" onclick="deleteOrder(this.value)"
+							style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: red; background-color: white;">삭제하기</button>
 					</div>
 					<div class="col-sm-offset-2" style="margin-left: 20px;">
-						<input type="submit" class="btn btn-primary" value="돌아가기"
-							style="border-radius: inherit; width: 110px;" />
+						<a href="/member/mypage/sentquery"><button type="button"
+								class="btn btn-primary"
+								style="border-radius: inherit; width: 110px;">돌아가기</button></a>
 					</div>
 				</div>
 			</div>
+
+			<input type="hidden" th:name="${_csrf.parameterName}"
+				th:value="${_csrf.token}">
 		</form>
 	</div>
 
@@ -141,7 +139,42 @@
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
-		
+		function deleteOrder(auctionQueryNo) {
+			const deleteConf = confirm("삭제하시겠습니까?");
+			if (!deleteConf)
+				return; //취소버튼 누르면
+
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+
+			//request URL
+			var url = "/auction/query/" + auctionQueryNo + "/delete";
+
+			$.ajax({
+				url : url, //request URL
+				type : "DELETE", //전송방식
+				contentType : "application/json",
+				beforeSend : function(xhr) {
+					//데이터를 전송하기 전에 헤더에 csrf 값을 설정
+					xhr.setRequestHeader(header, token);
+				},
+				dataType : "json",
+				cache : false,
+				success : function(result, status) {
+					location.href = '/member/mypage';
+
+				},
+
+				error : function(jqXHR, status, error) {
+					if (jqXHR.status == '401') {
+						alert('로그인 후 이용해주세요.');
+						location.href = '/members/login';
+					} else {
+						alert(jqXHR.responseText);
+					}
+				}
+			});
+		}
 	</script>
 </th:block>
 

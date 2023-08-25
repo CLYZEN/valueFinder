@@ -11,6 +11,7 @@ import org.modelmapper.ModelMapper;
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
 import com.ezen.valuefinder.entity.AuctionQuery;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Getter
@@ -23,8 +24,8 @@ public class AuctionQueryDto {
 	@NotNull(message = "제목 입력은 필수 입니다.")
 	private String auctionQueryTitle;
 	
-	@NotNull(message = "내용을 입력해 주세요")
-	private String auctionQueryDtail;
+	@NotBlank(message = "내용을 입력해 주세요")
+	private String auctionQueryDetail;
 	
 	
 

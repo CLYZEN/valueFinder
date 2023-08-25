@@ -75,7 +75,7 @@
 		</div>
 	</div>
 	<div class="container">
-		<form name="newProduct" action="/member/mypage/answer" method="post"
+		<form name="newProduct" th:action="'/member/mypage/answer/' + ${auctionQueryNo}" method="post"
 			class="form-horizontal" th:object="${auctionQueryResponseDto}">
 
 			<div class="form-group row col-sm-top" style="padding-top: 25px;">
@@ -110,8 +110,7 @@
 						style="border-radius: inherit;" />
 				</div>
 
-				<input type="hidden" th:name="${_csrf.parameterName}"
-					th:value="${_csrf.token}">
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
 			</div>
 		</form>
 	</div>

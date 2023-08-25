@@ -243,7 +243,7 @@ td>a {
 								<td style="border-right: 1px solid; width: 30%">문의내용</td>
 								<td style="border-right: 1px solid; width: 10%">판매자</td>
 								<td style="border-right: 1px solid;" rowspan=2><a
-									href="'/member/answer + ${auctionQueryResponse.auctionQueryNo}">답변하기</a></td>
+									th:href="@{'/member/mypage/answer/' + ${auctionQueryResponse.auctionQuery.auctionQueryNo}}">답변하기</a></td>
 							</tr>
 							<tr style="height: 100px; line-height: 100px;">
 								<td class=tdnum id="itemNo" name="itemNo"></td>
