@@ -196,6 +196,55 @@ table {
     border-collapse: collapse;
     border: 2px solid #52A8E0;
 }
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+#myform input[type=radio] {
+	display: none;
+}
+
+#myform label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+#myform input[type=radio]:checked ~label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
+}
+
+.review-message {
+	margin: 10px 0;
+	/* 여백을 위 아래 10px, 좌 우 0px로 조절 */
+	font-size: 16px;
+	/* 필요한 폰트 사이즈로 조절 */
+}
+
+.custom-pagination .page-item .page-link {
+	padding: 8px 12px;
+	/* 원하는 패딩 값으로 조절 */
+	line-height: 1;
+	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
+	margin-bottom: 15px;
+}
 
 .heartbutton{
 	margin-top: 10px;
@@ -271,7 +320,9 @@ table {
 		</div> 
 	</section>
 
-	<h6 style="text-align: right;width: 1750px;padding: 10px;">조회수 : 20</h6>
+	<h6 style="text-align: right; width: 1750px; padding: 10px;"
+		th:text="|조회수: ${auction.auctionCount}|"></h6>
+
 
 	<section class="py-3">
 		<div class="container-fluid">
@@ -280,44 +331,47 @@ table {
 
 					<div class="banner-blocks">
 
-						<div class="banner-ad block-1" style="place-self: center;">
-							<img alt="" src="/images/ad-image-1.png"
+
+					<div class="banner-ad block-1" style="place-self: center;">
+							<img th:src="${auction.item.itemImgList[0].itemImageUrl}"
+								th:alt="${auction.item.itemName}"
 								style="width: 100%; height: 100%">
 						</div>
 
 						<div class="block-2">
 								<div style="display: flex;">
 							<div>
-							<h4>현재 금액 : 10,000원</h4>
+							<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
 							</div>
 							<div style="width: 415px;">
 							<h4
-								style="text-align: right; margin-right: 60px; margin-bottom: 15px; ">남은
-								시간 0시간 54분 20초</h4>
+										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
+										th:text="|남은시간 : ${remainTime}|"></h4>
 							</div>
 						</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
-								<div class="col-sm-3">가방</div>
+								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
 							</div>
 
-							<div class="form-group row">
+						<div class="form-group row">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3">08/07 16:20</div>
+								<div class="col-sm-3" th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">시작가</label>
-								<div class="col-sm-3">10,000원</div>
+								<div class="col-sm-3"
+									th:text="|${#numbers.formatInteger(auction.auctionStartPrice, 0, 'COMMA')}원|"></div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
-									<div id='price' type='text' value='500' name="price">500
-									</div>
-									<div>원</div>
+									<div id='price' type='text' name="price"></div>
+									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|" />
 								</div>
 							</div>
 
@@ -326,9 +380,19 @@ table {
 								<div class="col-sm-3">0회</div>
 							</div>
 
-							<div class="form-group row">
+							<div class="form-group row col-sm-cet">
 								<label class="col-sm-2">진행상태</label>
-								<div class="col-sm-3">경매대기중</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행
+									중</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('END')}">마감</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('LAST')}">1분
+									남음</div>
+								<div class="col-sm-3"
+									th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기
+								</div>
 							</div>
 
 							<div class="form-group row col-sm-cet">
@@ -336,31 +400,232 @@ table {
 								<div class="col-sm-3">01:00</div>
 							</div>
 
-							<div class="form-group row" style="height: 72px;">
+									<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2" style="line-height: 71px;">판매자
 									닉네임</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
-									<div style="width: 50px; text-align: center;">보부상</div>
+									<div style="width: 50px; text-align: center;"
+										th:text="${auction.item.member.nickname}"></div>
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
-										<input type="submit" class="btn btn-primary" value="후기"
-											style="border-radius: inherit; width: 110px;" />
+										<button type="button" class="btn btn-primary"
+											style="border-radius: inherit; width: 110px;"
+											data-bs-toggle="modal" data-bs-target="#reviewModal">
+											후기</button>
+									</div>
+
+									<!-- 모달 창 -->
+									<div class="modal fade" id="reviewModal" tabindex="-1"
+										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
+														th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
+													<button type="button" class="btn-close"
+														data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body ">
+													<p class="review-message">후기가 n건 검색되었습니다.</p>
+													<table class="table">
+														<thead>
+															<tr>
+																<th scope="col">닉네임</th>
+																<th scope="col">별점</th>
+																<th scope="col">리뷰작성</th>
+
+															</tr>
+														</thead>
+														<tbody>
+															<tr>
+																<th scope="row">크롱</th>
+																<td>
+																	<!-- 별점 -->
+																	<form class="mb-3" name="myform" id="myform"
+																		method="post">
+																		<fieldset>
+																			<input type="radio" name="reviewStar" value="5"
+																				id="rate1" checked><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4"
+																				id="rate2" disabled><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3"
+																				id="rate3" disabled><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2"
+																				id="rate4" disabled><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1"
+																				id="rate5" disabled><label for="rate5">★</label>
+																		</fieldset>
+																	</form>
+
+																</td>
+																<td>크롱크롱</td>
+
+															</tr>
+															<tr>
+																<th scope="row">뽀로로</th>
+																<td>
+																	<!-- 별점 -->
+																	<form class="mb-3" name="myform" id="myform"
+																		method="post">
+																		<fieldset>
+																			<input type="radio" name="reviewStar" value="5"
+																				id="rate1" disabled><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4"
+																				id="rate2" checked><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3"
+																				id="rate3" disabled><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2"
+																				id="rate4" disabled><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1"
+																				id="rate5" disabled><label for="rate5">★</label>
+																		</fieldset>
+																	</form>
+
+																</td>
+																<td>너무 좋아요</td>
+
+															</tr>
+															<tr>
+																<th scope="row">루피</th>
+																<td>
+																	<!-- 별점 -->
+																	<form class="mb-3" name="myform" id="myform"
+																		method="post">
+																		<fieldset>
+																			<input type="radio" name="reviewStar" value="5"
+																				id="rate1" disabled><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4"
+																				id="rate2" checked><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3"
+																				id="rate3" disabled><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2"
+																				id="rate4" disabled><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1"
+																				id="rate5" disabled><label for="rate5">★</label>
+																		</fieldset>
+																	</form>
+
+																</td>
+																<td>너무 좋아요</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<!-- 페이징 버튼 -->
+												<div class="d-flex justify-content-center">
+													<nav aria-label="Page navigation example">
+														<ul class="pagination custom-pagination">
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+															</a></li>
+															<li class="page-item"><a class="page-link" href="#">1</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">2</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">3</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+															</a></li>
+														</ul>
+													</nav>
+												</div>
+
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
+														data-bs-dismiss="modal">닫기</button>
+
+												</div>
+											</div>
+										</div>
 									</div>
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
 										<input type="submit" class="btn btn-primary" value="신고"
-											style="border-radius: inherit; width: 110px;" />
+											style="border-radius: inherit; width: 110px;"
+											onclick="location.href='/auction/report';" />
 									</div>
 								</div>
 							</div>
-							<div class="form-group row" style="height: 72px;">
+									<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2"
 									style="line-height: 71px; padding-right: 0px; padding-left: 0px;">판매자
 									다른물품</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
-									<div style="width: 50px; text-align: center;">12건</div>
+									<div style="width: 50px; text-align: center;"
+										th:text=|${itemCount}건|></div>
 									<div class="col-sm-offset-2" style="margin-left: 20px;">
 										<input type="submit" class="btn btn-primary" value="더보기"
-											style="border-radius: inherit; width: 110px;" />
+											style="border-radius: inherit; width: 110px;"
+											data-bs-toggle="modal" data-bs-target="#otherItemModal" />
 									</div>
+
+									<div class="modal fade" id="otherItemModal" tabindex="-1"
+										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
+														th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
+													<button type="button" class="btn-close"
+														data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body ">
+													<table class="table">
+														<thead>
+															<tr>
+																<th scope="col">물품이름</th>
+																<th scope="col">가격</th>
+																<th scope="col">진행상태</th>
+
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="auction: ${auctionList} ">
+																<th scope="row" th:text="${auction.item.itemName}"></th>
+																<td th:text="${auction.auctionNowPrice}"></td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('END')}">마감</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('LAST')}">지난
+																	경매</td>
+																<td
+																	th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류중</td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
+
+												<!-- 페이징 버튼 -->
+												<div class="d-flex justify-content-center">
+													<nav aria-label="Page navigation example">
+														<ul class="pagination custom-pagination">
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+															</a></li>
+															<li class="page-item"><a class="page-link" href="#">1</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">2</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#">3</a>
+															</li>
+															<li class="page-item"><a class="page-link" href="#"
+																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+															</a></li>
+														</ul>
+													</nav>
+												</div>
+
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
+														data-bs-dismiss="modal">닫기</button>
+
+												</div>
+											</div>
+										</div>
+									</div>
+									<!-- 모달종료 -->
 								</div>
 							</div>
 						</div>
@@ -424,20 +689,25 @@ table {
 								
 								<div style="width: 670px;">
 								<div
-									style="display: flex; width: 600px; justify-content: right;">
-									<div style="line-height: 40px; margin-right: 20px;">입찰금액
+										style="display: flex; width: 600px; justify-content: right;">
+										<div style="line-height: 40px; margin-right: 20px;">입찰금액
+										</div>
+										<div>
+											<input id='sum' type='text' disabled
+												th:value="${auction.auctionNowPrice}" name="sum"
+												style="width: 165px; height: 40px; text-align: end;" />
+										</div>
 									</div>
-									<div>
-										<input id='sum' type='text' value='0' name="sum"
-											style="width: 165px; height: 40px; text-align: end;" />
+									<div style="text-align: right; width: 600px;">
+										<input type='button' onclick='count("minus")'
+											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
+											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
+											type='button' onclick='count("plus")'
+											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
+											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
-								</div>
-								<div style="text-align: right; width: 600px;">
-									<input type='button' onclick='count("minus")' value='- 500'
-										style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-										type='button' onclick='count("plus")' value='+ 500'
-										style="margin-top: 10px; width: 80px; height: 40px;" />
-								</div>
 								<div style="text-align: right; width: 600px;">
 									<!--  th:class="${wished != null && wished ? 'be bi-heart' : 'bi bi-heart'}"-->		
 									<!--  th:class="${wished ? 'be bi-heart' : 'bi bi-heart'}"-->
@@ -451,16 +721,9 @@ table {
         							4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
    									 </svg>
 									</button>  -->
-									<button class="heartbutton" th:if="${auction != null}" onclick="pushWish(this)" data-auctionno="${auction.auctionNo}">
-									<i class="bi bi-heart" id="heartIcon"></i>
+									<button class="heartbutton" th:class="${wished != null && wished ? 'be bi-heart' : 'bi bi-heart'}" onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
+										<i class="fa-regular fa-heart"></i>
 									</button>
-									
-									<form th:action="@{/auction/wish}" method="post">
-								    <input type="hidden" th:name="auctionNo" th:value="${auction.auctionNo}" />
-								    <input type="hidden" th:name="memberId" th:value="${member.memberId}" /> <!-- 로그인한 사용자의 memberId를 가져와서 설정-->
-								    <button type="submit" th:if="${!wished}">좋아요</button>
-								    <button type="submit" th:if="${wished}">좋아요 취소</button>
-									</form>
 									
 									<input type='button' value='입찰'
 										style="margin-top: 10px; width: 80px; height: 40px;" />
@@ -538,62 +801,71 @@ table {
 
 	<section style="margin-top: 100px;">
 		<div class="tab col-mb-8" id="bthtab">
-		<ul class="nav nav-tabs" id="myTab" role="tablist" style="
-    border-bottom: 1px solid #52A8E0;">
-			<li class="nav-item" role="presentation">
-				<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-					data-bs-target="#home" type="button" role="tab"
-					aria-controls="home" aria-selected="true" >물품정보</button>
-			</li>
-			<li class="nav-item" role="presentation">
-				<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-					data-bs-target="#profile" type="button" role="tab"
-					aria-controls="profile" aria-selected="false" >물품문의</button>
-			</li>
+			<ul class="nav nav-tabs" id="myTab" role="tablist"
+				style="border-bottom: 1px solid #52A8E0;">
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+						data-bs-target="#home" type="button" role="tab"
+						aria-controls="home" aria-selected="true">물품정보</button>
+				</li>
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#profile" type="button" role="tab"
+						aria-controls="profile" aria-selected="false">물품문의</button>
+				</li>
+				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#standard" type="button" role="tab"
+						aria-controls="standard" aria-selected="false">규격</button>
+				</li>
 
-		</ul>
-		<div class="tab-content" id="myTabContent">
-			<div class="tab-pane fade show active" id="home" role="tabpanel"
-				aria-labelledby="home-tab">
-				<div class="wishful">
-					<span>구매자 희망사항</span>
+			</ul>
+			<div class="tab-content" id="myTabContent">
+				<div class="tab-pane fade show active" id="home" role="tabpanel"
+					aria-labelledby="home-tab">
+					<div class="wishful">
+						<span th:utext="${auction.item.itemDetail}"></span>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="profile" role="tabpanel"
+					aria-labelledby="profile-tab">
+					<div class="join_customer">
+						<table>
+							<tr>
+								<th scope="col">번호</th>
+								<th>질문구분</th>
+								<th>제목</th>
+								<th>등록자</th>
+								<th>등록일자</th>
+							</tr>
+							<tr>
+								<td>1</td>
+								<td>제품문의</td>
+								<td>상품관련 질문이요~</td>
+								<td>뽀로로</td>
+								<td>08/07 12:20</td>
+							</tr>
+						</table>
+					</div>
+					<div class="form-group row" style="padding-top: 20px;">
+						<div class="col-sm-offset-2" style="text-align: right;">
+							<input type="submit" class="btn btn-primary" value="문의하기"
+								style="border-radius: inherit;" />
+						</div>
+					</div>
+				</div>
+				<div class="tab-pane fade" id="standard" role="tabpanel"
+					aria-labelledby="standard-tab">
+					<div class="standard wishful">
+						<p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
+						<p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
+						<p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
+					</div>
 				</div>
 			</div>
-			<div class="tab-pane fade" id="profile" role="tabpanel"
-				aria-labelledby="profile-tab">
-				<div class="join_customer">
-					<table>
-						<tr>
-							<th scope="col">번호</th>
-							<th>질문구분</th>
-							<th>제목</th>
-							<th>등록자</th>
-							<th>등록일자</th>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>제품문의</td>
-							<td>상품관련 질문이요~</td>
-							<td>뽀로로</td>
-							<td>08/07 12:20</td>
-						</tr>
-					</table>
-				</div>
-			<div class="form-group row"
-				style="padding-top: 20px;">
-				<div class="col-sm-offset-2"
-					style="text-align: right;">
-					<input type="submit" class="btn btn-primary" value="문의하기"
-						style="border-radius: inherit;" />
-				</div>
-			</div>
-			</div>
-
 		</div>
-	</div>
-		
-	</section>
 
+	</section>
 
 
 <!-- end s-content -->
@@ -601,10 +873,17 @@ table {
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
+	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+          crossorigin="anonymous"></script>
 	<script th:inline="javascript">
+	
 	 //찜 버튼에 대한 기능
 	function pushWish(heartIcon) {
-    /* var isWished = heartIcon.classList.contains('bi'); //아이콘 상태 판단 : 빈 하트.
+		 /*
+		  색있는 하트: <i class="fa-solid fa-heart"></i>
+          빈 하트: <i class="fa-regular fa-heart"></i>
+		 */
+        var isWished = heartIcon.classList.contains('be');
         var auctionNo = heartIcon.getAttribute('data-auctionno');
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -624,8 +903,9 @@ table {
                 // 요청 성공 처리
                 console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
                 // 찜 상태 토글
+                heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
                 heartIcon.classList.toggle('be'); //찜 완료
-                heartIcon.classList.toggle('bi'); // 찜 미완료
+                //heartIcon.classList.toggle('bi'); // 찜 미완료
             },
             error: function(jqXHR, status, error) {
                 // 오류 처리
@@ -635,43 +915,21 @@ table {
             }
         });
         
-    }  */
-    heartButton.classList.toggle('be'); // 채워진 하트
-    heartButton.classList.toggle('bi'); // 빈 하트
-    
-    var auctionNo = heartButton.getAttribute('data-auctionno');
-    var auctionNo = [[${auction.auctionNo}]];
-    
-    $.ajax({
-        url: "/wish", 
-        method: "POST", 
-        data: JSON.stringify({ auctionNo: auctionNo }),
-        contentType: "application/json",
-        success: function(result) {
-          console.log("좋아요가 완료되었습니다.!");
-        },
-        error: function(jqXHR, status, error) {
-          // 오류 처리
-          console.error("좋아요 중 오류 발생:", error);
-          // 하트 버튼을 원래 상태로 복원
-          heartButton.classList.toggle('be');
-          heartButton.classList.toggle('bi');
-        }
-      });
-    }
-    
+    }  
+   
 	</script>
 
 	<script src="/js/splide.min.js"></script>
 
-	<script>
+	<script th:inline="javascript">
 		document.addEventListener('DOMContentLoaded', function() {
 			var splide = new Splide('.splide');
 			splide.mount();
 		});
 	</script>
 
-	<script type="text/javascript">
+
+	<script th:inline="javascript">
 		function count(type) {
 			// 결과를 표시할 element
 			const resultElement = document.getElementById('sum');
@@ -690,6 +948,24 @@ table {
 			resultElement.value = number;
 
 		} 
+
+	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
+	function count(type) {
+	    // 결과를 표시할 element
+	    const resultElement = document.getElementById('sum');
+	    const resultElement2 = document.getElementById('price');
+	    // 현재 화면에 표시된 값
+	    let number = resultElement.value;
+	    // 더하기/빼기
+	    if (type === 'plus') {
+	        number = parseInt(number) + auctionPrice;
+	    } else if (type === 'minus') {
+	        number = parseInt(number) - auctionPrice;
+	    }
+	    // 결과 출력
+	    resultElement.value = number;
+	}
+
 	</script>
 </th:block>
 
