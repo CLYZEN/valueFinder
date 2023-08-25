@@ -292,6 +292,7 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
+    
     public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         return auctionRepository.findByItemMember(member, pageable);

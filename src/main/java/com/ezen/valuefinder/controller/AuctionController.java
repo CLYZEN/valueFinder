@@ -297,9 +297,10 @@ public class AuctionController {
 
 
     //역경매
-    @GetMapping(value = "/auction/reversebid")
-    public String auctionReversebid() {
-
+    @GetMapping(value = {"/auction/reversebid", "/auction/reversebid/{page}"})
+    public String auctionReversebid(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
+    	Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+    	
         return "auction/reversebid";
     }
     // 실시간 경매 페이지
