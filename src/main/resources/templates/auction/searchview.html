@@ -126,7 +126,7 @@
                                         <span th:if="${auction.auctionType.toString()} == 'REALTIME'"
                                               th:text="실시간경매"></span>
 										<a th:href="'/auction/detail/'+ ${auction.auctionNo}">
-                                        <div class="product-item">
+                                        <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
                                             <figure>
                                                 <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
                                                     <img src="images/thumb-bananas.png" class="tab-image">
@@ -224,6 +224,9 @@
             //주소 이동
             location.href = "/auction/publicbid/" + page
                 + "?category=" + category;
+        }
+        function moveDetail(auctionNo) {
+            location.href='/auction/detail/' + auctionNo;
         }
     </script>
 </th:block>

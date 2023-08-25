@@ -107,6 +107,8 @@ public class AuctionController {
     @GetMapping(value = "auction/detail/{auctionNo}")
     public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
         Auction auction = auctionService.getAuctionDetail(auctionNo);
+        Integer bidCount = auctionService.getBiddingCount(auction);
+        model.addAttribute("bidCount",bidCount);
         auctionService.addAuctionView(auctionNo);
 
         if(auction.getAuctionType() == AuctionType.PUBLIC) {
@@ -138,9 +140,8 @@ public class AuctionController {
             model.addAttribute("auctionList",
                     auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
             auctionService.updateAuction(auctionNo);
+            return "/auction/details/sealedDetail";
         }
-
-        return "/auction/details/publicDetail";
     }
 
     @PostMapping(value = "/auction/query/add")
@@ -189,21 +190,46 @@ public class AuctionController {
                     return new ResponseEntity("경매 시작 전입니다.", HttpStatus.LOCKED);
                 }
                 case PROGRESS, LAST -> {
-                    if (price <= auction.getAuctionNowPrice()) {
-                        return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
+
+                    if(price <= 0) {
+                        return new ResponseEntity("0보다 큰 슷자를 입력해주세요.", HttpStatus.BAD_REQUEST);
                     }
-                    biddingService.chkStatus(auction);
-                    return new ResponseEntity("등록 완료", HttpStatus.OK);
+
+                    // 비공개 경매라면
+                    if (auction.getAuctionType() == AuctionType.SEALED) {
+                        if(biddingService.chkSealedBidding(auction,principalDetails.getMember())) {
+                            biddingService.chkStatus(auction);
+                            biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
+                            return new ResponseEntity("입찰 완료", HttpStatus.OK);
+                        } else {
+                            return new ResponseEntity("비공개경매는 한번만 입찰 가능합니다.", HttpStatus.BAD_REQUEST);
+                        }
+                    }
+
+                    // 비공개 경매가 아니라면
+                    if (auction.getAuctionType() != AuctionType.SEALED) {
+
+                        if (price <= auction.getAuctionNowPrice()) {
+                            return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
+                        }
+
+                        if(biddingService.chkBidding(auction,principalDetails.getMember())) {
+                            biddingService.chkStatus(auction);
+                            biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
+                            return new ResponseEntity("입찰 완료", HttpStatus.OK);
+                        }
+                        return new ResponseEntity("현재 최상위 입찰자입니다.", HttpStatus.BAD_REQUEST);
+                    }
+
                 }
                 case END -> {
                     return new ResponseEntity("종료된 경매입니다.", HttpStatus.LOCKED);
                 }
             }
-            biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
         } catch (Exception e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @GetMapping(value = "/auction/report")
@@ -278,8 +304,8 @@ public class AuctionController {
     }
     // 실시간 경매 페이지
     @GetMapping(value = {"/auction/realtime", "/auction/realtime/{page}"})
-    public String auctionRealtime(Optional<Integer> page, Model model,@RequestParam Long category) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+    public String auctionRealtime(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.REALTIME,category);
 
         for (Auction auction : auctionList) {
@@ -292,8 +318,8 @@ public class AuctionController {
         return "auction/realtime";
     }
     @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
-    public String auctionSealedbid(Optional<Integer> page, Model model,@RequestParam Long category) {
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+    public String auctionSealedbid(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         Page<Auction> auctionList = auctionService.getAuctionList(pageable, AuctionType.SEALED,category);
 
         for (Auction auction : auctionList) {
@@ -309,9 +335,9 @@ public class AuctionController {
     }
 
     @GetMapping(value = {"/auction/publicbid", "/auction/publicbid/{page}"})
-    public String auctionPublicbid(Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+    public String auctionPublicbid(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category) {
         Page<Auction> auctionList;
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
 
         auctionList = auctionService.getAuctionList(pageable, AuctionType.PUBLIC,category);
 
@@ -328,9 +354,9 @@ public class AuctionController {
     }
 
     @GetMapping(value = {"/auction/search","/auction/search/{page}"})
-    public String searchView(Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+    public String searchView(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category) {
         Page<Auction> auctionList;
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         if(category != 0) {
             Category categorys = categoryService.getCategory(category);
             model.addAttribute("category",categorys);
@@ -360,7 +386,7 @@ public class AuctionController {
     @PostMapping(value = "/auction/searched")
     public String searchAuction(@Valid Long category, @Valid String searchVal,Model model,Optional<Integer> page) {
         Page<Auction> auctionList;
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 30);
+        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         if(category != 0) {
             Category categorys = categoryService.getCategory(category);
             model.addAttribute("category",categorys);

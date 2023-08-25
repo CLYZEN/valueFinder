@@ -21,7 +21,7 @@ public class SuccessBidding extends BaseEntity {
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 

@@ -151,7 +151,7 @@
                                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
 
                                     <div class="col" th:each="auction:${auctionList}">
-										<a th:href="'/auction/detail/'+ ${auction.auctionNo}">
+										<a th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
                                         <div class="product-item">
                                             <figure>
                                                 <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
@@ -250,6 +250,9 @@
             //주소 이동
             location.href = "/auction/publicbid/" + page
                 + "?category=" + category;
+        }
+        function moveDetail(auctionNo) {
+            location.href='/auction/detail/' + auctionNo;
         }
     </script>
 </th:block>

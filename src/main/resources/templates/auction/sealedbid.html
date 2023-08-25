@@ -149,9 +149,9 @@ margin-left: 151.5px; /* 좌측 여백 */
                
                 <!-- Card (인기 매물 아이템) -->
                 <div class="col" th:each="auction:${auctionList}">
-                  <div class="product-item">
+                  <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
                     <figure>
-                      <a href="product-single.html" title="Product Title">
+                      <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
                         <img src="images/thumb-bananas.png"  class="tab-image">
                       </a>
                     </figure>
@@ -239,6 +239,9 @@ margin-left: 151.5px; /* 좌측 여백 */
 			//주소 이동
 			location.href = "/auction/sealedbid/" + page
 					+ "?category=" + category;
+		}
+		function moveDetail(auctionNo) {
+			location.href='/auction/detail/' + auctionNo;
 		}
 	</script>
 </th:block>
