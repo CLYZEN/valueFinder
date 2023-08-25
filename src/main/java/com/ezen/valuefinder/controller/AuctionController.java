@@ -117,6 +117,10 @@ public class AuctionController {
 			model.addAttribute("auctionList",
 					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
 			auctionService.updateAuction(auctionNo);
+			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
+			model.addAttribute("auctionReview", auctionReview);
+			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
+			model.addAttribute("maxPage", 5);
 			return "/auction/details/publicDetail";
 		} else if (auction.getAuctionType() == AuctionType.REALTIME) {
 			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
@@ -127,6 +131,10 @@ public class AuctionController {
 			model.addAttribute("auctionList",
 					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
 			auctionService.updateAuction(auctionNo);
+			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
+			model.addAttribute("auctionReview", auctionReview);
+			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
+			model.addAttribute("maxPage", 5);
 			return "/auction/details/realtimeDetail";
 		} else {
 			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
@@ -137,9 +145,13 @@ public class AuctionController {
 			model.addAttribute("auctionList",
 					auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
 			auctionService.updateAuction(auctionNo);
+			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
+			model.addAttribute("auctionReview", auctionReview);
+			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
+			model.addAttribute("maxPage", 5);
+			return "/auction/details/sealedDetail";
 		}
 
-		return "/auction/details/publicDetail";
 	}
 
 	@PostMapping(value = "/auction/query/add")

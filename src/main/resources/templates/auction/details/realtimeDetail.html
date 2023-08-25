@@ -233,6 +233,18 @@ table {
 	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
 	margin-bottom: 15px;
 }
+
+.review th {
+	border-right : 1px solid #ebebeb;
+	text-align : center;
+	background-color: #dddddd;
+}
+
+.review td {
+	border-right : 1px solid #ebebeb;
+	text-align : center;
+	line-height: 80px;
+}
 </style>
 </th:block>
 
@@ -397,7 +409,7 @@ table {
 									<!-- 모달 창 -->
 									<div class="modal fade" id="reviewModal" tabindex="-1"
 										aria-labelledby="reviewModalLabel" aria-hidden="true">
-										<div class="modal-dialog modal-lg">
+										<div class="modal-dialog modal-lg" style="--bs-modal-width: 1200px !important;">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h5 class="modal-title" id="reviewModalLabel"
@@ -406,108 +418,71 @@ table {
 														data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body ">
-													<p class="review-message">후기가 n건 검색되었습니다.</p>
+													<p class="review-message" th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
 													<table class="table">
 														<thead>
-															<tr>
-																<th scope="col">닉네임</th>
-																<th scope="col">별점</th>
-																<th scope="col">리뷰작성</th>
+															<tr class="review">																
+																<th scope="col" style="width: 250px;">물품명</th>
+																<th scope="col">리뷰</th>
+																<th scope="col" style="width: 300px;">별점</th>
+																<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
 
 															</tr>
 														</thead>
 														<tbody>
-															<tr>
-																<th scope="row">크롱</th>
-																<td>
+															<tr th:each="auctionReview:${auctionReview}" class="review" id="review">
+																
+																<td th:text=${auctionReview.auction.item.itemName}></td>
+																<td th:text=${auctionReview.auctionReviewTitle}></td>
+																<td >
 																	<!-- 별점 -->
 																	<form class="mb-3" name="myform" id="myform"
-																		method="post">
+																		method="post" style="margin-bottom: 0px !important;">
 																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" checked><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" disabled><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
+																			<input type="radio" name="reviewStar" value="5" id="rate1" th:if="${auctionReview.auctionReviewScore.toString() == '5'}" checked ><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4" id="rate2" th:if="${auctionReview.auctionReviewScore.toString() == '4'}" checked ><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3" id="rate3" th:if="${auctionReview.auctionReviewScore.toString() == '3'}" checked ><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2" id="rate4" th:if="${auctionReview.auctionReviewScore.toString() == '2'}" checked ><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1" id="rate5" th:if="${auctionReview.auctionReviewScore.toString() == '1'}" checked ><label for="rate5">★</label>
 																		</fieldset>
 																	</form>
 
 																</td>
-																<td>크롱크롱</td>
-
-															</tr>
-															<tr>
-																<th scope="row">뽀로로</th>
-																<td>
-																	<!-- 별점 -->
-																	<form class="mb-3" name="myform" id="myform"
-																		method="post">
-																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" disabled><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" checked><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
-																		</fieldset>
-																	</form>
-
-																</td>
-																<td>너무 좋아요</td>
-
-															</tr>
-															<tr>
-																<th scope="row">루피</th>
-																<td>
-																	<!-- 별점 -->
-																	<form class="mb-3" name="myform" id="myform"
-																		method="post">
-																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5"
-																				id="rate1" disabled><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4"
-																				id="rate2" checked><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3"
-																				id="rate3" disabled><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2"
-																				id="rate4" disabled><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1"
-																				id="rate5" disabled><label for="rate5">★</label>
-																		</fieldset>
-																	</form>
-
-																</td>
-																<td>너무 좋아요</td>
+															
+																<td scope="row" th:text=${auctionReview.member.nickname} style="border-right: 0px;"></td>
 															</tr>
 														</tbody>
 													</table>
 												</div>
 
 												<!-- 페이징 버튼 -->
-												<div class="d-flex justify-content-center">
-													<nav aria-label="Page navigation example">
-														<ul class="pagination custom-pagination">
-															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-															</a></li>
-															<li class="page-item"><a class="page-link" href="#">1</a>
+												<div class="d-flex justify-content-center"
+													style="margin-top: 1%;">
+													<nav
+														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${0} +')'">이전</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#">2</a>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#">3</a>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-															</a></li>
 														</ul>
 													</nav>
 												</div>
@@ -918,6 +893,20 @@ table {
             updateCountdown();
         }
     </script>
+    
+    <script th:inline="javascript">
+    function loadPage(pageNumber) {
+    	
+    	
+        $.ajax({
+            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            type: 'GET',
+            success: function(response) {
+                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+            }
+        });
+    }
+</script>
 </th:block>
 
 </html>

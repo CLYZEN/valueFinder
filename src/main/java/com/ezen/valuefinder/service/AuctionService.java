@@ -8,19 +8,8 @@ import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
 import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.entity.*;
-import com.ezen.valuefinder.repository.AuctionQueryRepository;
-import com.ezen.valuefinder.repository.AuctionRepository;
-import com.ezen.valuefinder.repository.CategoryRepository;
-import com.ezen.valuefinder.repository.ItemRepository;
-import com.ezen.valuefinder.repository.MemberRepository;
-
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
-import com.ezen.valuefinder.repository.AuctionRepository;
-import com.ezen.valuefinder.repository.CategoryRepository;
-import com.ezen.valuefinder.repository.ItemImgRepository;
-import com.ezen.valuefinder.repository.ItemRepository;
-import com.ezen.valuefinder.repository.MemberRepository;
 
 import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
@@ -52,7 +41,8 @@ public class AuctionService {
     private final AuctionQueryRepository auctionQueryRepository;
     private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
-
+    private final ReviewRepository reviewRepository;
+    
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -197,12 +187,19 @@ public class AuctionService {
 		return itemRepository.countItemsByMemberId(memberId);	
 	}
 
-
+	public int reviewCount(Long memberId) {
+		return reviewRepository.countAuctionReviewsByAuctionItemMember(memberId);	
+	}
+	
 	public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		return auctionRepository.findByItemMember(member, pageable);
 	}
 	
+	public Page<AuctionReview> getAuctionReviewList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return reviewRepository.findByAuctionItemMember(member, pageable);
+	}
 
 	private void updateAuctionStatus(Auction auction) {
         LocalDateTime now = LocalDateTime.now();
