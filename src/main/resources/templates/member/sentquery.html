@@ -89,6 +89,10 @@ caption {
 
 td {
 	width: 12.5%;
+	text-overflow: ellipsis;
+	white-space: nowrap; 
+	max-width: 100px;
+	overflow: hidden;
 }
 
 .tdnum {
@@ -124,6 +128,9 @@ td {
 .table-hover {
 	width: 80%;
 }
+
+ 
+
 </style>
 </th:block>
 
@@ -245,12 +252,12 @@ td {
 							<tr style="height: 100px; line-height: 100px;">
 								<td class=tdnum id="itemNo" name="itemNo" th:text="${auctionQuery.auction.item.itemNo}"></td>
 								<td class=tdnum id="itemName" name="itemName"><a
-									th:href="@{'/auction/query/'  + ${auctionQuery.auctionQueryNo}}" th:text="${auctionQuery.auction.item.itemName}"></a></td>
+									th:href="@{'/auction/query/'  + ${auctionQuery.auctionQueryNo}}" th:text="${auctionQuery.auction.item.itemName}" ></a></td>
 								<td class=tdnum style="width: 30%" id="auctionQueryDetail"
 									name="auctionQueryDetail"
 									th:text="${auctionQuery.auctionQueryDetail}"></td>
 								<td class=tdnum style="width: 10%" id="nickname" name="nickname"
-									th:text="${auctionQuery.member.nickname}"></td>
+									th:text="${auctionQuery.member.nickname}" ></td>
 								<td type=date class=tdnum id="data1" ></td>
 							</tr>
 						</tbody>
