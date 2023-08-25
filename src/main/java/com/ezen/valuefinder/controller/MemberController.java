@@ -132,6 +132,7 @@ public class MemberController {
 		return "member/mypage";
 	}
 
+
 	@GetMapping(value = "member/mypage/bidding")
 	public String bidding(Authentication authentication, Model model) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -139,6 +140,7 @@ public class MemberController {
 		model.addAttribute("member", member);
 		return "member/bidding";
 	}
+
 
 	@GetMapping(value = "member/mypage/successfulbid")
 	public String successfulbid(Authentication authentication, Model model) {

@@ -243,15 +243,15 @@ td {
 
 							</tr>
 							<tr style="height: 100px; line-height: 100px;">
-								<td class=tdnum id="itemNo" name="itemNo" th:test="${auctionQuery.auction.item.itemNo}"></td>
+								<td class=tdnum id="itemNo" name="itemNo" th:text="${auctionQuery.auction.item.itemNo}"></td>
 								<td class=tdnum id="itemName" name="itemName"><a
-									href="'/auction/query/'  + ${auctionQuery.auciton.auctionNo}" th:test="${auctionQuery.auction.item.itemName}"></a></td>
+									th:href="@{'/auction/query/'  + ${auctionQuery.auctionQueryNo}}" th:text="${auctionQuery.auction.item.itemName}"></a></td>
 								<td class=tdnum style="width: 30%" id="auctionQueryDetail"
 									name="auctionQueryDetail"
 									th:text="${auctionQuery.auctionQueryDetail}"></td>
 								<td class=tdnum style="width: 10%" id="nickname" name="nickname"
 									th:text="${auctionQuery.member.nickname}"></td>
-								<td type=date class=tdnum id="data1" th:text="${auctionQuery.regTime(yy-MM-dd-HH)}"></td>
+								<td type=date class=tdnum id="data1" ></td>
 							</tr>
 						</tbody>
 					</table>

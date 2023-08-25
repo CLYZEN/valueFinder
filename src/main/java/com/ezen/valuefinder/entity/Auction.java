@@ -47,8 +47,10 @@ public class Auction extends BaseEntity {
     @Column(columnDefinition = "integer default 0", nullable = false)	
     private Integer auctionCount; // 경매조회수
 
+
     private String remainingTime; // 남은시간
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer biddingCount; // 입찰횟수
+
 }

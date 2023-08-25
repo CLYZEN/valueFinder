@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.entity;
 
+import com.ezen.valuefinder.constant.ReversebidAuctionStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,6 +34,9 @@ public class ReverseBidding extends BaseEntity {
 
     @Column(nullable = false)
     private Integer hopePrice; // 희망가
+
+    @Enumerated(EnumType.STRING)
+    private ReversebidAuctionStatus reversebidAuctionStatus;
 
     @Column(nullable = false)
     private LocalDateTime reverseBiddingExpireDate; // 마감기간

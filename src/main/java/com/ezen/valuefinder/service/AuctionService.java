@@ -1,8 +1,6 @@
 package com.ezen.valuefinder.service;
 
-import com.ezen.valuefinder.constant.AuctionQueryDistinction;
-import com.ezen.valuefinder.constant.AuctionStatus;
-import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.constant.*;
 import com.ezen.valuefinder.dto.ItemImgDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 
@@ -25,13 +23,20 @@ import com.ezen.valuefinder.repository.ItemImgRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
+import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
 import com.ezen.valuefinder.repository.*;
 
 
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,14 +63,15 @@ public class AuctionService {
     private final AuctionQueryRepository auctionQueryRepository;
     private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
+    private final AuctionQueryResponseRepository auctionQueryResponseRepository;
 
-	private final AuctionQueryResponseRepository auctionQueryResponseRepository;
-	
-	
-	
-	public List<Category> getCategoryList() {
-		return categoryRepository.findAll();
-	}
+    private final BiddingRepository biddingRepository;
+    private final EntityManager entityManager;
+    private final SuccessBiddingRepository successBiddingRepository;
+    public List<Category> getCategoryList() {
+        return categoryRepository.findAll();
+    }
+
 
 	public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email)
 			throws Exception {
@@ -101,12 +107,12 @@ public class AuctionService {
         auction.setAuctionNowPrice(normalAuctionFormDto.getAuctionStartPrice());
         auction.setAuctionStartTime(normalAuctionFormDto.getAuctionStartTime());
         auction.setBiddingCount(0);
-        if(normalAuctionFormDto.getAuctionDistinction() == 1) {
+        if (normalAuctionFormDto.getAuctionDistinction() == 1) {
             auction.setAuctionEndTime(normalAuctionFormDto.getAuctionStartTime().plusMinutes(5));
-        } else{
+        } else {
             auction.setAuctionEndTime(normalAuctionFormDto.getAuctionEndTime());
         }
-        if (normalAuctionFormDto.getAuctionStartTime().isAfter(LocalDateTime.now())
+        if (normalAuctionFormDto.getAuctionStartTime().isBefore(LocalDateTime.now())
                 || normalAuctionFormDto.getAuctionStartTime().isEqual(LocalDateTime.now())) {
             auction.setAuctionStatus(AuctionStatus.PROGRESS);
         } else {
@@ -133,11 +139,12 @@ public class AuctionService {
 
         return auction.getAuctionNo();
     }
-    
+
     @Transactional(readOnly = true)
     public Auction getAuctionDetail(Long auctionNo) {
-    	return auctionRepository.findById(auctionNo).orElseThrow();
+        return auctionRepository.findById(auctionNo).orElseThrow();
     }
+
 
 
 
@@ -153,6 +160,7 @@ public class AuctionService {
 		auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
 		auctionQuery.setMember(member);
 		auctionQuery.setReadOk(false);
+
 
 		if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
 			auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
@@ -207,10 +215,30 @@ public class AuctionService {
 	}
 
 
+
 	@Transactional
 	public AuctionQuery getAuctionDtl(Long auctionQueryNo) {
 		return auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
 	}
+
+  
+
+    public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
+        ReverseBidding reverseBidding = new ReverseBidding();
+        reverseBidding.setReverseBiddingTitle(reverseAuctionFormDto.getReverseBiddingTitle());
+        reverseBidding.setReverseBiddingDetail(reverseAuctionFormDto.getReverseBiddingDetail());
+        reverseBidding.setHopePrice(reverseAuctionFormDto.getHopePrice());
+        reverseBidding.setReverseBiddingExpireDate(reverseAuctionFormDto.getReverseBiddingExpireDate());
+        reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
+        reverseBidding.setReversebidAuctionStatus(ReversebidAuctionStatus.PROGRESS);
+
+        Member member = memberRepository.findByEmail(email);
+
+        reverseBidding.setMember(member);
+        reverseBiddingRepository.save(reverseBidding);
+
+        return reverseBidding.getReverseBiddingNo();
+    }
 
 
     public Auction getAuction(Long auctionId) {
@@ -218,32 +246,14 @@ public class AuctionService {
         return auction;
     }
 
-
-    
-    @Transactional
-    public int auctionCount(Long id) {
-    	return auctionRepository.auctionCount(id);
+    public void addAuctionView(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow();
+        auction.setAuctionCount(auction.getAuctionCount()+1);
     }
-    
 
 
 
 
-	public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
-		ReverseBidding reverseBidding = new ReverseBidding();
-		reverseBidding.setReverseBiddingTitle(reverseAuctionFormDto.getReverseBiddingTitle());
-		reverseBidding.setReverseBiddingDetail(reverseAuctionFormDto.getReverseBiddingDetail());
-		reverseBidding.setHopePrice(reverseAuctionFormDto.getHopePrice());
-		reverseBidding.setReverseBiddingExpireDate(reverseAuctionFormDto.getReverseBiddingExpireDate());
-		reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
-
-		Member member = memberRepository.findByEmail(email);
-
-		reverseBidding.setMember(member);
-		reverseBiddingRepository.save(reverseBidding);
-
-		return reverseBidding.getReverseBiddingNo();
-	}
 
 
 
@@ -269,8 +279,8 @@ public class AuctionService {
 
 
 
-    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
-        return auctionRepository.findByAuctionType(auctionType,pageable);
+    public int itemCount(Long memberId) {
+        return itemRepository.countItemsByMemberId(memberId);
     }
     
     public void deleteQuery(Long auctionQueryNo) {
@@ -280,6 +290,133 @@ public class AuctionService {
     	
     	auctionQueryRepository.delete(auctionQuery);
     }
+
+    private void successBidding(Auction auction) {
+        Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
+        SuccessBidding findSuccessBidding = successBiddingRepository.findByAuction(auction);
+
+        if (bidding != null && findSuccessBidding == null) {
+            SuccessBidding successBidding = new SuccessBidding();
+            successBidding.setAuction(bidding.getAuction());
+            successBidding.setMember(bidding.getMember());
+            successBidding.setBidStatus(BidStatus.PENDING);
+            successBiddingRepository.save(successBidding);
+        }
+    }
+
+    private void updateAuctionStatus(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime endTime = auction.getAuctionEndTime();
+        Duration duration = Duration.between(now, endTime);
+
+
+        if (auction.getAuctionStatus() == AuctionStatus.PENDING) {
+
+            if (auction.getAuctionStartTime().isBefore(LocalDateTime.now())) {
+                auction.setAuctionStatus(AuctionStatus.PROGRESS);
+            }
+
+        }
+        if (!auction.getAuctionStatus().equals(AuctionStatus.END)) {
+
+            if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
+                auction.setAuctionStatus(AuctionStatus.END);
+                successBidding(auction);
+            }
+            if (auction.getAuctionStatus() != AuctionStatus.END && duration.getSeconds() <= 60) { // 남은 시간이 1분 이하일 경우
+                auction.setAuctionStatus(AuctionStatus.LAST);
+            }
+        }
+
+    }
+
+    public void updateAuction(Long auctionId) {
+        updateAuctionStatus(auctionId);
+        updateAuctionReaminTime(auctionId);
+    }
+
+    private void updateAuctionReaminTime(Long auctionId) {
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+        Duration remainingDuration = Duration.between(LocalDateTime.now(), auction.getAuctionEndTime());
+        long hours = remainingDuration.toHours();
+        long minutes = remainingDuration.minusHours(hours).toMinutes();
+        long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
+
+        if(auction.getAuctionStatus() == AuctionStatus.PENDING) {
+            auction.setRemainingTime("대기중인 경매입니다.");
+            return;
+        }
+
+        if (remainingDuration.isNegative() || remainingDuration.isZero()) {
+            auction.setRemainingTime("종료된 경매입니다.");
+        } else if (hours == 0) {
+            if (minutes == 0) {
+                auction.setRemainingTime(seconds + "초");
+            } else {
+                auction.setRemainingTime(minutes + "분 " + seconds + "초");
+            }
+        } else {
+            auction.setRemainingTime(hours + "시간 " + minutes + "분 " + seconds + "초");
+        }
+    }
+
+
+    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType, Long categoryCode) {
+        if(categoryCode == 0) {
+            return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDescAuctionCountDesc(auctionType,pageable);
+        }
+        Category category = categoryRepository.findById(categoryCode).orElseThrow();
+        if(category == null) {
+            return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
+        } else if (category != null) {
+            return auctionRepository.findByAuctionTypeAndItemCategoryOrderByAuctionEndTimeDesc(auctionType,pageable,category);
+        }
+        return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
+    }
+    public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        return auctionRepository.findByItemMember(member, pageable);
+    }
+
+    public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
+        if(categoryCode==0) {
+            return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
+        }
+        Category category = categoryRepository.findById(categoryCode).orElseThrow();
+        if(category == null) {
+            return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
+        } else {
+            return auctionRepository.findByItemCategoryOrderByAuctionEndTimeDesc(category,pageable);
+        }
+
+    }
+
+    public Page<Auction> getSearchValList(Pageable pageable, Long categoryCode, String searchVal) {
+        if (categoryCode == 0) {
+            return auctionRepository.findByItemItemNameContainingOrderByAuctionEndTimeDesc(pageable,searchVal);
+        }
+        Category category = categoryRepository.findById(categoryCode).orElseThrow();
+
+        return auctionRepository.findByItemItemNameContainingAndItemCategoryOrderByAuctionEndTimeDesc(pageable,searchVal,category);
+    }
+
+    public Integer getBiddingCount(Auction auction) {
+        return biddingRepository.countByAuction(auction);
+    }
+
+    public Page<Auction> getPopularList(Pageable pageable) {
+        return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
+    }
+
+    public Page<Auction> getLastList(Pageable pageable) {
+        return auctionRepository.findActiveAuctionsOrderByTimeLeft(pageable,AuctionStatus.END);
+    }
+
+    public Page<Auction> getNewList(Pageable pageable) {
+        return auctionRepository.findAllByOrderByRegTime(pageable);
+    }
+
 
 }
 
