@@ -107,15 +107,12 @@ public class AuctionController {
     @GetMapping(value = "auction/detail/{auctionNo}")
     public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo,Authentication authentication, Optional<Integer> page) {
         Auction auction = auctionService.getAuctionDetail(auctionNo);
-        
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         boolean checkWish = wishService.checkWish(auctionNo, principalDetails.getMember().getMemberId());
         model.addAttribute("auction", auction);
         model.addAttribute("checkWish", checkWish);
-       // wish에서 체크 여부 판단해서 T/F. 현 상태 : 찜 되어있음. 해야할 것 : 찜 색깔 넣기. 
-        //wishService.checkWish(wishDto.getAuctionNo(), memberId)
-        
         auctionService.addAuctionView(auctionNo);
+        
         if(auction.getAuctionType() == AuctionType.PUBLIC) {
             model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
             model.addAttribute("auction", auction);

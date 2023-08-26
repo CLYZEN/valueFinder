@@ -79,20 +79,17 @@
 	border: 0px;
 }
 
-
-
 /* 
 상단 css
 */
-
 .category {
 	border-top: 1px solid black;
 	border-bottom: 1px solid black;
-	padding: 0;  
+	padding: 0;
 	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
- 	text-align: center; /* 내용 가운데 정렬 */
-} 
+	margin-right: 151.5px; /* 우측 여백 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
 
 .category_list {
 	list-style-type: none;
@@ -102,34 +99,31 @@
 	color: var(--dark-color);
 	font-weight: 700;
 	padding: 0;
-	margin-bottom : 0;
-	
-} 
+	margin-bottom: 0;
+}
 
 /* home>현재페이지 */
-.tabs_header{
+.tabs_header {
 	margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
 	margin-bottom: 10px;
 }
 
-.location{
-margin-left: 151.5px; /* 좌측 여백 */
-    margin-right: 151.5px; /* 우측 여백 */
+.location {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
 }
 
-
-.category_list > li {
+.category_list>li {
 	padding: 0;
-	margin : 0;
-	width:12.5%;
-	text-align:left;
+	margin: 0;
+	width: 12.5%;
+	text-align: left;
 }
 
 .nav-link {
 	padding: 0.5rem 1rem;
 }
-
 
 /* 
 하단 css
@@ -139,10 +133,7 @@ table {
 	border-top: 1px solid;
 	border-bottom: 1px solid;
 	width: 100%;
-
-} 
-
-
+}
 
 #myTab {
 	margin: 0px 100px;
@@ -153,7 +144,6 @@ table {
 	padding: 30px;
 }
 
-
 .wishful {
 	background-color: #D9D9D9;
 	height: 150px;
@@ -163,13 +153,10 @@ table {
 .join_customer th {
 	background-color: #D9D9D9;
 	text-align: center;
-
 }
 
 .join_customer td {
-
 	text-align: center;
-
 }
 
 .box2 th {
@@ -185,17 +172,18 @@ table {
 	border-color: #52A8E0 #52A8E0 white !important;
 }
 
-.box2{
-    top:0;
-    left:0;
-    height: 150px;
-    overflow-y: scroll;
-    margin:0 auto;
-    width: 100%;
-    float:left;
-    border-collapse: collapse;
-    border: 2px solid #52A8E0;
+.box2 {
+	top: 0;
+	left: 0;
+	height: 150px;
+	overflow-y: scroll;
+	margin: 0 auto;
+	width: 100%;
+	float: left;
+	border-collapse: collapse;
+	border: 2px solid #52A8E0;
 }
+
 #myform fieldset {
 	display: inline-block;
 	direction: rtl;
@@ -246,7 +234,7 @@ table {
 	margin-bottom: 15px;
 }
 
-.heartbutton{
+.heartbutton {
 	margin-top: 10px;
 	width: 80px;
 	height: 40px;
@@ -257,36 +245,39 @@ table {
 </th:block>
 
 <head>
-	<meta name="_csrf" th:content="${_csrf.token}" />
-	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <div layout:fragment="content">
-	
+
 	<section>
 		<div class="tabs_header">
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-house-door-fill"
+				viewBox="0 0 16 16">
  				<path
-			d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+					d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
 			</svg>
-	<a href="/" style="text-decoration: none;">홈</a>
-	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-		fill="currentColor" class="bi bi-chevron-compact-right"
-		viewBox="0 0 16 16">
+			<a href="/" style="text-decoration: none;">홈</a>
+			<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+				fill="currentColor" class="bi bi-chevron-compact-right"
+				viewBox="0 0 16 16">
  			 <path fill-rule="evenodd"
-			d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+					d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-	<a href="/">실시간경매</a>
-	</div>
-	<div class="location"> <h3 style="font-weight: 700;">실시간경매</h3> </div>	
+			<a href="/">실시간경매</a>
+		</div>
+		<div class="location">
+			<h3 style="font-weight: 700;">실시간경매</h3>
+		</div>
 
 		<div class="category">
 			<ul class="category_list">
-				<li><a href="#women" class="nav-link"
-					data-bs-toggle="collapse" data-bs-target="#collapseExample"
-					aria-expanded="false" aria-controls="collapseExample">전체</a></li>
+				<li><a href="#women" class="nav-link" data-bs-toggle="collapse"
+					data-bs-target="#collapseExample" aria-expanded="false"
+					aria-controls="collapseExample">전체</a></li>
 				<li><a href="#women" class="nav-link">인기매물</a></li>
 				<li><a href="#men" class="nav-link">디지털기기</a></li>
 				<li><a href="#kids" class="nav-link">가구/인테리어</a></li>
@@ -296,7 +287,7 @@ table {
 				<li><a href="#sale" class="nav-link">생활가전</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">생활/주방</a></li>
 				<li><a href="#sale" class="nav-link">가공식품</a></li>
 				<li><a href="#sale" class="nav-link">스포츠/레져</a></li>
@@ -307,7 +298,7 @@ table {
 				<li><a href="#sale" class="nav-link">티켓/교환권</a></li>
 			</ul>
 
-			<ul class="category_list" >
+			<ul class="category_list">
 				<li><a href="#sale" class="nav-link">도서</a></li>
 				<li><a href="#sale" class="nav-link">유아도서</a></li>
 				<li><a href="#sale" class="nav-link">기타</a></li>
@@ -317,7 +308,7 @@ table {
 				<li></li>
 				<li></li>
 			</ul>
-		</div> 
+		</div>
 	</section>
 
 	<h6 style="text-align: right; width: 1750px; padding: 10px;"
@@ -332,32 +323,33 @@ table {
 					<div class="banner-blocks">
 
 
-					<div class="banner-ad block-1" style="place-self: center;">
+						<div class="banner-ad block-1" style="place-self: center;">
 							<img th:src="${auction.item.itemImgList[0].itemImageUrl}"
 								th:alt="${auction.item.itemName}"
 								style="width: 100%; height: 100%">
 						</div>
 
 						<div class="block-2">
-								<div style="display: flex;">
-							<div>
-							<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
-							</div>
-							<div style="width: 415px;">
-							<h4
+							<div style="display: flex;">
+								<div>
+									<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
+								</div>
+								<div style="width: 415px;">
+									<h4
 										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
 										th:text="|남은시간 : ${remainTime}|"></h4>
+								</div>
 							</div>
-						</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
 								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
 							</div>
 
-						<div class="form-group row">
+							<div class="form-group row">
 								<label class="col-sm-2">경매예정기간</label>
-								<div class="col-sm-3" th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
+								<div class="col-sm-3"
+									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
 
 							<div class="form-group row">
@@ -370,7 +362,8 @@ table {
 								<label class="col-sm-2">입찰단위</label>
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price"></div>
-									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									<span
+										th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|" />
 								</div>
 							</div>
@@ -400,7 +393,7 @@ table {
 								<div class="col-sm-3">01:00</div>
 							</div>
 
-									<div class="form-group row" style="height: 72px;">
+							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2" style="line-height: 71px;">판매자
 									닉네임</label>
 								<div class="col-sm-3" style="line-height: 71px; display: flex;">
@@ -546,7 +539,7 @@ table {
 									</div>
 								</div>
 							</div>
-									<div class="form-group row" style="height: 72px;">
+							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2"
 									style="line-height: 71px; padding-right: 0px; padding-left: 0px;">판매자
 									다른물품</label>
@@ -675,20 +668,21 @@ table {
 						</div>
 
 						<div class="banner-ad block-4" style="justify-self: right;">
-							<div class="row banner-content" style="margin-right: 0px; flex-wrap: nowrap;">
-								
+							<div class="row banner-content"
+								style="margin-right: 0px; flex-wrap: nowrap;">
+
 								<div style="width: 80px;">
-									<div style=" height: 115px;">
-									<img alt="" src="/images/timer.png"
-									style="width: 100px;margin-left: 100px;height: 100px;">
+									<div style="height: 115px;">
+										<img alt="" src="/images/timer.png"
+											style="width: 100px; margin-left: 100px; height: 100px;">
 									</div>
 									<div style="width: 300px; text-align: -webkit-center;">
-									<h2>01:00</h2>
+										<h2>01:00</h2>
 									</div>
 								</div>
-								
+
 								<div style="width: 670px;">
-								<div
+									<div
 										style="display: flex; width: 600px; justify-content: right;">
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
@@ -708,164 +702,157 @@ table {
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
-								<div style="text-align: right; width: 600px;">
-									<!--  th:class="${wished != null && wished ? 'be bi-heart' : 'bi bi-heart'}"-->		
-									<!--  th:class="${wished ? 'be bi-heart' : 'bi bi-heart'}"-->
-									<!-- th:data-auctionno="${auction.auctionNo}" -->
-									<div> 
-									<!-- <button class="heartbutton" onclick="pushWish(this)">
-   									<i class="bi bi-heart" id="heartIcon" style="color: black;"></i>
-   									 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart" viewBox="0 0 16 16">
-        							<path d="m8 2.748-.717-.737C5.6.281 2.514.878 1.4 3.053c-.523 1.023-.641 2.5.314 4.385.92 1.815 2.834 3.989 6.286 6.357 
-        							3.452-2.368 5.365-4.542 6.286-6.357.955-1.886.838-3.362.314-4.385C13.486.878 10.4.28 8.717 2.01L8 2.748zM8 15C-7.333 
-        							4.868 3.279-3.04 7.824 1.143c.06.055.119.112.176.171a3.12 3.12 0 0 1 .176-.17C12.72-3.042 23.333 4.867 8 15z"/>
-   									 </svg>
-									</button>  -->
-									<button class="heartbutton" th:class="${wished != null && wished ? 'be bi-heart' : 'bi bi-heart'}" onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
-										<i class="fa-regular fa-heart"></i>
-									</button>
-									
-									<input type='button' value='입찰'
-										style="margin-top: 10px; width: 80px; height: 40px;" />
+
+									<!-- 찜하기 버튼 -->
+									<div style="text-align: right; width: 600px;">
+										<button class="heartbutton"
+											th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}"
+											onclick="pushWish(this)"
+											th:data-auctionno="${auction.auctionNo}">
+											<i
+												th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
+										</button>
+
+										<input type='button' value='입찰'
+											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
-									</div>
-								
-   									  
-   									  
-									</div>
-									</div>
-								</div>
 								</div>
 							</div>
 						</div>
-
-					</div>
-			</section>
-
-				</div>
-			
-	<section style="margin-top: 50px;text-align: -webkit-center; height: 250px; padding-top: 50px;" >
-		<div class="middlebox" id="myTabContent" style="  width: 950px;">
-					<h1 style="margin-bottom: 20px;">입찰현황</h1>
-				<div class="box2 scrollnone">
-					<table class="colr_table2" style="border-bottom: none; border-top: none;">
-						<tr>
-							<th scope="col">번호</th>
-							<th>입찰자</th>
-							<th>입찰날짜</th>
-							<th>입찰금액</th>
-							<th>결과</th>
-						</tr>
-						<tr>
-							<td>5</td>
-							<td>에디</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>4</td>
-							<td>루피</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>3</td>
-							<td>크롱</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>2</td>
-							<td>포비</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-						<tr>
-							<td>1</td>
-							<td>뽀로로</td>
-							<td>08/07 18:15</td>
-							<td>10,500원</td>
-							<td>유찰</td>
-						</tr>
-					</table>
-				</div>
-
-		</div>
-		
-	</section>
-
-
-	<section style="margin-top: 100px;">
-		<div class="tab col-mb-8" id="bthtab">
-			<ul class="nav nav-tabs" id="myTab" role="tablist"
-				style="border-bottom: 1px solid #52A8E0;">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-						data-bs-target="#home" type="button" role="tab"
-						aria-controls="home" aria-selected="true">물품정보</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-						data-bs-target="#profile" type="button" role="tab"
-						aria-controls="profile" aria-selected="false">물품문의</button>
-				</li>
-				<li class="nav-item" role="presentation" th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
-					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-						data-bs-target="#standard" type="button" role="tab"
-						aria-controls="standard" aria-selected="false">규격</button>
-				</li>
-
-			</ul>
-			<div class="tab-content" id="myTabContent">
-				<div class="tab-pane fade show active" id="home" role="tabpanel"
-					aria-labelledby="home-tab">
-					<div class="wishful">
-						<span th:utext="${auction.item.itemDetail}"></span>
-					</div>
-				</div>
-				<div class="tab-pane fade" id="profile" role="tabpanel"
-					aria-labelledby="profile-tab">
-					<div class="join_customer">
-						<table>
-							<tr>
-								<th scope="col">번호</th>
-								<th>질문구분</th>
-								<th>제목</th>
-								<th>등록자</th>
-								<th>등록일자</th>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>제품문의</td>
-								<td>상품관련 질문이요~</td>
-								<td>뽀로로</td>
-								<td>08/07 12:20</td>
-							</tr>
-						</table>
-					</div>
-					<div class="form-group row" style="padding-top: 20px;">
-						<div class="col-sm-offset-2" style="text-align: right;">
-							<input type="submit" class="btn btn-primary" value="문의하기"
-								style="border-radius: inherit;" />
-						</div>
-					</div>
-				</div>
-				<div class="tab-pane fade" id="standard" role="tabpanel"
-					aria-labelledby="standard-tab">
-					<div class="standard wishful">
-						<p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
-						<p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
-						<p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
 					</div>
 				</div>
 			</div>
 		</div>
+</div>
+</section>
 
-	</section>
+</div>
+
+<section
+	style="margin-top: 50px; text-align: -webkit-center; height: 250px; padding-top: 50px;">
+	<div class="middlebox" id="myTabContent" style="width: 950px;">
+		<h1 style="margin-bottom: 20px;">입찰현황</h1>
+		<div class="box2 scrollnone">
+			<table class="colr_table2"
+				style="border-bottom: none; border-top: none;">
+				<tr>
+					<th scope="col">번호</th>
+					<th>입찰자</th>
+					<th>입찰날짜</th>
+					<th>입찰금액</th>
+					<th>결과</th>
+				</tr>
+				<tr>
+					<td>5</td>
+					<td>에디</td>
+					<td>08/07 18:15</td>
+					<td>10,500원</td>
+					<td>유찰</td>
+				</tr>
+				<tr>
+					<td>4</td>
+					<td>루피</td>
+					<td>08/07 18:15</td>
+					<td>10,500원</td>
+					<td>유찰</td>
+				</tr>
+				<tr>
+					<td>3</td>
+					<td>크롱</td>
+					<td>08/07 18:15</td>
+					<td>10,500원</td>
+					<td>유찰</td>
+				</tr>
+				<tr>
+					<td>2</td>
+					<td>포비</td>
+					<td>08/07 18:15</td>
+					<td>10,500원</td>
+					<td>유찰</td>
+				</tr>
+				<tr>
+					<td>1</td>
+					<td>뽀로로</td>
+					<td>08/07 18:15</td>
+					<td>10,500원</td>
+					<td>유찰</td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+</section>
+
+
+<section style="margin-top: 100px;">
+	<div class="tab col-mb-8" id="bthtab">
+		<ul class="nav nav-tabs" id="myTab" role="tablist"
+			style="border-bottom: 1px solid #52A8E0;">
+			<li class="nav-item" role="presentation">
+				<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+					data-bs-target="#home" type="button" role="tab"
+					aria-controls="home" aria-selected="true">물품정보</button>
+			</li>
+			<li class="nav-item" role="presentation">
+				<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+					data-bs-target="#profile" type="button" role="tab"
+					aria-controls="profile" aria-selected="false">물품문의</button>
+			</li>
+			<li class="nav-item" role="presentation"
+				th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+				<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+					data-bs-target="#standard" type="button" role="tab"
+					aria-controls="standard" aria-selected="false">규격</button>
+			</li>
+
+		</ul>
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade show active" id="home" role="tabpanel"
+				aria-labelledby="home-tab">
+				<div class="wishful">
+					<span th:utext="${auction.item.itemDetail}"></span>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="profile" role="tabpanel"
+				aria-labelledby="profile-tab">
+				<div class="join_customer">
+					<table>
+						<tr>
+							<th scope="col">번호</th>
+							<th>질문구분</th>
+							<th>제목</th>
+							<th>등록자</th>
+							<th>등록일자</th>
+						</tr>
+						<tr>
+							<td>1</td>
+							<td>제품문의</td>
+							<td>상품관련 질문이요~</td>
+							<td>뽀로로</td>
+							<td>08/07 12:20</td>
+						</tr>
+					</table>
+				</div>
+				<div class="form-group row" style="padding-top: 20px;">
+					<div class="col-sm-offset-2" style="text-align: right;">
+						<input type="submit" class="btn btn-primary" value="문의하기"
+							style="border-radius: inherit;" />
+					</div>
+				</div>
+			</div>
+			<div class="tab-pane fade" id="standard" role="tabpanel"
+				aria-labelledby="standard-tab">
+				<div class="standard wishful">
+					<p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
+					<p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
+					<p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</section>
 
 
 <!-- end s-content -->
@@ -874,7 +861,7 @@ table {
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
 	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-          crossorigin="anonymous"></script>
+		crossorigin="anonymous"></script>
 	<script th:inline="javascript">
 	
 	 //찜 버튼에 대한 기능
@@ -883,7 +870,7 @@ table {
 		  색있는 하트: <i class="fa-solid fa-heart"></i>
           빈 하트: <i class="fa-regular fa-heart"></i>
 		 */
-        var isWished = heartIcon.classList.contains('be');
+        var isWished = heartIcon.classList.contains( 'be');
         var auctionNo = heartIcon.getAttribute('data-auctionno');
         var token = $("meta[name='_csrf']").attr("content");
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -903,9 +890,14 @@ table {
                 // 요청 성공 처리
                 console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
                 // 찜 상태 토글
-                heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
-                heartIcon.classList.toggle('be'); //찜 완료
-                //heartIcon.classList.toggle('bi'); // 찜 미완료
+                	if(method == "DELETE") {
+                		heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
+                    	heartIcon.classList.toggle('be'); // 찜 미완료
+                	} else {
+                		heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
+                        heartIcon.classList.toggle('bi'); //찜 완료
+                	}
+                window.location.reload(true);
             },
             error: function(jqXHR, status, error) {
                 // 오류 처리
@@ -916,9 +908,7 @@ table {
         });
         
     }  
-   
 	</script>
-
 	<script src="/js/splide.min.js"></script>
 
 	<script th:inline="javascript">

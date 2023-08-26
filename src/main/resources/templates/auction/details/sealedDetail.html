@@ -256,6 +256,12 @@
 	</style>
 </th:block>
 
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <div layout:fragment="content">
 
 	<section>
@@ -714,20 +720,14 @@
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
+									<!-- 찜하기 버튼 -->
 									<div style="text-align: right; width: 600px;">
-										<div>
-
-											<button
-												style="margin-top: 10px;width: 80px;height: 40px;border: 1px solid gray;border-radius: 2px;">
-												<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-													fill="currentColor" class="bi bi-chat-heart" viewBox="0 0 16 16">
-													<path fill-rule="evenodd"
-														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
-												</svg>
-											</button>
-											<input type='button' value='입찰'
-												style="margin-top: 10px; width: 80px; height: 40px;" />
-										</div>
+									<button class="heartbutton" th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}" 
+											onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
+										<i th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
+									</button>
+									
+									<input type='button' value='입찰' style="margin-top: 10px; width: 80px; height: 40px;" />
 									</div>
 								</div>
 							</div>
@@ -815,8 +815,55 @@
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
+<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+		crossorigin="anonymous"></script>
 	<script th:inline="javascript">
 
+	 //찜 버튼에 대한 기능
+	function pushWish(heartIcon) {
+		 /*
+		  색있는 하트: <i class="fa-solid fa-heart"></i>
+          빈 하트: <i class="fa-regular fa-heart"></i>
+		 */
+        var isWished = heartIcon.classList.contains( 'be');
+        var auctionNo = heartIcon.getAttribute('data-auctionno');
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
+        var method = isWished ? "DELETE" : "POST";
+
+        
+        $.ajax({
+            url: url,
+            type: method,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            data: JSON.stringify({ auctionNo: auctionNo }),
+            contentType: "application/json",
+            success: function(result) {
+                // 요청 성공 처리
+                console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
+                // 찜 상태 토글
+                	if(method == "DELETE") {
+                		heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
+                    	heartIcon.classList.toggle('be'); // 찜 미완료
+                	} else {
+                		heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
+                        heartIcon.classList.toggle('bi'); //찜 완료
+                	}
+                window.location.reload(true);
+            },
+            error: function(jqXHR, status, error) {
+                // 오류 처리
+                console.log(jqXHR.responseText);
+                alert("에러가 발생했습니다. 다시 시도해 주세요.");
+               
+            }
+        });
+        
+    }  
+	
 	</script>
 
 	<script src="/js/splide.min.js"></script>

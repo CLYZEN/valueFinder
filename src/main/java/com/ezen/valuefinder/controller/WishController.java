@@ -30,8 +30,7 @@ public class WishController {
 		
 		try {
 			if (wishService.checkWish(wishDto.getAuctionNo(), memberId)) {
-				
-				System.out.println("이미 찜이 되어있음");
+		
 			} else { //체크가 되어있지 않으면 체크
 				wishService.addWish(wishDto.getAuctionNo(), memberId);	        
 			}			
@@ -44,11 +43,12 @@ public class WishController {
 	}
 
 	// 경매 글에 찜 취소
-
 	@DeleteMapping("/deleteWish")
-	public void deleteLike(@RequestBody WishDto wishDto, Authentication authentication) {
+	public @ResponseBody ResponseEntity<String> deleteLike(@RequestBody WishDto wishDto, Authentication authentication) {
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		wishService.deleteWish(wishDto.getAuctionNo(), principalDetails.getMember().getMemberId());
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK); //성공시
 	}
 
 }
