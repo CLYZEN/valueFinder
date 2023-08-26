@@ -26,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.AuctionReportDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.dto.ReversebidEnterDto;
@@ -209,10 +210,21 @@ public class AuctionController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
+    //경매 신고 페이지 띄우기
     @GetMapping(value = "/auction/report")
     public String reportAuction() {
         return "/auction/report";
     }
+    
+    //경매 신고글 등록하기
+    @PostMapping(value = "/auction/report")
+    public String addReportAuction(@Valid AuctionReportDto auctionReportDto, Principal principal) {
+        
+    	
+    	return "/auction/report";
+    }
+    
+    
 
     @GetMapping(value = "/auction/query")
     public String queryDetail() {
