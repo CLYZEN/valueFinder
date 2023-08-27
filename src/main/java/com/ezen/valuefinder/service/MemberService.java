@@ -78,6 +78,12 @@ public class MemberService implements UserDetailsService {
 	public Member findByEmail(String email) {
 		return memberRepository.findByEmail(email);
 	}
+	
+	public List<Member> getMemberList() {
+		return memberRepository.findAll();
+	}
+	
+
 
 	public void updateMember(MemberModifyDto memberModifyDto, String email) {
 		Bank bank = bankRepository.findById(memberModifyDto.getBankCode()).orElseThrow();
@@ -116,6 +122,7 @@ public class MemberService implements UserDetailsService {
 		member.setStatus(Status.ACTIVE);
 	}
 	
+
 	
 	
 }

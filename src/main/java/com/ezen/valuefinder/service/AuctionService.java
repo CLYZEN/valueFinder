@@ -213,6 +213,12 @@ public class AuctionService {
 		return auctionQueryRepository.findByMember(pageable, member);
 
 	}
+	
+	public Page<AuctionQuery> auctionQueryAllList(Pageable pageable, Member member) {
+
+		return auctionQueryRepository.findByMember(pageable, member);
+ 
+	}
 
 
 
@@ -420,6 +426,10 @@ public class AuctionService {
         return auctionRepository.findAllByOrderByRegTime(pageable);
     }
     
+    
+    public List<Auction> getItemAuctionList() {
+    	return auctionRepository.findAll();
+    }
     
 
 
