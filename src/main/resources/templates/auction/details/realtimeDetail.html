@@ -683,7 +683,7 @@ table {
 														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
 										</svg>
 											</button>
-											<input type='button' value='입찰'
+											<input type='button' value='입찰' onclick="resetCountdown();"
 												style="margin-top: 10px; width: 80px; height: 40px;" />
 										</div>
 									</div>
@@ -864,35 +864,45 @@ table {
 	}
 	</script>
 	
-	 <script>
-        window.onload = function() {
-            var divCountElement = document.getElementById("count1");
-            var h2CountElement = document.getElementById("count2");
-            var duration = 60; // 1 minute in seconds
+	<script>
+    var divCountElement = document.getElementById("count1");
+    var h2CountElement = document.getElementById("count2");
+    var duration = 60; // 1 minute in seconds
+    var countdownInterval;
 
-            function updateCountdown() {
-                var minutes = Math.floor(duration / 60);
-                var seconds = duration % 60;
+    function updateCountdown() {
+        var minutes = Math.floor(duration / 60);
+        var seconds = duration % 60;
 
-                divCountElement.innerText = minutes + "분 " + seconds + "초";
-                h2CountElement.innerText = formatTime(minutes) + ":" + formatTime(seconds);
-                
-                if (duration > 0) {
-                    duration--;
-                    setTimeout(updateCountdown, 1000); // Update every second
-                } else {
-                    divCountElement.innerText = "시간 종료";
-                    h2CountElement.innerText = "시간 종료";
-                }
-            }
+        divCountElement.innerText = minutes + "분 " + seconds + "초";
+        h2CountElement.innerText = formatTime(minutes) + ":" + formatTime(seconds);
 
-            function formatTime(time) {
-                return time < 10 ? "0" + time : time;
-            }
-
-            updateCountdown();
+        if (duration > 0) {
+            duration--;
+        } else {
+            clearInterval(countdownInterval);
+            divCountElement.innerText = "시간 종료";
+            h2CountElement.innerText = "시간 종료";
         }
-    </script>
+    }
+
+    function formatTime(time) {
+        return time < 10 ? "0" + time : time;
+    }
+
+    function resetCountdown() {
+        duration = 60; 
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(updateCountdown, 1000); 
+        updateCountdown(); 
+    }
+
+    window.onload = function() {
+        countdownInterval = setInterval(updateCountdown, 1000); 
+        updateCountdown(); 
+    }
+</script>
+
     
     <script th:inline="javascript">
     function loadPage(pageNumber) {
@@ -907,6 +917,8 @@ table {
         });
     }
 </script>
+
+
 </th:block>
 
 </html>
