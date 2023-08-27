@@ -219,7 +219,8 @@ public class AuctionController {
     //경매 신고글 등록하기
     @PostMapping(value = "/auction/report")
     public String addReportAuction(@Valid AuctionReportDto auctionReportDto, Principal principal) {
-        
+    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    	Member member = principalDetails.getMember();
     	
     	return "/auction/report";
     }
