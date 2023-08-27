@@ -440,7 +440,7 @@
 						<div class="form-group row" style="text-align: center;">
 							<label class="col-sm-2">리뷰작성</label>
 							<div class="col-sm" style="width: 60%;">
-								<textarea name="description" class="form-control"
+								<textarea name="description" id= "auctionReviewDetail" class="form-control"
 									style="line-height: 100px;"></textarea>
 							</div>
 						</div>
@@ -472,7 +472,17 @@
 		});
 
 
+	$(document).ready(function(){
+		$('#submitReview').on('show.bs.modal', function(event){
+			auctionReviewDetail = $(event.relatedTarget).data('auctionReviewDetail');
+			auctionReviewScore = $(event.relatedTarget).data('auctionReviewScore');
+		});
+	});
 	
+	function submitReview(){
+		var auctionReviewDetail = $('#auctionReviewDetail').val();
+		location.href = '/auction/details/realtimeDetail.html'
+	}
 	</script>
 
 

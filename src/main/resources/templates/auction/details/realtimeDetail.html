@@ -335,9 +335,9 @@ table {
 									<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
 								</div>
 								<div style="width: 415px;">
-									<h4
+									 <h4
 										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-										th:text="|남은시간 : ${remainTime}|"></h4>
+										th:text="|남은시간 : ${remainTime}|" id="remainTime"></h4>
 								</div>
 							</div>
 
@@ -864,13 +864,21 @@ table {
 	}
 	</script>
 	
-	<script>
+<script>
     var divCountElement = document.getElementById("count1");
     var h2CountElement = document.getElementById("count2");
-    var duration = 60; // 1 minute in seconds
+    var remainingTimeElement = document.getElementById("remainTime");  
     var countdownInterval;
 
+    console.log(remainTime);
+
     function updateCountdown() {
+        var durationText = remainingTimeElement.textContent.trim(); // HTML 요소의 텍스트 내용을 가져옴 (공백 제거)
+        var regex = /[^0-9]/g;
+        var duration = durationText.replace(regex,"") 
+        
+  console.log(durationText);
+  console.log(duration);
         var minutes = Math.floor(duration / 60);
         var seconds = duration % 60;
 
@@ -902,6 +910,7 @@ table {
         updateCountdown(); 
     }
 </script>
+
 
     
     <script th:inline="javascript">
