@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.apply.dto.QnaDto;
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -34,10 +35,12 @@ import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.entity.ReverseBidding;
+import com.ezen.valuefinder.service.AuctionReportService;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.ReversebidService;
 import com.ezen.valuefinder.service.WishService;
+import com.shopmax.dto.ItemFormDto;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -219,10 +222,14 @@ public class AuctionController {
     //경매 신고글 등록하기
     @PostMapping(value = "/auction/report")
     public String addReportAuction(@Valid AuctionReportDto auctionReportDto, Principal principal) {
-    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-    	Member member = principalDetails.getMember();
     	
-    	return "/auction/report";
+    	try {
+    		AuctionReportService.saveReport(auctionReportDto, auctionReportNo);
+		} catch (Exception e) {
+			 e.printStackTrace();
+		}
+    	
+    	return "redirect:/auction/report";
     }
     
     

@@ -1,5 +1,9 @@
 package com.ezen.valuefinder.dto;
 
+import org.modelmapper.ModelMapper;
+
+import com.ezen.valuefinder.entity.AuctionReport;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,5 +17,9 @@ public class AuctionReportDto {
 	@NotBlank(message = "내용을 입력해주세요.") 
 	private String auctionReportDetail; // 경매신고내용
 	
+	private static ModelMapper modelMapper = new ModelMapper();
 	
+	public AuctionReport createReport() {
+		return modelMapper.map(this,AuctionReport.class);
+	}
 }
