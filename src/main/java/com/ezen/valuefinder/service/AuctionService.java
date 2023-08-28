@@ -132,6 +132,14 @@ public class AuctionService {
         return auctionRepository.findById(auctionNo).orElseThrow();
     }
 
+    @Transactional(readOnly = true)
+    public ReverseBidding getReverseAuctionDetail(Long reverseBiddingNo) {
+        return reverseBiddingRepository.findById(reverseBiddingNo).orElseThrow();
+    }
+    @Transactional(readOnly = true)
+    public ReverseBidding getReverseAuctionJoinDetail(Long reverseBiddingNo) {
+    	return reverseBiddingRepository.findById(reverseBiddingNo).orElseThrow();
+    }
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
 
@@ -291,6 +299,20 @@ public class AuctionService {
             return auctionRepository.findByAuctionTypeAndItemCategoryOrderByAuctionEndTimeDesc(auctionType,pageable,category);
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
+    }
+    
+    public Page<ReverseBidding> getReverseAuctionList(Pageable pageable,  Long categoryCode) {
+    	if(categoryCode == 0) {
+    		return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
+    	}
+    	Category category = categoryRepository.findById(categoryCode).orElseThrow();
+    	if(category == null) {
+            return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
+        } else if (category != null) {
+            return reverseBiddingRepository.findByCategoryOrderByReverseBiddingExpireDate(pageable,category);
+        }
+    	
+    	return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
     }
     
     public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {

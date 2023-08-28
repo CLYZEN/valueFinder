@@ -102,9 +102,57 @@ table {
 }
 
 .pagination {
- margin: 25px 0px;
- justify-content: end;
- 
+	margin: 25px 0px;
+	justify-content: end;
+}
+#myform fieldset {
+	display: inline-block;
+	direction: rtl;
+	border: 0;
+}
+
+#myform fieldset legend {
+	text-align: right;
+}
+
+#myform input[type=radio] {
+	display: none;
+}
+
+#myform label {
+	font-size: 3em;
+	color: transparent;
+	text-shadow: 0 0 0 #f0f0f0;
+}
+
+#myform input[type=radio]:checked ~label {
+	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
+}
+
+#reviewContents {
+	width: 100%;
+	height: 150px;
+	padding: 10px;
+	box-sizing: border-box;
+	border: solid 1.5px #D3D3D3;
+	border-radius: 5px;
+	font-size: 16px;
+	resize: none;
+}
+
+.review-message {
+	margin: 10px 0;
+	/* 여백을 위 아래 10px, 좌 우 0px로 조절 */
+	font-size: 16px;
+	/* 필요한 폰트 사이즈로 조절 */
+}
+
+.custom-pagination .page-item .page-link {
+	padding: 8px 12px;
+	/* 원하는 패딩 값으로 조절 */
+	line-height: 1;
+	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
+	margin-bottom: 15px;
 }
 </style>
 
@@ -138,10 +186,10 @@ table {
 
 
 	<div class="view_count">
-		조회수 :<span> 30</span>
+		<span th:text="|조회수: ${reverseBidding.reverseBiddingCount}|"></span>
 	</div>
 	<div class="box_period">
-		남은시간<span>00시00분00초</span>
+		<span th:text="|남은시간 : ${remainTime}|"></span>
 	</div>
 	<section class="reverseForm">
 		<div class="item_box table-responsive">
@@ -149,20 +197,27 @@ table {
 
 				<tr>
 					<th scope="col">물품 이름</th>
-					<td>가방</td>
+					<td th:text="${reverseBidding.reverseBiddingTitle}"></td>
 				</tr>
 				<tr>
 					<th scope="col">경매 기간</th>
-					<td>08/07 00:00 ~ 08/00:00:00</td>
+					<td
+						th:text="${#temporals.format(reverseBidding.reverseBiddingExpireDate,'yyyy-MM-dd HH:mm')}">
+
+					</td>
 				</tr>
 				<tr>
 					<th scope="col">예상가</th>
-					<td>15151</td>
+					<td th:text="${reverseBidding.hopePrice}"></td>
 				</tr>
 				<tr>
 					<th scope="col">진행 상태</th>
-					<td>경매진행중</td>
+					<td
+						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}">진행중</td>
+					<td
+						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('END')}">마감</td>
 				</tr>
+
 
 			</table>
 		</div>
@@ -172,19 +227,144 @@ table {
 
 				<tr>
 					<th scope="col">구매자 닉네임</th>
-					<td>보부상
-						<button>후기</button>
-						<button>신고하기</button>
+					<td th:text="${reverseBidding.member.nickname}">
+					<td>
+						<div class="col-sm-offset-2" style="margin-left: 20px;">
+							<button type="button" class="btn btn-primary"
+								style="border-radius: inherit; width: 110px;"
+								data-bs-toggle="modal" data-bs-target="#reviewModal">
+								후기</button>
+						</div>
+						<div class="modal fade" id="reviewModal" tabindex="-1"
+							aria-labelledby="reviewModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-lg">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="reviewModalLabel"
+											th:text="|${reverseBidding.member.nickname}님의 후기 리스트|"></h5>
+										<button type="button" class="btn-close"
+											data-bs-dismiss="modal" aria-label="Close"></button>
+									</div>
+									<div class="modal-body ">
+										<p class="review-message">후기가 n건 검색되었습니다.</p>
+										<table class="table">
+											<thead>
+												<tr>
+													<th scope="col">닉네임</th>
+													<th scope="col">별점</th>
+													<th scope="col">리뷰작성</th>
+
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<th scope="row">크롱</th>
+													<td>
+														<!-- 별점 -->
+														<form class="mb-3" name="myform" id="myform" method="post">
+															<fieldset>
+																<input type="radio" name="reviewStar" value="5"
+																	id="rate1" checked><label for="rate1">★</label>
+																<input type="radio" name="reviewStar" value="4"
+																	id="rate2" disabled><label for="rate2">★</label>
+																<input type="radio" name="reviewStar" value="3"
+																	id="rate3" disabled><label for="rate3">★</label>
+																<input type="radio" name="reviewStar" value="2"
+																	id="rate4" disabled><label for="rate4">★</label>
+																<input type="radio" name="reviewStar" value="1"
+																	id="rate5" disabled><label for="rate5">★</label>
+															</fieldset>
+														</form>
+
+													</td>
+													<td>크롱크롱</td>
+
+												</tr>
+												<tr>
+													<th scope="row">뽀로로</th>
+													<td>
+														<!-- 별점 -->
+														<form class="mb-3" name="myform" id="myform" method="post">
+															<fieldset>
+																<input type="radio" name="reviewStar" value="5"
+																	id="rate1" disabled><label for="rate1">★</label>
+																<input type="radio" name="reviewStar" value="4"
+																	id="rate2" checked><label for="rate2">★</label>
+																<input type="radio" name="reviewStar" value="3"
+																	id="rate3" disabled><label for="rate3">★</label>
+																<input type="radio" name="reviewStar" value="2"
+																	id="rate4" disabled><label for="rate4">★</label>
+																<input type="radio" name="reviewStar" value="1"
+																	id="rate5" disabled><label for="rate5">★</label>
+															</fieldset>
+														</form>
+
+													</td>
+													<td>너무 좋아요</td>
+
+												</tr>
+												<tr>
+													<th scope="row">루피</th>
+													<td>
+														<!-- 별점 -->
+														<form class="mb-3" name="myform" id="myform" method="post">
+															<fieldset>
+																<input type="radio" name="reviewStar" value="5"
+																	id="rate1" disabled><label for="rate1">★</label>
+																<input type="radio" name="reviewStar" value="4"
+																	id="rate2" checked><label for="rate2">★</label>
+																<input type="radio" name="reviewStar" value="3"
+																	id="rate3" disabled><label for="rate3">★</label>
+																<input type="radio" name="reviewStar" value="2"
+																	id="rate4" disabled><label for="rate4">★</label>
+																<input type="radio" name="reviewStar" value="1"
+																	id="rate5" disabled><label for="rate5">★</label>
+															</fieldset>
+														</form>
+
+													</td>
+													<td>너무 좋아요</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+
+									<!-- 페이징 버튼 -->
+									<div class="d-flex justify-content-center">
+										<nav aria-label="Page navigation example">
+											<ul class="pagination custom-pagination">
+												<li class="page-item"><a class="page-link" href="#"
+													aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+												</a></li>
+												<li class="page-item"><a class="page-link" href="#">1</a>
+												</li>
+												<li class="page-item"><a class="page-link" href="#">2</a>
+												</li>
+												<li class="page-item"><a class="page-link" href="#">3</a>
+												</li>
+												<li class="page-item"><a class="page-link" href="#"
+													aria-label="Next"> <span aria-hidden="true">&raquo;</span>
+												</a></li>
+											</ul>
+										</nav>
+									</div>
+
+									<div class="modal-footer d-flex justify-content-center">
+										<button type="button" class="btn btn-secondary "
+											data-bs-dismiss="modal">닫기</button>
+
+									</div>
+								</div>
+							</div>
+						</div>
+						<td class="col-sm-offset-2" style="margin-left: 20px;">
+							<input type="submit" class="btn btn-primary" value="신고"
+								style="border-radius: inherit; width: 110px;"
+								onclick="location.href='/auction/report';" />
+						</td>
 					</td>
 
 				</tr>
-				<tr>
-					<th scope="col">구매자의 다른물품</th>
-					<td>12건
-						<button>더보기</button>
-					</td>
-				</tr>
-
 
 			</table>
 		</div>
@@ -213,7 +393,7 @@ table {
 			<div class="tab-pane fade show active" id="home" role="tabpanel"
 				aria-labelledby="home-tab">
 				<div class="wishful">
-					<span>구매자 희망사항</span>
+					<span th:text="${reverseBidding.reverseBiddingDetail}"></span>
 				</div>
 			</div>
 			<div class="tab-pane fade" id="profile" role="tabpanel"
@@ -257,7 +437,8 @@ table {
 	<div class="form-group">
 		<div class="join">
 			<button type="submit" class="btn btn-primary mb-3"
-				style="background-color: #355808; width: 150px">참가신청</button>
+				style="background-color: #355808; opacity:63%; width: 150px;" >
+				참가신청</button>
 		</div>
 	</div>
 </div>

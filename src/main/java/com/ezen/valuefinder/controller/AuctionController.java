@@ -300,7 +300,11 @@ public class AuctionController {
     @GetMapping(value = {"/auction/reversebid", "/auction/reversebid/{page}"})
     public String auctionReversebid(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
     	Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+    	Page<ReverseBidding> reverseAuctionList = auctionService.getReverseAuctionList(pageable, category);
     	
+    	 model.addAttribute("nowTime", LocalDateTime.now());
+         model.addAttribute("reverseAuctionList", reverseAuctionList);
+         model.addAttribute("maxPage", 5);
         return "auction/reversebid";
     }
     // 실시간 경매 페이지
@@ -377,12 +381,19 @@ public class AuctionController {
         return "auction/searchview";
     }
 
-    //비공개 경매 페이지
-    @GetMapping(value = "/auction/reversebid/details")
-    public String redetails() {
-
-        return "auction/reversebid/details";
-    }
+    //역경매 페이지
+ // 비공개 경매 페이지
+ 	@GetMapping(value = "/auction/reversebid/detail/{reverseBiddingNo}")
+ 	public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,
+ 			Optional<Integer> page) {
+ 		ReverseBidding reverseBidding = reversebidService.getReversebidById(reverseBiddingNo);
+ 		reversebidService.addReverseBiddingView(reverseBiddingNo);
+ 		model.addAttribute("nowTime", LocalDateTime.now());
+ 		model.addAttribute("remainTime", auctionService.getRemainTime(reverseBidding.getReverseBiddingExpireDate()));
+ 		model.addAttribute("reverseBidding", reverseBidding);
+ 		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
+ 		return "auction/reversebid/details";
+ 	}
 
     @PostMapping(value = "/auction/searched")
     public String searchAuction(@Valid Long category, @Valid String searchVal,Model model,Optional<Integer> page) {
