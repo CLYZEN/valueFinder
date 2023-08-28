@@ -192,7 +192,7 @@
 
                     <li class="page-item"
                         th:each="page: ${#numbers.sequence(start, end)}"
-                        th:classappend="${auctionList.number eq page-1}?'active':''">
+                        th:classappend="${auctionList.number eq page - 1}?'active':''">
                         <a
                                 class="page-link" th:inline="text"
                                 th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
@@ -222,7 +222,7 @@
             //입력한 값을 전부 가지고 온다.
 
             //주소 이동
-            location.href = "/auction/publicbid/" + page
+            location.href = "/auction/search/" + page
                 + "?category=" + category;
         }
         function moveDetail(auctionNo) {

@@ -2,6 +2,7 @@ package com.ezen.valuefinder.repository;
 
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.MemberAuctionDto;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.entity.Member;
@@ -33,4 +34,8 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 	Page<Auction> findByItemItemNameContainingOrderByAuctionEndTimeDesc(Pageable pageable, String name);
 
 	Page<Auction> findAllByOrderByRegTime(Pageable pageable);
+
+	@Query("SELECT new com.ezen.valuefinder.dto.MemberAuctionDto(a.auctionNo, a.item, a.auctionType, a.auctionStartPrice, a.auctionNowPrice, a.auctionStartTime, a.auctionEndTime, a.auctionStatus, a.auctionCount, a.remainingTime, a.biddingCount, sb.successBiddingNo, sb.member, sb.bidStatus, sb.shippingNo) " +
+			"FROM Auction a LEFT JOIN FETCH SuccessBidding sb ON a = sb.auction WHERE sb.member.memberId = :memberId")
+	Page<MemberAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 }

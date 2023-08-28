@@ -1,10 +1,8 @@
 package com.ezen.valuefinder.service;
 
 import com.ezen.valuefinder.constant.*;
-import com.ezen.valuefinder.dto.ItemImgDto;
-import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.*;
 
-import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
 import com.ezen.valuefinder.repository.AuctionRepository;
@@ -12,7 +10,6 @@ import com.ezen.valuefinder.repository.CategoryRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
-import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
@@ -59,6 +56,7 @@ public class AuctionService {
     private final BiddingRepository biddingRepository;
     private final EntityManager entityManager;
     private final SuccessBiddingRepository successBiddingRepository;
+    private final AuctionQueryResponseRepository auctionQueryResponseRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -133,15 +131,18 @@ public class AuctionService {
     }
 
 
-    public Long createdQuery(AuctionQueryDto auctionQueryDto, String email) throws Exception {
+    public Long createdQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionNo ) throws Exception {
 
         Member member = memberRepository.findByEmail(email);
-
+        Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
 
         AuctionQuery auctionQuery = new AuctionQuery();
 
-        auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDtail());
+        auctionQuery.setAuction(auction);
+        auctionQuery.setAuctionQueryDetail(auctionQueryDto.getAuctionQueryDetail());
         auctionQuery.setAuctionQueryTitle(auctionQueryDto.getAuctionQueryTitle());
+        auctionQuery.setMember(member);
+        auctionQuery.setReadOk(false);
 
 
         if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
@@ -156,10 +157,38 @@ public class AuctionService {
 
         return auctionQuery.getAuctionQueryNo();
 
+    }
+    public Long createdQueryResponse(AuctionQueryResponseDto auctionQueryResponseDto, String email , Long auctionQueryNo) throws Exception {
+        Member member = memberRepository.findByEmail(email);
+        AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+
+        AuctionQueryResponse auctionQueryResponse = new AuctionQueryResponse();
+        auctionQueryResponse.setAuctionQuery(auctionQuery);
+        auctionQueryResponse.setAuctionQueryResponseTitle(auctionQueryResponseDto.getAuctionQueryResponseTitle());
+        auctionQueryResponse.setAuctionQueryResponseDetail(auctionQueryResponseDto.getAuctionQueryResponseDetail());
+        auctionQueryResponse.setMember(member);
+
+        auctionQueryResponseRepository.save(auctionQueryResponse);
+
+        return auctionQueryResponse.getAuctionQueryResponseNo();
 
     }
 
+    public Long updateQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionQueryNo) throws Exception {
 
+        Member member = memberRepository.findByEmail(email);
+        AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+
+
+
+        auctionQuery.updateQuery(auctionQueryDto);
+        auctionQuery.setMember(member);
+
+
+
+
+        return auctionQuery.getAuctionQueryNo();
+    }
     public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
         ReverseBidding reverseBidding = new ReverseBidding();
         reverseBidding.setReverseBiddingTitle(reverseAuctionFormDto.getReverseBiddingTitle());
@@ -177,6 +206,10 @@ public class AuctionService {
         return reverseBidding.getReverseBiddingNo();
     }
 
+    @Transactional
+    public AuctionQuery getAuctionDtl(Long auctionQueryNo) {
+        return auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+    }
 
     public Auction getAuction(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
@@ -292,9 +325,9 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
-    public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
+    public Page<MemberAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElseThrow();
-        return auctionRepository.findByItemMember(member, pageable);
+        return auctionRepository.findAuctionsByMemberId(memberId, pageable);
     }
 
     public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
@@ -334,7 +367,6 @@ public class AuctionService {
     public Page<Auction> getNewList(Pageable pageable) {
         return auctionRepository.findAllByOrderByRegTime(pageable);
     }
-
 
 }
 

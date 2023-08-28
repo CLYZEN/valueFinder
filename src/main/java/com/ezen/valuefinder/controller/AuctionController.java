@@ -144,34 +144,83 @@ public class AuctionController {
         }
     }
 
-    @PostMapping(value = "/auction/query/add")
-    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Principal principal, BindingResult bindingResult,
-                           Model model) {
+    // 문의하기 insery
+    @PostMapping(value = "/auction/query/add/{auctionNo}")
+    public String addQuery(@Valid AuctionQueryDto auctionQueryDto, Authentication authentication,
+                           BindingResult bindingResult, Model model, @PathVariable("auctionNo") Long auctionNo) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 
         if (bindingResult.hasErrors()) {
+
             model.addAttribute("auctionQueryDto", auctionQueryDto);
-            return "/auction/query/queryform";
+            return "auction/query/add/{auctionNo}";
         }
 
         try {
-            auctionService.createdQuery(auctionQueryDto, principal.getName());
+            auctionService.createdQuery(auctionQueryDto, principalDetails.getUsername(), auctionNo);
         } catch (Exception e) {
             e.printStackTrace();
             model.addAttribute("auctionQueryDto", new AuctionQueryDto());
-            return "/auction/query/queryform";
+
+            return "auction/query/add/{auctionNo}";
         }
 
         return "redirect:/";
     }
 
-    @GetMapping(value = "/auction/query/add")
-    public String auctionQuery(Model model, Authentication authentication) {
+
+    @GetMapping(value = "/auction/query/add/{auctionNo}")
+    public String auctionQuery(Model model, Authentication authentication, @PathVariable("auctionNo") Long auctionNo) {
         model.addAttribute("auctionQueryDto", new AuctionQueryDto());
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
         model.addAttribute("member", member);
+        model.addAttribute("auctionNo", auctionNo);
 
-        return "/auction/query/queryform";
+        return "auction/query/queryform";
+
+    }
+    @PostMapping(value = "/auction/query/{auctionQueryNo}")
+    public String queryUpdate(@Valid AuctionQueryDto auctionQueryDto, Model model, Authentication authentication,
+                              BindingResult bindingResult , AuctionQuery auctionQuery , @PathVariable("auctionQueryNo") Long auctionQueryNo) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        model.addAttribute("auctionQuery " , auctionQuery);
+
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("auctinoQueryNo" , auctionQueryNo);
+            return "auction/query/queryform";
+        }
+
+        try {
+            auctionService.updateQuery(auctionQueryDto, principalDetails.getUsername() , auctionQueryNo);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "문의 글 수정중 에러가 발생했습니다");
+            return "auction/query/queryform";
+
+        }
+
+        return "redirect:/";
+    }
+
+    // 문의 하기 수정페이지
+    @GetMapping(value = "/auction/query/{auctionQueryNo}")
+    public String queryDetail(@PathVariable("auctionQueryNo") Long auctionQueryNo, Model model,
+                              Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+
+        try {
+            AuctionQuery auctionQuery  = auctionService.getAuctionDtl(auctionQueryNo);
+            model.addAttribute("auctionQuery",auctionQuery);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage" , "상품정보를 가져올때 에러가 발생했습니다.");
+
+            model.addAttribute("auctionQueryDto" , new AuctionQueryDto());
+            return "auction/query/queryForm";
+        }
+
+        return "/auction/query/query";
     }
 
     @PostMapping(value = "/auction/bidding")
