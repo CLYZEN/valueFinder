@@ -1,5 +1,13 @@
 package com.ezen.valuefinder.controller;
 
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
@@ -11,28 +19,42 @@ import com.ezen.valuefinder.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ezen.valuefinder.config.PrincipalDetails;
+import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.dto.ReversebidEnterDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.ReverseBidding;
+import com.ezen.valuefinder.service.AuctionService;
+import com.ezen.valuefinder.service.BiddingService;
+import com.ezen.valuefinder.service.ReversebidService;
+import com.ezen.valuefinder.service.WishService;
 
-import java.security.Principal;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+
 
 @Controller
 @RequiredArgsConstructor
@@ -42,6 +64,9 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final BiddingService biddingService;
     private final ReversebidService reversebidService;
+
+    private final WishService wishService;
+
     private final CategoryService categoryService;
 
     @GetMapping(value = "/auction/add")
@@ -51,6 +76,7 @@ public class AuctionController {
         model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
         return "/auction/form/normalitemform";
     }
+
 
 
     @PostMapping(value = "/auction/add")
@@ -105,12 +131,19 @@ public class AuctionController {
 
 
     @GetMapping(value = "auction/detail/{auctionNo}")
-    public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
+    public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo,Authentication authentication, Optional<Integer> page) {
         Auction auction = auctionService.getAuctionDetail(auctionNo);
+
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        boolean checkWish = wishService.checkWish(auctionNo, principalDetails.getMember().getMemberId());
+        model.addAttribute("auction", auction);
+        model.addAttribute("checkWish", checkWish);
+
         Integer bidCount = auctionService.getBiddingCount(auction);
         model.addAttribute("bidCount",bidCount);
-        auctionService.addAuctionView(auctionNo);
 
+        auctionService.addAuctionView(auctionNo);
+        
         if(auction.getAuctionType() == AuctionType.PUBLIC) {
             model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
             model.addAttribute("auction", auction);
@@ -302,8 +335,6 @@ public class AuctionController {
     }
 
 
-
-
     @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
     public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -351,6 +382,7 @@ public class AuctionController {
 
         return "auction/reversebid";
     }
+    
     // 실시간 경매 페이지
     @GetMapping(value = {"/auction/realtime", "/auction/realtime/{page}"})
     public String auctionRealtime(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
@@ -366,6 +398,7 @@ public class AuctionController {
         model.addAttribute("maxPage", 5);
         return "auction/realtime";
     }
+    
     @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
     public String auctionSealedbid(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam Long category) {
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);

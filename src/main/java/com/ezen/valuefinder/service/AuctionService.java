@@ -125,11 +125,6 @@ public class AuctionService {
         return auction.getAuctionNo();
     }
 
-    @Transactional(readOnly = true)
-    public Auction getAuctionDetail(Long auctionNo) {
-        return auctionRepository.findById(auctionNo).orElseThrow();
-    }
-
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionNo ) throws Exception {
 
@@ -174,6 +169,7 @@ public class AuctionService {
 
     }
 
+
     public Long updateQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionQueryNo) throws Exception {
 
         Member member = memberRepository.findByEmail(email);
@@ -188,6 +184,11 @@ public class AuctionService {
 
 
         return auctionQuery.getAuctionQueryNo();
+    }
+
+    @Transactional(readOnly = true)
+    public Auction getAuctionDetail(Long auctionNo) {
+        return auctionRepository.findById(auctionNo).orElseThrow();
     }
     public Long createReverseAuction(ReverseAuctionFormDto reverseAuctionFormDto, String email) {
         ReverseBidding reverseBidding = new ReverseBidding();
@@ -236,6 +237,7 @@ public class AuctionService {
         long seconds = duration.toSecondsPart();
 
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+
     }
 
     public int itemCount(Long memberId) {
