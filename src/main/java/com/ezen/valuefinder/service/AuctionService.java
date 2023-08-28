@@ -13,6 +13,7 @@ import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+import com.ezen.valuefinder.dto.ReversebidEnterDto;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
@@ -314,6 +315,8 @@ public class AuctionService {
     	
     	return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
     }
+    
+ 
     
     public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElseThrow();

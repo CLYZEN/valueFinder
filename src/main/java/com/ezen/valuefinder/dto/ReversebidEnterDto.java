@@ -15,5 +15,6 @@ public class ReversebidEnterDto {
     private String title;
     private Integer price;
     private String detail;
+    private Long itemNo;
     private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
 }

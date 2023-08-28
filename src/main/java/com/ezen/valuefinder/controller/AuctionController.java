@@ -253,8 +253,14 @@ public class AuctionController {
     	return "/auction/enter/enter";
     }
 
-
-
+    @PostMapping(value = "/auction/reversebid/enter/{bidno}")
+  public String enterUpdate(@Valid ReversebidEnterDto reversebidEnterDto,Model model, @PathVariable("bidno") Long bidno) {
+        
+    	
+    	reversebidService.updateEnter(reversebidEnterDto);
+    	
+    	return "/auction/enter/enter";
+    }
 
     @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
     public String enterReversebid(Authentication authentication, Model model, @PathVariable("bidno") Long bidno) {

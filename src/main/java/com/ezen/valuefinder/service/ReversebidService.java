@@ -6,6 +6,8 @@ import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingJoinRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -93,6 +95,14 @@ public class ReversebidService {
         long seconds = duration.toSecondsPart();
 
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+    }
+    
+    public Long updateEnter(ReversebidEnterDto reversebidEnterDto) {
+    	Item item = itemRepository.findById(reversebidEnterDto.getItemNo()).orElseThrow();
+    	ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reversebidEnterDto.getItemNo()).orElseThrow(EntityNotFoundException::new);
+    	reverseBiddingJoin.updateReverseBiddingJoin(reversebidEnterDto, item);
+    	
+    	return reverseBiddingJoin.getReverseBiddingJoinNo();
     }
     
 

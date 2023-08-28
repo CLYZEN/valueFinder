@@ -9,4 +9,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ReverseBiddingJoinRepository extends JpaRepository<ReverseBiddingJoin,Long> {
 
 	Page<ReverseBiddingJoin> findByReverseBiddingReverseBiddingNoOrderByReverseBiddingJoinNo(Pageable pageable, Long reverseBiddingJoinNo);
+
+	ReverseBiddingJoin findByreverseBiddingJoinNo(Long reverseBiddingJoinNo);
 }
