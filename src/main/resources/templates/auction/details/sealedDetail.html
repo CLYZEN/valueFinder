@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
-
+<head>
+	<meta name="_csrf" th:content="${_csrf.token}"/>
+	<meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 	<link rel="stylesheet" href="/css/splide.min.css">
@@ -367,14 +370,13 @@
 								<div class="col-sm-3" style="display: flex; line-height: 39px;">
 									<div id='price' type='text' name="price">
 									</div>
-									<span th:text="|${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|" />
+									<span>자유</span>
 								</div>
 							</div>
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰수</label>
-								<div class="col-sm-3">0회</div>
+								<div class="col-sm-3" th:text="|${bidCount} 회|">>0회</div>
 							</div>
 
 						
@@ -706,12 +708,14 @@
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
-											<input id='sum' type='text' disabled th:value="${auction.auctionStartPrice}" name="sum"
+											<input id='sum' type='text'name="sum"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
+
+
 									<div style="text-align: right; width: 600px;">
-										<input type='button' onclick='count("minus")'
+                    	<input type='button' onclick='count("minus")'
 											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
@@ -719,15 +723,16 @@
 											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
 									}원|"
 											style="margin-top: 10px; width: 80px; height: 40px;" />
-									</div>
-									<!-- 찜하기 버튼 -->
-									<div style="text-align: right; width: 600px;">
-									<button class="heartbutton" th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}" 
+										<div>
+
+											<button class="heartbutton" th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}" 
 											onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
 										<i th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
 									</button>
-									
-									<input type='button' value='입찰' style="margin-top: 10px; width: 80px; height: 40px;" />
+											<input type='button' onclick="bidding()" value='입찰'
+												style="margin-top: 10px; width: 80px; height: 40px;" />
+										</div>
+
 									</div>
 								</div>
 							</div>
@@ -817,9 +822,52 @@
 <th:block layout:fragment="script">
 <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 		crossorigin="anonymous"></script>
+  <script src="/js/splide.min.js"></script>
 	<script th:inline="javascript">
 
-	 //찜 버튼에 대한 기능
+	
+
+	
+
+		function bidding() {
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+      let auctionNo = [[${auction.auctionNo}]];
+
+			var price = $("#sum").val();
+			var url = '/auction/bidding';
+			var method = "POST";
+
+			$.ajax({
+				url: url,
+				type: method,
+				beforeSend: function (xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				data: JSON.stringify({
+					auctionNo: auctionNo,
+					price: price
+				}),
+				contentType: "application/json",
+				success: function (result, status, jqXHR) {
+					// 요청 성공 처리
+					alert('등록 완료');
+					location.href = document.referrer;
+				},
+				error: function (jqXHR, status, error) {
+					if (jqXHR.status == '401') {
+						alert('로그인 후 이용해주세요.');
+						location.href = '/member/login';
+					} else {
+						alert(jqXHR.responseText);
+						location.href = document.referrer;
+					}
+
+				}
+			});
+		}
+    
+     //찜 버튼에 대한 기능
 	function pushWish(heartIcon) {
 		 /*
 		  색있는 하트: <i class="fa-solid fa-heart"></i>
@@ -863,35 +911,10 @@
         });
         
     }  
-	
-	</script>
-
-	<script src="/js/splide.min.js"></script>
-
-	<script>
 		document.addEventListener('DOMContentLoaded', function () {
 			var splide = new Splide('.splide');
 			splide.mount();
 		});
-	</script>
-
-<script type="text/javascript">
-	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
-	function count(type) {
-	    // 결과를 표시할 element
-	    const resultElement = document.getElementById('sum');
-	    const resultElement2 = document.getElementById('price');
-	    // 현재 화면에 표시된 값
-	    let number = resultElement.value;
-	    // 더하기/빼기
-	    if (type === 'plus') {
-	        number = parseInt(number) + auctionPrice;
-	    } else if (type === 'minus') {
-	        number = parseInt(number) - auctionPrice;
-	    }
-	    // 결과 출력
-	    resultElement.value = number;
-	}
 	</script>
 </th:block>
 
