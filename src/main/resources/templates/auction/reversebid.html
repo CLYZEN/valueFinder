@@ -269,11 +269,11 @@
 
             <tr th:each="reverseAuctionList:${reverseAuctionList}">
 
-                <th style="width: 10%;" th:text=${reverseAuctionList.reverseBiddingNo}></th>
+                <th style="width: 10%; " th:text=${reverseAuctionList.reverseBiddingNo}></th>
 
                 <td style="width: 10%;" th:text=${reverseAuctionList.category.categoryName}></td>
 
-                <td style="width: 60%;" th:text=${reverseAuctionList.reverseBiddingTitle} th:onclick="'javascript:moveDetail(' + ${reverseAuctionList.reverseBiddingNo} +')'">
+                <td style="width: 60%; color: blue; cursor: pointer;" th:text=${reverseAuctionList.reverseBiddingTitle} th:onclick="'javascript:moveDetail(' + ${reverseAuctionList.reverseBiddingNo} +')'">
                 </td>
 
                 <td style="width: 10%;" th:text=${reverseAuctionList.member.nickname}></td>

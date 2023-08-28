@@ -242,21 +242,22 @@ public class AuctionController {
         return "/auction/query/query";
     }
 
-    @GetMapping(value = "/auction/reversebid/enter/add")
-    public String enterQuery() {
-        return "/auction/enter/enterForm";
-    }
+   
 
-    @GetMapping(value = "/auction/reversebid/enter")
-    public String enterDetail() {
-        return "/auction/enter/enter";
+    @GetMapping(value = "/auction/reversebid/enter/{bidno}")
+    public String enterDetail(Model model, @PathVariable("bidno") Long bidno) {
+        
+    	ReverseBiddingJoin reverseBiddingJoin = reversebidService.getReversebidJoinById(bidno);
+    	
+         model.addAttribute("bid", reverseBiddingJoin);
+    	return "/auction/enter/enter";
     }
 
 
 
 
     @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
-    public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
+    public String enterReversebid(Authentication authentication, Model model, @PathVariable("bidno") Long bidno) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
         ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
@@ -271,7 +272,7 @@ public class AuctionController {
 
     @PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
     public String enterReversebid(Authentication authentication, Model model, @Valid ReversebidEnterDto reversebidEnterDto
-            , @RequestParam("image") List<MultipartFile> itemImgFiles, @PathVariable Long bidno) {
+            , @RequestParam("image") List<MultipartFile> itemImgFiles, @PathVariable("bidno") Long bidno) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
         ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
@@ -292,7 +293,7 @@ public class AuctionController {
             return "/auction/enter/enterForm";
         }
 
-        return "redirect:/auction/reversebid/enter/" + bidno;
+        return "redirect:/auction/reversebid";
     }
 
 
@@ -382,16 +383,23 @@ public class AuctionController {
     }
 
     //역경매 페이지
- // 비공개 경매 페이지
- 	@GetMapping(value = "/auction/reversebid/detail/{reverseBiddingNo}")
+ 	@GetMapping(value = {"/auction/reversebid/detail/{reverseBiddingNo}", "/auction/reversebid/detail/{reverseBiddingNo}/{page}"})
  	public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,
- 			Optional<Integer> page) {
+ 			@PathVariable("page") Optional<Integer> page) {
  		ReverseBidding reverseBidding = reversebidService.getReversebidById(reverseBiddingNo);
  		reversebidService.addReverseBiddingView(reverseBiddingNo);
+ 		
+ 		Page<ReverseBiddingJoin> reverseBiddingJoinList ;
+ 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+ 		
+ 		reverseBiddingJoinList = reversebidService.getReverseJoinList(pageable, reverseBiddingNo);
+ 		
  		model.addAttribute("nowTime", LocalDateTime.now());
  		model.addAttribute("remainTime", auctionService.getRemainTime(reverseBidding.getReverseBiddingExpireDate()));
  		model.addAttribute("reverseBidding", reverseBidding);
  		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
+ 		model.addAttribute("reverseBiddingJoinList", reverseBiddingJoinList);
+ 		model.addAttribute("maxPage", 5);
  		return "auction/reversebid/details";
  	}
 

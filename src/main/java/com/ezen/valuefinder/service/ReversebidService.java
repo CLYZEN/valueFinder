@@ -7,6 +7,9 @@ import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingJoinRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +29,11 @@ public class ReversebidService {
     public ReverseBidding getReversebidById(Long id) {
         return reverseBiddingRepository.findById(id).orElseThrow();
     }
+    
+    public ReverseBiddingJoin getReversebidJoinById(Long id) {
+    	return reverseBiddingJoinRepository.findById(id).orElseThrow();
+    }
+
 
     public void saveReversebidEnter(ReversebidEnterDto reversebidEnterDto, Member member, Long bidno, List<MultipartFile> itemImgFiles) throws Exception {
         ReverseBidding reverseBidding = reverseBiddingRepository.findById(bidno).orElseThrow();
@@ -71,6 +79,12 @@ public class ReversebidService {
 
         return formatDuration(remainingDuration);
     }
+    
+    public Page<ReverseBiddingJoin> getReverseJoinList(Pageable pageable, Long reverseBiddingJoinNo) {
+    	return reverseBiddingJoinRepository.findByReverseBiddingReverseBiddingNoOrderByReverseBiddingJoinNo(pageable, reverseBiddingJoinNo);
+    }
+    
+    
 
     private String formatDuration(Duration duration) {
         long days = duration.toDays();
