@@ -332,7 +332,7 @@ public class AuctionController {
 		return "auction/sealedbid";
 	}
 
-	// 비공개 경매 페이지
+
 	@GetMapping(value = "/auction/reversebid/detail/{reverseBiddingNo}")
 	public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,
 			Optional<Integer> page) {
@@ -343,6 +343,11 @@ public class AuctionController {
 		model.addAttribute("reverseBidding", reverseBidding);
 		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
 		return "auction/reversebid/details";
+	}
+	
+	@PostMapping(value= "/auction/auctionReview")
+	 public ResponseEntity<String> submitAuctionReview(@RequestBody AuctionReview auctionReview) {
+		  return ResponseEntity.ok("리뷰가 등록되었습니다.");
 	}
 
 }

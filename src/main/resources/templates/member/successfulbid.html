@@ -2,6 +2,11 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
 <th:block layout:fragment="css">
 	<style>
 		a {
@@ -451,7 +456,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">등록취소</button>
-					<button type="button" class="btn btn-primary" id="submitReview">등록</button>
+					<button type="button" class="btn btn-primary" onclick="submitReview()">등록</button>
 				</div>
 			</div>
 		</div>
@@ -460,7 +465,8 @@
 </div>
 
 <th:block layout:fragment="script">
-	<script>
+   <script src="/js/splide.min.js"></script>
+  <script th:inline="javascript">
 		$(document).ready(function () {
 			var currentPosition = parseInt($(".quickmenu").css("top"));
 			$(window).scroll(function () {
@@ -472,17 +478,41 @@
 		});
 
 
-	$(document).ready(function(){
-		$('#submitReview').on('show.bs.modal', function(event){
-			auctionReviewDetail = $(event.relatedTarget).data('auctionReviewDetail');
-			auctionReviewScore = $(event.relatedTarget).data('auctionReviewScore');
-		});
-	});
-	
-	function submitReview(){
-		var auctionReviewDetail = $('#auctionReviewDetail').val();
-		location.href = '/auction/details/realtimeDetail.html'
-	}
+		function submitReview() {
+		    var auctionReviewDetail = $('#auctionReviewDetail').val();
+		    var auctionReviewScore = $("input[name='reviewStar']:checked").val(); 
+
+		       var token = $("meta[name='_csrf']").attr("content");
+	            var header = $("meta[name='_csrf_header']").attr("content");
+		    
+		    var url = '/auction/auctionReview'; 
+		    var method = "POST"; 
+		    $.ajax({
+		        url: url,
+		        type: method,
+		        beforeSend: function (xhr) {
+		            xhr.setRequestHeader(header, token);
+		        },
+		        data: JSON.stringify({
+		            auctionReviewDetail: auctionReviewDetail,
+		            auctionReviewScore: auctionReviewScore
+		        }),
+		        contentType: "application/json",
+		        success: function (result, status, jqXHR) {
+		            
+		            alert('리뷰가 등록되었습니다.');
+		            $('#reviewModal').modal('hide'); 
+		        },
+		        error: function (jqXHR, status, error) {
+		            alert('리뷰 등록에 실패했습니다.');
+		        }
+		    });
+		}
+
+		
+			
+		
+
 	</script>
 
 

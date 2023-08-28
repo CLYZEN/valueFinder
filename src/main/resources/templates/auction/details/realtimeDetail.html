@@ -2,7 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
-
+<head>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 	<link rel="stylesheet" href="/css/splide.min.css">
@@ -233,18 +236,6 @@ table {
 	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
 	margin-bottom: 15px;
 }
-
-.review th {
-	border-right : 1px solid #ebebeb;
-	text-align : center;
-	background-color: #dddddd;
-}
-
-.review td {
-	border-right : 1px solid #ebebeb;
-	text-align : center;
-	line-height: 80px;
-}
 </style>
 </th:block>
 
@@ -335,9 +326,9 @@ table {
 									<h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
 								</div>
 								<div style="width: 415px;">
-									 <h4
+									<h4
 										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-										th:text="|남은시간 : ${remainTime}|" id="remainTime"></h4>
+										th:text="|남은시간 : ${remainTime}|" id="remainTime" ></h4>
 								</div>
 							</div>
 
@@ -347,7 +338,7 @@ table {
 							</div>
 
 							<div class="form-group row">
-								<label class="col-sm-2">경매예정기간</label>
+								<label class="col-sm-2">경매시작시간</label>
 								<div class="col-sm-3"
 									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 							</div>
@@ -369,8 +360,8 @@ table {
 							</div>
 
 							<div class="form-group row">
-								<label class="col-sm-2">입찰수</label>
-								<div class="col-sm-3">0회</div>
+								<label class="col-sm-2">입찰수</label>	
+								<div class="col-sm-3" th:text="|${auction.biddingCount} 회|">0회</div>
 							</div>
 
 							<div class="form-group row col-sm-cet">
@@ -388,10 +379,6 @@ table {
 								</div>
 							</div>
 
-							<div class="form-group row col-sm-cet">
-								<label class="col-sm-2">카운트</label>
-								  <div class="col-sm-3" id="count1"></div>
-							</div>
 
 							<div class="form-group row" style="height: 72px;">
 								<label class="col-sm-2" style="line-height: 71px;">판매자
@@ -646,7 +633,7 @@ table {
 											style="width: 100px; margin-left: 100px; height: 100px;">
 									</div>
 									<div style="width: 300px; text-align: -webkit-center;">
-										<h2 id="count2"></h2>
+										<h2 id="count"></h2>
 									</div>
 								</div>
 
@@ -683,7 +670,7 @@ table {
 														d="M2.965 12.695a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6c0 3.193-3.004 6-7 6a8.06 8.06 0 0 1-2.088-.272 1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a10.97 10.97 0 0 0 .398-2Zm-.8 3.108.02-.004c1.83-.363 2.948-.842 3.468-1.105A9.06 9.06 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.437 10.437 0 0 1-.524 2.318l-.003.011a10.722 10.722 0 0 1-.244.637c-.079.186.074.394.273.362a21.673 21.673 0 0 0 .693-.125ZM8 5.993c1.664-1.711 5.825 1.283 0 5.132-5.825-3.85-1.664-6.843 0-5.132Z" />
 										</svg>
 											</button>
-											<input type='button' value='입찰' onclick="resetCountdown();"
+											<input type='button' onclick="bidding()" value='입찰'
 												style="margin-top: 10px; width: 80px; height: 40px;" />
 										</div>
 									</div>
@@ -862,58 +849,115 @@ table {
 	    // 결과 출력
 	    resultElement.value = number;
 	}
-	</script>
-	
-<script>
-    var divCountElement = document.getElementById("count1");
-    var h2CountElement = document.getElementById("count2");
-    var remainingTimeElement = document.getElementById("remainTime");  
-    var countdownInterval;
 
-    console.log(remainTime);
 
-    function updateCountdown() {
-        var durationText = remainingTimeElement.textContent.trim(); // HTML 요소의 텍스트 내용을 가져옴 (공백 제거)
-        var regex = /[^0-9]/g;
-        var duration = durationText.replace(regex,"") 
-        
-  console.log(durationText);
-  console.log(duration);
-        var minutes = Math.floor(duration / 60);
-        var seconds = duration % 60;
+	var CountElement = document.getElementById("count");
+	var remainingTimeElement = document.getElementById("remainTime");
+	var countdownInterval;
 
-        divCountElement.innerText = minutes + "분 " + seconds + "초";
-        h2CountElement.innerText = formatTime(minutes) + ":" + formatTime(seconds);
+	function updateCountdown() {
+	    var durationText = remainingTimeElement.textContent.trim();
+	    var regex = /[^0-9]/g;
 
-        if (duration > 0) {
-            duration--;
-        } else {
-            clearInterval(countdownInterval);
-            divCountElement.innerText = "시간 종료";
-            h2CountElement.innerText = "시간 종료";
-        }
-    }
+	    var days = parseInt((durationText.match(/\d+(?=일)/) || [])[0] || 0);
+	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
 
-    function formatTime(time) {
-        return time < 10 ? "0" + time : time;
-    }
+	    if (minutes >= 60) {
+	        hours += Math.floor(minutes / 60);
+	        minutes %= 60;
+	    }
 
-    function resetCountdown() {
-        duration = 60; 
-        clearInterval(countdownInterval);
-        countdownInterval = setInterval(updateCountdown, 1000); 
-        updateCountdown(); 
-    }
+	    if (hours >= 24) {
+	        days += Math.floor(hours / 24);
+	        hours %= 24;
+	    }
 
-    window.onload = function() {
-        countdownInterval = setInterval(updateCountdown, 1000); 
-        updateCountdown(); 
-    }
-</script>
+	    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
+	        clearInterval(countdownInterval);
+	        CountElement.innerText = "시간 종료";
+	    } else {
+	        if (seconds === 0) {
+	            seconds = 59;
+	            if (minutes === 0) {
+	                minutes = 59;
+	                if (hours === 0) {
+	                    hours = 23;
+	                    if (days > 0) {
+	                        days--;
+	                    }
+	                } else {
+	                    hours--;
+	                }
+	            } else {
+	                minutes--;
+	            }
+	        } else {
+	            seconds--;
+	        }
 
+	        var updatedTimeText = days + "일 " + hours + " : " + minutes + " : " + seconds;
+	        CountElement.innerText = updatedTimeText;
+	    }
+	}
+
+	window.onload = function () {
+	    countdownInterval = setInterval(updateCountdown, 1000);
+	    updateCountdown();
+	};
 
     
-    <script th:inline="javascript">
+	let auctionNo = [[${auction.auctionNo}]];
+
+	function bidding() {
+		var token = $("meta[name='_csrf']").attr("content");
+		var header = $("meta[name='_csrf_header']").attr("content");
+	      var durationText = remainingTimeElement.textContent.trim(); 
+	        var regex = /[^0-9]/g;
+	        
+	        var days = parseInt(durationText.match(/\d+(?=일)/)[0]);
+	        var hours = parseInt(durationText.match(/\d+(?=시)/)[0]); 
+	        var minutes = parseInt(durationText.match(/\d+(?=분)/)[0]); 
+	        var seconds = parseInt(durationText.match(/\d+(?=초)/)[0]); 
+	        var updatedTimeText = days + "일 " + hours + " : " + minutes + " : " + seconds;
+
+       		 CountElement.innerText = updatedTimeText;
+		var price = $("#sum").val();
+		var url = '/auction/bidding';
+		var method = "POST";
+
+		$.ajax({
+			url: url,
+			type: method,
+			beforeSend: function (xhr) {
+				xhr.setRequestHeader(header, token);
+			},
+			data: JSON.stringify({
+				auctionNo: auctionNo,
+				price: price
+			}),
+			contentType: "application/json",
+			success: function (result, status, jqXHR) {
+				// 요청 성공 처리
+				alert('등록 완료');
+				location.href = document.referrer;
+			},
+			error: function (jqXHR, status, error) {
+				if (jqXHR.status == '401') {
+					alert('로그인 후 이용해주세요.');
+					location.href = '/member/login';
+				} else {
+					alert(jqXHR.responseText);
+					location.href = document.referrer;
+				}
+
+			}
+		});
+	}
+	</script>
+
+   <script th:inline="javascript">
     function loadPage(pageNumber) {
     	
     	
@@ -925,8 +969,10 @@ table {
             }
         });
     }
-</script>
+    
+  
 
+</script>
 
 </th:block>
 
