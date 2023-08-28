@@ -1,18 +1,16 @@
 package com.ezen.valuefinder.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Category;
 import com.ezen.valuefinder.entity.Member;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface AuctionRepository extends JpaRepository<Auction,Long> {
+	Auction findByAuctionNo(Long auctionNo);
 
 	Page<Auction> findByItemMember(Member member, Pageable pageable);
 
