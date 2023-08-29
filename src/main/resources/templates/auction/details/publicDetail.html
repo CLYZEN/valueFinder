@@ -564,26 +564,37 @@
                                                 </div>
 
                                                 <!-- 페이징 버튼 -->
-                                                <div class="d-flex justify-content-center">
-                                                    <nav aria-label="Page navigation example">
-                                                        <ul class="pagination custom-pagination">
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Previous"> <span
-                                                                    aria-hidden="true">&laquo;</span>
-                                                            </a></li>
-                                                            <li class="page-item"><a class="page-link" href="#">1</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">2</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">3</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Next"> <span
-                                                                    aria-hidden="true">&raquo;</span>
-                                                            </a></li>
-                                                        </ul>
-                                                    </nav>
-                                                </div>
+                                                <div class="d-flex justify-content-center"
+													style="margin-top: 1%;">
+													<nav
+														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${0} +')'">이전</a>
+															</li>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+															</li>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+															</li>
+														</ul>
+													</nav>
+												</div>
+
 
                                                 <div class="modal-footer d-flex justify-content-center">
                                                     <button type="button" class="btn btn-secondary "
