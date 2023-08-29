@@ -140,7 +140,7 @@ public class MemberController {
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		 Member member = principalDetails.getMember();
 		 Page<SuccessBidding> successBiddingList = biddingService.getMemberSuccessBiddingList(member,pageable);
-
+		 model.addAttribute("reviewFormDto", new ReviewFormDto());
 		 model.addAttribute("successBiddingList",successBiddingList);
 		 model.addAttribute("maxPage",5);
 		 model.addAttribute("member",member);
@@ -247,10 +247,15 @@ public class MemberController {
 		 return "member/receivedquery";
 	 }
 	 
-	 @GetMapping(value ="member/mypage/like")
-	 public String like(Model model, Authentication authentication) {
+	 @GetMapping(value ={"member/mypage/like","member/mypage/like/{page}"})
+	 public String like(Model model, Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+
+		 Page<Wish> wishList = memberService.getMemberWishList(member,pageable);
+		 model.addAttribute("wishList", wishList);
+		 model.addAttribute("maxPage",5);
 		 model.addAttribute("member",member);
 		 return "member/like";
 	 }

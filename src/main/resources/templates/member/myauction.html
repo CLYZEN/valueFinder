@@ -247,8 +247,10 @@
 					<td class=tdnum th:text="${auction.auctionStartPrice}">1500원</td>
 					<td class=tdnum th:text="${auction.auctionNowPrice}">2500원</td>
 					<td class=tdnum th:text="${auction.biddingCount}">5</td>
-					<td class=tdnum th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">2023/08/15</td>
+						<td class=tdnum th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">2023/08/15</td>
 					<td th:if="${auction.bidStatus} == null" th:text="유찰"></td>
+					<td th:if="${auction.bidStatus.toString()} == 'NO'" th:text="유찰"></td>
+
 					<td th:if="${auction.bidStatus} != null">
 						<button type="button" class="btn btn-primary" th:if="${auction.bidStatus.toString()} == 'OK'"
 								th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">입금확인</button>

@@ -9,6 +9,7 @@ import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.entity.SuccessBidding;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.BiddingRepository;
+import com.ezen.valuefinder.repository.MemberRepository;
 import com.ezen.valuefinder.repository.SuccessBiddingRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,6 +20,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +32,7 @@ public class BiddingService {
     private final MemberService memberService;
     private final AuctionRepository auctionRepository;
     private final SuccessBiddingRepository successBiddingRepository;
+    private final MemberRepository memberRepository;
 
     public void joinBidding(String email, Long auctionNo, Long price) {
         Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
@@ -87,6 +91,25 @@ public class BiddingService {
         SuccessBidding successBidding = successBiddingRepository.findById(id).orElseThrow();
         if(status.equals("NO")) {
             successBidding.setBidStatus(BidStatus.NO);
+
+            Auction auction = successBidding.getAuction();
+            List<Member> memberList = new ArrayList<>();
+            List<SuccessBidding> successBiddingList = successBiddingRepository.findByBidStatusAndAuction(BidStatus.NO,auction);
+            for(SuccessBidding successBidding2 : successBiddingList) {
+                memberList.add(successBidding2.getMember());
+            }
+            Bidding bidding = biddingRepository.findTopByAuctionAndMemberNotInOrderByBiddingPriceDesc(auction,memberList);
+
+            if(bidding == null) {
+                return;
+            }
+
+            SuccessBidding newSuccessBidding = new SuccessBidding();
+            newSuccessBidding.setBidStatus(BidStatus.PENDING);
+            newSuccessBidding.setAuction(auction);
+            newSuccessBidding.setMember(bidding.getMember());
+            successBiddingRepository.save(newSuccessBidding);
+
         } else if (status.equals("OK")) {
             successBidding.setBidStatus(BidStatus.OK);
         } else if (status.equals("CONFIRM")) {

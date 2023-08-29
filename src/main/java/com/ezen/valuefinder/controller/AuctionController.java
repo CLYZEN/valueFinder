@@ -54,6 +54,7 @@ import com.ezen.valuefinder.service.WishService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -334,6 +335,20 @@ public class AuctionController {
         return "/auction/enter/enter";
     }
 
+    @PostMapping(value = "/auction/review/add/{auctionNo}")
+    public String addAuctionReview(@PathVariable Long auctionNo, Authentication authentication, @Valid ReviewFormDto reviewFormDto, Model model
+    , RedirectAttributes redirectAttributes) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+        if(auctionService.chkAuctionReview(auctionNo)){
+            auctionService.addAuctionReview(reviewFormDto,auctionNo,member);
+            return "redirect:/member/mypage/successfulbid";
+        } else {
+            model.addAttribute("reviewFormDto", new ReviewFormDto());
+            redirectAttributes.addFlashAttribute("errorMessage","이미 리뷰를 작성한 경매입니다.");
+            return "redirect:/member/mypage/successfulbid";
+        }
+    }
 
     @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
     public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {

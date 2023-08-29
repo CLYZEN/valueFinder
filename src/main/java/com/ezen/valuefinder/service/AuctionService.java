@@ -57,6 +57,7 @@ public class AuctionService {
     private final EntityManager entityManager;
     private final SuccessBiddingRepository successBiddingRepository;
     private final AuctionQueryResponseRepository auctionQueryResponseRepository;
+    private final AuctionReviewRepository auctionReviewRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -370,5 +371,25 @@ public class AuctionService {
         return auctionRepository.findAllByOrderByRegTime(pageable);
     }
 
+    public void addAuctionReview(ReviewFormDto reviewFormDto, Long id, Member member) {
+        Auction auction = auctionRepository.findById(id).orElseThrow();
+        AuctionReview auctionReview = new AuctionReview();
+        auctionReview.setAuction(auction);
+        auctionReview.setAuctionReviewDetail(reviewFormDto.getAuctionReviewDetail());
+        auctionReview.setAuctionReviewTitle(reviewFormDto.getAuctionReviewTitle());
+        auctionReview.setAuctionReviewScore(reviewFormDto.getAuctionReviewSocre().longValue());
+        auctionReview.setMember(member);
+        auctionReviewRepository.save(auctionReview);
+    }
+
+    public boolean chkAuctionReview(Long id) {
+        AuctionReview auctionReview = auctionReviewRepository.findByAuction(auctionRepository.findByAuctionNo(id));
+
+        if (auctionReview != null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 
