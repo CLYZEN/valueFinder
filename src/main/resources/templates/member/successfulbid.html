@@ -456,7 +456,7 @@
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-bs-dismiss="modal">등록취소</button>
-					<button type="button" class="btn btn-primary" onclick="submitReview()">등록</button>
+					<button type="button" class="btn btn-primary">등록</button>
 				</div>
 			</div>
 		</div>
@@ -478,36 +478,7 @@
 		});
 
 
-		function submitReview() {
-		    var auctionReviewDetail = $('#auctionReviewDetail').val();
-		    var auctionReviewScore = $("input[name='reviewStar']:checked").val(); 
-
-		       var token = $("meta[name='_csrf']").attr("content");
-	            var header = $("meta[name='_csrf_header']").attr("content");
-		    
-		    var url = '/auction/auctionReview'; 
-		    var method = "POST"; 
-		    $.ajax({
-		        url: url,
-		        type: method,
-		        beforeSend: function (xhr) {
-		            xhr.setRequestHeader(header, token);
-		        },
-		        data: JSON.stringify({
-		            auctionReviewDetail: auctionReviewDetail,
-		            auctionReviewScore: auctionReviewScore
-		        }),
-		        contentType: "application/json",
-		        success: function (result, status, jqXHR) {
-		            
-		            alert('리뷰가 등록되었습니다.');
-		            $('#reviewModal').modal('hide'); 
-		        },
-		        error: function (jqXHR, status, error) {
-		            alert('리뷰 등록에 실패했습니다.');
-		        }
-		    });
-		}
+	
 
 		
 			

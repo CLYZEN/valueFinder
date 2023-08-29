@@ -328,7 +328,7 @@ table {
 								<div style="width: 415px;">
 									<h4
 										style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-										th:text="|남은시간 : ${remainTime}|" id="remainTime" ></h4>
+										th:text="|남은시간 : ${auction.remainingTime}|" id="remainTime" ></h4>
 								</div>
 							</div>
 
@@ -361,7 +361,7 @@ table {
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰수</label>	
-								<div class="col-sm-3" th:text="|${auction.biddingCount} 회|">0회</div>
+								<div class="col-sm-3" th:text="|${auction.biddingCount} 회|"></div>
 							</div>
 
 							<div class="form-group row col-sm-cet">
@@ -851,78 +851,44 @@ table {
 	}
 
 
-	var CountElement = document.getElementById("count");
 	var remainingTimeElement = document.getElementById("remainTime");
 	var countdownInterval;
 
-	function updateCountdown() {
 	    var durationText = remainingTimeElement.textContent.trim();
 	    var regex = /[^0-9]/g;
 
-	    var days = parseInt((durationText.match(/\d+(?=일)/) || [])[0] || 0);
 	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
 	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
 	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+	    var Time = (hours * 3600) + (minutes * 60) + seconds;
 
-	    if (minutes >= 60) {
-	        hours += Math.floor(minutes / 60);
-	        minutes %= 60;
-	    }
-
-	    if (hours >= 24) {
-	        days += Math.floor(hours / 24);
-	        hours %= 24;
-	    }
-
-	    if (days === 0 && hours === 0 && minutes === 0 && seconds === 0) {
-	        clearInterval(countdownInterval);
-	        CountElement.innerText = "시간 종료";
-	    } else {
-	        if (seconds === 0) {
-	            seconds = 59;
-	            if (minutes === 0) {
-	                minutes = 59;
-	                if (hours === 0) {
-	                    hours = 23;
-	                    if (days > 0) {
-	                        days--;
-	                    }
-	                } else {
-	                    hours--;
-	                }
-	            } else {
-	                minutes--;
-	            }
-	        } else {
-	            seconds--;
-	        }
-
-	        var updatedTimeText = days + "일 " + hours + " : " + minutes + " : " + seconds;
-	        CountElement.innerText = updatedTimeText;
-	    }
-	}
-
-	window.onload = function () {
-	    countdownInterval = setInterval(updateCountdown, 1000);
-	    updateCountdown();
-	};
-
+	    var updateTime = setInterval(function() {
+	    	
+	    	hours = parseInt(Time/3600);
+	    	minutes = parseInt((Time%3600) / 60);
+	    	seconds = Time%60;
+	    	
+	    	document.getElementById("count").innerHTML = hours + "시간" + minutes + "분" + seconds + "초";
+	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+	    	Time--;
+	    	
+	    	if(Time < 0 ){
+	    		clearInterval(updateTime);
+	    		document.getElementById("count").innerHTML = "시간초과";
+	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
+	    	}
+	    },1000);
+		   
     
 	let auctionNo = [[${auction.auctionNo}]];
 
 	function bidding() {
 		var token = $("meta[name='_csrf']").attr("content");
 		var header = $("meta[name='_csrf_header']").attr("content");
+		
 	      var durationText = remainingTimeElement.textContent.trim(); 
 	        var regex = /[^0-9]/g;
 	        
-	        var days = parseInt(durationText.match(/\d+(?=일)/)[0]);
-	        var hours = parseInt(durationText.match(/\d+(?=시)/)[0]); 
-	        var minutes = parseInt(durationText.match(/\d+(?=분)/)[0]); 
-	        var seconds = parseInt(durationText.match(/\d+(?=초)/)[0]); 
-	        var updatedTimeText = days + "일 " + hours + " : " + minutes + " : " + seconds;
-
-       		 CountElement.innerText = updatedTimeText;
 		var price = $("#sum").val();
 		var url = '/auction/bidding';
 		var method = "POST";

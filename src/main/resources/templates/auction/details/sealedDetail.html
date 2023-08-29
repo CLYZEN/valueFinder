@@ -342,7 +342,7 @@ table {
 						<div class="block-2">
 							<h4
 								style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-								th:text="|남은시간 : ${remainTime}|"></h4>
+								th:text="|남은시간 : ${auction.remainingTime}|" id="remainTime" ></h4>
 							<div class="form-group row">
 								<label class="col-sm-2">물품 이름</label>
 								<div class="col-sm-3" th:text="${auction.item.itemName}"></div>
@@ -352,7 +352,7 @@ table {
 								style="flex-flow: nowrap; width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
 								<div class="col-sm-3" style="border-right: 0px; width: 110px;"
-									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
+									th:text="${#temporals.format(auction.a  uctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 								<div class="col-sm-3"
 									style="width: 100px; border-right: 0px; text-align: center;">~</div>
 								<div class="col-sm-3" style="width: 240px;"
@@ -377,7 +377,7 @@ table {
 
 							<div class="form-group row">
 								<label class="col-sm-2">입찰수</label>
-								<div class="col-sm-3">0회</div>
+								<div class="col-sm-3" th:text="|${auction.biddingCount} 회|"></div>
 							</div>
 
 
@@ -810,6 +810,35 @@ table {
 	    // 결과 출력
 	    resultElement.value = number;
 	}
+	
+	var remainingTimeElement = document.getElementById("remainTime");
+	var countdownInterval;
+
+	    var durationText = remainingTimeElement.textContent.trim();
+	    var regex = /[^0-9]/g;
+
+	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+	    var Time = (hours * 3600) + (minutes * 60) + seconds;
+
+	    var updateTime = setInterval(function() {
+	    	
+	    	hours = parseInt(Time/3600);
+	    	minutes = parseInt((Time%3600) / 60);
+	    	seconds = Time%60;
+	    	
+	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+	    	Time--;
+	    	
+	    	if(Time < 0 ){
+	    		clearInterval(updateTime);
+	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
+	    	}
+	    },1000);
+	    
+	    let auctionNo = [[${auction.auctionNo}]];
+	    
 	  function bidding() {
           var token = $("meta[name='_csrf']").attr("content");
           var header = $("meta[name='_csrf_header']").attr("content");

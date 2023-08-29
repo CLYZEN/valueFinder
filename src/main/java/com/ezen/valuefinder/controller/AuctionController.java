@@ -107,7 +107,7 @@ public class AuctionController {
 	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page) {
 		Auction auction = auctionService.getAuctionDetail(auctionNo);
 		auctionService.addAuctionView(auctionNo);
-		
+		model.addAttribute("remainingTime",auction.getRemainingTime());
 		if (auction.getAuctionType() == AuctionType.PUBLIC) {
 			model.addAttribute("remainTime", auctionService.getRemainTime(auction.getAuctionEndTime()));
 			model.addAttribute("auction", auction);
