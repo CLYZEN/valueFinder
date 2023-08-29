@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.example.apply.dto.QnaDto;
+
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
@@ -40,7 +40,7 @@ import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.ReversebidService;
 import com.ezen.valuefinder.service.WishService;
-import com.shopmax.dto.ItemFormDto;
+
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +55,7 @@ public class AuctionController {
     private final BiddingService biddingService;
     private final ReversebidService reversebidService;
     private final WishService wishService;
+    private final AuctionReportService auctionReportService;
 
 
     @PostMapping(value = "/auction/add")
@@ -214,22 +215,32 @@ public class AuctionController {
     }
 
     //경매 신고 페이지 띄우기
-    @GetMapping(value = "/auction/report")
-    public String reportAuction() {
+    @GetMapping(value = "/auction/report/{auctionNo}")
+    public String reportAuction(@PathVariable Long auctionNo,Model model) {
+    	model.addAttribute("auctionReportDto", new AuctionReportDto());
         return "/auction/report";
     }
     
     //경매 신고글 등록하기
-    @PostMapping(value = "/auction/report")
-    public String addReportAuction(@Valid AuctionReportDto auctionReportDto, Principal principal) {
+    @PostMapping(value = "/auction/report/{auctionNo}")
+    public String addReportAuction(@Valid AuctionReportDto auctionReportDto,BindingResult bindingResult,
+    								Model model, Authentication authentication,@PathVariable Long auctionNo) {
+    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    	Member member = principalDetails.getMember();
+    	
+    	 if(bindingResult.hasErrors()) {
+    		 model.addAttribute("auctionReportDto", new AuctionReportDto());
+			 return "auction/report";
+		 }
     	
     	try {
-    		AuctionReportService.saveReport(auctionReportDto, auctionReportNo);
+    		Auction auction = auctionService.getAuction(auctionNo);
+    		auctionReportService.saveReport(auctionReportDto, member, auction);
 		} catch (Exception e) {
 			 e.printStackTrace();
 		}
     	
-    	return "redirect:/auction/report";
+    	return "auction/report";
     }
     
     

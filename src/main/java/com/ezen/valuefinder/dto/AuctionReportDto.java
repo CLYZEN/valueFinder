@@ -14,7 +14,7 @@ public class AuctionReportDto {
 	@NotBlank(message = "제목을 입력해주세요.")
 	private String auctionReportTitle; // 경매신고제목
 	 
-	@NotBlank(message = "내용을 입력해주세요.") 
+	@NotBlank(message = "신고내용을 입력해주세요.") 
 	private String auctionReportDetail; // 경매신고내용
 	
 	private static ModelMapper modelMapper = new ModelMapper();

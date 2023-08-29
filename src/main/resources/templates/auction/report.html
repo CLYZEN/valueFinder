@@ -26,13 +26,17 @@
 	margin-bottom: 25px;
 	}
 	
+	
   </style>
 </th:block>
 
+<head>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+</head>
+
 <div layout:fragment="content" >
     	
- 		
-		
     <div class="jumbotron">
     
       <div class="container" style="padding-left: 0px;">
@@ -56,7 +60,8 @@
       </div>
    </div>
    <div class="container">
-      <form name="newProduct" action="addProduct_process.jsp" method="post" class="form-horizontal">
+      <form name="newProduct" action="addProduct_process.jsp" method="post" class="form-horizontal"
+      th:object="${auctionReportDto}">
        <div class="form-group row col-sm-top" style="padding-top: 25px;">
           <label class="col-sm-2">판매자</label>
           <div class="col-sm-3">
@@ -67,7 +72,9 @@
        <div class="form-group row">
           <label class="col-sm-2">제목</label>
           <div class="col-sm-3">
-             <input type="text" name="pname" class="form-control" />         
+             <input type="text" name="auctionReportTitle" class="form-control" th:field="*{auctionReportTitle}"/> 
+             <p th:if="${#fields.hasErrors('auctionReportTitle')}"
+										th:errors="*{auctionReportTitle}" class="fieldError">Incorrect Data</p>        
           </div>
        </div>
        
@@ -82,7 +89,10 @@
            <div class="form-group row">
           <label class="col-sm-2" style="line-height: 299px;">신고내용</label>
           <div class="col-sm-5">
-             <textarea name="description" class="form-control" style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit;border: 1px solid;"></textarea>          
+             <textarea name="auctionReportDetail" class="form-control" 
+             		   style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit;border: 1px solid;"></textarea>
+             <p th:if="${#fields.hasErrors('auctionReportDetail')}"
+				th:errors="*{auctionReportDetail}" class="fieldError">Incorrect Data</p>          
           </div>
        </div>
        
