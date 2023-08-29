@@ -316,6 +316,20 @@ public class AuctionService {
     }
 
 
+    public Page<ReverseBidding> getReverseAuctionList(Pageable pageable,  Long categoryCode) {
+    	if(categoryCode == 0) {
+    		return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
+    	}
+    	Category category = categoryRepository.findById(categoryCode).orElseThrow();
+    	if(category == null) {
+            return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
+        } else if (category != null) {
+            return reverseBiddingRepository.findByCategoryOrderByReverseBiddingExpireDate(pageable,category);
+        }
+    	
+    	return reverseBiddingRepository.findAllByOrderByReverseBiddingExpireDate(pageable);
+    }
+    
     public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType, Long categoryCode) {
         if(categoryCode == 0) {
             return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDescAuctionCountDesc(auctionType,pageable);

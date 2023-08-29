@@ -40,4 +40,7 @@ public class ReverseBidding extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime reverseBiddingExpireDate; // 마감기간
+    
+    @Column(columnDefinition = "integer default 0", nullable = false)	
+    private Integer reverseBiddingCount; // 경매조회수
 }
