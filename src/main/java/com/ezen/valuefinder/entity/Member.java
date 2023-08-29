@@ -103,4 +103,6 @@ public class Member extends BaseEntity {
     public void updatePassword(String password,PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
+    
+   
 }

@@ -237,10 +237,10 @@ public class MemberController {
 		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Member member = principalDetails.getMember();
-		Page<AuctionQueryResponse> auctionQueryResponseList = auctionService.auctionQueryResponseList(pageable, member);
+		Page<AuctionQuery> auctionQueryList = auctionService.auctionQueryList(pageable, member);
 	
 		model.addAttribute("member", member);
-		model.addAttribute("auctionQueryResponseList", auctionQueryResponseList);
+		model.addAttribute("auctionQueryList", auctionQueryList);
 		model.addAttribute("maxPage", 5);
 
 		return "member/receivedquery";

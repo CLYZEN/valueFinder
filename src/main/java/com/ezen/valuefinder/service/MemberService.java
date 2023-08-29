@@ -2,6 +2,7 @@ package com.ezen.valuefinder.service;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.Status;
+import com.ezen.valuefinder.dto.MemberCautionDto;
 import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
@@ -48,7 +49,12 @@ public class MemberService implements UserDetailsService {
 		 * 
 		 */
 	}
-
+	
+	public void memberCaution(Long memberId) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		member.setCaution(member.getCaution()+1);
+	}
+	
 
 	public List<Bank> getBankList() {
 		return bankRepository.findAll();

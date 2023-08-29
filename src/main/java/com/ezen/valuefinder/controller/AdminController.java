@@ -2,6 +2,7 @@ package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.dto.CreateCouponDto;
+import com.ezen.valuefinder.dto.MemberCautionDto;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.AuctionQuery;
 import com.ezen.valuefinder.entity.CouponList;
@@ -11,17 +12,23 @@ import com.ezen.valuefinder.service.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.modelmapper.internal.util.Members;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 import java.util.Optional;
@@ -34,7 +41,7 @@ public class AdminController {
 	private final MemberRepository memberRepository;
 	private final AdminService adminService;
 	private final AuctionService auctionService;
-	
+
 	@GetMapping(value = "/admin")
 	public String adminMain() {
 
@@ -43,37 +50,41 @@ public class AdminController {
 
 	@GetMapping(value = "/admin/itemList")
 	public String adminitemlist(Model model) {
-		
+
 		List<Auction> auctions = auctionService.getItemAuctionList();
-		model.addAttribute("auctions" , auctions);
-		
+		model.addAttribute("auctions", auctions);
+
 		return "admin/itemList";
 	}
-	
-	
+
 	/*
 	 * @GetMapping(value= "/custiomerList") public String list(Model model , Long
 	 * memberId) { Member members = adminService.getMember(memberId);
 	 * 
 	 * model.addAttribute("members",members); return "admin/custiomerList"; }
 	 */
-	
-	@GetMapping(value = "/admin/customerList"  )
-	public String admincustomerList(Model model  ) {
-		
-		
-		
+
+	@PostMapping(value = "/admin/customerList")
+	public @ResponseBody ResponseEntity updateCaution(@RequestBody @Valid MemberCautionDto memberCautionDto) {
+		try {
+			memberService.memberCaution(memberCautionDto.getMemberId());
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<Long>(memberCautionDto.getMemberId(), HttpStatus.OK); // 성공시
+
+	}
+
+	@GetMapping(value = "/admin/customerList")
+	public String admincustomerList(Model model) {
+
 		List<Member> members = memberService.getMemberList();
-		 
-		 model.addAttribute("members",members);
-		
-		
 
-		
+		model.addAttribute("members", members);
 
-		
-		
-		
 		return "admin/customerList";
 	}
 
