@@ -9,9 +9,11 @@ import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.entity.MemberOut;
+import com.ezen.valuefinder.entity.MemberReport;
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
 import com.ezen.valuefinder.repository.BankRepository;
 import com.ezen.valuefinder.repository.MemberOutRepository;
+import com.ezen.valuefinder.repository.MemberReportRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
 
@@ -34,6 +36,7 @@ public class MemberService implements UserDetailsService {
 	private final BankRepository bankRepository;
 	private final MemberOutRepository memberOutRepository;
 	private final AuctionQueryRepository auctionQueryRepository;
+	private final MemberReportRepository memberReportRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -87,6 +90,11 @@ public class MemberService implements UserDetailsService {
 	
 	public List<Member> getMemberList() {
 		return memberRepository.findAll();
+	}
+	
+	
+	public List<MemberReport> getMemberReportList() {
+		return memberReportRepository.findAll();
 	}
 	
 

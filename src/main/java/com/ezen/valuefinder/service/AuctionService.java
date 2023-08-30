@@ -64,6 +64,7 @@ public class AuctionService {
     private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
     private final AuctionQueryResponseRepository auctionQueryResponseRepository;
+    private final AuctionReportRepository auctionReportRepository;
 
     private final BiddingRepository biddingRepository;
     private final EntityManager entityManager;
@@ -429,6 +430,11 @@ public class AuctionService {
     
     public List<Auction> getItemAuctionList() {
     	return auctionRepository.findAll();
+    }
+    
+    
+    public List<AuctionReport> getAuctionReportList() {
+    	return auctionReportRepository.findAll();
     }
     
 

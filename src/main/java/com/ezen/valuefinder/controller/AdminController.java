@@ -5,8 +5,10 @@ import com.ezen.valuefinder.dto.CreateCouponDto;
 import com.ezen.valuefinder.dto.MemberCautionDto;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.AuctionQuery;
+import com.ezen.valuefinder.entity.AuctionReport;
 import com.ezen.valuefinder.entity.CouponList;
 import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.MemberReport;
 import com.ezen.valuefinder.repository.MemberRepository;
 import com.ezen.valuefinder.service.*;
 import jakarta.validation.Valid;
@@ -25,7 +27,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -89,12 +93,20 @@ public class AdminController {
 	}
 
 	@GetMapping(value = "/admin/itemreportList")
-	public String adminitemreportList() {
+	public String adminitemreportList(Model model) {
+		List<AuctionReport> auctionReports = auctionService.getAuctionReportList();
+		model.addAttribute("auctionReports",auctionReports);
+		
 		return "admin/itemreportList";
 	}
 
 	@GetMapping(value = "/admin/customerReportList")
-	public String admincustomerReportList() {
+	public String admincustomerReportList(Model model) {
+		List<MemberReport> memberReports = memberService.getMemberReportList();
+		
+		model.addAttribute("memberReports" ,memberReports);
+		
+		
 		return "admin/customerReportList";
 	}
 
@@ -131,5 +143,14 @@ public class AdminController {
 		couponService.createCoupon(createCouponDto);
 
 		return "redirect:/admin";
+	}
+	
+	@DeleteMapping("/admin/itemreport/{auctionNo}/delete")
+	public @ResponseBody ResponseEntity<Long> deleteItem(@PathVariable("auctionNo") Long auctionNo) {
+		
+		adminService.deleteAuction(auctionNo);
+		
+		return new ResponseEntity<Long>(auctionNo , HttpStatus.OK);
+		
 	}
 }
