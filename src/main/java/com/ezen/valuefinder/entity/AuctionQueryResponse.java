@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class AuctionQueryResponse extends BaseEntity {
+public class AuctionQueryResponse {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionQueryResponseNo; // 문의답변식별자
@@ -28,7 +28,4 @@ public class AuctionQueryResponse extends BaseEntity {
 
     @Column(nullable = false)
     private String auctionQueryResponseDetail; // 문의답변
-    
-    
-    
 }

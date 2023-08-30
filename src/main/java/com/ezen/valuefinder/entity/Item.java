@@ -5,15 +5,12 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Table(name = "item")
 @Getter
 @Setter
 @ToString
-public class Item extends BaseEntity {
+public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long itemNo; // 물품식별자
@@ -38,8 +35,4 @@ public class Item extends BaseEntity {
     private Integer itemDepth; // 세로길이
 
     private Integer itemHeight; // 높이
-
-    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    private List<ItemImg> itemImgList = new ArrayList<>();
-    
 }
