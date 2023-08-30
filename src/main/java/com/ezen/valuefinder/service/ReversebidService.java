@@ -1,5 +1,8 @@
 package com.ezen.valuefinder.service;
 
+
+import com.ezen.valuefinder.constant.AuctionStatus;
+
 import com.ezen.valuefinder.constant.ReversebidAuctionStatus;
 import com.ezen.valuefinder.dto.ReversebidEnterDto;
 import com.ezen.valuefinder.entity.*;
@@ -8,11 +11,15 @@ import com.ezen.valuefinder.repository.ReverseBiddingJoinRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import lombok.RequiredArgsConstructor;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Duration;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -33,7 +40,7 @@ public class ReversebidService {
     	return reverseBiddingJoinRepository.findById(id).orElseThrow();
     }
 
-    
+   
     public void saveReversebidEnter(ReversebidEnterDto reversebidEnterDto, Member member, Long bidno, List<MultipartFile> itemImgFiles) throws Exception {
         ReverseBidding reverseBidding = reverseBiddingRepository.findById(bidno).orElseThrow();
 
@@ -72,11 +79,31 @@ public class ReversebidService {
         reverseBidding.setReverseBiddingCount(reverseBidding.getReverseBiddingCount()+1);
     }
     
+
+    public String getRemainTime(LocalDateTime dateTime) {
+        LocalDateTime now = LocalDateTime.now();
+        Duration remainingDuration = Duration.between(now, dateTime);
+
+        return formatDuration(remainingDuration);
+    }
+
+    private String formatDuration(Duration duration) {
+        long days = duration.toDays();
+        long hours = duration.toHoursPart();
+        long minutes = duration.toMinutesPart();
+        long seconds = duration.toSecondsPart();
+
+        return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
+    }
+    
+
+
     public Page<ReverseBiddingJoin> getReverseJoinList(Pageable pageable, Long reverseBiddingJoinNo) {
     	return reverseBiddingJoinRepository.findByReverseBiddingReverseBiddingNoOrderByReverseBiddingJoinNo(pageable, reverseBiddingJoinNo);
     }
     
     public void updateAuctionStatusToEnd(Long reverseBiddingNo) {
+
         ReverseBidding reverseBidding = reverseBiddingRepository.findById(reverseBiddingNo).orElse(null);
         if (!reverseBidding.getReversebidAuctionStatus().equals(ReversebidAuctionStatus.END)) {
             if (reverseBidding.getReverseBiddingExpireDate().isBefore(LocalDateTime.now())) {

@@ -8,6 +8,8 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+import com.ezen.valuefinder.constant.ReversebidAuctionStatus;
+
 @Entity
 @Table(name = "reverse_bidding")
 @ToString
@@ -40,6 +42,11 @@ public class ReverseBidding extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime reverseBiddingExpireDate; // 마감기간
+    
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ReversebidAuctionStatus reversebidAuctionStatus; //경매상태
     
     @Column(columnDefinition = "integer default 0", nullable = false)	
     private Integer reverseBiddingCount; // 경매조회수

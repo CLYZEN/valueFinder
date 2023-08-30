@@ -336,7 +336,8 @@
                                 <div style="width: 415px;">
                                     <h4
                                             style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-                                            th:text="|남은시간 : ${remainTime}|"></h4>
+                                           th:text="|남은시간 : ${auction.remainingTime}|" id="remainTime"></h4>
+
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -372,7 +373,8 @@
 
                             <div class="form-group row">
                                 <label class="col-sm-2">입찰수</label>
-                                <div class="col-sm-3" th:text="|${bidCount} 회|">></div>
+                                <div class="col-sm-3" th:text="|${auction.biddingCount} 회|"></div>
+
                             </div>
 
                             <div class="form-group row col-sm-cet">
@@ -408,150 +410,98 @@
                                         </button>
                                     </div>
 
-                                    <!-- 모달 창 -->
-                                    <div class="modal fade" id="reviewModal" tabindex="-1"
-                                         aria-labelledby="reviewModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="reviewModalLabel"
-                                                        th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
-                                                    <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body ">
-                                                    <p class="review-message">후기가 n건 검색되었습니다.</p>
-                                                    <table class="table">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">닉네임</th>
-                                                            <th scope="col">별점</th>
-                                                            <th scope="col">리뷰작성</th>
 
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr>
-                                                            <th scope="row">크롱</th>
-                                                            <td>
-                                                                <!-- 별점 -->
-                                                                <form class="mb-3" name="myform" id="myform"
-                                                                      method="post">
-                                                                    <fieldset>
-                                                                        <input type="radio" name="reviewStar" value="5"
-                                                                               id="rate1" checked><label
-                                                                            for="rate1">★</label>
-                                                                        <input type="radio" name="reviewStar" value="4"
-                                                                               id="rate2" disabled><label
-                                                                            for="rate2">★</label>
-                                                                        <input type="radio" name="reviewStar" value="3"
-                                                                               id="rate3" disabled><label
-                                                                            for="rate3">★</label>
-                                                                        <input type="radio" name="reviewStar" value="2"
-                                                                               id="rate4" disabled><label
-                                                                            for="rate4">★</label>
-                                                                        <input type="radio" name="reviewStar" value="1"
-                                                                               id="rate5" disabled><label
-                                                                            for="rate5">★</label>
-                                                                    </fieldset>
-                                                                </form>
+                                  <!-- 모달 창 -->
+									<div class="modal fade" id="reviewModal" tabindex="-1"
+										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg" style="--bs-modal-width: 1200px !important;">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
+														th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
+													<button type="button" class="btn-close"
+														data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body ">
+													<p class="review-message" th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
+													<table class="table">
+														<thead>
+															<tr class="review">																
+																<th scope="col" style="width: 250px;">물품명</th>
+																<th scope="col">리뷰</th>
+																<th scope="col" style="width: 300px;">별점</th>
+																<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
 
-                                                            </td>
-                                                            <td>크롱크롱</td>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="auctionReview:${auctionReview}" class="review" id="review">
+																
+																<td th:text=${auctionReview.auction.item.itemName}></td>
+																<td th:text=${auctionReview.auctionReviewTitle}></td>
+																<td >
+																	<!-- 별점 -->
+																	<form class="mb-3" name="myform" id="myform"
+																		method="post" style="margin-bottom: 0px !important;">
+																		<fieldset>
+																			<input type="radio" name="reviewStar" value="5" id="rate1" th:if="${auctionReview.auctionReviewScore.toString() == '5'}" checked ><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4" id="rate2" th:if="${auctionReview.auctionReviewScore.toString() == '4'}" checked ><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3" id="rate3" th:if="${auctionReview.auctionReviewScore.toString() == '3'}" checked ><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2" id="rate4" th:if="${auctionReview.auctionReviewScore.toString() == '2'}" checked ><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1" id="rate5" th:if="${auctionReview.auctionReviewScore.toString() == '1'}" checked ><label for="rate5">★</label>
+																		</fieldset>
+																	</form>
 
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">뽀로로</th>
-                                                            <td>
-                                                                <!-- 별점 -->
-                                                                <form class="mb-3" name="myform" id="myform"
-                                                                      method="post">
-                                                                    <fieldset>
-                                                                        <input type="radio" name="reviewStar" value="5"
-                                                                               id="rate1" disabled><label
-                                                                            for="rate1">★</label>
-                                                                        <input type="radio" name="reviewStar" value="4"
-                                                                               id="rate2" checked><label
-                                                                            for="rate2">★</label>
-                                                                        <input type="radio" name="reviewStar" value="3"
-                                                                               id="rate3" disabled><label
-                                                                            for="rate3">★</label>
-                                                                        <input type="radio" name="reviewStar" value="2"
-                                                                               id="rate4" disabled><label
-                                                                            for="rate4">★</label>
-                                                                        <input type="radio" name="reviewStar" value="1"
-                                                                               id="rate5" disabled><label
-                                                                            for="rate5">★</label>
-                                                                    </fieldset>
-                                                                </form>
+																</td>
+															
+																<td scope="row" th:text=${auctionReview.member.nickname} style="border-right: 0px;"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
 
-                                                            </td>
-                                                            <td>너무 좋아요</td>
+												<!-- 페이징 버튼 -->
+												<div class="d-flex justify-content-center"
+													style="margin-top: 1%;">
+													<nav
+														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${0} +')'">이전</a>
+															</li>
 
-                                                        </tr>
-                                                        <tr>
-                                                            <th scope="row">루피</th>
-                                                            <td>
-                                                                <!-- 별점 -->
-                                                                <form class="mb-3" name="myform" id="myform"
-                                                                      method="post">
-                                                                    <fieldset>
-                                                                        <input type="radio" name="reviewStar" value="5"
-                                                                               id="rate1" disabled><label
-                                                                            for="rate1">★</label>
-                                                                        <input type="radio" name="reviewStar" value="4"
-                                                                               id="rate2" checked><label
-                                                                            for="rate2">★</label>
-                                                                        <input type="radio" name="reviewStar" value="3"
-                                                                               id="rate3" disabled><label
-                                                                            for="rate3">★</label>
-                                                                        <input type="radio" name="reviewStar" value="2"
-                                                                               id="rate4" disabled><label
-                                                                            for="rate4">★</label>
-                                                                        <input type="radio" name="reviewStar" value="1"
-                                                                               id="rate5" disabled><label
-                                                                            for="rate5">★</label>
-                                                                    </fieldset>
-                                                                </form>
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+															</li>
 
-                                                            </td>
-                                                            <td>너무 좋아요</td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+															</li>
+														</ul>
+													</nav>
+												</div>
 
-                                                <!-- 페이징 버튼 -->
-                                                <div class="d-flex justify-content-center">
-                                                    <nav aria-label="Page navigation example">
-                                                        <ul class="pagination custom-pagination">
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Previous"> <span
-                                                                    aria-hidden="true">&laquo;</span>
-                                                            </a></li>
-                                                            <li class="page-item"><a class="page-link" href="#">1</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">2</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">3</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Next"> <span
-                                                                    aria-hidden="true">&raquo;</span>
-                                                            </a></li>
-                                                        </ul>
-                                                    </nav>
-                                                </div>
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
+														data-bs-dismiss="modal">닫기</button>
 
-                                                <div class="modal-footer d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-secondary "
-                                                            data-bs-dismiss="modal">닫기
-                                                    </button>
+												</div>
+											</div>
+										</div>
+									</div>
 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+
                                     <div class="col-sm-offset-2" style="margin-left: 20px;">
                                         <input type="submit" class="btn btn-primary" value="신고"
                                                style="border-radius: inherit; width: 110px;"
@@ -619,26 +569,37 @@
                                                 </div>
 
                                                 <!-- 페이징 버튼 -->
-                                                <div class="d-flex justify-content-center">
-                                                    <nav aria-label="Page navigation example">
-                                                        <ul class="pagination custom-pagination">
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Previous"> <span
-                                                                    aria-hidden="true">&laquo;</span>
-                                                            </a></li>
-                                                            <li class="page-item"><a class="page-link" href="#">1</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">2</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#">3</a>
-                                                            </li>
-                                                            <li class="page-item"><a class="page-link" href="#"
-                                                                                     aria-label="Next"> <span
-                                                                    aria-hidden="true">&raquo;</span>
-                                                            </a></li>
-                                                        </ul>
-                                                    </nav>
-                                                </div>
+
+                                                <div class="d-flex justify-content-center"
+													style="margin-top: 1%;">
+													<nav
+														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${0} +')'">이전</a>
+															</li>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+															</li>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+															</li>
+														</ul>
+													</nav>
+												</div>
 
                                                 <div class="modal-footer d-flex justify-content-center">
                                                     <button type="button" class="btn btn-secondary "
@@ -730,6 +691,7 @@
                                     </div>
                                     <div style="text-align: right; width: 600px;">
                                         <div>
+
                                             	<button class="heartbutton" th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}" 
 											onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
 										<i th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
@@ -862,6 +824,7 @@
                     </div>
                     <div class="form-group row" style="padding-top: 20px;">
                         <div class="col-sm-offset-2" style="text-align: right;">
+
                             <input onclick="moveQuery()" type="button" class="btn btn-primary" value="문의하기"
                                    style="border-radius: inherit;"/>
                         </div>
@@ -887,6 +850,7 @@
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
+
 	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
           crossorigin="anonymous"></script>
     <script src="/js/splide.min.js"></script>
@@ -914,6 +878,34 @@
             // 결과 출력
             resultElement.value = number;
         }
+
+        
+        var remainingTimeElement = document.getElementById("remainTime");
+    	var countdownInterval;
+
+    	    var durationText = remainingTimeElement.textContent.trim();
+    	    var regex = /[^0-9]/g;
+
+    	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+    	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+    	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+    	    var Time = (hours * 3600) + (minutes * 60) + seconds;
+
+    	    var updateTime = setInterval(function() {
+    	    	
+    	    	hours = parseInt(Time/3600);
+    	    	minutes = parseInt((Time%3600) / 60);
+    	    	seconds = Time%60;
+    	    	
+    	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+    	    	Time--;
+    	    	
+    	    	if(Time < 0 ){
+    	    		clearInterval(updateTime);
+    	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
+    	    	}
+    	    },1000);
+
 
         let auctionNo = [[${auction.auctionNo}]];
 
@@ -954,6 +946,18 @@
                 }
             });
         }
+      function loadPage(pageNumber) {
+    	
+    	
+        $.ajax({
+            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            type: 'GET',
+            success: function(response) {
+                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+            }
+        });
+    }
+
 	//찜 버튼에 대한 기능
 	function pushWish(heartIcon) {
 		 /*
@@ -1003,6 +1007,7 @@
         
     }
     </script>
+
 
 </th:block>
 

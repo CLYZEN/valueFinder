@@ -2,10 +2,12 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns="http://www.w3.org/1999/html"
       layout:decorate="~{layouts/layout1}">
+
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+
 <th:block layout:fragment="css">
     <style>
         a {
@@ -538,6 +540,7 @@
             });
         }
     </script>
+
 </th:block>
 
 </html>

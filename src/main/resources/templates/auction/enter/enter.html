@@ -69,6 +69,7 @@
 		</div>
 	</div>
 	<div class="container">
+
 		<form name="reversebidEnter"  method="post" role="form" th:object="${reverseBiddingJoin}" enctype="multipart/form-data"
 			class="form-horizontal" >
 
@@ -81,6 +82,7 @@
 
 			<div class="form-group row">
 				<label class="col-sm-2">제목</label>
+
 				<div class="col-sm-3" th:text=${bid.item.itemName}>
 					<input type="text"  class="form-control" />
 				</div>

@@ -4,18 +4,15 @@ import com.ezen.valuefinder.constant.*;
 import com.ezen.valuefinder.dto.*;
 
 import com.ezen.valuefinder.entity.*;
+
+import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
+
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
 import com.ezen.valuefinder.repository.AuctionRepository;
 import com.ezen.valuefinder.repository.CategoryRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
-
 import com.ezen.valuefinder.entity.*;
-import com.ezen.valuefinder.repository.AuctionRepository;
-import com.ezen.valuefinder.repository.CategoryRepository;
-import com.ezen.valuefinder.repository.ItemImgRepository;
-import com.ezen.valuefinder.repository.ItemRepository;
-import com.ezen.valuefinder.repository.MemberRepository;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityNotFoundException;
@@ -53,11 +50,13 @@ public class AuctionService {
     private final AuctionQueryRepository auctionQueryRepository;
     private final ItemImgRepository itemImgRepository;
     private final ReverseBiddingRepository reverseBiddingRepository;
+    private final ReviewRepository reviewRepository;
     private final BiddingRepository biddingRepository;
     private final EntityManager entityManager;
     private final SuccessBiddingRepository successBiddingRepository;
     private final AuctionQueryResponseRepository auctionQueryResponseRepository;
     private final AuctionReviewRepository auctionReviewRepository;
+
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -125,6 +124,7 @@ public class AuctionService {
 
         return auction.getAuctionNo();
     }
+
 
 
     public Long createdQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionNo ) throws Exception {
@@ -218,6 +218,7 @@ public class AuctionService {
         return auction;
     }
 
+
     public void addAuctionView(Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow();
         auction.setAuctionCount(auction.getAuctionCount()+1);
@@ -240,6 +241,26 @@ public class AuctionService {
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
 
     }
+
+
+	public int itemCount(Long memberId) {
+		return itemRepository.countItemsByMemberId(memberId);	
+	}
+
+	public int reviewCount(Long memberId) {
+		return reviewRepository.countAuctionReviewsByAuctionItemMember(memberId);	
+	}
+	
+	public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return auctionRepository.findByItemMember(member, pageable);
+	}
+	
+	public Page<AuctionReview> getAuctionReviewList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return reviewRepository.findByAuctionItemMember(member, pageable);
+	}
+
 
     public int itemCount(Long memberId) {
         return itemRepository.countItemsByMemberId(memberId);
@@ -276,6 +297,7 @@ public class AuctionService {
 
             if (auction.getAuctionEndTime().isBefore(LocalDateTime.now())) {
                 auction.setAuctionStatus(AuctionStatus.END);
+
                 successBidding(auction);
             }
             if (auction.getAuctionStatus() != AuctionStatus.END && duration.getSeconds() <= 60) { // 남은 시간이 1분 이하일 경우
@@ -286,9 +308,12 @@ public class AuctionService {
     }
 
     public void updateAuction(Long auctionId) {
-        updateAuctionStatus(auctionId);
-        updateAuctionReaminTime(auctionId);
+
+        Auction auction = auctionRepository.findById(auctionId).orElseThrow();
+        updateAuctionStatus(auction);
+        updateAuctionReaminTime(auction);
     }
+
 
     private void updateAuctionReaminTime(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
@@ -297,11 +322,11 @@ public class AuctionService {
         long minutes = remainingDuration.minusHours(hours).toMinutes();
         long seconds = remainingDuration.minusHours(hours).minusMinutes(minutes).getSeconds();
 
+
         if(auction.getAuctionStatus() == AuctionStatus.PENDING) {
             auction.setRemainingTime("대기중인 경매입니다.");
             return;
         }
-
         if (remainingDuration.isNegative() || remainingDuration.isZero()) {
             auction.setRemainingTime("종료된 경매입니다.");
         } else if (hours == 0) {
@@ -313,6 +338,15 @@ public class AuctionService {
         } else {
             auction.setRemainingTime(hours + "시간 " + minutes + "분 " + seconds + "초");
         }
+    }
+	 
+    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
+        return auctionRepository.findByAuctionType(auctionType,pageable);
+    }
+
+    public void addAuctionView(Long id) {
+        Auction auction = auctionRepository.findById(id).orElseThrow();
+        auction.setAuctionCount(auction.getAuctionCount()+1);
     }
 
 
@@ -404,6 +438,7 @@ public class AuctionService {
         } else {
             return true;
         }
+
     }
 }
 

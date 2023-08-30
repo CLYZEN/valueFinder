@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface AuctionRepository extends JpaRepository<Auction,Long> {
+
 	Auction findByAuctionNo(Long auctionNo);
 
 	Page<Auction> findByItemMember(Member member, Pageable pageable);
