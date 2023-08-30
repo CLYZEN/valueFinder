@@ -39,4 +39,6 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 	@Query("SELECT new com.ezen.valuefinder.dto.MemberAuctionDto(a.auctionNo, a.item, a.auctionType, a.auctionStartPrice, a.auctionNowPrice, a.auctionStartTime, a.auctionEndTime, a.auctionStatus, a.auctionCount, a.remainingTime, a.biddingCount, sb.successBiddingNo, sb.member, sb.bidStatus, sb.shippingNo) " +
 			"FROM Auction a LEFT JOIN FETCH SuccessBidding sb ON a = sb.auction WHERE sb.member.memberId = :memberId")
 	Page<MemberAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
+
 }

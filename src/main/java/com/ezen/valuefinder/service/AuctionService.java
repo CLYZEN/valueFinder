@@ -219,10 +219,7 @@ public class AuctionService {
     }
 
 
-    public void addAuctionView(Long id) {
-        Auction auction = auctionRepository.findById(id).orElseThrow();
-        auction.setAuctionCount(auction.getAuctionCount()+1);
-    }
+
 
 
     public String getRemainTime(LocalDateTime dateTime) {
@@ -251,20 +248,13 @@ public class AuctionService {
 		return reviewRepository.countAuctionReviewsByAuctionItemMember(memberId);	
 	}
 	
-	public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
-		Member member = memberRepository.findById(memberId).orElseThrow();
-		return auctionRepository.findByItemMember(member, pageable);
-	}
+
 	
 	public Page<AuctionReview> getAuctionReviewList(Long memberId, Pageable pageable) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		return reviewRepository.findByAuctionItemMember(member, pageable);
 	}
 
-
-    public int itemCount(Long memberId) {
-        return itemRepository.countItemsByMemberId(memberId);
-    }
 
     private void successBidding(Auction auction) {
         Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
@@ -310,8 +300,8 @@ public class AuctionService {
     public void updateAuction(Long auctionId) {
 
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
-        updateAuctionStatus(auction);
-        updateAuctionReaminTime(auction);
+        updateAuctionStatus(auction.getAuctionNo());
+        updateAuctionReaminTime(auction.getAuctionNo());
     }
 
 
@@ -338,10 +328,6 @@ public class AuctionService {
         } else {
             auction.setRemainingTime(hours + "시간 " + minutes + "분 " + seconds + "초");
         }
-    }
-	 
-    public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType) {
-        return auctionRepository.findByAuctionType(auctionType,pageable);
     }
 
     public void addAuctionView(Long id) {

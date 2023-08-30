@@ -37,8 +37,6 @@ public class ReverseBidding extends BaseEntity {
     @Column(nullable = false)
     private Integer hopePrice; // 희망가
 
-    @Enumerated(EnumType.STRING)
-    private ReversebidAuctionStatus reversebidAuctionStatus;
 
     @Column(nullable = false)
     private LocalDateTime reverseBiddingExpireDate; // 마감기간
