@@ -359,7 +359,7 @@ table {
 								style="flex-flow: nowrap; width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
 								<div class="col-sm-3" style="border-right: 0px; width: 110px;"
-									th:text="${#temporals.format(auction.a  uctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
+									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 								<div class="col-sm-3"
 									style="width: 100px; border-right: 0px; text-align: center;">~</div>
 								<div class="col-sm-3" style="width: 240px;"
@@ -663,21 +663,14 @@ table {
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
-											<input id='sum' type='text'name="sum"
+											<input id='sum' type='text'name="sum" value="1"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
 
 
 									<div style="text-align: right; width: 600px;">
-                    	<input type='button' onclick='count("minus")'
-											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-											type='button' onclick='count("plus")'
-											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-											style="margin-top: 10px; width: 80px; height: 40px;" />
+
 										<div>
 
 
