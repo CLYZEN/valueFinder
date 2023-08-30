@@ -34,7 +34,6 @@ import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
 
 import com.ezen.valuefinder.entity.*;
-import com.ezen.valuefinder.repository.ReverseBiddingRepository;
 import com.ezen.valuefinder.service.*;
 
 
@@ -158,7 +157,7 @@ public class AuctionController {
 
 		model.addAttribute("remainingTime",auction.getRemainingTime());
 		if (auction.getAuctionType() == AuctionType.PUBLIC) {
-			model.addAttribute("auction", auction);
+            model.addAttribute("auction", auction);
 			model.addAttribute("nowTime", LocalDateTime.now());
 			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
 			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);

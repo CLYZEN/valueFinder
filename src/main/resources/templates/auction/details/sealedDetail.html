@@ -291,33 +291,31 @@ table {
 
 		<div class="category">
 			<ul class="category_list">
-				<li><a href="#women" class="nav-link" data-bs-toggle="collapse"
-					data-bs-target="#collapseExample" aria-expanded="false"
-					aria-controls="collapseExample">전체</a></li>
-				<li><a href="#women" class="nav-link">인기매물</a></li>
-				<li><a href="#men" class="nav-link">디지털기기</a></li>
-				<li><a href="#kids" class="nav-link">가구/인테리어</a></li>
-				<li><a href="#accessories" class="nav-link">여성의류</a></li>
-				<li><a href="#brand" class="nav-link">여성잡화</a></li>
-				<li><a href="#brand" class="nav-link">남성패션/잡화</a></li>
-				<li><a href="#sale" class="nav-link">생활가전</a></li>
+				<li><a th:href="'/auction/sealedbid?category=0'" class="nav-link">전체</a></li>
+				<li><a th:href="'/auction/sealedbid?category=0'" class="nav-link">인기매물</a></li>
+				<li><a th:href="'/auction/sealedbid?category=1'" class="nav-link">디지털기기</a></li>
+				<li><a th:href="'/auction/sealedbid?category=2'" class="nav-link">가구/인테리어</a></li>
+				<li><a th:href="'/auction/sealedbid?category=3'"class="nav-link">여성의류</a></li>
+				<li><a th:href="'/auction/sealedbid?category=4'" class="nav-link">여성잡화</a></li>
+				<li><a th:href="'/auction/sealedbid?category=5'" class="nav-link">남성패션/잡화</a></li>
+				<li><a th:href="'/auction/sealedbid?category=6'" class="nav-link">생활가전</a></li>
 			</ul>
 
 			<ul class="category_list">
-				<li><a href="#sale" class="nav-link">생활/주방</a></li>
-				<li><a href="#sale" class="nav-link">가공식품</a></li>
-				<li><a href="#sale" class="nav-link">스포츠/레져</a></li>
-				<li><a href="#sale" class="nav-link">취미/게임/음반</a></li>
-				<li><a href="#sale" class="nav-link">뷰티/미용</a></li>
-				<li><a href="#sale" class="nav-link">식물</a></li>
-				<li><a href="#sale" class="nav-link">반려동물용품</a></li>
-				<li><a href="#sale" class="nav-link">티켓/교환권</a></li>
+				<li><a th:href="'/auction/sealedbid?category=7'" class="nav-link">생활/주방</a></li>
+				<li><a th:href="'/auction/sealedbid?category=8'" class="nav-link">가공식품</a></li>
+				<li><a th:href="'/auction/sealedbid?category=9'" class="nav-link">스포츠/레져</a></li>
+				<li><a th:href="'/auction/sealedbid?category=10'" class="nav-link">취미/게임/음반</a></li>
+				<li><a th:href="'/auction/sealedbid?category=11'" class="nav-link">뷰티/미용</a></li>
+				<li><a th:href="'/auction/sealedbid?category=12'" class="nav-link">식물</a></li>
+				<li><a th:href="'/auction/sealedbid?category=13'" class="nav-link">반려동물용품</a></li>
+				<li><a th:href="'/auction/sealedbid?category=14'" class="nav-link">티켓/교환권</a></li>
 			</ul>
 
 			<ul class="category_list">
-				<li><a href="#sale" class="nav-link">도서</a></li>
-				<li><a href="#sale" class="nav-link">유아도서</a></li>
-				<li><a href="#sale" class="nav-link">기타</a></li>
+				<li><a th:href="'/auction/sealedbid?category=15'" class="nav-link">도서</a></li>
+				<li><a th:href="'/auction/sealedbid?category=16'" class="nav-link">유아도서</a></li>
+				<li><a th:href="'/auction/sealedbid?category=17'" class="nav-link">기타</a></li>
 				<li></li>
 				<li></li>
 				<li></li>
@@ -361,7 +359,7 @@ table {
 								style="flex-flow: nowrap; width: 300px;">
 								<label class="col-sm-2">경매예정기간</label>
 								<div class="col-sm-3" style="border-right: 0px; width: 110px;"
-									th:text="${#temporals.format(auction.a  uctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
+									th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
 								<div class="col-sm-3"
 									style="width: 100px; border-right: 0px; text-align: center;">~</div>
 								<div class="col-sm-3" style="width: 240px;"
@@ -665,21 +663,14 @@ table {
 										<div style="line-height: 40px; margin-right: 20px;">입찰금액
 										</div>
 										<div>
-											<input id='sum' type='text'name="sum"
+											<input id='sum' type='text'name="sum" value="1"
 												style="width: 165px; height: 40px; text-align: end;" />
 										</div>
 									</div>
 
 
 									<div style="text-align: right; width: 600px;">
-                    	<input type='button' onclick='count("minus")'
-											th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-											style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-											type='button' onclick='count("plus")'
-											th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-											style="margin-top: 10px; width: 80px; height: 40px;" />
+
 										<div>
 
 

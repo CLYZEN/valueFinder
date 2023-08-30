@@ -37,7 +37,7 @@ public class ReverseBidding extends BaseEntity {
     @Column(nullable = false)
     private Integer hopePrice; // 희망가
 
-   
+
 
     @Column(nullable = false)
     private LocalDateTime reverseBiddingExpireDate; // 마감기간

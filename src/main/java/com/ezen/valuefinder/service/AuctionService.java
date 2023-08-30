@@ -299,6 +299,7 @@ public class AuctionService {
 	}
 
 
+
     public int itemCount(Long memberId) {
         return itemRepository.countItemsByMemberId(memberId);
     }
@@ -313,6 +314,7 @@ public class AuctionService {
     	
     	auctionQueryRepository.delete(auctionQuery);
     }
+
 
     private void successBidding(Auction auction) {
         Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
@@ -389,6 +391,7 @@ public class AuctionService {
             auction.setRemainingTime(hours + "시간 " + minutes + "분 " + seconds + "초");
         }
     }
+
 	 
     public Page<Auction> getAuctionList(Pageable pageable, AuctionType auctionType, Long categoryCode) {
         if(categoryCode == 0) {
@@ -402,6 +405,7 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
+
 
     public void addAuctionView(Long id) {
         Auction auction = auctionRepository.findById(id).orElseThrow();
