@@ -57,6 +57,10 @@ public class AuctionService {
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
+    
+    public Auction findById(Long id) {
+    	return auctionRepository.findById(id).orElseThrow();
+    }
 
     public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception {
         Category category;

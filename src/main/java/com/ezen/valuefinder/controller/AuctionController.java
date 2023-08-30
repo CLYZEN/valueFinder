@@ -216,8 +216,15 @@ public class AuctionController {
 
     //경매 신고 페이지 띄우기
     @GetMapping(value = "/auction/report/{auctionNo}")
-    public String reportAuction(@PathVariable Long auctionNo,Model model) {
+    public String reportAuction(@PathVariable Long auctionNo,Model model, Authentication authentication) {
+    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    	Member member = principalDetails.getMember();
     	model.addAttribute("auctionReportDto", new AuctionReportDto());
+    	Auction auction = auctionService.findById(auctionNo);
+    	model.addAttribute("auction",auction); // 신고할 경매
+    	model.addAttribute("member",member); // 지금 접속한 사용자
+    	
+    	
         return "/auction/report";
     }
     
@@ -227,20 +234,25 @@ public class AuctionController {
     								Model model, Authentication authentication,@PathVariable Long auctionNo) {
     	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
     	Member member = principalDetails.getMember();
-    	
+    	Auction auction = auctionService.findById(auctionNo);
     	 if(bindingResult.hasErrors()) {
+    		 model.addAttribute("auction",auction); // 신고할 경매
+    	    model.addAttribute("member",member); // 지금 접속한 사용자
     		 model.addAttribute("auctionReportDto", new AuctionReportDto());
 			 return "auction/report";
 		 }
     	
     	try {
-    		Auction auction = auctionService.getAuction(auctionNo);
     		auctionReportService.saveReport(auctionReportDto, member, auction);
 		} catch (Exception e) {
 			 e.printStackTrace();
+			 model.addAttribute("auction",auction); // 신고할 경매
+ 	    	model.addAttribute("member",member); // 지금 접속한 사용자
+ 		 model.addAttribute("auctionReportDto", new AuctionReportDto());
+			 return "auction/report";
 		}
     	
-    	return "auction/report";
+    	return "redirect:/";
     }
     
     

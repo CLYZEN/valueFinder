@@ -30,6 +30,7 @@
   </style>
 </th:block>
 
+<!-- 아이작스를 위한 토큰 -->
 <head>
 <meta name="_csrf" th:content="${_csrf.token}" />
 <meta name="_csrf_header" th:content="${_csrf.headerName}" />
@@ -60,28 +61,29 @@
       </div>
    </div>
    <div class="container">
-      <form name="newProduct" action="addProduct_process.jsp" method="post" class="form-horizontal"
+      <form name="newProduct" th:action="'/auction/report/'+${auctionNo}" method="post" class="form-horizontal"
       th:object="${auctionReportDto}">
        <div class="form-group row col-sm-top" style="padding-top: 25px;">
           <label class="col-sm-2">판매자</label>
           <div class="col-sm-3">
-             <input type="text" name="pname" class="form-control" />          
+             <input type="text" name="pname" class="form-control" th:value="${auction.item.member.nickname}"/>          
           </div>
        </div>
        
        <div class="form-group row">
           <label class="col-sm-2">제목</label>
           <div class="col-sm-3">
-             <input type="text" name="auctionReportTitle" class="form-control" th:field="*{auctionReportTitle}"/> 
+             <input type="text" class="form-control" th:field="*{auctionReportTitle}"/> 
              <p th:if="${#fields.hasErrors('auctionReportTitle')}"
-										th:errors="*{auctionReportTitle}" class="fieldError">Incorrect Data</p>        
+				th:errors="*{auctionReportTitle}" class="fieldError">Incorrect Data</p>
+				
           </div>
        </div>
        
            <div class="form-group row col-sm-cet">
           <label class="col-sm-2">등록자</label>
           <div class="col-sm-3">
-             <input type="text" name="uniPrice" class="form-control" />          
+             <input type="text" name="uniPrice" class="form-control" th:value="${member.nickname}" />          
           </div>
        </div>
        
@@ -89,7 +91,7 @@
            <div class="form-group row">
           <label class="col-sm-2" style="line-height: 299px;">신고내용</label>
           <div class="col-sm-5">
-             <textarea name="auctionReportDetail" class="form-control" 
+             <textarea  class="form-control"  th:field="*{auctionReportDetail}"
              		   style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit;border: 1px solid;"></textarea>
              <p th:if="${#fields.hasErrors('auctionReportDetail')}"
 				th:errors="*{auctionReportDetail}" class="fieldError">Incorrect Data</p>          
@@ -102,6 +104,7 @@
             <input type="submit" class="btn btn-primary" value="등록" style="border-radius: inherit;" />
          </div>
       </div>
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
    </form>
    </div>
    
