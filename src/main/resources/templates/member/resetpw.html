@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 각 페이지의 CSS가 작성될 위치 -->
+<th:block layout:fragment="css">
+  <link rel="stylesheet" type="text/css" href="/css/memberRegister.css">
+  <style>
+  </style>
+</th:block>
+
+<div layout:fragment="content">
+  <div class="sublogo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+         fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+      <path
+              d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+    </svg>
+    <a href="/" style="text-decoration: none;">홈</a>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+         fill="currentColor" class="bi bi-chevron-compact-right"
+         viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+            d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+    </svg>
+    <a href="/" style="text-decoration: none;">로그인</a>
+    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+         fill="currentColor" class="bi bi-chevron-compact-right"
+         viewBox="0 0 16 16">
+      <path fill-rule="evenodd"
+            d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+    </svg>
+    <a href="/" style="text-decoration: none;">비밀번호재설정</a>
+  </div>
+
+
+  <div class="form_content">
+    <div class="inner">
+      <div class="form_section">
+
+        <div class="form_list">
+          <h2 style="font-weight: bold;">비밀번호 재설정</h2>
+          <form action="/member/updatepw" method="post" id="updateForm">
+            <div class="form_login findpw error" id="divfindpw">
+              <ul>
+                <li><p>비밀번호의 경우 암호화 저장되어 분실시 찾아드릴 수 없는 정보입니다.</p></li>
+                <li><p>본인 확인을 통해 비밀번호를 재설정 하실 수 있습니다.</p></li>
+              </ul>
+
+
+              <table class="find_password">
+
+                <tr>
+                  <th scope="row">비밀번호</th>
+                  <td><input class="find_password_email" type="password" name="password" id="password"
+                             data-err-target="form-err__email" data-err-msg="이메일을 입력해주세요."
+                             placeholder="비밀번호"
+                             style="height: 150px">
+                    <span class="form-err form-err__email"></span></td>
+                </tr>
+                <tr>
+                  <th scope="row">비밀번호 확인</th>
+                  <td><input class="find_password_phone" type="password" name="chkpassword" id="chkpassword"
+                             data-err-target="form-err__phone" data-err-msg="휴대폰번호를 입력해주세요."
+                             placeholder="비밀번호 확인" style="height: 150px" >
+                    <span class="form-err form-err__phone"></span></td>
+                </tr>
+              </table>
+
+              <div class="form-group">
+                <div class="find_pw_poot">
+                  <button onclick="updatePw()" class="btn btn-primary mb-3">비밀번호 재설정</button>
+                </div>
+              </div>
+            </div>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="hidden" name="email" th:value="${email}">
+          </form>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- 각 페이지의 스크립트가 작성될 위치 -->
+<th:block layout:fragment="script">
+  <script>
+    //왜 안되는지 모르겠음
+    let errorMessage = /*[[${errorMessage}]]*/ null;
+
+    if (errorMessage != null) {
+      alert(errorMessage);
+    }
+
+    function updatePw(){
+      let password = $('#password').val();
+      let chkpassword = $('#chkpassword').val();
+      let form = $('#updateForm');
+
+      if(password == chkpassword) {
+        form.submit();
+        return;
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+        return;
+      }
+    }
+
+  </script>
+</th:block>
+
+
+</html>

@@ -1,5 +1,8 @@
 package com.ezen.valuefinder.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +13,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class MemberOut {
+public class MemberOut extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,4 +25,6 @@ public class MemberOut {
 
     @Column(nullable = false)
     private String memberOutDetail; // 탈퇴사유
+    
+ 
 }

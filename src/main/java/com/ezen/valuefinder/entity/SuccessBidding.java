@@ -11,7 +11,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class SuccessBidding {
+public class SuccessBidding extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +21,7 @@ public class SuccessBidding {
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 
@@ -30,4 +30,8 @@ public class SuccessBidding {
     private BidStatus bidStatus; // 낙찰상태
 
     private String shippingNo; // 운송장번호
+
+    private void updateStatus(BidStatus bidStatus) {
+        this.bidStatus = bidStatus;
+    }
 }

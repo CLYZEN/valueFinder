@@ -5,14 +5,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-@Entity
-@Table(name = "wish")
-@ToString
 @Getter
 @Setter
-public class Wish {
+@ToString
+@Entity
+@Table(name = "wish")
+public class Wish extends BaseEntity {
+	
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "wish_no")
     private Long wishNo; // 찜 식별자
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -22,4 +24,6 @@ public class Wish {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; //회원
+    
+
 }

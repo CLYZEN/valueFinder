@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<!-- 각 페이지의 CSS가 작성될 위치 -->
+<th:block layout:fragment="css">
+	<style>
+.col-sm-2 {
+	background-color: #D9D9D9;
+	font-weight: 900;
+	color: black;
+	text-align: center;
+	border: 1px solid gray;
+	border-left: 0px;
+	line-height: 39px;
+}
+
+.col-sm-3 {
+	margin-left: 25px;
+	border: 1px solid gray;
+	width: 1060px;
+}
+
+.btn-primary {
+	background-color: #52A8E0;
+	opacity: 63%;
+}
+
+.col-sm-top {
+	border-top: 3px solid black;
+}
+
+.col-sm-btm {
+	border-bottom: 3px solid black;
+}
+
+.col-sm-cet {
+	margin-bottom: 25px;
+}
+
+.col-md-123 {
+	display: flex;
+}
+
+.text-black {
+	width: 90px;
+	margin-left: 20px;
+	line-height: 38px;
+}
+
+.form-control {
+	width: 300px;
+	border-radius: inherit;
+	border: 1px solid #bbbbbb;
+}
+
+.error {
+	color: red;
+}
+
+</style>
+</th:block>
+
+<div layout:fragment="content">
+
+
+
+
+	<div class="site-section" style="margin-bottom: 100px;">
+		<div class="container">
+			<div class="row">
+				<div class="container" style="padding-left: 0px;">
+					<div style="margin-bottom: 25px;">
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+							fill="currentColor" class="bi bi-house-door-fill"
+							viewBox="0 0 16 16">
+				 				<path
+								d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+											</svg>
+						<a href="/" style="text-decoration: none;">홈</a>
+						<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+							fill="currentColor" class="bi bi-chevron-compact-right"
+							viewBox="0 0 16 16">
+				 			 	<path fill-rule="evenodd"
+								d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+							</svg>
+						<a href="/" style="text-decoration: none;">로그인</a>
+					</div>
+					<h4 class=""
+						style="text-align: center; font-size: 40px; margin-bottom: 30px;">
+						로그인</h4>
+				</div>
+				<div class="col-md-12" style="text-align: -webkit-center;">
+
+					<div class="p-3 p-lg-5 border"
+						style="border: 1px solid #52A8E0 !important; height: 500px; width: 1000px; border-top: 3px solid #52A8E0 !important; text-align: -webkit-center;">
+						<form role="form" action="/member/login" method="post"
+							style="background-color: #D9D9D9; width: 600px; height: 200px; display: flex; margin-top: 20px; margin-bottom: 15px;">
+							<div>
+								<div class="form-group row">
+									<div class="col-md-123" style="margin-top: 30px; ">
+										<label th:for="email" class="text-black">아이디</label> <input
+											type="email" class="form-control" id="email" name="email"
+											placeholder="이메일을 입력해주세요">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-md-123" style="margin-top: 10px;">
+										<label th:for="password" class="text-black">비밀번호</label> <input
+											type="password" class="form-control" id="password"
+											name="password" placeholder="비밀번호를 입력해주세요">
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-md-123"
+										style="margin-top: 10px; width: 330px; justify-content: center;">
+										<p style="font-size: 12px; margin-bottom: 0px; color: black;">자동
+											로그인</p>
+										<input type="checkbox" name="remember-me" id="remember-me"
+											style="margin-left: 9px;" />
+									</div>
+								</div>
+
+								<div class="form-group row">
+									<div class="col-md-123"
+										style="margin-top: 10px; width: 330px; justify-content: center;">
+										<p style="font-size: 12px; margin-bottom: 0px; color: black;">아이디
+											기억</p>
+										<input type="checkbox" name="id_save" id="id_save"
+											style="margin-left: 9px;" />
+									</div>
+								</div>
+								<p th:if="${loginErrorMsg}" class="error" th:text="${loginErrorMsg}"></p>
+							</div>
+
+							<div class="form-group">
+								<div>
+									<button type="submit" class="btn btn-primary mb-3"
+										id="loginButton"
+										style="width: 120px; height: 87px; margin-top: 30px; margin-left: 35px; border-radius: inherit; font-size: 20px; font-weight: 900;">로그인</button>
+
+								</div>
+							</div>
+
+
+							<input type="hidden" th:name="${_csrf.parameterName}"
+								th:value="${_csrf.token}">
+						</form>
+						<div class="form-group"
+							style="text-align-last: start; width: 600px;">
+							<a href="index.html"> <img alt="kakao"
+								src="/img/kakao_login_medium_narrow.png"
+								style="margin-top: 20px;">
+							</a>
+							<div style="margin-top: 30px; display: flex;">
+								<p
+									style="font-size: 16px; margin-bottom: 0px; color: black; font-weight: 700; line-height: 37px;">아직
+									회원이 아니신가요?</p>
+								<div>
+									<button type="submit" class="btnfinder" id="loginbtn" onclick="moveRegister()"
+										style="margin-left: 60px; width: 150px; text-align-last: center; background-color: white;border: 1px solid #bbbbbb;">회원가입</button>
+								</div>
+							</div>
+							<div style="margin-top: 20px; display: flex;">
+								<p
+									style="font-size: 16px; margin-bottom: 0px; color: black; font-weight: 700; line-height: 37px;">
+									비밀번호를 잊어버리셨나요?</p>
+								<div>
+									<button type="submit" class="btnfinder" id="loginbtn" onclick="movePage()"
+										style="margin-left: 32px; width: 150px; text-align-last: center; background-color: white;border: 1px solid #bbbbbb;">비밀번호 찾기</button>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+
+
+
+			</div>
+		</div>
+	</div>
+
+
+</div>
+<!-- end s-content -->
+
+
+
+<!-- 각 페이지의 스크립트가 작성될 위치 -->
+<th:block layout:fragment="script">
+	<script type="text/javascript" src="/js/cookie.js"></script>
+	<script th:inline="javascript">
+		// 이메일 기억
+		$(document).ready(function(){
+			var userInputId = getCookie("userInputId"); //쿠키값(이메일주소)을 가져온다.
+			var setCookieYN = getCookie("setCookieYN"); //쿠키값(이메일 저장 여부)을 가져온다.
+			var rememberMe = getCookie("remember-me");
+
+			if(rememberMe != null) {
+				$("remember-me").prop("checked",true);
+				location.href = "/";
+			}
+
+			if(setCookieYN == 'Y') { //이메일 저장 여부가 Y면
+				$("#id_save").prop("checked", true); //이메일 저장 체크박스를 체크한다
+				$("#email").val(userInputId); //이메일 input창에는 쿠키에서 가져온 이메일 주소를 넣는다.
+			} else {
+				$("#id_save").prop("checked", false);
+			}
+
+
+			//로그인 버튼 클릭시 쿠키에 이메일 저장여부, 이메일 저장
+			$("#loginButton").click(function(){
+
+				if($("#id_save").is(":checked")) { //이메일 저장에 체크가 되어있다면
+					var userInputId = $("#email").val(); //이메일 값을 가지고 온다.
+
+					//쿠키 생성
+					setCookie("userInputId", userInputId, 60); //이메일 저장
+					setCookie("setCookieYN", "Y", 60); //이메일 저장여부 저장
+				} else {
+					//쿠키 삭제
+					deleteCookie("userInputId");
+					deleteCookie("setCookieYN");
+				}
+
+				if($("#remember-me").is(":unchecked")) {
+					deleteCookie("remember-me");
+				}
+			});
+
+
+		});
+
+		function movePage() {
+			location.href='/member/findpw';
+		}
+
+		function moveRegister() {
+			location.href='/member/regist';
+		}
+	</script>
+</th:block>
+
+</html>

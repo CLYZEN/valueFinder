@@ -120,34 +120,57 @@
 
                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                   <!-- Card -->
-                  <div class="col">
-                    <div class="product-item">
-                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                      <figure>
-                        <a href="product-single.html" title="Product Title">
-                          <img src="images/thumb-bananas.png"  class="tab-image">
-                        </a>
-                      </figure>
-                      <h3>Sunstar Fresh Melon Juice</h3>
-                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                      <span class="price">$18.00</span>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
-                          <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
+                  <div class="col" th:each="popular:${popularList}">
+                                        <span th:if="${popular.auctionType.toString()} == 'PUBLIC'"
+                                              th:text="공개입찰경매"></span>
+                    <span th:if="${popular.auctionType.toString()} == 'SEALED'"
+                          th:text="비공개경매"></span>
+                    <span th:if="${popular.auctionType.toString()} == 'REALTIME'"
+                          th:text="실시간경매"></span>
+                    <a th:href="'/auction/detail/'+ ${popular.auctionNo}">
+                      <div class="product-item" th:onclick="'javascript:moveDetail(' + ${popular.auctionNo} +')'" style="cursor: pointer">
+                        <figure>
+                          <a th:href="'/auction/detail/'+ ${popular.auctionNo}" title="Product Title">
+                            <img src="images/thumb-bananas.png" class="tab-image">
+                          </a>
+                        </figure>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${popular.auctionStatus.toString()} == 'PENDING'"
+                                th:text="대기중" disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${popular.auctionStatus.toString()} == 'END'" th:text="종료"
+                                disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${popular.auctionStatus.toString()} == 'LAST'"
+                                th:text="마감임박"></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${popular.auctionStatus.toString()} == 'PROGRESS'"
+                                th:text="진행중"></button>
+
+                        <div class="d-flex justify-content-center">
+                          <span class="time_action" th:text="${popular.remainingTime}"></span>
+
                         </div>
-                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+
+                        <div class="item_detail">
+                          <h3>물건 이름 : <span th:text="${popular.item.itemName}"></span></h3>
+                          <h3>시작가 : <span th:text="${popular.auctionStartPrice}"></span>
+                            <span>원</span></h3>
+                          <h3 th:if="${popular.auctionType.toString()} != 'SEALED'">현재가 : <span th:text="${popular.auctionNowPrice}"></span>
+                            <span>원</span></h3>
+                          <h3>입찰수 : <span th:text="${popular.biddingCount}">0</span>
+                            <span>회</span></h3>
+                          <h3>마감
+                            <span th:text="${#temporals.format(popular.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+                          </h3>
+                        </div>
+                        </h3>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div class="input-group product-qty">
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </div>
                   <!-- Card -->
                 </div>
@@ -174,34 +197,57 @@
 
                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                   <!-- Card -->
-                  <div class="col">
-                    <div class="product-item">
-                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                      <figure>
-                        <a href="product-single.html" title="Product Title">
-                          <img src="images/thumb-bananas.png"  class="tab-image">
-                        </a>
-                      </figure>
-                      <h3>Sunstar Fresh Melon Juice</h3>
-                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                      <span class="price">$18.00</span>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
-                          <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
+                  <div class="col" th:each="last:${lastList}">
+                                        <span th:if="${last.auctionType.toString()} == 'PUBLIC'"
+                                              th:text="공개입찰경매"></span>
+                    <span th:if="${last.auctionType.toString()} == 'SEALED'"
+                          th:text="비공개경매"></span>
+                    <span th:if="${last.auctionType.toString()} == 'REALTIME'"
+                          th:text="실시간경매"></span>
+                    <a th:href="'/auction/detail/'+ ${last.auctionNo}">
+                      <div class="product-item" th:onclick="'javascript:moveDetail(' + ${last.auctionNo} +')'" style="cursor: pointer">
+                        <figure>
+                          <a th:href="'/auction/detail/'+ ${last.auctionNo}" title="Product Title">
+                            <img src="images/thumb-bananas.png" class="tab-image">
+                          </a>
+                        </figure>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${last.auctionStatus.toString()} == 'PENDING'"
+                                th:text="대기중" disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${last.auctionStatus.toString()} == 'END'" th:text="종료"
+                                disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${last.auctionStatus.toString()} == 'LAST'"
+                                th:text="마감임박"></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${last.auctionStatus.toString()} == 'PROGRESS'"
+                                th:text="진행중"></button>
+
+                        <div class="d-flex justify-content-center">
+                          <span class="time_action" th:text="${last.remainingTime}"></span>
+
                         </div>
-                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+
+                        <div class="item_detail">
+                          <h3>물건 이름 : <span th:text="${last.item.itemName}"></span></h3>
+                          <h3>시작가 : <span th:text="${last.auctionStartPrice}"></span>
+                            <span>원</span></h3>
+                          <h3 th:if="${last.auctionType.toString()} != 'SEALED'">현재가 : <span th:text="${last.auctionNowPrice}"></span>
+                            <span>원</span></h3>
+                          <h3>입찰수 : <span th:text="${last.biddingCount}">0</span>
+                            <span>회</span></h3>
+                          <h3>마감
+                            <span th:text="${#temporals.format(last.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+                          </h3>
+                        </div>
+                        </h3>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div class="input-group product-qty">
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </div>
                   <!-- Card -->
                 </div>
@@ -228,34 +274,57 @@
 
                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                   <!-- Card -->
-                  <div class="col">
-                    <div class="product-item">
-                      <a href="#" class="btn-wishlist"><svg width="24" height="24"><use xlink:href="#heart"></use></svg></a>
-                      <figure>
-                        <a href="product-single.html" title="Product Title">
-                          <img src="images/thumb-bananas.png"  class="tab-image">
-                        </a>
-                      </figure>
-                      <h3>Sunstar Fresh Melon Juice</h3>
-                      <span class="qty">1 Unit</span><span class="rating"><svg width="24" height="24" class="text-primary"><use xlink:href="#star-solid"></use></svg> 4.5</span>
-                      <span class="price">$18.00</span>
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="input-group product-qty">
-                              <span class="input-group-btn">
-                                  <button type="button" class="quantity-left-minus btn btn-danger btn-number"  data-type="minus" data-field="">
-                                    <svg width="16" height="16"><use xlink:href="#minus"></use></svg>
-                                  </button>
-                              </span>
-                          <input type="text" id="quantity" name="quantity" class="form-control input-number" value="10" min="1" max="100">
-                          <span class="input-group-btn">
-                                  <button type="button" class="quantity-right-plus btn btn-success btn-number" data-type="plus" data-field="">
-                                      <svg width="16" height="16"><use xlink:href="#plus"></use></svg>
-                                  </button>
-                              </span>
+                  <div class="col" th:each="newauction:${newList}">
+                                        <span th:if="${newauction.auctionType.toString()} == 'PUBLIC'"
+                                              th:text="공개입찰경매"></span>
+                    <span th:if="${newauction.auctionType.toString()} == 'SEALED'"
+                          th:text="비공개경매"></span>
+                    <span th:if="${newauction.auctionType.toString()} == 'REALTIME'"
+                          th:text="실시간경매"></span>
+                    <a th:href="'/auction/detail/'+ ${newauction.auctionNo}">
+                      <div class="product-item" th:onclick="'javascript:moveDetail(' + ${newauction.auctionNo} +')'" style="cursor: pointer">
+                        <figure>
+                          <a th:href="'/auction/detail/'+ ${newauction.auctionNo}" title="Product Title">
+                            <img src="images/thumb-bananas.png" class="tab-image">
+                          </a>
+                        </figure>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${newauction.auctionStatus.toString()} == 'PENDING'"
+                                th:text="대기중" disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${newauction.auctionStatus.toString()} == 'END'" th:text="종료"
+                                disabled></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${newauction.auctionStatus.toString()} == 'LAST'"
+                                th:text="마감임박"></button>
+                        <button class="btn2 d-flex justify-content-center"
+                                th:if="${newauction.auctionStatus.toString()} == 'PROGRESS'"
+                                th:text="진행중"></button>
+
+                        <div class="d-flex justify-content-center">
+                          <span class="time_action" th:text="${newauction.remainingTime}"></span>
+
                         </div>
-                        <a href="#" class="nav-link">Add to Cart <iconify-icon icon="uil:shopping-cart"></a>
+
+                        <div class="item_detail">
+                          <h3>물건 이름 : <span th:text="${newauction.item.itemName}"></span></h3>
+                          <h3>시작가 : <span th:text="${newauction.auctionStartPrice}"></span>
+                            <span>원</span></h3>
+                          <h3 th:if="${newauction.auctionType.toString()} != 'SEALED'">현재가 : <span th:text="${newauction.auctionNowPrice}"></span>
+                            <span>원</span></h3>
+                          <h3>입찰수 : <span th:text="${newauction.biddingCount}">0</span>
+                            <span>회</span></h3>
+                          <h3>마감
+                            <span th:text="${#temporals.format(newauction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+                          </h3>
+                        </div>
+                        </h3>
+                        <div class="d-flex align-items-center justify-content-between">
+                          <div class="input-group product-qty">
+                          </div>
+                        </div>
                       </div>
-                    </div>
+                    </a>
                   </div>
                   <!-- Card -->
                 </div>
@@ -268,11 +337,19 @@
   <!-- 신규 매물 End -->
 </div>
 <!-- end s-content -->
-</div>
+
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
   <script th:inline="javascript">
+    let message = [[${message}]];
+
+    if(message != null) {
+      alert(message);
+    }
+    function moveDetail(auctionNo) {
+      location.href='/auction/detail/' + auctionNo;
+    }
   </script>
 </th:block>
 

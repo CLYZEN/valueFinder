@@ -1,17 +1,23 @@
 package com.ezen.valuefinder.entity;
 
 import com.ezen.valuefinder.constant.AuctionQueryDistinction;
+import com.ezen.valuefinder.dto.AuctionQueryDto;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "auction_query")
 @ToString
 @Getter
 @Setter
-public class AuctionQuery {
+public class AuctionQuery extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,4 +40,33 @@ public class AuctionQuery {
     @Enumerated(EnumType.STRING)
     private AuctionQueryDistinction auctionQueryDistinction; // 경매문의구분
 
+    @Column(nullable = false)
+    private boolean readOk; // 읽음 안읽음
+
+    private LocalDateTime readOkTime; // 읽은 시간
+    
+    public void updateQuery(AuctionQueryDto auctionQueryDto) {
+    	this.auctionQueryTitle = auctionQueryDto.getAuctionQueryTitle();
+    	this.auctionQueryDetail = auctionQueryDto.getAuctionQueryDetail();
+    	
+    	
+    }
+    
+    @OneToMany(mappedBy = "auctionQuery" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuctionQueryResponse> auctionQueryResponses = new ArrayList<>();
+    
+    
+    
+    
+    
+   
+    
+    
+    
+
+ 
+  
+    
+   
 }

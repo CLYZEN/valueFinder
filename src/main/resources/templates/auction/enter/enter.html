@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
+
+<!-- 각 페이지의 CSS가 작성될 위치 -->
+<th:block layout:fragment="css">
+	<style>
+.col-sm-2 {
+	background-color: #D9D9D9;
+	font-weight: 900;
+	color: black;
+	text-align: center;
+	border: 1px solid gray;
+	border-left: 0px;
+	line-height: 39px;
+}
+
+.col-sm-3 {
+	margin-left: 25px;
+	border: 1px solid gray;
+	width: 1060px;
+}
+
+.btn-primary {
+	background-color: #355808;
+	opacity: 63%;
+	border: 0px;
+}
+
+.col-sm-top {
+	border-top: 3px solid black;
+}
+
+.col-sm-btm {
+	border-bottom: 3px solid black;
+}
+
+.col-sm-cet {
+	margin-bottom: 25px;
+}
+</style>
+</th:block>
+
+<div layout:fragment="content">
+
+
+
+	<div class="jumbotron">
+
+		<div class="container" style="padding-left: 0px;">
+			<div style="margin-bottom: 25px;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+					fill="currentColor" class="bi bi-house-door-fill"
+					viewBox="0 0 16 16">
+ 				<path
+						d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
+			</svg>
+				<a href="/static" style="text-decoration: none;">홈</a>
+				<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+					fill="currentColor" class="bi bi-chevron-compact-right"
+					viewBox="0 0 16 16">
+ 			 <path fill-rule="evenodd"
+						d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
+			</svg>
+				<a href="/static" style="text-decoration: none;">참가신청</a>
+			</div>
+			<h4 class="">참가신청</h4>
+		</div>
+	</div>
+	<div class="container">
+
+		<form name="reversebidEnter"  method="post" role="form" th:object="${reverseBiddingJoin}" enctype="multipart/form-data"
+			class="form-horizontal" >
+
+			<div class="form-group row">
+				<label class="col-sm-2">등록자</label>
+				<div class="col-sm-3" th:text=${bid.member.nickname}>
+					<input type="text" name="pname" class="form-control"  disabled/>
+				</div>
+			</div>
+
+			<div class="form-group row">
+				<label class="col-sm-2">제목</label>
+
+				<div class="col-sm-3" th:text=${bid.item.itemName}>
+					<input type="text"  class="form-control" />
+				</div>
+			</div>
+
+			<div class="form-group row col-sm-cet">
+				<label class="col-sm-2">금액</label>
+				<div class="col-sm-3" th:text=${bid.suggestPrice}>
+					<input type="text"  class="form-control" />
+				</div>
+			</div>
+
+
+			<div class="form-group row col-sm-cet">
+				<label class="col-sm-2" style="line-height: 299px;">물품 상세설명</label>
+				<div class="col-sm-5" >
+					<textarea name="description" class="form-control" th:text=${bid.item.itemDetail}
+						style="height: 300px; width: 1060px; margin-left: 13px; border-radius: inherit; border: 1px solid;"></textarea>
+				</div>
+			</div>
+			
+			<div class="form-group row">
+				<label class="col-sm-2" style="height: 510px; line-height: 510px">이미지
+					등록</label>
+				<div class="col-sm-5" style="margin-left: 13px;" >
+					<div id="image_container"  th:src=${bid.item.itemImgList[0].itemImageUrl}
+						style="height: 430px; width: 1060px; border-radius: inherit; border: 1px solid; margin-bottom: 20px;"
+						></div>
+					<input type="file" id="image" accept="image/*"
+						onchange="setThumbnail(event);" multiple />
+					<p>(이미지 등록은 최소 1장 최대 10장까지 등록 가능합니다.)</p>
+				</div>
+			</div>
+
+
+			<div class="form-group row"
+				style="margin-top: 40px; border-top: 3px solid; padding-top: 20px;">
+				<div style="display: flex;">
+					<div class="col-sm-offset-2 col-10"
+						style="text-align: right;width: 1035px;">
+						<button type="button" onclick="beforeSubmit()"
+										class="btn btn-primary mb-3" style="border-radius: inherit;width: 110px; border: 2px solid #D9D9D9;color: blue;">
+										수정</button>
+						
+					</div>
+					<div class="col-sm-offset-2"
+						style="margin-left: 20px;">
+						<input type="submit" class="btn" value="삭제"
+							style="border-radius: inherit;width: 110px; border: 2px solid #D9D9D9;color: red;" />
+					</div>
+					<div class="col-sm-offset-2"
+						style=" margin-left: 20px;">
+						<input type="submit" class="btn btn-primary" value="돌아가기"
+							style="border-radius: inherit;width: 110px;" />
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+
+
+</div>
+<!-- end s-content -->
+
+
+<!-- 각 페이지의 스크립트가 작성될 위치 -->
+<th:block layout:fragment="script">
+	<script
+		src="https://cdn.tiny.cloud/1/wbp6amz0uk92ml3i2koa8kum1gthp9eiebu0ynmvboph9x2j/tinymce/5/tinymce.min.js"></script>
+
+	<script>
+      function setThumbnail(event) {
+        for (var image of event.target.files) {
+          var reader = new FileReader();
+          reader.onload = function(event) {
+            var img = document.createElement("img");
+            img.setAttribute("src", event.target.result);
+            document.querySelector("div#image_container").appendChild(img);
+          };
+          console.log(image);
+          reader.readAsDataURL(image);
+        }
+      }
+      
+      function beforeSubmit() {
+    	  const f = document.reversebidEnter;
+  		
+  		f.submit();
+  	}
+    </script>
+</th:block>
+
+</html>
