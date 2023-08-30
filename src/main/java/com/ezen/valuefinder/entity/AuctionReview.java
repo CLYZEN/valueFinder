@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class AuctionReview extends BaseEntity {
+public class AuctionReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionReviewNo; // 경매후기식별자

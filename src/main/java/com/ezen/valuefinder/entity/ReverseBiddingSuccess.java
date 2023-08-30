@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "reverse_bidding_success")
-public class ReverseBiddingSuccess extends BaseEntity {
+public class ReverseBiddingSuccess {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long reverseBiddingSuccessNo; // 역경매낙찰식별자

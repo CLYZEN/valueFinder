@@ -2,15 +2,11 @@ package com.ezen.valuefinder.entity;
 
 import com.ezen.valuefinder.constant.Role;
 import com.ezen.valuefinder.constant.Status;
-import com.ezen.valuefinder.dto.MemberFormDto;
-import com.ezen.valuefinder.dto.MemberModifyDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class Member extends BaseEntity {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long memberId; // 회원식별자
@@ -46,9 +42,6 @@ public class Member extends BaseEntity {
     private String address; // 주소
 
     @Column(nullable = false)
-    private String addressDetail; // 상세주소
-
-    @Column(nullable = false)
     private String phone; // 휴대폰번호
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -58,7 +51,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String bankAddress; // 계좌번호
 
-    private LocalDate birthday; // 생일
+    private LocalDateTime birthday; // 생일
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -66,41 +59,4 @@ public class Member extends BaseEntity {
 
     @Column(nullable = false)
     private Integer caution; // 경고횟수
-
-    public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder,Bank bank) {
-        Member member = new Member();
-
-        member.setName(memberFormDto.getName());
-        member.setEmail(memberFormDto.getEmail());
-        member.setPassword(passwordEncoder.encode(memberFormDto.getPassword()));
-        member.setNickname(memberFormDto.getNickname());
-        member.setRole(Role.ROLE_USER);
-        member.setAddressNo(memberFormDto.getAddressNo());
-        member.setAddress(memberFormDto.getAddress());
-        member.setAddressDetail(memberFormDto.getAddressDetail());
-        member.setPhone(memberFormDto.getPhone());
-        member.setBank(bank);
-        member.setBankAddress(memberFormDto.getBankAddress());
-        member.setBirthday(memberFormDto.getBirthday());
-        member.setStatus(Status.ACTIVE);
-        member.setCaution(0);
-
-        return member;
-    }
-
-    public void updateMember(MemberModifyDto memberModifyDto,Bank bank) {
-        this.name = memberModifyDto.getName();
-        this.nickname = memberModifyDto.getNickName();
-        this.addressNo = memberModifyDto.getAddressNo();
-        this.address = memberModifyDto.getAddress();
-        this.addressDetail = memberModifyDto.getAddressDetail();
-        this.phone = memberModifyDto.getPhone();
-        this.bank = bank;
-        this.bankAddress = memberModifyDto.getBankAddress();
-        this.birthday = memberModifyDto.getBirthday();
-    }
-
-    public void updatePassword(String password,PasswordEncoder passwordEncoder) {
-        this.password = passwordEncoder.encode(password);
-    }
 }

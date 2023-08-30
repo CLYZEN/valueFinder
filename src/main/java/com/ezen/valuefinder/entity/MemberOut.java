@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class MemberOut extends BaseEntity {
+public class MemberOut {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

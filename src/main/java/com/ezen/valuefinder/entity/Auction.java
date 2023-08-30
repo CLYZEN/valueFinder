@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -15,7 +14,7 @@ import java.time.LocalDateTime;
 @ToString
 @Getter
 @Setter
-public class Auction extends BaseEntity {
+public class Auction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionNo; // 경매식별자
@@ -41,16 +40,8 @@ public class Auction extends BaseEntity {
     private LocalDateTime auctionEndTime; // 경매종료일
 
     @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
     private AuctionStatus auctionStatus; // 경매상태
 
-    @Column(columnDefinition = "integer default 0", nullable = false)	
+    @Column(nullable = false)
     private Integer auctionCount; // 경매조회수
-
-
-    private String remainingTime; // 남은시간
-
-    @Column(columnDefinition = "integer default 0", nullable = false)
-    private Integer biddingCount; // 입찰횟수
-
 }

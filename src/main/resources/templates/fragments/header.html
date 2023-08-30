@@ -9,81 +9,73 @@
 
             <div class="col-sm-4 col-lg-3 text-center text-sm-start">
                 <div class="main-logo">
-                    <a href="/">
-                        <img src="/img/logo.png" alt="logo" class="img-fluid">
+                    <a href="index.html">
+                        <img src="images/logo.png" alt="logo" class="img-fluid">
                     </a>
                 </div>
             </div>
 
             <div class="col-sm-6 offset-sm-2 offset-md-0 col-lg-5 d-none d-lg-block">
                 <div class="search-bar row bg-light p-2 my-2 rounded-4">
-                    <form id="search-form" class="text-center d-flex" action="/auction/searched" method="post">
                     <div class="col-md-4 d-none d-md-block">
-                        <select class="form-select border-0 bg-transparent" name="category">
-                            <option value="0">전체 카테고리</option>
-                            <option value="1">디지털기기</option>
-                            <option value="2">가구/인테리어</option>
-                            <option value="3">여성의류</option>
-                            <option value="4">여성잡화</option>
-                            <option value="5">남성패션/잡화</option>
-                            <option value="6">생활가전</option>
-                            <option value="7">생활/주방</option>
-                            <option value="8">가공식품</option>
-                            <option value="9">스포츠/레저</option>
-                            <option value="10">취미/게임/음반</option>
-                            <option value="11">뷰티/미용</option>
-                            <option value="12">식물</option>
-                            <option value="13">반려동물용품</option>
-                            <option value="14">티켓/교환권</option>
-                            <option value="15">도서</option>
-                            <option value="16">유아도서</option>
-                            <option value="17">기타</option>
+                        <select class="form-select border-0 bg-transparent">
+                            <option>전체 카테고리</option>
+                            <option>디지털기기</option>
+                            <option>가구/인테리어</option>
+                            <option>여성의류</option>
+                            <option>남성패션/잡화</option>
+                            <option>생활가전</option>
+                            <option>생활/주방</option>
+                            <option>가공식품</option>
+                            <option>스포츠/레저</option>
+                            <option>취미/게임/음반</option>
+                            <option>뷰티/미용</option>
+                            <option>식물</option>
+                            <option>반려동물용품</option>
+                            <option>티켓/교환권</option>
+                            <option>도서</option>
+                            <option>유아도서</option>
+                            <option>기타</option>
                         </select>
                     </div>
                     <div class="col-11 col-md-7">
-                            <input type="text" class="form-control border-0 bg-transparent" placeholder="검색어를 입력해주세요!" name="searchVal"/>
+                        <form id="search-form" class="text-center" action="" method="">
+                            <input type="text" class="form-control border-0 bg-transparent" placeholder="검색어를 입력해주세요!"/>
+                        </form>
                     </div>
-                        <div class="col-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="cursor: pointer"
-                            onclick="$('#search-form').submit()">
-                                <path fill="currentColor"
-                                      d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/>
-                            </svg>
-                        </div>
-                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                    </form>
-
-
+                    <div class="col-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <path fill="currentColor"
+                                  d="M21.71 20.29L18 16.61A9 9 0 1 0 16.61 18l3.68 3.68a1 1 0 0 0 1.42 0a1 1 0 0 0 0-1.39ZM11 18a7 7 0 1 1 7-7a7 7 0 0 1-7 7Z"/>
+                        </svg>
+                    </div>
                 </div>
             </div>
 
             <div class="col-sm-8 col-lg-4 d-flex justify-content-end gap-5 align-items-center mt-4 mt-sm-0 justify-content-center justify-content-sm-end">
-                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAnonymous()">
-                  <a href="/member/login"><h5 class="mb-0">로그인</h5> </a>
+                <div class="support-box text-end d-none d-xl-block">
+                    <h5 class="mb-0">로그인</h5>
                 </div>
-                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAuthenticated()">
-                    <a href="/member/logout"><h5 class="mb-0">로그아웃</h5> </a>
-                </div>
-                <div class="support-box text-end d-none d-xl-block" sec:authorize="isAnonymous()">
-                  <a href="/member/regist">  <h5 class="mb-0">회원가입</h5> </a>
+                <div class="support-box text-end d-none d-xl-block">
+                    <h5 class="mb-0">회원가입</h5>
                 </div>
                 <ul class="d-flex justify-content-end list-unstyled m-0">
                     <li>
-                        <a href="/member/mypage" class="rounded-circle bg-light p-2 mx-1">
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#user"></use>
                             </svg>
                         </a>
                     </li>
                     <li>
-                        <a href="/member/mypage/like" class="rounded-circle bg-light p-2 mx-1">
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#heart"></use>
                             </svg>
                         </a>
                     </li>
                     <li>
-                        <a href="/member/mypage/receivedquery" class="rounded-circle bg-light p-2 mx-1">
+                        <a href="#" class="rounded-circle bg-light p-2 mx-1">
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <use xlink:href="#message"></use>
                             </svg>
@@ -126,25 +118,22 @@
                                     </li>
 
                                     <li class="nav-item active">
-                                        <a href="/auction/publicbid/0?category=0" class="nav-link">공개입찰경매</a>
+                                        <a href="#women" class="nav-link">공개입찰경매</a>
                                     </li>
                                     <li class="nav-item dropdown">
-                                        <a href="/auction/sealedbid/0?category=0" class="nav-link">비공개경매</a>
+                                        <a href="#men" class="nav-link">비공개경매</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/auction/realtime/0?category=0" class="nav-link">실시간경매</a>
+                                        <a href="#kids" class="nav-link">실시간경매</a>
                                     </li>
                                     <li class="nav-item">
-                                       <a href="/auction/reversebid/0?category=0" class="nav-link">역경매</a>
+                                        <a href="#accessories" class="nav-link">역경매</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/auction/add" class="nav-link" style="color: #0b5ed7">물품등록</a>
+                                        <a href="#brand" class="nav-link">물픔등록</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="/auction/reverse/add" class="nav-link">역경매신청</a>
-                                    </li>
-                                    <li class="nav-item" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
-                                        <a href="/admin" class="nav-link">관리자메뉴</a>
+                                        <a href="#sale" class="nav-link">관리자메뉴</a>
                                     </li>
 
                                 </ul>
@@ -161,67 +150,66 @@
                 <div>
                     <div class="collapse" id="collapseExample">
                         <ul class="navbar-nav justify-content-end menu-list list-unstyled d-flex gap-md-3 mb-0 flex-row float-start"
-                            style="margin-left: 30px; padding-bottom: 3rem; font-size :0.9em;">
+                            style="margin-left: 30px; padding-bottom: 3rem;">
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=0" class="nav-link">인기매물</a>
+                                <a href="#brand" class="nav-link">인기매물</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=1" class="nav-link">디지털기기</a>
+                                <a href="#sale" class="nav-link">디지털기기</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=2" class="nav-link">가구/인테리어</a>
+                                <a href="#blog" class="nav-link">가구/인테리어</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=3" class="nav-link">여성의류</a>
+                                <a href="#blog" class="nav-link">여성의류</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=4" class="nav-link">여성잡화</a>
+                                <a href="#blog" class="nav-link">여성잡화</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=5" class="nav-link">남성패션/잡화</a>
+                                <a href="#blog" class="nav-link">남성패션/잡화</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=6" class="nav-link">생활가전</a>
+                                <a href="#blog" class="nav-link">생활가전</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=7" class="nav-link">생활/주방</a>
+                                <a href="#blog" class="nav-link">생활/주방</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=8" class="nav-link">가공식품</a>
+                                <a href="#blog" class="nav-link">가공식품</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=9" class="nav-link">스포츠/레저</a>
+                                <a href="#blog" class="nav-link">스포츠/레저</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=10" class="nav-link">취미/게임/음반</a>
+                                <a href="#blog" class="nav-link">취미/게임/음반</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=11" class="nav-link">뷰티/미용</a>
+                                <a href="#blog" class="nav-link">뷰티/미용</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=12" class="nav-link">식물</a>
+                                <a href="#blog" class="nav-link">식물</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=13" class="nav-link">반려동물용품</a>
+                                <a href="#blog" class="nav-link">반려동물용품</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=14" class="nav-link">티켓/교횐권</a>
+                                <a href="#blog" class="nav-link">티켓/교횐권</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=15" class="nav-link">도서</a>
+                                <a href="#blog" class="nav-link">도서</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=16" class="nav-link">유아도서</a>
+                                <a href="#blog" class="nav-link">유아도서</a>
                             </li>
                             <li class="nav-item">
-                                <a href="/auction/search/0?category=17" class="nav-link">기타</a>
+                                <a href="#blog" class="nav-link">기타</a>
                             </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</header>`
+</header>
 
 </html>
