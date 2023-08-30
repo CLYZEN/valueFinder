@@ -398,7 +398,7 @@ table {
 			</div>
 			<div class="tab-pane fade" id="profile" role="tabpanel"
 				aria-labelledby="profile-tab">
-				<h2>참가자(*값을 받아야되는곳)</h2>
+				<h2>참가자</h2>
 				<div class="join_customer">
 					<table>
 						<tr>
@@ -407,27 +407,40 @@ table {
 							<th>제시금액</th>
 							<th>등록자</th>
 						</tr>
-						<tr>
-							<td>1</td>
-							<td>2</td>
-							<td>3</td>
-							<td>4</td>
+						<tr th:each="reverseBiddingJoinList:${reverseBiddingJoinList}">
+							<td th:text=${reverseBiddingJoinList.reverseBiddingJoinNo}></td>
+							<td style="color: blue; cursor: pointer;" th:text=${reverseBiddingJoinList.item.itemName} th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
+							<td id="price" th:text=${reverseBiddingJoinList.suggestPrice}></td>
+							<td th:text=${reverseBiddingJoinList.member.nickname}></td>
 						</tr>
 					</table>
 				</div>
-				<nav aria-label="Page navigation example">
-					<ul class="pagination">
-						<li class="page-item"><a class="page-link" href="#"
-							aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-						</a></li>
-						<li class="page-item"><a class="page-link" href="#">1</a></li>
-						<li class="page-item"><a class="page-link" href="#">2</a></li>
-						<li class="page-item"><a class="page-link" href="#">3</a></li>
-						<li class="page-item"><a class="page-link" href="#"
-							aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-						</a></li>
-					</ul>
-				</nav>
+				<div class="d-flex justify-content-center">
+				<nav
+                    th:with="start=${(reverseBiddingJoinList.number/maxPage)*maxPage + 1}
+			                 ,end=(${(reverseBiddingJoinList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reverseBiddingJoinList.totalPages ? start + (maxPage - 1) : reverseBiddingJoinList.totalPages)})"
+                    aria-label="Page navigation example">
+                <ul class="pagination d-flex justify-content-center">
+                    <li class="page-item" th:classappend="${reverseBiddingJoinList.first}?'disabled'">
+                        <a class="page-link"
+                           th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number - 1} +')'">이전</a>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="page: ${#numbers.sequence(start, end)}"
+                        th:classappend="${reverseBiddingJoinList.number eq page-1}?'active':''">
+                        <a
+                                class="page-link" th:inline="text"
+                                th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
+                    </li>
+
+                    <li class="page-item" th:classappend="${reverseBiddingJoinList.last}?'disabled'">
+                        <a class="page-link"
+                           th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number + 1} +')'">다음</a>
+                    </li>
+                </ul>
+            </nav>
+				</div>
 			</div>
 
 		</div>
@@ -437,7 +450,9 @@ table {
 	<div class="form-group">
 		<div class="join">
 			<button type="submit" class="btn btn-primary mb-3"
-				style="background-color: #355808; opacity:63%; width: 150px;" >
+
+				style="background-color: #355808; opacity:63%; width: 150px;" th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
+
 				참가신청</button>
 		</div>
 	</div>
@@ -454,6 +469,27 @@ table {
 <th:block layout:fragment="script">
 	<script th:inline="javascript">
 		
+	 var reverseBidding = [[${reverseBidding.reverseBiddingNo}]];
+	
+	 function page(page) {
+	        //입력한 값을 전부 가지고 온다.
+
+	        //주소 이동
+	        location.href = "/auction/reversebid/detail/" + reverseBidding + "/" + page;
+	    }
+	
+	 function moveDetail(reverseBiddingNo) {
+	        location.href='/auction/reversebid/enter/add/' + reverseBiddingNo;
+	    }
+	 
+	 function moveEnterDetail(reverseBiddingNo) {
+	        location.href='/auction/reversebid/enter/' + reverseBiddingNo;
+	   
+	        
+
+	 
+	 }
+	 
 	</script>
 </th:block>
 
