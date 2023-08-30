@@ -30,4 +30,8 @@ public class SuccessBidding extends BaseEntity {
     private BidStatus bidStatus; // 낙찰상태
 
     private String shippingNo; // 운송장번호
+
+    private void updateStatus(BidStatus bidStatus) {
+        this.bidStatus = bidStatus;
+    }
 }

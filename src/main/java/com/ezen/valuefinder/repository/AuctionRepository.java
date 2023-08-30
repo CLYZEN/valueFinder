@@ -1,24 +1,21 @@
 package com.ezen.valuefinder.repository;
 
-import com.ezen.valuefinder.constant.AuctionStatus;
-import com.ezen.valuefinder.constant.AuctionType;
-import com.ezen.valuefinder.entity.Auction;
-import com.ezen.valuefinder.entity.Category;
-import com.ezen.valuefinder.entity.Member;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
+import com.ezen.valuefinder.constant.AuctionStatus;
+import com.ezen.valuefinder.constant.AuctionType;
+import com.ezen.valuefinder.dto.MemberAuctionDto;
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface AuctionRepository extends JpaRepository<Auction,Long> {
 
 
-	Page<Auction> findByAuctionType(AuctionType auctionType, Pageable pageable);
-	
-	
-	
+	Auction findByAuctionNo(Long auctionNo);
 
 	Page<Auction> findByItemMember(Member member, Pageable pageable);
 
@@ -39,5 +36,10 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 	Page<Auction> findByItemItemNameContainingOrderByAuctionEndTimeDesc(Pageable pageable, String name);
 
 	Page<Auction> findAllByOrderByRegTime(Pageable pageable);
+
+	@Query("SELECT new com.ezen.valuefinder.dto.MemberAuctionDto(a.auctionNo, a.item, a.auctionType, a.auctionStartPrice, a.auctionNowPrice, a.auctionStartTime, a.auctionEndTime, a.auctionStatus, a.auctionCount, a.remainingTime, a.biddingCount, sb.successBiddingNo, sb.member, sb.bidStatus, sb.shippingNo) " +
+			"FROM Auction a LEFT JOIN FETCH SuccessBidding sb ON a = sb.auction WHERE sb.member.memberId = :memberId")
+	Page<MemberAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+
 
 }

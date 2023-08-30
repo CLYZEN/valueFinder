@@ -9,15 +9,27 @@ import com.ezen.valuefinder.dto.MemberModifyDto;
 import com.ezen.valuefinder.entity.Bank;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.entity.MemberOut;
+
 import com.ezen.valuefinder.entity.MemberReport;
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
+
+import com.ezen.valuefinder.entity.Wish;
+
 import com.ezen.valuefinder.repository.BankRepository;
 import com.ezen.valuefinder.repository.MemberOutRepository;
 import com.ezen.valuefinder.repository.MemberReportRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
 
+
 import lombok.RequiredArgsConstructor;
+
+import com.ezen.valuefinder.repository.WishRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.User;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -32,11 +44,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
 
+
 	private final MemberRepository memberRepository;
 	private final BankRepository bankRepository;
 	private final MemberOutRepository memberOutRepository;
 	private final AuctionQueryRepository auctionQueryRepository;
 	private final MemberReportRepository memberReportRepository;
+
+    private final WishRepository wishRepository;
+
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -131,13 +147,19 @@ public class MemberService implements UserDetailsService {
 	}
 
 
-	public void repairMember(String email) {
-		Member member = memberRepository.findByEmail(email);
-		member.setStatus(Status.ACTIVE);
-	}
 	
 
 	
 	
+
+
+
+    public void repairMember(String email) {
+        Member member = memberRepository.findByEmail(email);
+        member.setStatus(Status.ACTIVE);
+    }
+    public Page<Wish> getMemberWishList(Member member, Pageable pageable) {
+        return wishRepository.findByMember(member,pageable);
+    }
 }
 

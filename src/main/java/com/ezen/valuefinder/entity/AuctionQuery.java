@@ -64,6 +64,8 @@ public class AuctionQuery extends BaseEntity {
     
     
     
+
+ 
   
     
    
