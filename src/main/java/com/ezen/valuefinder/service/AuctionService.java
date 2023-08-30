@@ -314,6 +314,13 @@ public class AuctionService {
     	
     	auctionQueryRepository.delete(auctionQuery);
     }
+    
+    
+    public void deleteAuctionReport(Long auctionNo) {
+    	Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
+    	
+    	auctionRepository.delete(auction);
+    }
 
 
     private void successBidding(Auction auction) {

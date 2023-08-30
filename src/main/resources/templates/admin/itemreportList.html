@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta name="_csrf" th:content="${_csrf.token}" />
+<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport"
@@ -192,7 +194,7 @@
 										<th th:text="${auctionReport.auction.item.itemName}"></th>
 										<td th:text="${auctionReport.member.nickname}"></td>
 										<td th:text="${auctionReport.auctionReportTitle}"></td>
-										<td th:text="${{auctionReport.auctionReportDetail}"></td>
+										<td th:text="${auctionReport.auctionReportDetail}"></td>
 										<td>
 											<div class="col-sm-offset-2" style="margin-left: 20px;">
 												<button type="button" class="btn btn-primary"
@@ -224,7 +226,7 @@
 		</div>
 	</div>
 	<script th:inline="javascript">
-		function deleteOrder(auctionQueryNo) {
+		function deleteOrder(auctionNo) {
 			const deleteConf = confirm("삭제하시겠습니까?");
 			if (!deleteConf)
 				return; //취소버튼 누르면
@@ -233,7 +235,7 @@
 			var header = $("meta[name='_csrf_header']").attr("content");
 
 			//request URL
-			var url = "/admin/itemreportList" + auctionNo + "/delete";
+			var url = "/admin/itemreportList/" + auctionNo + "/delete";
 
 			$.ajax({
 				url : url, //request URL
@@ -275,5 +277,6 @@
 		src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js"
 		crossorigin="anonymous"></script>
 	<script src="/js/datatables-simple-demo.js"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </body>
 </html>

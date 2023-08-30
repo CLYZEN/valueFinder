@@ -9,6 +9,8 @@ import lombok.ToString;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "auction")
@@ -52,5 +54,21 @@ public class Auction extends BaseEntity {
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer biddingCount; // 입찰횟수
-
+    
+    @OneToMany(mappedBy = "auction" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuctionReport> auctionReport = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "auction" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Wish> wishs = new ArrayList<>();
+    
+    @OneToMany(mappedBy = "auction" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<AuctionReview> auctionReviews = new ArrayList<>();
+    
+    
+    @OneToMany(mappedBy = "auction" , cascade = CascadeType.ALL,
+    		orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Bidding> biddings = new ArrayList<>();
 }

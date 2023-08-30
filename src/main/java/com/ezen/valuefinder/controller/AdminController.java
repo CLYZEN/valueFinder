@@ -99,6 +99,19 @@ public class AdminController {
 		
 		return "admin/itemreportList";
 	}
+	
+	 @DeleteMapping("/auction/itemreportList/{auctionNo}/delete")
+		public @ResponseBody ResponseEntity<Long> deleteQuery(@PathVariable("auctionNo") Long auctionNo
+				) {
+	
+			
+			
+			auctionService.deleteQuery(auctionNo);
+			
+			return new ResponseEntity<Long>(auctionNo , HttpStatus.OK);
+		}
+	
+	
 
 	@GetMapping(value = "/admin/customerReportList")
 	public String admincustomerReportList(Model model) {
@@ -145,9 +158,10 @@ public class AdminController {
 		return "redirect:/admin";
 	}
 	
-	@DeleteMapping("/admin/itemreport/{auctionNo}/delete")
-	public @ResponseBody ResponseEntity<Long> deleteItem(@PathVariable("auctionNo") Long auctionNo) {
-		
+	@DeleteMapping("/admin/itemreportList/{auctionNo}/delete")
+	public @ResponseBody ResponseEntity<Long> deleteItem(@PathVariable("auctionNo") Long auctionNo
+			, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		adminService.deleteAuction(auctionNo);
 		
 		return new ResponseEntity<Long>(auctionNo , HttpStatus.OK);

@@ -272,6 +272,18 @@ public class AuctionController {
 
         return "/auction/query/query";
     }
+    
+    
+    @DeleteMapping("/auction/query/{auctionQueryNo}/delete")
+	public @ResponseBody ResponseEntity<Long> deleteQuery(@PathVariable("auctionQueryNo") Long auctionQueryNo
+			, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		
+		
+		auctionService.deleteQuery(auctionQueryNo);
+		
+		return new ResponseEntity<Long>(auctionQueryNo , HttpStatus.OK);
+	}
   
 	   @PostMapping(value = "/auction/bidding")
     public @ResponseBody ResponseEntity bidding(@RequestBody Map<String, Object> requestBody,
