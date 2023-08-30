@@ -1,5 +1,8 @@
 package com.ezen.valuefinder.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -22,4 +25,6 @@ public class MemberOut extends BaseEntity {
 
     @Column(nullable = false)
     private String memberOutDetail; // 탈퇴사유
+    
+ 
 }

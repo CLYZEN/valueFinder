@@ -9,5 +9,5 @@ public class MemberCautionDto {
 	private Long memberId;
 	
 	
-	//private Integer caution;
+	private Integer caution;
 }

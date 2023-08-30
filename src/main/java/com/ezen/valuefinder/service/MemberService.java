@@ -20,8 +20,6 @@ import com.ezen.valuefinder.repository.MemberOutRepository;
 import com.ezen.valuefinder.repository.MemberReportRepository;
 import com.ezen.valuefinder.repository.MemberRepository;
 
-
-
 import lombok.RequiredArgsConstructor;
 
 import com.ezen.valuefinder.repository.WishRepository;
@@ -44,15 +42,13 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService implements UserDetailsService {
 
-
 	private final MemberRepository memberRepository;
 	private final BankRepository bankRepository;
 	private final MemberOutRepository memberOutRepository;
 	private final AuctionQueryRepository auctionQueryRepository;
 	private final MemberReportRepository memberReportRepository;
 
-    private final WishRepository wishRepository;
-
+	private final WishRepository wishRepository;
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -68,21 +64,30 @@ public class MemberService implements UserDetailsService {
 		 * 
 		 */
 	}
-	
+
 	public void memberCaution(Long memberId) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
-		member.setCaution(member.getCaution()+1);
+		member.setCaution(member.getCaution() + 1);
+
+		MemberOut memberOut = new MemberOut();
+
+		if (member.getCaution() == 3) {
+
+			member.setStatus(Status.DISABLE); 
+
+			memberOut.setMember(member);
+			memberOut.setMemberOutDetail("강제탈퇴");
+
+			memberOutRepository.save(memberOut);
+		}
+
 	}
-	
 
 	public List<Bank> getBankList() {
 		return bankRepository.findAll();
 	}
 
-
-    
-    public Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
-
+	public Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder) {
 
 		Bank bank = bankRepository.findById(memberFormDto.getBankCode()).orElseThrow();
 		Member member = Member.createMember(memberFormDto, passwordEncoder, bank);
@@ -103,17 +108,14 @@ public class MemberService implements UserDetailsService {
 	public Member findByEmail(String email) {
 		return memberRepository.findByEmail(email);
 	}
-	
+
 	public List<Member> getMemberList() {
-		return memberRepository.findAll();
+		return memberRepository.findByStatus(Status.ACTIVE);
 	}
-	
-	
+
 	public List<MemberReport> getMemberReportList() {
 		return memberReportRepository.findAll();
 	}
-	
-
 
 	public void updateMember(MemberModifyDto memberModifyDto, String email) {
 		Bank bank = bankRepository.findById(memberModifyDto.getBankCode()).orElseThrow();
@@ -146,20 +148,12 @@ public class MemberService implements UserDetailsService {
 		outMember.setStatus(Status.DISABLE);
 	}
 
+	public void repairMember(String email) {
+		Member member = memberRepository.findByEmail(email);
+		member.setStatus(Status.ACTIVE);
+	}
 
-	
-
-	
-	
-
-
-
-    public void repairMember(String email) {
-        Member member = memberRepository.findByEmail(email);
-        member.setStatus(Status.ACTIVE);
-    }
-    public Page<Wish> getMemberWishList(Member member, Pageable pageable) {
-        return wishRepository.findByMember(member,pageable);
-    }
+	public Page<Wish> getMemberWishList(Member member, Pageable pageable) {
+		return wishRepository.findByMember(member, pageable);
+	}
 }
-
