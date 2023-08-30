@@ -64,12 +64,13 @@ public class BiddingService {
 
     public boolean chkBidding(Auction auction, Member member) {
         Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
+        Member maxBidMember = bidding.getMember();
         if (bidding != null) {
-            if(bidding.getMember() == member) {
+            if(maxBidMember.getEmail().equals(member.getEmail())) {
                 return false;
+            } else {
+                return true;
             }
-        } else if (bidding == null){
-            return true;
         }
        return false;
     }

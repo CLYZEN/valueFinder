@@ -56,7 +56,7 @@ public class AuctionService {
     private final SuccessBiddingRepository successBiddingRepository;
     private final AuctionQueryResponseRepository auctionQueryResponseRepository;
     private final AuctionReviewRepository auctionReviewRepository;
-
+    private final AuctionReportRepository auctionReportRepository;
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
@@ -170,6 +170,9 @@ public class AuctionService {
 
     }
 
+    public List<Auction> getItemAuctionList() {
+        return auctionRepository.findAll();
+    }
 
     public Long updateQuery(AuctionQueryDto auctionQueryDto, String email , Long auctionQueryNo) throws Exception {
 
@@ -186,7 +189,11 @@ public class AuctionService {
 
         return auctionQuery.getAuctionQueryNo();
     }
+    public Page<AuctionQuery> auctionQueryList(Pageable pageable, Member member) {
 
+        return auctionQueryRepository.findByMember(pageable, member);
+
+    }
     @Transactional(readOnly = true)
     public Auction getAuctionDetail(Long auctionNo) {
         return auctionRepository.findById(auctionNo).orElseThrow();
@@ -239,6 +246,9 @@ public class AuctionService {
 
     }
 
+    public Page<AuctionQueryResponse> auctionQueryResponseList(Pageable pageable, Member member) {
+        return auctionQueryResponseRepository.findByMember(pageable, member);
+    }
 
 	public int itemCount(Long memberId) {
 		return itemRepository.countItemsByMemberId(memberId);	
@@ -247,9 +257,19 @@ public class AuctionService {
 	public int reviewCount(Long memberId) {
 		return reviewRepository.countAuctionReviewsByAuctionItemMember(memberId);	
 	}
-	
 
-	
+    public void deleteQuery(Long auctionQueryNo) {
+        AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
+
+
+
+        auctionQueryRepository.delete(auctionQuery);
+    }
+    public void deleteAuctionReport(Long auctionNo) {
+        Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
+
+        auctionRepository.delete(auction);
+    }
 	public Page<AuctionReview> getAuctionReviewList(Long memberId, Pageable pageable) {
 		Member member = memberRepository.findById(memberId).orElseThrow();
 		return reviewRepository.findByAuctionItemMember(member, pageable);
@@ -303,7 +323,9 @@ public class AuctionService {
         updateAuctionStatus(auction.getAuctionNo());
         updateAuctionReaminTime(auction.getAuctionNo());
     }
-
+    public List<AuctionReport> getAuctionReportList() {
+        return auctionReportRepository.findAll();
+    }
 
     private void updateAuctionReaminTime(Long auctionId) {
         Auction auction = auctionRepository.findById(auctionId).orElseThrow();
