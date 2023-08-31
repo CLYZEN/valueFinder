@@ -154,6 +154,25 @@ table {
 	/* 텍스트 센터 정렬을 위한 라인 높이 조절 */
 	margin-bottom: 15px;
 }
+
+  .col-sm-2 {
+            background-color: #D9D9D9;
+            font-weight: 900;
+            color: black;
+            text-align: center;
+            border: 1px solid gray;
+            border-left: 0px;
+            border-right: 0px;
+            line-height: 39px;
+            width: 140px;
+        }
+
+        .col-sm-3 {
+            border: 1px solid gray;
+            border-left: 0px;
+            width: 450px;
+            line-height: 35px;
+        }
 </style>
 
 </th:block>
@@ -192,182 +211,149 @@ table {
 		<span th:text="|남은시간 : ${remainTime}|"></span>
 	</div>
 	<section class="reverseForm">
-		<div class="item_box table-responsive">
-			<table class="table">
+		<div class="item_box">
 
-				<tr>
-					<th scope="col">물품 이름</th>
-					<td th:text="${reverseBidding.reverseBiddingTitle}"></td>
-				</tr>
-				<tr>
-					<th scope="col">경매 기간</th>
-					<td
-						th:text="${#temporals.format(reverseBidding.reverseBiddingExpireDate,'yyyy-MM-dd HH:mm')}">
+				<div class="row">
+					<label class="col-sm-2">물품 이름</label>
+					<div class="col-sm-3" th:text="${reverseBidding.reverseBiddingTitle}"></div>
+				</div>
+				<div class="row">
+					<label class="col-sm-2">경매 기간</label>
+					<div
+						class="col-sm-3" th:text="${#temporals.format(reverseBidding.reverseBiddingExpireDate,'yyyy-MM-dd HH:mm')}">
 
-					</td>
-				</tr>
-				<tr>
-					<th scope="col">예상가</th>
-					<td th:text="${reverseBidding.hopePrice}"></td>
-				</tr>
-				<tr>
-					<th scope="col">진행 상태</th>
-					<td
-						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}">진행중</td>
-					<td
-						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('END')}">마감</td>
-				</tr>
+					</div>
+				</div>
+				<div class="row">
+					<label class="col-sm-2">예상가</label>
+					<div class="col-sm-3" th:text="${reverseBidding.hopePrice}"></div>
+				</div>
+				<div class="row">
+					<label class="col-sm-2">진행 상태</label>
+					<div class="col-sm-3"
+						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}">진행중</div>
+					<div class="col-sm-3"
+						th:if="${reverseBidding.ReversebidAuctionStatus.toString().equals('END')}">마감</div>
+				</div>
 
 
-			</table>
 		</div>
 
-		<div class="item_box2 table-responsive">
-			<table class="table">
 
-				<tr>
-					<th scope="col">구매자 닉네임</th>
-					<td th:text="${reverseBidding.member.nickname}">
-					<td>
-						<div class="col-sm-offset-2" style="margin-left: 20px;">
-							<button type="button" class="btn btn-primary"
-								style="border-radius: inherit; width: 110px;"
-								data-bs-toggle="modal" data-bs-target="#reviewModal">
-								후기</button>
-						</div>
-						<div class="modal fade" id="reviewModal" tabindex="-1"
-							aria-labelledby="reviewModalLabel" aria-hidden="true">
-							<div class="modal-dialog modal-lg">
-								<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title" id="reviewModalLabel"
-											th:text="|${reverseBidding.member.nickname}님의 후기 리스트|"></h5>
-										<button type="button" class="btn-close"
-											data-bs-dismiss="modal" aria-label="Close"></button>
-									</div>
-									<div class="modal-body ">
-										<p class="review-message">후기가 n건 검색되었습니다.</p>
-										<table class="table">
-											<thead>
-												<tr>
-													<th scope="col">닉네임</th>
-													<th scope="col">별점</th>
-													<th scope="col">리뷰작성</th>
+				<div class="form-group row" style="height: 72px;">
+                                <label class="col-sm-2" style="line-height: 71px;">판매자
+                                    닉네임</label>
+                                <div class="col-sm-3" style="line-height: 71px; display: flex;">
+                                    <div style="width: 50px; text-align: center;"
+                                         th:text="${reverseBidding.member.nickname}"></div>
+                                    <div class="col-sm-offset-2" style="margin-left: 20px;">
+                                        <button type="button" class="btn btn-primary"
+                                                style="border-radius: inherit; width: 110px;"
+                                                data-bs-toggle="modal" data-bs-target="#reviewModal">
+                                            후기
+                                        </button>
+                                    </div>
 
-												</tr>
-											</thead>
-											<tbody>
-												<tr>
-													<th scope="row">크롱</th>
-													<td>
-														<!-- 별점 -->
-														<form class="mb-3" name="myform" id="myform" method="post">
-															<fieldset>
-																<input type="radio" name="reviewStar" value="5"
-																	id="rate1" checked><label for="rate1">★</label>
-																<input type="radio" name="reviewStar" value="4"
-																	id="rate2" disabled><label for="rate2">★</label>
-																<input type="radio" name="reviewStar" value="3"
-																	id="rate3" disabled><label for="rate3">★</label>
-																<input type="radio" name="reviewStar" value="2"
-																	id="rate4" disabled><label for="rate4">★</label>
-																<input type="radio" name="reviewStar" value="1"
-																	id="rate5" disabled><label for="rate5">★</label>
-															</fieldset>
-														</form>
 
-													</td>
-													<td>크롱크롱</td>
+                                  <!-- 모달 창 -->
+									<div class="modal fade" id="reviewModal" tabindex="-1"
+										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										<div class="modal-dialog modal-lg" style="--bs-modal-width: 1200px !important;">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
+														th:text="|${reverseBidding.member.nickname}님의 후기 리스트|"></h5>
+													<button type="button" class="btn-close"
+														data-bs-dismiss="modal" aria-label="Close"></button>
+												</div>
+												<div class="modal-body ">
+													<p class="review-message" th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
+													<table class="table">
+														<thead>
+															<tr class="review">																
+																<th scope="col" style="width: 250px;">물품명</th>
+																<th scope="col">리뷰</th>
+																<th scope="col" style="width: 300px;">별점</th>
+																<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
 
-												</tr>
-												<tr>
-													<th scope="row">뽀로로</th>
-													<td>
-														<!-- 별점 -->
-														<form class="mb-3" name="myform" id="myform" method="post">
-															<fieldset>
-																<input type="radio" name="reviewStar" value="5"
-																	id="rate1" disabled><label for="rate1">★</label>
-																<input type="radio" name="reviewStar" value="4"
-																	id="rate2" checked><label for="rate2">★</label>
-																<input type="radio" name="reviewStar" value="3"
-																	id="rate3" disabled><label for="rate3">★</label>
-																<input type="radio" name="reviewStar" value="2"
-																	id="rate4" disabled><label for="rate4">★</label>
-																<input type="radio" name="reviewStar" value="1"
-																	id="rate5" disabled><label for="rate5">★</label>
-															</fieldset>
-														</form>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="auctionReview:${auctionReview}" class="review" id="review">
+																
+																<td th:text=${auctionReview.auction.item.itemName}></td>
+																<td th:text=${auctionReview.auctionReviewTitle}></td>
+																<td >
+																	<!-- 별점 -->
+																	<form class="mb-3" name="myform" id="myform"
+																		method="post" style="margin-bottom: 0px !important;">
+																		<fieldset>
+																			<input type="radio" name="reviewStar" value="5" id="rate1" th:if="${auctionReview.auctionReviewScore.toString() == '5'}" checked ><label for="rate1">★</label>
+																			<input type="radio" name="reviewStar" value="4" id="rate2" th:if="${auctionReview.auctionReviewScore.toString() == '4'}" checked ><label for="rate2">★</label>
+																			<input type="radio" name="reviewStar" value="3" id="rate3" th:if="${auctionReview.auctionReviewScore.toString() == '3'}" checked ><label for="rate3">★</label>
+																			<input type="radio" name="reviewStar" value="2" id="rate4" th:if="${auctionReview.auctionReviewScore.toString() == '2'}" checked ><label for="rate4">★</label>
+																			<input type="radio" name="reviewStar" value="1" id="rate5" th:if="${auctionReview.auctionReviewScore.toString() == '1'}" checked ><label for="rate5">★</label>
+																		</fieldset>
+																	</form>
 
-													</td>
-													<td>너무 좋아요</td>
+																</td>
+															
+																<td scope="row" th:text=${auctionReview.member.nickname} style="border-right: 0px;"></td>
+															</tr>
+														</tbody>
+													</table>
+												</div>
 
-												</tr>
-												<tr>
-													<th scope="row">루피</th>
-													<td>
-														<!-- 별점 -->
-														<form class="mb-3" name="myform" id="myform" method="post">
-															<fieldset>
-																<input type="radio" name="reviewStar" value="5"
-																	id="rate1" disabled><label for="rate1">★</label>
-																<input type="radio" name="reviewStar" value="4"
-																	id="rate2" checked><label for="rate2">★</label>
-																<input type="radio" name="reviewStar" value="3"
-																	id="rate3" disabled><label for="rate3">★</label>
-																<input type="radio" name="reviewStar" value="2"
-																	id="rate4" disabled><label for="rate4">★</label>
-																<input type="radio" name="reviewStar" value="1"
-																	id="rate5" disabled><label for="rate5">★</label>
-															</fieldset>
-														</form>
+												<!-- 페이징 버튼 -->
+												<div class="d-flex justify-content-center"
+													style="margin-top: 1%;">
+													<nav
+														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${0} +')'">이전</a>
+															</li>
 
-													</td>
-													<td>너무 좋아요</td>
-												</tr>
-											</tbody>
-										</table>
-									</div>
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+															</li>
 
-									<!-- 페이징 버튼 -->
-									<div class="d-flex justify-content-center">
-										<nav aria-label="Page navigation example">
-											<ul class="pagination custom-pagination">
-												<li class="page-item"><a class="page-link" href="#"
-													aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-												</a></li>
-												<li class="page-item"><a class="page-link" href="#">1</a>
-												</li>
-												<li class="page-item"><a class="page-link" href="#">2</a>
-												</li>
-												<li class="page-item"><a class="page-link" href="#">3</a>
-												</li>
-												<li class="page-item"><a class="page-link" href="#"
-													aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-												</a></li>
-											</ul>
-										</nav>
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																class="page-link"
+																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+															</li>
+														</ul>
+													</nav>
+												</div>
+
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
+														data-bs-dismiss="modal">닫기</button>
+
+												</div>
+											</div>
+										</div>
 									</div>
 
-									<div class="modal-footer d-flex justify-content-center">
-										<button type="button" class="btn btn-secondary "
-											data-bs-dismiss="modal">닫기</button>
 
-									</div>
-								</div>
-							</div>
-						</div>
-						<td class="col-sm-offset-2" style="margin-left: 20px;">
-							<input type="submit" class="btn btn-primary" value="신고"
-								style="border-radius: inherit; width: 110px;"
-								onclick="location.href='/auction/report';" />
-						</td>
-					</td>
+                                    <div class="col-sm-offset-2" style="margin-left: 20px;">
+                                        <input type="submit" class="btn btn-primary" value="신고"
+                                               style="border-radius: inherit; width: 110px;"
+                                               onclick="location.href='/auction/report';"/>
+                                    </div>
+                                </div>
+                            </div>
 
-				</tr>
-
-			</table>
-		</div>
 
 
 
@@ -483,12 +469,19 @@ table {
 	    }
 	 
 	 function moveEnterDetail(reverseBiddingNo) {
-	        location.href='/auction/reversebid/enter/' + reverseBiddingNo;
-	   
-	        
-
+	        location.href='/auction/reversebid/enter/' + reverseBiddingNo;	   	        
 	 
 	 }
+	 function loadPage(pageNumber) {
+	        $.ajax({
+	            url: '/auction/reversebid/detail/' + [[${reverseBiddingNo}]] + '/' + pageNumber,
+	            type: 'GET',
+	            success: function(response) {
+	                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+	            }
+	        });
+	    }
+	 
 	 
 	</script>
 </th:block>
