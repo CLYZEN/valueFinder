@@ -384,11 +384,12 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
-    public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
-		Member member = memberRepository.findById(memberId).orElseThrow();
-		return auctionRepository.findByItemMember(member, pageable);
-	}
 
+    public Page<MemberAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        return auctionRepository.findAuctionsByMemberId(memberId, pageable);
+    }
+    
     public List<Auction> getDetailPageAuctionList(Member member) {
         return auctionRepository.findByItemMemberOrderByAuctionEndTimeDesc(member);
     }

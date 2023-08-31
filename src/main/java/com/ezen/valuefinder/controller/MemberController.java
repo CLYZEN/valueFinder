@@ -158,6 +158,7 @@ public class MemberController {
 		 model.addAttribute("member",member);
 		 return "member/myauction";
 	 }
+
 	 
 	 @GetMapping(value ="member/mypage/modify/checkpwd")
 	 public String checkpwd(Model model, Authentication authentication) {

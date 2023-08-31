@@ -682,13 +682,15 @@
                                                    style="width: 165px; height: 40px; text-align: end;"/>
                                         </div>
                                     </div>
-                                    <div style="text-align: right; width: 600px;">
+                                     <div style="text-align: right; width: 600px;">
                                         <input type='button' onclick='count("minus")'
-                                               th:value="${enterPrice}"
-                                               style="margin-top: 10px; width: 80px; height: 40px;"/> <input
+                                               th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
+                                               style="margin-top: 10px; width: 80px; height: 40px;" /> <input
                                             type='button' onclick='count("plus")'
-                                            th:value="${enterPrice}"
-                                            style="margin-top: 10px; width: 80px; height: 40px;"/>
+                                            th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
+									}원|"
+                                            style="margin-top: 10px; width: 80px; height: 40px;" />
                                     </div>
                                     <div style="text-align: right; width: 600px;">
                                         <div>
@@ -836,7 +838,7 @@
         });
 
 
-        let auctionPrice = [[${auction.auctionStartPrice}]];
+        let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
         function count(type) {
             // 결과를 표시할 element
             const resultElement = document.getElementById('sum');
@@ -852,6 +854,7 @@
             // 결과 출력
             resultElement.value = number;
         }
+
 
         
         var remainingTimeElement = document.getElementById("remainTime");
