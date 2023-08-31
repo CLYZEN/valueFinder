@@ -12,6 +12,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "member")
@@ -67,6 +69,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private Integer caution; // 경고횟수
 
+
     public static Member createMember(MemberFormDto memberFormDto, PasswordEncoder passwordEncoder,Bank bank) {
         Member member = new Member();
 
@@ -103,4 +106,12 @@ public class Member extends BaseEntity {
     public void updatePassword(String password,PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
+    /* ???
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<MemberOut> memberOuts = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Coupon> couponts = new ArrayList<>();
+
+     */
 }

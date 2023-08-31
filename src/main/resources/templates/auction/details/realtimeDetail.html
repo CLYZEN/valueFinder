@@ -903,7 +903,7 @@ table {
                 contentType: "application/json",
                 success: function (result, status, jqXHR) {
                     // 요청 성공 처리
-                    alert('등록 완료');
+                    alert(jqXHR.responseText);
                     location.href = document.referrer;
                 },
                 error: function (jqXHR, status, error) {

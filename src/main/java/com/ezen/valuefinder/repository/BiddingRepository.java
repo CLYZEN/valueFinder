@@ -10,9 +10,7 @@ import java.util.List;
 public interface BiddingRepository extends JpaRepository<Bidding,Long> {
     Bidding findTopByAuctionOrderByBiddingPriceDesc(Auction auction);
     Integer countByAuction(Auction auction);
-
     Bidding findByAuctionAndMember(Auction auction, Member member);
-
     Bidding findTopByAuctionAndMemberNotInOrderByBiddingPriceDesc(Auction auction, List<Member> memberList);
     
     List<Bidding> findByAuctionOrderByBiddingPriceDesc(Auction auction);

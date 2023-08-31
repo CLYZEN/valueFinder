@@ -1,6 +1,7 @@
 package com.ezen.valuefinder.repository;
 
 import com.ezen.valuefinder.constant.BidStatus;
+import com.ezen.valuefinder.constant.Status;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.entity.SuccessBidding;
@@ -13,5 +14,6 @@ public interface MemberRepository extends JpaRepository<Member,Long> {
 
     Member findByEmailAndPhone(String email, String phone);
 
+    List<Member> findByStatus(Status status);
 
 }

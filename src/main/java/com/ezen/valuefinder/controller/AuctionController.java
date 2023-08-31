@@ -32,12 +32,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
@@ -186,7 +181,7 @@ public class AuctionController {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("auctionQueryDto", auctionQueryDto);
-            return "auction/query/add/{auctionNo}";
+            return "auction/query/add/" + auctionNo;
         }
 
         try {
@@ -195,7 +190,7 @@ public class AuctionController {
             e.printStackTrace();
             model.addAttribute("auctionQueryDto", new AuctionQueryDto());
 
-            return "auction/query/add/{auctionNo}";
+            return "auction/query/add/" + auctionNo;
         }
 
         return "redirect:/";
@@ -254,7 +249,18 @@ public class AuctionController {
 
         return "/auction/query/query";
     }
-  
+
+    @DeleteMapping("/auction/query/{auctionQueryNo}/delete")
+    public @ResponseBody ResponseEntity<Long> deleteQuery(@PathVariable("auctionQueryNo") Long auctionQueryNo
+            , Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+
+        auctionService.deleteQuery(auctionQueryNo);
+
+        return new ResponseEntity<Long>(auctionQueryNo , HttpStatus.OK);
+    }
+
 	   @PostMapping(value = "/auction/bidding")
     public @ResponseBody ResponseEntity bidding(@RequestBody Map<String, Object> requestBody,
                                                 Authentication authentication) {
@@ -294,12 +300,15 @@ public class AuctionController {
                             return new ResponseEntity("현재 금액보다 큰 금액을 입력해주세요.", HttpStatus.BAD_REQUEST);
                         }
 
+                        // 현재 최상위 입찰자인지 검사
                         if(biddingService.chkBidding(auction,principalDetails.getMember())) {
                             biddingService.chkStatus(auction);
                             biddingService.joinBidding(principalDetails.getUsername(), auctionNo, price);
                             return new ResponseEntity("입찰 완료", HttpStatus.OK);
+                        } else {
+                            return new ResponseEntity("현재 최상위 입찰자입니다.", HttpStatus.BAD_REQUEST);
                         }
-                        return new ResponseEntity("현재 최상위 입찰자입니다.", HttpStatus.BAD_REQUEST);
+
                     }
 
                 }
