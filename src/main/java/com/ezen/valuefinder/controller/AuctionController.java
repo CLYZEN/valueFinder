@@ -118,8 +118,8 @@ public class AuctionController {
 		return "redirect:/";
 	}
 
-	@GetMapping(value = "auction/detail/{auctionNo}")
-	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page,Authentication authentication) {
+	@GetMapping(value = {"auction/detail/{auctionNo}","auction/detail/{auctionNo}/{page}"})
+	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo,@PathVariable("page") Optional<Integer> page,Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Auction auction = auctionService.getAuctionDetail(auctionNo);
 		auctionService.addAuctionView(auctionNo);
@@ -426,7 +426,7 @@ public class AuctionController {
   		reversebidService.addReverseBiddingView(reverseBiddingNo);
   		
   		Page<ReverseBiddingJoin> reverseBiddingJoinList ;
-  		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+  		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
   		
   		reverseBiddingJoinList = reversebidService.getReverseJoinList(pageable, reverseBiddingNo);
   		
@@ -436,6 +436,9 @@ public class AuctionController {
   		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
   		model.addAttribute("reverseBiddingJoinList", reverseBiddingJoinList);
   		model.addAttribute("maxPage", 5);
+  		Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(reverseBidding.getMember().getMemberId(), pageable);
+		model.addAttribute("auctionReview", auctionReview);
+		model.addAttribute("reviewCount", auctionService.reviewCount(reverseBidding.getMember().getMemberId()));
   		return "auction/reversebid/details";
   	}
     @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
