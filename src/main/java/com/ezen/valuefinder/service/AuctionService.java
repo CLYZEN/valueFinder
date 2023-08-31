@@ -384,11 +384,11 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
-    public Page<MemberAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
-        Member member = memberRepository.findById(memberId).orElseThrow();
-        return auctionRepository.findAuctionsByMemberId(memberId, pageable);
-    }
-    
+    public Page<Auction> getMemberAuctionList(Long memberId, Pageable pageable) {
+		Member member = memberRepository.findById(memberId).orElseThrow();
+		return auctionRepository.findByItemMember(member, pageable);
+	}
+
     public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
         if(categoryCode==0) {
             return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
@@ -402,8 +402,6 @@ public class AuctionService {
 
     }
 
-   
-    
     public Page<Auction> getSearchValList(Pageable pageable, Long categoryCode, String searchVal) {
         if (categoryCode == 0) {
             return auctionRepository.findByItemItemNameContainingOrderByAuctionEndTimeDesc(pageable,searchVal);
@@ -451,4 +449,3 @@ public class AuctionService {
 
     }
 }
-

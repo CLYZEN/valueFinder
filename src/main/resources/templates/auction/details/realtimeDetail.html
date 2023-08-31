@@ -759,7 +759,7 @@ table {
                   				<td th:if = "${query.auctionQueryDistinction.toString.equals('ETC')}">기타</td>
                   				<td th:if = "${query.auctionQueryDistinction.toString.equals('ITEM')}">물품</td>
                   				<td th:if = "${query.auctionQueryDistinction.toString.equals('SHIPPING')}">배송</td>
-                  				<td th:text = "${query.auctionQueryTitle}" ></td>
+                  				<td th:text = "${query.auctionQueryTitle}" th:onclick="'javascript:moveDetail(' + ${query.auctionQueryNo} +')'"></td>
                   				<td th:text = "${query.member.nickname}"></td>
                   				<td th:text = "${#temporals.format(query.regTime,'yyyy-MM-dd HH:mm')}"></td>
                  		 </tr>
@@ -960,6 +960,9 @@ table {
           });
     }
 
+      function moveDetail(reverseBiddingNo) {
+          location.href='/auction/query/queryform' + auctionQueryNo;
+      }
     </script>
 </th:block>
 
