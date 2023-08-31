@@ -61,12 +61,12 @@
       </div>
    </div>
    <div class="container">
-      <form name="newProduct" th:action="'/auction/report/'+${auctionNo}" method="post" class="form-horizontal"
+      <form th:action="'/auction/report/'+${auctionNo}" method="post" class="form-horizontal"
       th:object="${auctionReportDto}">
        <div class="form-group row col-sm-top" style="padding-top: 25px;">
           <label class="col-sm-2">판매자</label>
           <div class="col-sm-3">
-             <input type="text" name="pname" class="form-control" th:value="${auction.item.member.nickname}"/>          
+             <input type="text" name="pname" class="form-control" th:value="${auction.item.member.nickname}" disabled/>          
           </div>
        </div>
        
@@ -83,7 +83,7 @@
            <div class="form-group row col-sm-cet">
           <label class="col-sm-2">등록자</label>
           <div class="col-sm-3">
-             <input type="text" name="uniPrice" class="form-control" th:value="${member.nickname}" />          
+             <input type="text" name="uniPrice" class="form-control" th:value="${member.nickname}" disabled/>          
           </div>
        </div>
        

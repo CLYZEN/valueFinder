@@ -235,10 +235,10 @@ public class AuctionController {
     	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
     	Member member = principalDetails.getMember();
     	Auction auction = auctionService.findById(auctionNo);
-    	 if(bindingResult.hasErrors()) {
+    	 if(bindingResult.hasErrors()) {    		 
     		 model.addAttribute("auction",auction); // 신고할 경매
-    	    model.addAttribute("member",member); // 지금 접속한 사용자
-    		 model.addAttribute("auctionReportDto", new AuctionReportDto());
+    	     model.addAttribute("member",member); // 지금 접속한 사용자
+    		 //model.addAttribute("auctionReportDto", new AuctionReportDto());
 			 return "auction/report";
 		 }
     	

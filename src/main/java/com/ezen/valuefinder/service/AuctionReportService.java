@@ -21,9 +21,10 @@ public class AuctionReportService{
 	public void saveReport(AuctionReportDto auctionReportDto, Member member, Auction auction) {
 		AuctionReport auctionReport = new AuctionReport();
 		auctionReport.setAuctionReportTitle(auctionReportDto.getAuctionReportTitle());
-		auctionReport.setAuctionReportDetail(auctionReportDto.getAuctionReportTitle());
+		auctionReport.setAuctionReportDetail(auctionReportDto.getAuctionReportDetail());
 		auctionReport.setAuction(auction);
 		auctionReport.setMember(member);
 		
+		auctionReportRepository.save(auctionReport);
 	}
 }
