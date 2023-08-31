@@ -132,7 +132,7 @@ public class AuctionController {
 			model.addAttribute("nowTime", LocalDateTime.now());
 			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
 			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-			model.addAttribute("auctionList", auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			model.addAttribute("auctionList", auctionService.getDetailPageAuctionList(auction.getItem().getMember()));
 			auctionService.updateAuction(auctionNo);
 			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
 			model.addAttribute("auctionReview", auctionReview);
@@ -144,7 +144,7 @@ public class AuctionController {
 			model.addAttribute("nowTime", LocalDateTime.now());
 			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
 			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-			model.addAttribute("auctionList", auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			model.addAttribute("auctionList", auctionService.getDetailPageAuctionList(auction.getItem().getMember()));
 			auctionService.updateAuction(auctionNo);
 			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
 			model.addAttribute("auctionReview", auctionReview);
@@ -156,7 +156,7 @@ public class AuctionController {
 			model.addAttribute("nowTime", LocalDateTime.now());
 			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
 			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
-			model.addAttribute("auctionList", auctionService.getMemberAuctionList(auction.getItem().getMember().getMemberId(), pageable));
+			model.addAttribute("auctionList", auctionService.getDetailPageAuctionList(auction.getItem().getMember()));
 			auctionService.updateAuction(auctionNo);
 			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
 			model.addAttribute("auctionReview", auctionReview);
