@@ -476,36 +476,18 @@ public class AuctionController {
 
   
    @GetMapping(value = {"/auction/search","/auction/search/{page}"})
-    public String searchView(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+    public String searchView(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category,@RequestParam("searchVal") String searchVal) {
         Page<Auction> auctionList;
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         if(category != 0) {
             Category categorys = categoryService.getCategory(category);
             model.addAttribute("category",categorys);
         }
+       auctionList = auctionService.getSearchValList(pageable,category,searchVal);
+       for (Auction auction : auctionList) {
+           auctionService.updateAuction(auction.getAuctionNo());
+       }
 
-        auctionList = auctionService.getSearchList(pageable,category);
-
-
-        for (Auction auction : auctionList) {
-            auctionService.updateAuction(auction.getAuctionNo());
-        }
-
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("auctionList", auctionList);
-        model.addAttribute("maxPage", 5);
-
-        return "auction/searchview";
-    }
-    @PostMapping(value = "/auction/searched")
-    public String searchAuction(@Valid Long category, @Valid String searchVal,Model model,Optional<Integer> page) {
-        Page<Auction> auctionList;
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
-        if(category != 0) {
-            Category categorys = categoryService.getCategory(category);
-            model.addAttribute("category",categorys);
-        }
-        auctionList = auctionService.getSearchValList(pageable,category,searchVal);
         for (Auction auction : auctionList) {
             auctionService.updateAuction(auction.getAuctionNo());
         }
@@ -515,4 +497,5 @@ public class AuctionController {
 
         return "auction/searchview";
     }
+
 }
