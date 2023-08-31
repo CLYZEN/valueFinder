@@ -389,6 +389,10 @@ public class AuctionService {
 		return auctionRepository.findByItemMember(member, pageable);
 	}
 
+    public List<Auction> getDetailPageAuctionList(Member member) {
+        return auctionRepository.findByItemMemberOrderByAuctionEndTimeDesc(member);
+    }
+
     public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
         if(categoryCode==0) {
             return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
