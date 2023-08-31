@@ -366,7 +366,7 @@ public class AuctionService {
         Member member = memberRepository.findById(memberId).orElseThrow();
         return auctionRepository.findAuctionsByMemberId(memberId, pageable);
     }
-
+    
     public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
         if(categoryCode==0) {
             return auctionRepository.findAllByOrderByAuctionEndTimeDescAuctionCountDesc(pageable);
@@ -380,6 +380,8 @@ public class AuctionService {
 
     }
 
+   
+    
     public Page<Auction> getSearchValList(Pageable pageable, Long categoryCode, String searchVal) {
         if (categoryCode == 0) {
             return auctionRepository.findByItemItemNameContainingOrderByAuctionEndTimeDesc(pageable,searchVal);

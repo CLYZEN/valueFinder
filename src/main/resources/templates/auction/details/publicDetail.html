@@ -725,41 +725,14 @@
                         <th>입찰금액</th>
                         <th>결과</th>
                     </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>에디</td>
-                        <td>08/07 18:15</td>
-                        <td>10,500원</td>
-                        <td>유찰</td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>루피</td>
-                        <td>08/07 18:15</td>
-                        <td>10,500원</td>
-                        <td>유찰</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>크롱</td>
-                        <td>08/07 18:15</td>
-                        <td>10,500원</td>
-                        <td>유찰</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>포비</td>
-                        <td>08/07 18:15</td>
-                        <td>10,500원</td>
-                        <td>유찰</td>
-                    </tr>
-                    <tr>
-                        <td>1</td>
-                        <td>뽀로로</td>
-                        <td>08/07 18:15</td>
-                        <td>10,500원</td>
-                        <td>유찰</td>
-                    </tr>
+                      <tr th:each= "bidding, stat: ${biddingList}">
+                  		<td th:text = "${stat.count}"></td>
+                  		<td th:text = "${bidding.member.nickname}"></td>
+                  		<td th:text = "${#temporals.format(bidding.biddingTime,'yyyy-MM-dd HH:mm')}"></td>
+                  		<td th:text = "${bidding.biddingPrice}"></td>
+                 		<td th:if = "|${stat.count.toString.equals('1')}|">최고입찰자</td>
+                		<td th:unless = "|${stat.count.toString.equals('1')}|">유찰</td>
+                 	 </tr>
                 </table>
             </div>
 

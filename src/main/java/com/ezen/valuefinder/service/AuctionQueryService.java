@@ -1,9 +1,13 @@
 package com.ezen.valuefinder.service;
 
+import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.AuctionQuery;
 import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.repository.AuctionQueryRepository;
 import lombok.RequiredArgsConstructor;
+
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,4 +26,9 @@ public class AuctionQueryService {
     public Page<AuctionQuery> getReceiveQueryPage(Pageable pageable, Member member) {
         return auctionQueryRepository.findByAuctionItemMember(pageable,member);
     }
+    
+    public List<AuctionQuery>getAuctionQueryList(Pageable pageable, Auction auction){
+    	return auctionQueryRepository.findByAuction(auction);
+    }
+    
 }

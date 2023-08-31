@@ -14,6 +14,7 @@ import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.*;
 import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.BiddingRepository;
 import com.ezen.valuefinder.service.*;
 
 
@@ -64,6 +65,7 @@ public class AuctionController {
 	private final ReversebidService reversebidService;
     private final CategoryService categoryService;
     private final WishService wishService;
+    private final AuctionQueryService auctionQueryService;
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -143,6 +145,7 @@ public class AuctionController {
 			model.addAttribute("auctionReview", auctionReview);
 			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
 			model.addAttribute("maxPage", 5);
+			model.addAttribute("biddingList", biddingService.getBiddingList(pageable, auction));
 			return "/auction/details/publicDetail";
 		} else if (auction.getAuctionType() == AuctionType.REALTIME) {
 			model.addAttribute("auction", auction);
@@ -155,6 +158,8 @@ public class AuctionController {
 			model.addAttribute("auctionReview", auctionReview);
 			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
 			model.addAttribute("maxPage", 5);
+			model.addAttribute("biddingList", biddingService.getBiddingList(pageable, auction));
+			model.addAttribute("auctionQueryList", auctionQueryService.getAuctionQueryList(pageable, auction));
 			return "/auction/details/realtimeDetail";
 		} else {
 			model.addAttribute("auction", auction);
@@ -167,6 +172,7 @@ public class AuctionController {
 			model.addAttribute("auctionReview", auctionReview);
 			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
 			model.addAttribute("maxPage", 5);
+			model.addAttribute("biddingList", biddingService.getBiddingList(pageable, auction));
 			return "/auction/details/sealedDetail";
 		}
 

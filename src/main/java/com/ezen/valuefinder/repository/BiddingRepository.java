@@ -14,4 +14,6 @@ public interface BiddingRepository extends JpaRepository<Bidding,Long> {
     Bidding findByAuctionAndMember(Auction auction, Member member);
 
     Bidding findTopByAuctionAndMemberNotInOrderByBiddingPriceDesc(Auction auction, List<Member> memberList);
+    
+    List<Bidding> findByAuctionOrderByBiddingPriceDesc(Auction auction);
 }

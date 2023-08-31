@@ -125,5 +125,7 @@ public class BiddingService {
         successBidding.setShippingNo(data);
     }
 
-
+    public List<Bidding>getBiddingList(Pageable pageable, Auction auction){
+    	return biddingRepository.findByAuctionOrderByBiddingPriceDesc(auction);
+    }
 }
