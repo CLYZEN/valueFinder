@@ -951,7 +951,7 @@
     	
     	
         $.ajax({
-            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
             type: 'GET',
             success: function(response) {
                 $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
