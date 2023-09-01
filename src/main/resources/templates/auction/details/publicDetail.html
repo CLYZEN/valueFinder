@@ -825,7 +825,6 @@
                     </div>
                     <div class="form-group row" style="padding-top: 20px;">
                         <div class="col-sm-offset-2" style="text-align: right;">
-
                             <input onclick="moveQuery()" type="button" class="btn btn-primary" value="문의하기"
                                    style="border-radius: inherit;"/>
                         </div>
@@ -856,15 +855,17 @@
           crossorigin="anonymous"></script>
     <script src="/js/splide.min.js"></script>
     <script th:inline="javascript">
-
+        function moveQuery() {
+            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+        }
         document.addEventListener('DOMContentLoaded', function () {
             var splide = new Splide('.splide');
             splide.mount();
         });
 
-
         let auctionPrice = [[${auction.auctionStartPrice}]];
         function count(type) {
+
             // 결과를 표시할 element
             const resultElement = document.getElementById('sum');
             const resultElement2 = document.getElementById('price');
@@ -900,7 +901,7 @@
     	    	
     	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
     	    	Time--;
-    	    	
+
     	    	if(Time < 0 ){
     	    		clearInterval(updateTime);
     	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
@@ -973,9 +974,7 @@
         var method = isWished ? "DELETE" : "POST";
 
 
-        function moveQuery() {
-            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
-        }
+
         
         $.ajax({
             url: url,

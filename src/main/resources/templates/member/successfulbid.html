@@ -303,7 +303,12 @@
                                 정보보기
                             </button>
                             <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'OK'">입금확인요청
+                                    th:if="${auction.bidStatus.toString()} == 'OK'"
+                                    th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">입금확인요청
+                            </button>
+                            <button type="button" class="btn btn-primary"
+                                    th:if="${auction.bidStatus.toString()} == 'OK'"
+                                    >판매자 입금확인중
                             </button>
                             <button type="button" class="btn btn-primary"
                                     th:if="${auction.bidStatus.toString()} == 'NO'">삭제하기

@@ -1,11 +1,8 @@
-<!DOCTYPE html>
+mypage.html<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
-<head>
-    <meta name="_csrf" th:content="${_csrf.token}"/>
-    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
-</head>
+
 <th:block layout:fragment="css">
     <style>
         a {
@@ -15,6 +12,7 @@
         p {
             font-size: 25px;
         }
+
 
         .quickmenu, ul, li {
             -webkit-box-sizing: border-box;
@@ -92,28 +90,16 @@
 
         td {
             width: 12.5%;
-            font-size: 9px;
         }
 
         .tdnum {
             border-right: 1px solid;
             font-size: 20px;
         }
-
-        .btn {
-            background-color: #fcfcfc;
-            border-radius: 0%;
-            border: #000 1px solid;
-            color: #000;
-        }
-
-        img {
-            height: 100px;
-        }
     </style>
 </th:block>
 
-<div layout:fragment="content" style="margin-bottom: 1100px;">
+<div layout:fragment="content" style="margin-bottom:1100px;">
     <div class="jumbotron" style="height: 100%">
         <div class="container">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -129,14 +115,7 @@
                 <path fill-rule="evenodd"
                       d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
             </svg>
-            <a href="/" style="text-decoration: none;">마이페이지</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-chevron-compact-right"
-                 viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-            </svg>
-            <a href="/" style="text-decoration: none;">내 물품 확인</a> <br> <br>
+            <a href="/" style="text-decoration: none;">마이페이지</a> <br> <br>
         </div>
     </div>
 
@@ -216,122 +195,130 @@
             </div>
 
             <table class="table table-hover"
-                   style="border: 1px solid; margin: auto 0; text-align: center; margin-top: 50px;"
-                   th:each="auction:${auctionList}">
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'PUBLIC'"
-                        th:text="공개입찰경매"></caption>
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'SEALED'"
-                        th:text="비공개경매"></caption>
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'REALTIME'"
-                        th:text="실시간경매"></caption>
-
+                   style="border: 1px solid; margin: auto 0; text-align: center; margin-top:50px; ">
+                <caption>공개입찰경매</caption>
                 <thead>
-                <th style="border-right: 1px solid;">대표이미지</th>
-                <th style="border-right: 1px solid;">물품번호</th>
-                <th style="border-right: 1px solid;">물품명</th>
-                <th style="border-right: 1px solid;">시작가</th>
-                <th style="border-right: 1px solid;">현재가</th>
-                <th style="border-right: 1px solid;">입찰횟수</th>
-                <th style="border-right: 1px solid;">마감일</th>
-                <th style="border-right: 1px solid;">상태</th>
+                <th colspan='4' style="border-right: 1px solid;">주문/배송조회</th>
+                <th colspan='4'>취소/반품/미수령</th>
                 </thead>
                 <tbody>
+                <tr>
+                    <td style="border-right: 1px solid;">입금대기</td>
+                    <td style="border-right: 1px solid;">입금완료</td>
+                    <td style="border-right: 1px solid;">배송중</td>
+                    <td style="border-right: 1px solid;">구매결정대기</td>
+                    <td style="border-right: 1px solid;">구매거부</td>
+                    <td style="border-right: 1px solid;">반품</td>
+                    <td style="border-right: 1px solid;">미수령</td>
+                    <td>미입금</td>
+                </tr>
                 <tr style="height: 100px; line-height: 100px;">
-                    <td class=tdnum><img src="/images/thumb-bananas.png"
-                                         class="tab-image"></td>
-                    <td class=tdnum th:text="${auction.auctionNo}">5</td>
-                    <td class=tdnum th:text="${auction.item.itemName}">바나나</td>
-                    <td class=tdnum th:text="${auction.auctionStartPrice}">1500원</td>
-                    <td class=tdnum th:text="${auction.auctionNowPrice}">2500원</td>
-                    <td class=tdnum th:text="${auction.biddingCount}">5</td>
-                    <td class=tdnum th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">
-                        2023/08/15
-                    </td>
-                    <td th:if="${auction.bidStatus} == null" th:text="유찰"></td>
-                    <td th:if="${auction.bidStatus.toString()} == 'NO'" th:text="유찰"></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                </tr>
+                </tbody>
+            </table>
 
-                    <td th:if="${auction.bidStatus} != null">
-                        <button type="button" class="btn btn-primary" th:if="${auction.bidStatus.toString()} == 'OK'"
-                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">입금확인
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'CONFIRM'"
-                                data-bs-toggle="modal" th:data-bs-target="'#exampleModal'+${auction.successBiddingNo}">운송장번호입력
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'SHIPPING'" disabled>배송중
-                        </button>
-                        <button type="button" class="btn btn-primary" th:if="${auction.bidStatus.toString()} == 'END'"
-                                disabled>판매자인수완료
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'PENDING'" disabled>대기중
-                        </button>
-                        <div class="modal fade" th:id="'exampleModal'+${auction.successBiddingNo}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form th:action="'/member/shipping/'+${auction.successBiddingNo}" method="post">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text"
-                                                      id="inputGroup-sizing-default">배송정보</span>
-                                                <input type="text" name="data" class="form-control"
-                                                       aria-label="Sizing example input"
-                                                       aria-describedby="inputGroup-sizing-default"
-                                                       placeholder="택배사 : 운송장번호">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-secondary">입력</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
+            <table class="table table-hover"
+                   style="border: 1px solid; margin: auto 0; text-align: center;">
+                <caption>비공개경매</caption>
+                <thead>
+                <th colspan='4' style="border-right: 1px solid;">주문/배송조회</th>
+                <th colspan='4'>취소/반품/미수령</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="border-right: 1px solid;">입금대기</td>
+                    <td style="border-right: 1px solid;">입금완료</td>
+                    <td style="border-right: 1px solid;">배송중</td>
+                    <td style="border-right: 1px solid;">구매결정대기</td>
+                    <td style="border-right: 1px solid;">구매거부</td>
+                    <td style="border-right: 1px solid;">반품</td>
+                    <td style="border-right: 1px solid;">미수령</td>
+                    <td>미입금</td>
+                </tr>
+                <tr style="height: 100px; line-height: 100px;">
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
                 </tr>
                 </tbody>
             </table>
 
 
-            <!-- 페이징 버튼 -->
-            <div class="d-flex justify-content-center">
-                <nav
-                        th:with="start=${(auctionList.number/maxPage)*maxPage + 1}
-			                 ,end=(${(auctionList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionList.totalPages ? start + (maxPage - 1) : auctionList.totalPages)})"
-                        aria-label="Page navigation example">
-                    <ul class="pagination d-flex justify-content-center">
-                        <li class="page-item" th:classappend="${auctionList.first}?'disabled'">
-                            <a class="page-link"
-                               th:href="@{'/member/mypage/myauction/' +  ${auctionList.number - 1}}">이전</a>
-                        </li>
+            <table class="table table-hover"
+                   style="border: 1px solid; margin: auto 0; text-align: center;">
+                <caption>실시간경매</caption>
+                <thead>
+                <th colspan='4' style="border-right: 1px solid;">주문/배송조회</th>
+                <th colspan='4'>취소/반품/미수령</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="border-right: 1px solid;">입금대기</td>
+                    <td style="border-right: 1px solid;">입금완료</td>
+                    <td style="border-right: 1px solid;">배송중</td>
+                    <td style="border-right: 1px solid;">구매결정대기</td>
+                    <td style="border-right: 1px solid;">구매거부</td>
+                    <td style="border-right: 1px solid;">반품</td>
+                    <td style="border-right: 1px solid;">미수령</td>
+                    <td>미입금</td>
+                </tr>
+                <tr style="height: 100px; line-height: 100px;">
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                </tr>
+                </tbody>
+            </table>
 
-                        <li class="page-item"
-                            th:each="page: ${#numbers.sequence(start, end)}"
-                            th:classappend="${auctionList.number eq page - 1}?'active':''">
-                            <a
-                                    class="page-link" th:inline="text"
-                                    th:href="@{'/member/mypage/myauction/' + ${page - 1}}">[[${page}]]</a>
-                        </li>
 
-                        <li class="page-item" th:classappend="${auctionList.last}?'disabled'">
-                            <a class="page-link"
-                               th:href="@{'/member/mypage/myauction/' +  ${auctionList.number + 1}}">다음</a>
-                        </li>
-                    </ul>
-                </nav>
-            </div>
+            <table class="table table-hover"
+                   style="border: 1px solid; margin: auto 0; text-align: center;">
+                <caption>역경매</caption>
+                <thead>
+                <th colspan='4' style="border-right: 1px solid;">주문/배송조회</th>
+                <th colspan='4'>취소/반품/미수령</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td style="border-right: 1px solid;">입금대기</td>
+                    <td style="border-right: 1px solid;">입금완료</td>
+                    <td style="border-right: 1px solid;">배송중</td>
+                    <td style="border-right: 1px solid;">구매결정대기</td>
+                    <td style="border-right: 1px solid;">구매거부</td>
+                    <td style="border-right: 1px solid;">반품</td>
+                    <td style="border-right: 1px solid;">미수령</td>
+                    <td>미입금</td>
+                </tr>
+                <tr style="height: 100px; line-height: 100px;">
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                    <td class=tdnum><a href="/">5</a></td>
+                </tr>
+                </tbody>
+            </table>
 
         </div>
     </div>
@@ -356,7 +343,7 @@
 </div>
 
 <th:block layout:fragment="script">
-    <script th:inline="javascript">
+    <script>
         $(document).ready(function () {
             var currentPosition = parseInt($(".quickmenu").css("top"));
             $(window).scroll(function () {
@@ -366,43 +353,6 @@
                 }, 1000);
             });
         });
-
-        function update(no, status) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
-
-            var url = '/member/mypage/updateStatus';
-            var method = "POST";
-
-            $.ajax({
-                url: url,
-                type: method,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
-                data: JSON.stringify({
-                    no: no,
-                    status: status
-                }),
-                contentType: "application/json",
-                success: function (result, status, jqXHR) {
-                    // 요청 성공 처리
-                    alert('등록 완료');
-                    location.href = document.referrer;
-                },
-                error: function (jqXHR, status, error) {
-                    if (jqXHR.status == '401') {
-                        alert('로그인 후 이용해주세요.');
-                        location.href = '/member/login';
-                    } else {
-                        alert(jqXHR.responseText);
-                        location.href = document.referrer;
-                    }
-
-                }
-            });
-        }
     </script>
 </th:block>
-
 </html>

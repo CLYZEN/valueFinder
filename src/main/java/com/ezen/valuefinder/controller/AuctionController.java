@@ -273,7 +273,7 @@ public class AuctionController {
                 case PROGRESS, LAST -> {
 
                     if(price <= 0) {
-                        return new ResponseEntity("0보다 큰 슷자를 입력해주세요.", HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity("0보다 큰 숫자를 입력해주세요.", HttpStatus.BAD_REQUEST);
                     }
 
                     // 비공개 경매라면
@@ -311,7 +311,7 @@ public class AuctionController {
                 }
             }
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }

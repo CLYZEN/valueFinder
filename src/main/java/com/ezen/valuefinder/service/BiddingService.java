@@ -63,15 +63,20 @@ public class BiddingService {
     }
 
     public boolean chkBidding(Auction auction, Member member) {
-        Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
-        Member maxBidMember = bidding.getMember();
-        if (bidding != null) {
-            if(maxBidMember.getEmail().equals(member.getEmail())) {
-                return false;
-            } else {
-                return true;
+        try {
+            Bidding bidding = biddingRepository.findTopByAuctionOrderByBiddingPriceDesc(auction);
+            Member maxBidMember = bidding.getMember();
+            if (bidding != null) {
+                if(maxBidMember.getEmail().equals(member.getEmail())) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
+        }catch (Exception e) {
+            return true;
         }
+
        return false;
     }
 
@@ -123,7 +128,8 @@ public class BiddingService {
     }
     public void setShippingNo(Long id, String data) {
         SuccessBidding successBidding =successBiddingRepository.findById(id).orElseThrow();
-        successBidding.setShippingNo(data);
+        successBidding.updateShippingNo(data);
+        successBiddingRepository.save(successBidding);
     }
 
 
