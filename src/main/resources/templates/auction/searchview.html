@@ -5,6 +5,8 @@
 <head>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+          
+          	<link rel="stylesheet" type="text/css" href="/css/card.css">
     <style>
 
         .category {
@@ -44,7 +46,7 @@
         그냥 btn은 다른버튼까지 다 적용되어 네이밍바꿈. */
         .btn2 {
             border: none;
-            background: rgb(152, 194, 229);
+            
             font-weight: 600;
             width: 200px;
             padding: 6px 0;
@@ -119,12 +121,14 @@
                                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
 
                                     <div class="col" th:each="auction:${auctionList}">
+                                    <div class="badge">
                                         <span th:if="${auction.auctionType.toString()} == 'PUBLIC'"
                                         th:text="공개입찰경매"></span>
                                         <span th:if="${auction.auctionType.toString()} == 'SEALED'"
                                               th:text="비공개경매"></span>
                                         <span th:if="${auction.auctionType.toString()} == 'REALTIME'"
                                               th:text="실시간경매"></span>
+                                    </div>
 										<a th:href="'/auction/detail/'+ ${auction.auctionNo}">
                                         <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
                                             <figure>
@@ -133,16 +137,16 @@
                                                 </a>
                                             </figure>
                                             <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'PENDING'"
+                                              id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'PENDING'"
                                                     th:text="대기중" disabled></button>
                                             <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료"
+                                              id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료"
                                                     disabled></button>
                                             <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'LAST'"
+                                              id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'LAST'"
                                                     th:text="마감임박"></button>
                                             <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'PROGRESS'"
+                                              id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'PROGRESS'"
                                                     th:text="진행중"></button>
 
                                             <div class="d-flex justify-content-center">
@@ -151,10 +155,10 @@
                                             </div>
 
                                             <div class="item_detail">
-                                                <h3>물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
+                                                <h3 id="itemNameText">물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
                                                 <h3>시작가 : <span th:text="${auction.auctionStartPrice}"></span>
                                                     <span>원</span></h3>
-                                                <h3 th:if="${auction.auctionType.toString()} != 'SEALED'">현재가 : <span th:text="${auction.auctionNowPrice}"></span>
+                                                <h3 th:if="${auction.auctionType.toString()} != 'SEALED'">현재가 : <span class="product-price" th:text="${auction.auctionNowPrice}"></span>
                                                     <span>원</span></h3>
                                                 <h3>입찰수 : <span th:text="${auction.biddingCount}">0</span>
                                                     <span>회</span></h3>
@@ -217,13 +221,19 @@
 
         var url = new URL(url_href);
         var category = url.searchParams.get("category");
+        var searchVal = url.searchParams.get("searchVal");
+
+        if (category == null || category == '') {
+            category = 0;
+        }
 
         function page(page) {
             //입력한 값을 전부 가지고 온다.
 
             //주소 이동
             location.href = "/auction/search/" + page
-                + "?category=" + category;
+                + "?category=" + category
+                + "&searchVal=" + searchVal;
         }
         function moveDetail(auctionNo) {
             location.href='/auction/detail/' + auctionNo;

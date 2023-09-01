@@ -528,66 +528,92 @@ table {
 									</div>
 
 									<div class="modal fade" id="otherItemModal" tabindex="-1"
-										aria-labelledby="reviewModalLabel" aria-hidden="true">
+										 aria-labelledby="reviewModalLabel" aria-hidden="true">
 										<div class="modal-dialog modal-lg">
 											<div class="modal-content">
 												<div class="modal-header">
 													<h5 class="modal-title" id="reviewModalLabel"
 														th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
 													<button type="button" class="btn-close"
-														data-bs-dismiss="modal" aria-label="Close"></button>
+															data-bs-dismiss="modal" aria-label="Close"></button>
 												</div>
 												<div class="modal-body ">
 													<table class="table">
 														<thead>
-															<tr>
-																<th scope="col">물품이름</th>
-																<th scope="col">가격</th>
-																<th scope="col">진행상태</th>
+														<tr>
+															<th scope="col">물품이름</th>
+															<th scope="col">가격</th>
+															<th scope="col">진행상태</th>
+															<th scope="col">경매구분</th>
 
-															</tr>
+														</tr>
 														</thead>
 														<tbody>
-															<tr th:each="auction: ${auctionList} ">
-																<th scope="row" th:text="${auction.item.itemName}"></th>
-																<td th:text="${auction.auctionNowPrice}"></td>
-																<td
-																	th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중</td>
-																<td
-																	th:if="${auction.auctionStatus.toString().equals('END')}">마감</td>
-																<td
-																	th:if="${auction.auctionStatus.toString().equals('LAST')}">지난
-																	경매</td>
-																<td
-																	th:if="${auction.auctionStatus.toString().equals('PENDING')}">보류중</td>
-															</tr>
+														<tr th:each="reviewAuction: ${auctionList} ">
+															<th scope="row" th:text="${reviewAuction.item.itemName}"></th>
+															<td th:text="${reviewAuction.auctionNowPrice}"></td>
+															<td
+																	th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
+																진행중
+															</td>
+															<td
+																	th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
+																마감
+															</td>
+															<td
+																	th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
+																지난
+																경매
+															</td>
+															<td
+																	th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
+																보류중
+															</td>
+															<td th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'" th:text="실시간경매"></td>
+															<td th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'" th:text="공개입찰경매"></td>
+															<td th:if="${reviewAuction.auctionType.toString()} == 'SEALED'" th:text="비공개경매"></td>
+														</tr>
 														</tbody>
 													</table>
 												</div>
 
 												<!-- 페이징 버튼 -->
-												<div class="d-flex justify-content-center">
-													<nav aria-label="Page navigation example">
-														<ul class="pagination custom-pagination">
-															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-															</a></li>
-															<li class="page-item"><a class="page-link" href="#">1</a>
+
+												<div class="d-flex justify-content-center"
+													 style="margin-top: 1%;">
+													<nav
+															th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+															aria-label="Page navigation example">
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, start)}"
+																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																	class="page-link"
+																	th:onclick="'loadPage(' + ${0} +')'">이전</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#">2</a>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(start, end)}"
+																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																<a class="page-link" th:inline="text"
+																   th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#">3</a>
+
+															<li class="page-item"
+																th:each="page: ${#numbers.sequence(end, end)}"
+																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																	class="page-link"
+																	th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
 															</li>
-															<li class="page-item"><a class="page-link" href="#"
-																aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-															</a></li>
 														</ul>
 													</nav>
 												</div>
 
 												<div class="modal-footer d-flex justify-content-center">
 													<button type="button" class="btn btn-secondary "
-														data-bs-dismiss="modal">닫기</button>
+															data-bs-dismiss="modal">닫기
+													</button>
 
 												</div>
 											</div>
@@ -961,7 +987,7 @@ table {
     // 이거 뭐지 ?
     function loadPage(pageNumber) {
         $.ajax({
-            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
             type: 'GET',
             success: function(response) {
                 $('#reviewModal .modal-body').html($(response).find('.modal-body').html());

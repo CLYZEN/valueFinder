@@ -537,30 +537,33 @@
                                                             <th scope="col">물품이름</th>
                                                             <th scope="col">가격</th>
                                                             <th scope="col">진행상태</th>
-
+                                                            <th scope="col">경매구분</th>
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        <tr th:each="auction: ${auctionList} ">
-                                                            <th scope="row" th:text="${auction.item.itemName}"></th>
-                                                            <td th:text="${auction.auctionNowPrice}"></td>
+                                                        <tr th:each="reviewAuction: ${auctionList} ">
+                                                            <th scope="row" th:text="${reviewAuction.item.itemName}"></th>
+                                                            <td th:text="${reviewAuction.auctionNowPrice}"></td>
                                                             <td
-                                                                    th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">
+                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
                                                                 진행중
                                                             </td>
                                                             <td
-                                                                    th:if="${auction.auctionStatus.toString().equals('END')}">
+                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
                                                                 마감
                                                             </td>
                                                             <td
-                                                                    th:if="${auction.auctionStatus.toString().equals('LAST')}">
+                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
                                                                 지난
                                                                 경매
                                                             </td>
                                                             <td
-                                                                    th:if="${auction.auctionStatus.toString().equals('PENDING')}">
+                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
                                                                 보류중
                                                             </td>
+                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'" th:text="실시간경매"></td>
+                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'" th:text="공개입찰경매"></td>
+                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'SEALED'" th:text="비공개경매"></td>
                                                         </tr>
                                                         </tbody>
                                                     </table>
@@ -948,7 +951,7 @@
     	
     	
         $.ajax({
-            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
             type: 'GET',
             success: function(response) {
                 $('#reviewModal .modal-body').html($(response).find('.modal-body').html());

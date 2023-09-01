@@ -12,11 +12,13 @@ import com.ezen.valuefinder.entity.Member;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
+
 public interface AuctionRepository extends JpaRepository<Auction,Long> {
 
 	Auction findByAuctionNo(Long auctionNo);
 
-	Page<Auction> findByItemMember(Member member, Pageable pageable);
+	List<Auction> findByItemMemberOrderByAuctionEndTimeDesc(Member member);
 
 	Page<Auction> findByAuctionTypeOrderByAuctionEndTimeDescAuctionCountDesc(AuctionType auctionType, Pageable pageable);
 
@@ -39,6 +41,5 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 	@Query("SELECT new com.ezen.valuefinder.dto.MemberAuctionDto(a.auctionNo, a.item, a.auctionType, a.auctionStartPrice, a.auctionNowPrice, a.auctionStartTime, a.auctionEndTime, a.auctionStatus, a.auctionCount, a.remainingTime, a.biddingCount, sb.successBiddingNo, sb.member, sb.bidStatus, sb.shippingNo) " +
 			"FROM Auction a LEFT JOIN FETCH SuccessBidding sb ON a = sb.auction WHERE sb.member.memberId = :memberId")
 	Page<MemberAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
-
 
 }

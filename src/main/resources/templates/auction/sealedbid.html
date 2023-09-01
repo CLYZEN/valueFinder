@@ -5,6 +5,8 @@
 <head>
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	
+	 	<link rel="stylesheet" type="text/css" href="/css/card.css">
 <style>
 
 .category {
@@ -44,7 +46,6 @@ margin-left: 151.5px; /* 좌측 여백 */
 그냥 btn은 다른버튼까지 다 적용되어 네이밍바꿈. */
 .btn2{
 	border: none;
-	background: rgb(152,194,229);
 	font-weight: 600;
 	width: 200px;
     padding: 6px 0;
@@ -156,13 +157,13 @@ margin-left: 151.5px; /* 좌측 여백 */
                       </a>
                     </figure>
 					  <button class="btn2 d-flex justify-content-center"
-							  th:if="${auction.auctionStatus.toString()} == 'PENDING'" th:text="대기중" disabled></button>
+						id="btn-status"	  th:if="${auction.auctionStatus.toString()} == 'PENDING'" th:text="대기중" disabled></button>
 					  <button class="btn2 d-flex justify-content-center"
-							  th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료" disabled></button>
+						id="btn-status"	  th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료" disabled></button>
 					  <button class="btn2 d-flex justify-content-center"
-							  th:if="${auction.auctionStatus.toString()} == 'LAST'" th:text="마감임박"></button>
+						id="btn-status"	  th:if="${auction.auctionStatus.toString()} == 'LAST'" th:text="마감임박"></button>
 					  <button class="btn2 d-flex justify-content-center"
-							  th:if="${auction.auctionStatus.toString()} == 'PROGRESS'" th:text="진행중"></button>
+						id="btn-status"	  th:if="${auction.auctionStatus.toString()} == 'PROGRESS'" th:text="진행중"></button>
 				
 					<div class = "d-flex justify-content-center"> 
                     <span class="time_action" th:text="${auction.remainingTime}"></span>
@@ -170,7 +171,7 @@ margin-left: 151.5px; /* 좌측 여백 */
                     </div>
                     
                     <div class = "item_detail">
-                    <h3>물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
+                    <h3 id="itemNameText">물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
                     <h3>시작가 : <span th:text="${auction.auctionStartPrice}"></span> <span>원</span></h3>
                     <h3>입찰수 : <span th:text="${auction.biddingCount}">0</span> <span>회</span></h3>
                   	<h3>마감
