@@ -574,29 +574,29 @@
                                                 <div class="d-flex justify-content-center"
 													style="margin-top: 1%;">
 													<nav
-														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
-			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+														th:with="start=${(auctionList.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionList.totalPages ? start + (maxPage - 1) : auctionList.totalPages)})"
 														aria-label="Page navigation example">
 														<ul class="pagination d-flex justify-content-center">
 															<li class="page-item"
 																th:each="page: ${#numbers.sequence(start, start)}"
-																th:classappend="${auctionReview.number eq page }?'active':''"><a
+																th:classappend="${auctionList.number eq page }?'active':''"><a
 																class="page-link"
-																th:onclick="'loadPage(' + ${0} +')'">이전</a>
+																th:onclick="'loadItemPage(' + ${0} +')'">이전</a>
 															</li>
 
 															<li class="page-item"
 																th:each="page: ${#numbers.sequence(start, end)}"
-																th:classappend="${auctionReview.number eq page + 1}?'active':''">
+																th:classappend="${auctionList.number eq page + 1}?'active':''">
 																<a class="page-link" th:inline="text"
-																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+																th:onclick="loadItemPage(1)">[[${page}]]</a>
 															</li>
 
 															<li class="page-item"
 																th:each="page: ${#numbers.sequence(end, end)}"
-																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+																th:classappend="${auctionList.number eq page - 1}?'active':''"><a
 																class="page-link"
-																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+																th:onclick="'loadItemPage(' + ${auctionList.totalPages - 1} +')'">다음</a>
 															</li>
 														</ul>
 													</nav>
@@ -780,7 +780,7 @@
                 </div>
                 <div class="tab-pane fade" id="profile" role="tabpanel"
                      aria-labelledby="profile-tab">
-                    <div class="join_customer">
+                        <div class="join_customer">
                         <table>
                             <tr>
                                 <th scope="col">번호</th>
@@ -789,15 +789,51 @@
                                 <th>등록자</th>
                                 <th>등록일자</th>
                             </tr>
-                            <tr>
-                                <td>1</td>
-                                <td>제품문의</td>
-                                <td>상품관련 질문이요~</td>
-                                <td>뽀로로</td>
-                                <td>08/07 12:20</td>
-                            </tr>
+                           <tr th:each= "query, stat: ${auctionQueryList}">
+                  				<td th:text = "${stat.count}"></td>
+                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('ETC')}">기타</td>
+                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('ITEM')}">물품</td>
+                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('SHIPPING')}">배송</td>
+                  				<td th:text = "${query.auctionQueryTitle}" th:onclick="'javascript:moveDetail(' + ${query.auctionQueryNo} +')'"></td>
+                  				<td th:text = "${query.member.nickname}"></td>
+                  				<td th:text = "${#temporals.format(query.regTime,'yyyy-MM-dd HH:mm')}"></td>
+                 		 </tr>
                         </table>
                     </div>
+                    
+                                <!-- 페이징 버튼 -->
+
+                                <div class="d-flex justify-content-center"
+                                     style="margin-top: 1%;">
+                                    <nav
+                                            th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+                                            aria-label="Page navigation example">
+                                        <ul class="pagination d-flex justify-content-center">
+                                            <li class="page-item"
+                                                th:each="page: ${#numbers.sequence(start, start)}"
+                                                th:classappend="${auctionReview.number eq page }?'active':''"><a
+                                                    class="page-link"
+                                                    th:onclick="'loadPage(' + ${0} +')'">이전</a>
+                                            </li>
+
+                                            <li class="page-item"
+                                                th:each="page: ${#numbers.sequence(start, end)}"
+                                                th:classappend="${auctionReview.number eq page + 1}?'active':''">
+                                                <a class="page-link" th:inline="text"
+                                                   th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+                                            </li>
+
+                                            <li class="page-item"
+                                                th:each="page: ${#numbers.sequence(end, end)}"
+                                                th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+                                                    class="page-link"
+                                                    th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                
                     <div class="form-group row" style="padding-top: 20px;">
                         <div class="col-sm-offset-2" style="text-align: right;">
 
@@ -806,6 +842,7 @@
                         </div>
                     </div>
                 </div>
+                
                 <div class="tab-pane fade" id="standard" role="tabpanel"
                      aria-labelledby="standard-tab">
                     <div class="standard wishful">
@@ -927,13 +964,24 @@
     	
     	
         $.ajax({
-            url: '/auction/realtime/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+            url: '/auction/public/detail/' + [[${auctionNo}]] + '/' + pageNumber,
             type: 'GET',
             success: function(response) {
                 $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
             }
         });
     }
+      
+      function loadItemPage(pageNumber) {
+    	    $.ajax({
+    	        url: '/auction/public/detail/' + [[${auctionNo}]] + '?page=' + pageNumber,
+    	        type: 'GET',
+    	        success: function(response) {
+    	            $('#otherItemModal .modal-body').html($(response).find('.modal-body').html());
+    	        }
+    	    });
+    	}
+
 
 	//찜 버튼에 대한 기능
 	function pushWish(heartIcon) {
@@ -983,6 +1031,10 @@
         });
         
     }
+	
+	 function moveDetail(reverseBiddingNo) {
+         location.href='/auction/query/queryform' + auctionQueryNo;
+     }
     </script>
 
 
