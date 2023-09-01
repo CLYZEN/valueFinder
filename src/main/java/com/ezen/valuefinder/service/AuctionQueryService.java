@@ -27,8 +27,8 @@ public class AuctionQueryService {
         return auctionQueryRepository.findByAuctionItemMember(pageable,member);
     }
     
-    public List<AuctionQuery>getAuctionQueryList(Pageable pageable, Auction auction){
-    	return auctionQueryRepository.findByAuction(auction);
+    public Page<AuctionQuery>getAuctionQueryList(Pageable pageable, Auction auction){
+    	return auctionQueryRepository.findByAuction(pageable,auction);
     }
     
 }

@@ -18,5 +18,5 @@ public interface AuctionQueryRepository extends JpaRepository<AuctionQuery,Long>
 
     Page<AuctionQuery> findByAuctionItemMember(Pageable pageable, Member member);
     
-    List<AuctionQuery> findByAuction(Auction auction);
+    Page<AuctionQuery> findByAuction(Pageable pageable,Auction auction);
 }

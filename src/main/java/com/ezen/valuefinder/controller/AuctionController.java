@@ -120,8 +120,8 @@ public class AuctionController {
 		return "redirect:/";
 	}
 
-	@GetMapping(value = "auction/detail/{auctionNo}")
-	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo, Optional<Integer> page,Authentication authentication) {
+	@GetMapping(value = {"auction/detail/{auctionNo}","auction/detail/{auctionNo}/{page}"})
+	public String auctionDetail(Model model, @PathVariable("auctionNo") Long auctionNo,@PathVariable("page") Optional<Integer> page,Authentication authentication) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		Auction auction = auctionService.getAuctionDetail(auctionNo);
 		auctionService.addAuctionView(auctionNo);
@@ -142,13 +142,15 @@ public class AuctionController {
 			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
 			model.addAttribute("maxPage", 5);
 			model.addAttribute("biddingList", biddingService.getBiddingList(pageable, auction));
+			model.addAttribute("auctionQueryList", auctionQueryService.getAuctionQueryList(pageable, auction));
 			return "/auction/details/publicDetail";
 		} else if (auction.getAuctionType() == AuctionType.REALTIME) {
 			model.addAttribute("auction", auction);
 			model.addAttribute("nowTime", LocalDateTime.now());
 			model.addAttribute("itemCount", auctionService.itemCount(auction.getItem().getMember().getMemberId()));
-			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 1);
-			model.addAttribute("auctionList", auctionService.getDetailPageAuctionList(auction.getItem().getMember(),pageable));
+			Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
+			Page<Auction> auctionList = auctionService.getDetailPageAuctionList(auction.getItem().getMember(), pageable);
+			model.addAttribute("auctionList", auctionList);
 			auctionService.updateAuction(auctionNo);
 			Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(auction.getItem().getMember().getMemberId(), pageable);
 			model.addAttribute("auctionReview", auctionReview);
@@ -169,6 +171,7 @@ public class AuctionController {
 			model.addAttribute("reviewCount", auctionService.reviewCount(auction.getItem().getMember().getMemberId()));
 			model.addAttribute("maxPage", 5);
 			model.addAttribute("biddingList", biddingService.getBiddingList(pageable, auction));
+			model.addAttribute("auctionQueryList", auctionQueryService.getAuctionQueryList(pageable, auction));
 			return "/auction/details/sealedDetail";
 		}
 
@@ -433,7 +436,7 @@ public class AuctionController {
   		reversebidService.addReverseBiddingView(reverseBiddingNo);
   		
   		Page<ReverseBiddingJoin> reverseBiddingJoinList ;
-  		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
+  		Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 6);
   		
   		reverseBiddingJoinList = reversebidService.getReverseJoinList(pageable, reverseBiddingNo);
   		
@@ -443,6 +446,9 @@ public class AuctionController {
   		reversebidService.updateAuctionStatusToEnd(reverseBiddingNo);
   		model.addAttribute("reverseBiddingJoinList", reverseBiddingJoinList);
   		model.addAttribute("maxPage", 5);
+  		Page<AuctionReview> auctionReview = auctionService.getAuctionReviewList(reverseBidding.getMember().getMemberId(), pageable);
+		model.addAttribute("auctionReview", auctionReview);
+		model.addAttribute("reviewCount", auctionService.reviewCount(reverseBidding.getMember().getMemberId()));
   		return "auction/reversebid/details";
   	}
     @GetMapping(value = {"/auction/sealedbid", "/auction/sealedbid/{page}"})
@@ -483,36 +489,18 @@ public class AuctionController {
 
   
    @GetMapping(value = {"/auction/search","/auction/search/{page}"})
-    public String searchView(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category) {
+    public String searchView(@PathVariable("page") Optional<Integer> page, Model model,@RequestParam("category") Long category,@RequestParam("searchVal") String searchVal) {
         Page<Auction> auctionList;
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         if(category != 0) {
             Category categorys = categoryService.getCategory(category);
             model.addAttribute("category",categorys);
         }
+       auctionList = auctionService.getSearchValList(pageable,category,searchVal);
+       for (Auction auction : auctionList) {
+           auctionService.updateAuction(auction.getAuctionNo());
+       }
 
-        auctionList = auctionService.getSearchList(pageable,category);
-
-
-        for (Auction auction : auctionList) {
-            auctionService.updateAuction(auction.getAuctionNo());
-        }
-
-        model.addAttribute("nowTime", LocalDateTime.now());
-        model.addAttribute("auctionList", auctionList);
-        model.addAttribute("maxPage", 5);
-
-        return "auction/searchview";
-    }
-    @PostMapping(value = "/auction/searched")
-    public String searchAuction(@Valid Long category, @Valid String searchVal,Model model,Optional<Integer> page) {
-        Page<Auction> auctionList;
-        Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
-        if(category != 0) {
-            Category categorys = categoryService.getCategory(category);
-            model.addAttribute("category",categorys);
-        }
-        auctionList = auctionService.getSearchValList(pageable,category,searchVal);
         for (Auction auction : auctionList) {
             auctionService.updateAuction(auction.getAuctionNo());
         }
@@ -522,4 +510,5 @@ public class AuctionController {
 
         return "auction/searchview";
     }
+
 }
