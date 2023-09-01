@@ -266,6 +266,10 @@ public class AuctionController {
 
             Auction auction = auctionService.getAuction(auctionNo);
 
+            if(auction.getItem().getMember().getEmail().equals(principalDetails.getUsername())) {
+                return new ResponseEntity("본인 경매에는 입찰할 수 없습니다.", HttpStatus.LOCKED);
+            }
+
             switch (auction.getAuctionStatus()) {
                 case PENDING -> {
                     return new ResponseEntity("경매 시작 전입니다.", HttpStatus.LOCKED);
