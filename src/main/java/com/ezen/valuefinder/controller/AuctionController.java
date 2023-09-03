@@ -390,10 +390,6 @@ public class AuctionController {
 		return "/auction/report";
 	}
 
-	@GetMapping(value = "/auction/query")
-	public String queryDetail() {
-		return "/auction/query/query";
-	}
 
 	@GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
 	public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
