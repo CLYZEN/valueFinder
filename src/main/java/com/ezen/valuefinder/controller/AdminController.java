@@ -47,8 +47,11 @@ public class AdminController {
 	private final AdminService adminService;
 	private final AuctionService auctionService;
 	@GetMapping(value = "/admin")
-	public String adminMain() {
-
+	public String adminMain(Model model) {
+		List<Auction> auctions = auctionService.getItemAuctionList();
+		model.addAttribute("auctions", auctions);
+		
+		
 		return "admin/main";
 	}
 
@@ -81,6 +84,7 @@ public class AdminController {
 		return new ResponseEntity<Long>(memberCautionDto.getMemberId(), HttpStatus.OK); // 성공시
 
 	}
+	
 
 	@GetMapping(value = "/admin/customerList")
 	public String admincustomerList(Model model) {
@@ -112,12 +116,28 @@ public class AdminController {
 	}
 
 
+	
+	@PostMapping(value = "/admin/customerReportList")
+	public @ResponseBody ResponseEntity dropCaution(@RequestBody @Valid MemberCautionDto memberCautionDto) {
+		try {
+			memberService.memberdropCaution(memberCautionDto.getMemberId());
+		} catch (Exception e) {
+			e.printStackTrace();
+			// TODO: handle exception
+			return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+
+		return new ResponseEntity<Long>(memberCautionDto.getMemberId(), HttpStatus.OK); // 성공시
+
+	}
+
+	
 
 	@GetMapping(value = "/admin/customerReportList")
 	public String admincustomerReportList(Model model) {
-		List<MemberReport> memberReports = memberService.getMemberReportList();
+		List<Member> members = memberService.getMemberdropList();
 
-		model.addAttribute("memberReports" ,memberReports);
+		model.addAttribute("members" ,members);
 
 
 		return "admin/customerReportList";

@@ -347,4 +347,26 @@ public class MemberController {
 
 		return "redirect:/";
 	}
+	
+	
+	@GetMapping(value = "/member/querydetails/{auctionQueryNo}")
+	public String memberQueryDetail(@PathVariable("auctionQueryNo") Long auctionQueryNo , Model model
+			,  Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		
+		try {
+			AuctionQuery auctionQuery = auctionService.getAuctionDtl(auctionQueryNo);
+			model.addAttribute("auctionQuery",auctionQuery);
+		} catch (Exception e) {
+		model.addAttribute("errorMessage" , "상품정보를 가져오지 못했습니다.");
+		
+		return "member/receivedquery";
+				
+		}
+		
+		return "/member/querydetails";
+		
+		
+	}
 }
