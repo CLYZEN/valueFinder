@@ -32,8 +32,10 @@
 <div layout:fragment="content" >
 
 
-
-    <div class="jumbotron">
+    <div class="jumbotron" th:if="${auctionQuery.member} == null">
+        <h1>잘못된 접근입니다.</h1>
+    </div>
+    <div class="jumbotron" th:if="${auctionQuery.member} != null">
 
         <div class="container" style="padding-left: 0px;">
             <div style="margin-bottom: 25px;">

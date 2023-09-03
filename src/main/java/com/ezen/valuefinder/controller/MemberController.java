@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 
+import java.io.Console;
 import java.util.List;
 import java.util.Optional;
 
@@ -357,6 +358,7 @@ public class MemberController {
 		
 		try {
 			AuctionQuery auctionQuery = auctionService.getAuctionDtl(auctionQueryNo);
+			System.out.println("here");
 			model.addAttribute("auctionQuery",auctionQuery);
 		} catch (Exception e) {
 		model.addAttribute("errorMessage" , "상품정보를 가져오지 못했습니다.");
