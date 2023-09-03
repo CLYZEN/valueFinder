@@ -5,13 +5,11 @@ import com.ezen.valuefinder.constant.Status;
 import com.ezen.valuefinder.dto.MemberFindPwDto;
 import com.ezen.valuefinder.dto.MemberFormDto;
 import com.ezen.valuefinder.dto.MemberModifyDto;
-import com.ezen.valuefinder.entity.Bank;
-import com.ezen.valuefinder.entity.Member;
-import com.ezen.valuefinder.entity.MemberOut;
-import com.ezen.valuefinder.repository.BankRepository;
-import com.ezen.valuefinder.repository.MemberOutRepository;
-import com.ezen.valuefinder.repository.MemberRepository;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,6 +29,8 @@ public class MemberService implements UserDetailsService {
     private final MemberRepository memberRepository;
     private final BankRepository bankRepository;
     private final MemberOutRepository memberOutRepository;
+    private final WishRepository wishRepository;
+    private final MemberReportRepository memberReportRepository;
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         Member member = memberRepository.findByEmail(email);
@@ -109,5 +109,31 @@ public class MemberService implements UserDetailsService {
     public void repairMember(String email) {
         Member member = memberRepository.findByEmail(email);
         member.setStatus(Status.ACTIVE);
+    }
+    public Page<Wish> getMemberWishList(Member member, Pageable pageable) {
+        return wishRepository.findByMember(member,pageable);
+    }
+    public List<Member> getMemberList() {
+        return memberRepository.findByStatus(Status.ACTIVE);
+    }
+    public void memberCaution(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        member.setCaution(member.getCaution() + 1);
+
+        MemberOut memberOut = new MemberOut();
+
+        if (member.getCaution() == 3) {
+
+            member.setStatus(Status.DISABLE);
+
+            memberOut.setMember(member);
+            memberOut.setMemberOutDetail("강제탈퇴");
+
+            memberOutRepository.save(memberOut);
+        }
+
+    }
+    public List<MemberReport> getMemberReportList() {
+        return memberReportRepository.findAll();
     }
 }

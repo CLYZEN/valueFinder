@@ -8,3 +8,4 @@ public interface AuctionReportRepository extends JpaRepository<AuctionReport,Lon
 
 
 }
+

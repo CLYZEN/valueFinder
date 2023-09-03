@@ -1,13 +1,13 @@
 package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
-import com.ezen.valuefinder.dto.MemberFindPwDto;
-import com.ezen.valuefinder.dto.MemberFormDto;
-import com.ezen.valuefinder.dto.MemberModifyDto;
-import com.ezen.valuefinder.dto.AuctionQueryDto;
-import com.ezen.valuefinder.entity.Bank;
-import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.constant.BidStatus;
+import com.ezen.valuefinder.dto.*;
+import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.BiddingRepository;
+import com.ezen.valuefinder.service.AuctionQueryService;
 import com.ezen.valuefinder.service.AuctionService;
+import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +40,8 @@ public class MemberController {
 	private final MemberService memberService;
 	private final PasswordEncoder passwordEncoder;
 	private final AuctionService auctionService;
-
+	private final BiddingService biddingService;
+	private final AuctionQueryService auctionQueryService;
 	 @GetMapping(value = "/member/login")
 	 public String login() {
 	 	return "member/login";
@@ -133,18 +134,27 @@ public class MemberController {
 		 return "member/bidding";
 	 }
 	 
-	 @GetMapping(value ="member/mypage/successfulbid")
-	 public String successfulbid(Authentication authentication, Model model) {
+	 @GetMapping(value ={"member/mypage/successfulbid","member/mypage/successfulbid/{page}"})
+	 public String successfulbid(Authentication authentication, Model model,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		 Member member = principalDetails.getMember();
+		 Page<SuccessBidding> successBiddingList = biddingService.getMemberSuccessBiddingList(member,pageable);
+		 model.addAttribute("reviewFormDto", new ReviewFormDto());
+		 model.addAttribute("successBiddingList",successBiddingList);
+		 model.addAttribute("maxPage",5);
 		 model.addAttribute("member",member);
 		 return "member/successfulbid";
 	 }
 	 
-	 @GetMapping(value ="member/mypage/myauction")
-	 public String myauction(Model model,Authentication authentication) {
+	 @GetMapping(value ={"member/mypage/myauction","member/mypage/myauction/{page}"})
+	 public String myauction(Model model,Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		 Member member = principalDetails.getMember();
+		 Page<MemberAuctionDto> auctionList = auctionService.getMemberAuctionList(member.getMemberId(),pageable);
+		 model.addAttribute("auctionList",auctionList);
+		 model.addAttribute("maxPage", 5);
 		 model.addAttribute("member",member);
 		 return "member/myauction";
 	 }
@@ -209,32 +219,43 @@ public class MemberController {
 		 return "member/coupon";
 	 }
 	 
-	 @GetMapping(value ="member/mypage/sentquery")
-	 public String sentquery(Model model,Authentication authentication) {
+	 @GetMapping(value ={"member/mypage/sentquery","member/mypage/sentquery/{page}"})
+	 public String sentquery(Model model,Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+		 Page<AuctionQuery> auctionQueryList = auctionQueryService.getAuctionQueryPage(pageable,principalDetails.getMember());
 		 Member member = principalDetails.getMember();
+		 model.addAttribute("auctionQueryList",auctionQueryList);
 		 model.addAttribute("member",member);
+		 model.addAttribute("maxPage",5);
 		 return "member/sentquery";
 	 }
 	 
 
 	 
 	 
-	 @GetMapping(value ="member/mypage/receivedquery")
-	 public String receivedquery(Model model, Authentication authentication ) {
+	 @GetMapping(value ={"member/mypage/receivedquery","member/mypage/receivedquery/{page}"})
+	 public String receivedquery(Model model, Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+		Page<AuctionQuery> auctionQueryList = auctionQueryService.getReceiveQueryPage(pageable,member);
+
+		model.addAttribute("auctionQueryList", auctionQueryList);
 		 model.addAttribute("member",member);
-		 
-		
-		 
+		 model.addAttribute("maxPage",5);
 		 return "member/receivedquery";
 	 }
 	 
-	 @GetMapping(value ="member/mypage/like")
-	 public String like(Model model, Authentication authentication) {
+	 @GetMapping(value ={"member/mypage/like","member/mypage/like/{page}"})
+	 public String like(Model model, Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
+
+		 Page<Wish> wishList = memberService.getMemberWishList(member,pageable);
+		 model.addAttribute("wishList", wishList);
+		 model.addAttribute("maxPage",5);
 		 model.addAttribute("member",member);
 		 return "member/like";
 	 }
@@ -277,5 +298,53 @@ public class MemberController {
 		 }
 		 memberService.repairMember(email);
 		 return "redirect:/member/login";
+	}
+
+	@PostMapping(value = "/member/shipping/{id}")
+	public String updateBidStatus(@PathVariable Long id, Authentication authentication,@Valid String data) {
+
+		 biddingService.updateBidStatus(id,"SHIPPING");
+		 biddingService.setShippingNo(id,data);
+
+		 return "redirect:/member/mypage/myauction";
+	}
+
+	@GetMapping(value = "member/mypage/answer/{auctionQueryNo}")
+	public String answerList(Model model, Authentication authentication,
+							 @PathVariable("auctionQueryNo") Long auctionQueryNo) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		model.addAttribute("auctionQueryResponseDto", new AuctionQueryResponseDto());
+
+		Member member = principalDetails.getMember();
+
+		model.addAttribute("auctionQueryNo", auctionQueryNo);
+
+		return "member/answer";
+	}
+
+
+	@PostMapping(value = "/member/mypage/answer/{auctionQueryNo}")
+	public String addQueryResponse(@Valid AuctionQueryResponseDto auctionQueryResponseDto,
+								   Authentication authentication, BindingResult bindingResult, Model model,
+								   @PathVariable("auctionQueryNo") Long auctionQueryNo) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("errorMessage", "답변하기중 오류가 발생했습니다.");
+			model.addAttribute("auctionQueryResponseDto", auctionQueryResponseDto);
+			return "member/mypage/answer";
+		}
+
+		try {
+			auctionService.createdQueryResponse(auctionQueryResponseDto, principalDetails.getUsername(),
+					auctionQueryNo);
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("auctionQueryResponseDto", new AuctionQueryResponseDto());
+
+
+			return "member/mypage/answer";
+		}
+
+		return "redirect:/";
 	}
 }

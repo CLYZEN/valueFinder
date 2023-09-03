@@ -90,6 +90,9 @@ caption {
 td {
 	vertical-align: middle;
 	width: 12.5%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .tdnum {
@@ -232,7 +235,7 @@ td>a {
 				style="width: 100%; height: 1000px; border: 1px solid; margin-top: 5%;">
 				
 
-					<div style="display: flex; justify-content: center;">
+					<div style="display: flex; justify-content: center;" th:each="auctionQuery:${auctionQueryList}">
 						<table class="table table-hover"
 							style="border: 1px solid; margin: auto 0; margin-top: 4%; text-align: center;">
 							<tbody>
@@ -241,13 +244,13 @@ td>a {
 									<td style="border-right: 1px solid;" >물품명</td>
 									<td style="border-right: 1px solid; width: 30%" >문의내용</td>
 									<td style="border-right: 1px solid; width: 10%" >판매자</td>
-									<td style="border-right: 1px solid;" rowspan=2><a href="/">답변하기</a></td>
+									<td style="border-right: 1px solid;" rowspan=2><a th:href="'/member/mypage/answer/' + ${auctionQuery.auctionQueryNo}">답변하기</a></td>
 								</tr>
 								<tr style="height: 100px; line-height: 100px;">
-									<td class=tdnum  id="itemNo" name="itemNo">a123456789</td>
-									<td class=tdnum id="itemName" name="itemName">아이패드 에어 5</td>
-									<td class=tdnum style="width: 30%" id="auctionQueryDetail" name="auctionQueryDetail">이거 구성품, 박스 있나요?</td>
-									<td class=tdnum style="width: 10%" id="nickname"  name="nickname">아무개</td>
+									<td class=tdnum  id="itemNo" name="itemNo" th:text="${auctionQuery.auction.auctionNo}">a123456789</td>
+									<td class=tdnum id="itemName" name="itemName" th:text="${auctionQuery.auction.item.itemName}">아이패드 에어 5</td>
+									<td class=tdnum style="width: 30%" id="auctionQueryDetail" name="auctionQueryDetail" th:text="${auctionQuery.auctionQueryDetail}">이거 구성품, 박스 있나요?</td>
+									<td class=tdnum style="width: 10%" id="nickname"  name="nickname" th:text="${auctionQuery.createdBy}">아무개</td>
 								</tr>
 							</tbody>
 						</table>
@@ -258,18 +261,29 @@ td>a {
 
 				
 				<!-- 페이징 버튼 -->
-				<div class="d-flex justify-content-center" style="margin-top: 1%;">
-					<nav aria-label="Page navigation example">
-						<ul class="pagination">
-							<li class="page-item"><a class="page-link" href="#"
-								aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-							</a></li>
-							<li class="page-item"><a class="page-link" href="#">1</a></li>
-							<li class="page-item"><a class="page-link" href="#">2</a></li>
-							<li class="page-item"><a class="page-link" href="#">3</a></li>
-							<li class="page-item"><a class="page-link" href="#"
-								aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-							</a></li>
+				<div class="d-flex justify-content-center">
+					<nav
+							th:with="start=${(auctionQueryList.number/maxPage)*maxPage + 1}
+			                 ,end=(${(auctionQueryList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionQueryList.totalPages ? start + (maxPage - 1) : auctionQueryList.totalPages)})"
+							aria-label="Page navigation example">
+						<ul class="pagination d-flex justify-content-center">
+							<li class="page-item" th:classappend="${auctionQueryList.first}?'disabled'">
+								<a class="page-link"
+								   th:href="@{'/member/mypage/receivedquery/' +  ${auctionQueryList.number - 1}}">이전</a>
+							</li>
+
+							<li class="page-item"
+								th:each="page: ${#numbers.sequence(start, end)}"
+								th:classappend="${auctionQueryList.number eq page - 1}?'active':''">
+								<a
+										class="page-link" th:inline="text"
+										th:href="@{'/member/mypage/receivedquery/' + ${page - 1}}">[[${page}]]</a>
+							</li>
+
+							<li class="page-item" th:classappend="${auctionQueryList.last}?'disabled'">
+								<a class="page-link"
+								   th:href="@{'/member/mypage/receivedquery/' +  ${auctionQueryList.number + 1}}">다음</a>
+							</li>
 						</ul>
 					</nav>
 				</div>
