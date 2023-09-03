@@ -1,208 +1,153 @@
 <!DOCTYPE html>
 
 <html xmlns:th="http://www.thymeleaf.org"
-
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-
-      layout:decorate="~{layouts/layout1}">
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layouts/layout1}">
 
 <head>
 
-    <link rel="stylesheet"
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<style>
+.category {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	padding: 0;
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	text-align: center; /* 내용 가운데 정렬 */
+}
 
-    <style>
+.category_list {
+	list-style-type: none;
+	display: flex; /*메뉴 가로정렬*/
+	justify-content: space-between; /* 공간 균등 분배 */
+	font-family: var(--heading-font);
+	color: var(--dark-color);
+	font-weight: 700;
+	padding: 0;
+	margin-bottom: 0;
+}
 
-        .category {
+.category_list>li {
+	padding: 0;
+	margin: 0;
+	width: 12.5%;
+	text-align: left;
+}
 
-            border-top: 1px solid black;
+/* home>현재페이지 */
+.tabs_header {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	margin-bottom: 10px;
+}
 
-            border-bottom: 1px solid black;
+.location {
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+}
 
-            padding: 0;
-
-            margin-left: 151.5px; /* 좌측 여백 */
-
-            margin-right: 151.5px; /* 우측 여백 */
-
-            text-align: center; /* 내용 가운데 정렬 */
-
-        }
-
-
-        .category_list {
-
-            list-style-type: none;
-
-            display: flex; /*메뉴 가로정렬*/
-
-            justify-content: space-between; /* 공간 균등 분배 */
-
-            font-family: var(--heading-font);
-
-            color: var(--dark-color);
-
-            font-weight: 700;
-
-            padding: 0;
-
-            margin-bottom: 0;
-
-        }
-
-
-        .category_list > li {
-
-            padding: 0;
-
-            margin: 0;
-
-            width: 12.5%;
-
-            text-align: left;
-
-        }
-
-
-        /* home>현재페이지 */
-
-        .tabs_header {
-
-            margin-left: 151.5px; /* 좌측 여백 */
-
-            margin-right: 151.5px; /* 우측 여백 */
-
-            margin-bottom: 10px;
-
-        }
-
-
-        .location {
-
-            margin-left: 151.5px; /* 좌측 여백 */
-
-            margin-right: 151.5px; /* 우측 여백 */
-
-        }
-
-
-        /* 경매 상태 박스.
+/* 경매 상태 박스.
 
         그냥 btn은 다른버튼까지 다 적용되어 네이밍바꿈. */
+.btn2 {
+	border: none;
+	background: rgb(152, 194, 229);
+	font-weight: 600;
+	width: 200px;
+	padding: 6px 0;
+	text-align: center;
+	margin: 0 auto;
+}
 
-        .btn2 {
+/* 시,분,초 */
+.time_action {
+	background: rgb(217, 217, 217);
+	padding: 5px 6px;
+	margin: 10px;
+}
 
-            border: none;
+/* : */
+.time_action2 {
+	padding: 5px 6px;
+	margin: 10px;
+}
 
-            background: rgb(152, 194, 229);
+.item_detail {
+	padding: 5px 6px;
+	margin: 10px;
+}
 
-            font-weight: 600;
+.table {
+	margin-top: 30px;
+	margin-left: 151.5px; /* 좌측 여백 */
+	margin-right: 151.5px; /* 우측 여백 */
+	margin-bottom: 30px;
+}
 
-            width: 200px;
+.table td, .table th {
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	text-align: center;
+}
 
-            padding: 6px 0;
-
-            text-align: center;
-
-            margin: 0 auto;
-
-        }
-
-        /* 시,분,초 */
-
-        .time_action {
-
-            background: rgb(217, 217, 217);
-
-            padding: 5px 6px;
-
-            margin: 10px;
-
-        }
-
-        /* : */
-
-        .time_action2 {
-
-            padding: 5px 6px;
-
-            margin: 10px;
-
-        }
-
-
-        .item_detail {
-
-            padding: 5px 6px;
-
-            margin: 10px;
-
-        }
-
-
-        .table {
-
-            margin-top: 30px;
-
-            margin-left: 151.5px; /* 좌측 여백 */
-
-            margin-right: 151.5px; /* 우측 여백 */
-
-            margin-bottom: 30px;
-
-        }
-
-
-        .table td, .table th {
-
-            border-top: 1px solid black;
-
-            border-bottom: 1px solid black;
-
-            text-align: center;
-
-        }
-
-
-        .table thead th {
-
-            border-bottom: 1px solid black;
-
-
-    </style>
+.table thead th {
+	border-bottom: 1px solid black;
+}
+</style>
 
 </head>
 
 
 <div layout:fragment="content">
 
-    <!-- 현재위치 -->
+	<!-- 현재위치 -->
 
-    <div class="tabs_header">
+	<div class="tabs_header">
 
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
             <path
-                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+				d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z" />
         </svg>
-        <a href="/" style="text-decoration: none;">홈</a>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             fill="currentColor" class="bi bi-chevron-compact-right"
-             viewBox="0 0 16 16">
+		<a href="/" style="text-decoration: none;">홈</a>
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+			fill="currentColor" class="bi bi-chevron-compact-right"
+			viewBox="0 0 16 16">
             <path fill-rule="evenodd"
-                  d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+				d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
         </svg>
-        <a href="/">역경매</a>
+		<a href="/">역경매</a>
 
-    </div>
+	</div>
 
-    <div class="location">
+	<div class="location">
 
-        <h3 style="font-weight: 700;">역경매</h3>
+		<h3 style="font-weight: 700;">역경매</h3>
 
-    </div>
+	</div>
 
+<<<<<<< HEAD
+	<div class="category">
+		<ul class="category_list">
+			<li><a th:href="'/auction/publicbid'" class="nav-link">전체</a></li>
+			<li><a th:href="'/auction/publicbid?category=0'"
+				class="nav-link">인기매물</a></li>
+			<li><a th:href="'/auction/publicbid?category=1'"
+				class="nav-link">디지털기기</a></li>
+			<li><a th:href="'/auction/publicbid?category=2'"
+				class="nav-link">가구/인테리어</a></li>
+			<li><a th:href="'/auction/publicbid?category=3'"
+				class="nav-link">여성의류</a></li>
+			<li><a th:href="'/auction/publicbid?category=4'"
+				class="nav-link">여성잡화</a></li>
+			<li><a th:href="'/auction/publicbid?category=5'"
+				class="nav-link">남성패션/잡화</a></li>
+			<li><a th:href="'/auction/publicbid?category=6'"
+				class="nav-link">생활가전</a></li>
+		</ul>
      <div class="category">
         <ul class="category_list">
             <li><a th:href="'/auction/publicbid?category=0'" class="nav-link">전체</a></li>
@@ -215,113 +160,134 @@
             <li><a th:href="'/auction/publicbid?category=6'" class="nav-link">생활가전</a></li>
         </ul>
 
-        <ul class="category_list">
-            <li><a th:href="'/auction/publicbid?category=7'" class="nav-link">생활/주방</a></li>
-            <li><a th:href="'/auction/publicbid?category=8'" class="nav-link">가공식품</a></li>
-            <li><a th:href="'/auction/publicbid?category=9'" class="nav-link">스포츠/레져</a></li>
-            <li><a th:href="'/auction/publicbid?category=10'" class="nav-link">취미/게임/음반</a></li>
-            <li><a th:href="'/auction/publicbid?category=11'" class="nav-link">뷰티/미용</a></li>
-            <li><a th:href="'/auction/publicbid?category=12'" class="nav-link">식물</a></li>
-            <li><a th:href="'/auction/publicbid?category=13'" class="nav-link">반려동물용품</a></li>
-            <li><a th:href="'/auction/publicbid?category=14'" class="nav-link">티켓/교환권</a></li>
-        </ul>
+		<ul class="category_list">
+			<li><a th:href="'/auction/publicbid?category=7'"
+				class="nav-link">생활/주방</a></li>
+			<li><a th:href="'/auction/publicbid?category=8'"
+				class="nav-link">가공식품</a></li>
+			<li><a th:href="'/auction/publicbid?category=9'"
+				class="nav-link">스포츠/레져</a></li>
+			<li><a th:href="'/auction/publicbid?category=10'"
+				class="nav-link">취미/게임/음반</a></li>
+			<li><a th:href="'/auction/publicbid?category=11'"
+				class="nav-link">뷰티/미용</a></li>
+			<li><a th:href="'/auction/publicbid?category=12'"
+				class="nav-link">식물</a></li>
+			<li><a th:href="'/auction/publicbid?category=13'"
+				class="nav-link">반려동물용품</a></li>
+			<li><a th:href="'/auction/publicbid?category=14'"
+				class="nav-link">티켓/교환권</a></li>
+		</ul>
 
-        <ul class="category_list">
-            <li><a th:href="'/auction/publicbid?category=15'" class="nav-link">도서</a></li>
-            <li><a th:href="'/auction/publicbid?category=16'" class="nav-link">유아도서</a></li>
-            <li><a th:href="'/auction/publicbid?category=17'" class="nav-link">기타</a></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-            <li></li>
-        </ul>
-    </div>
-
-
-    <!-- 데이터 테이블 -->
-
-    <div class="table">
-
-        <table style="width: 84%;">
-
-            <thead>
-
-            <tr>
-
-                <th style="width: 10%;">번호</th>
-
-                <th style="width: 10%;">카테고리</th>
-
-                <th style="width: 60%;">제목</th>
-
-                <th style="width: 10%;">닉네임</th>
-
-                <th style="width: 10%;">진행사항</th>
-
-            </tr>
-
-            </thead>
-
-            <tbody>
-
-          
-
-            <tr th:each="reverseAuctionList:${reverseAuctionList}">
-
-                <th style="width: 10%; " th:text=${reverseAuctionList.reverseBiddingNo}></th>
-
-                <td style="width: 10%;" th:text=${reverseAuctionList.category.categoryName}></td>
-
-                <td style="width: 60%; color: blue; cursor: pointer;" th:text=${reverseAuctionList.reverseBiddingTitle} th:onclick="'javascript:moveDetail(' + ${reverseAuctionList.reverseBiddingNo} +')'">
-                </td>
-
-                <td style="width: 10%;" th:text=${reverseAuctionList.member.nickname}></td>
-
-                <td style="width: 10%;" th:if="${reverseAuctionList.reversebidAuctionStatus.toString()} == 'END'" th:text="종료" disabled></td>
-                <td style="width: 10%;" th:if="${reverseAuctionList.reversebidAuctionStatus.toString()} == 'PROGRESS'" th:text="진행중" ></td>
-
-            </tr>
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-    <!-- 데이터 테이블 -->
+		<ul class="category_list">
+			<li><a th:href="'/auction/publicbid?category=15'"
+				class="nav-link">도서</a></li>
+			<li><a th:href="'/auction/publicbid?category=16'"
+				class="nav-link">유아도서</a></li>
+			<li><a th:href="'/auction/publicbid?category=17'"
+				class="nav-link">기타</a></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+			<li></li>
+		</ul>
+	</div>
 
 
-    <!-- 페이징 버튼 -->
+	<!-- 데이터 테이블 -->
 
-    <div class="d-flex justify-content-center">
-            <nav
-                    th:with="start=${(reverseAuctionList.number/maxPage)*maxPage + 1}
+	<div class="table">
+
+		<table style="width: 84%;">
+
+			<thead>
+
+				<tr>
+
+					<th style="width: 10%;">번호</th>
+
+					<th style="width: 10%;">카테고리</th>
+
+					<th style="width: 60%;">제목</th>
+
+					<th style="width: 10%;">닉네임</th>
+
+					<th style="width: 10%;">진행사항</th>
+
+				</tr>
+
+			</thead>
+
+			<tbody>
+
+
+
+				<tr th:each="reverseAuctionList:${reverseAuctionList}">
+
+					<th style="width: 10%;"
+						th:text=${reverseAuctionList.reverseBiddingNo}></th>
+
+					<td style="width: 10%;"
+						th:text=${reverseAuctionList.category.categoryName}></td>
+
+					<td style="width: 60%; color: blue; cursor: pointer;"
+						th:text=${reverseAuctionList.reverseBiddingTitle}
+						th:onclick="'javascript:moveDetail(' + ${reverseAuctionList.reverseBiddingNo} +')'">
+					</td>
+
+					<td style="width: 10%;"
+						th:text=${reverseAuctionList.member.nickname}></td>
+
+					<td style="width: 10%;"
+						th:if="${reverseAuctionList.reversebidAuctionStatus.toString()} == 'END'"
+						th:text="종료" disabled></td>
+					<td style="width: 10%;"
+						th:if="${reverseAuctionList.reversebidAuctionStatus.toString()} == 'PROGRESS'"
+						th:text="진행중"></td>
+
+				</tr>
+
+			</tbody>
+
+		</table>
+
+	</div>
+
+	<!-- 데이터 테이블 -->
+
+
+	<!-- 페이징 버튼 -->
+
+	<div class="d-flex justify-content-center">
+		<nav
+			th:with="start=${(reverseAuctionList.number/maxPage)*maxPage + 1}
 			                 ,end=(${(reverseAuctionList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reverseAuctionList.totalPages ? start + (maxPage - 1) : reverseAuctionList.totalPages)})"
-                    aria-label="Page navigation example">
-                <ul class="pagination d-flex justify-content-center">
-                    <li class="page-item" th:classappend="${reverseAuctionList.first}?'disabled'">
-                        <a class="page-link"
-                           th:onclick="'javascript:page(' + ${reverseAuctionList.number - 1} +')'">이전</a>
-                    </li>
+			aria-label="Page navigation example">
+			<ul class="pagination d-flex justify-content-center">
+				<li class="page-item"
+					th:classappend="${reverseAuctionList.first}?'disabled'"><a
+					class="page-link"
+					th:onclick="'javascript:page(' + ${reverseAuctionList.number - 1} +')'">이전</a>
+				</li>
 
-                    <li class="page-item"
-                        th:each="page: ${#numbers.sequence(start, end)}"
-                        th:classappend="${reverseAuctionList.number eq page-1}?'active':''">
-                        <a
-                                class="page-link" th:inline="text"
-                                th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
-                    </li>
+				<li class="page-item"
+					th:each="page: ${#numbers.sequence(start, end)}"
+					th:classappend="${reverseAuctionList.number eq page-1}?'active':''">
+					<a class="page-link" th:inline="text"
+					th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
+				</li>
 
-                    <li class="page-item" th:classappend="${reverseAuctionList.last}?'disabled'">
-                        <a class="page-link"
-                           th:onclick="'javascript:page(' + ${reverseAuctionList.number + 1} +')'">다음</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
+				<li class="page-item"
+					th:classappend="${reverseAuctionList.last}?'disabled'"><a
+					class="page-link"
+					th:onclick="'javascript:page(' + ${reverseAuctionList.number + 1} +')'">다음</a>
+				</li>
+			</ul>
+		</nav>
+	</div>
 
-    </section>
+	</section>
 
 
 </div>
@@ -329,25 +295,23 @@
 
 <th:block layout:fragment="script">
 
-    <script th:inline="javascript">
-    var url_href = window.location.href;
+	<script th:inline="javascript">
+		var url_href = window.location.href;
 
-    var url = new URL(url_href);
-    var category = url.searchParams.get("category");
+		var url = new URL(url_href);
+		var category = url.searchParams.get("category");
 
-    function page(page) {
-        //입력한 값을 전부 가지고 온다.
+		function page(page) {
+			//입력한 값을 전부 가지고 온다.
 
-        //주소 이동
-        location.href = "/auction/reversebid/" + page
-            + "?category=" + category;
-    }
-    function moveDetail(reverseBiddingNo) {
-        location.href='/auction/reversebid/detail/' + reverseBiddingNo;
-    }
-
-
-    </script>
+			//주소 이동
+			location.href = "/auction/reversebid/" + page + "?category="
+					+ category;
+		}
+		function moveDetail(reverseBiddingNo) {
+			location.href = '/auction/reversebid/detail/' + reverseBiddingNo;
+		}
+	</script>
 
 </th:block>
 

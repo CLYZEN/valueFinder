@@ -48,6 +48,7 @@ public class BiddingService {
         bidding.setBiddingTime(LocalDateTime.now());
         bidding.setAuction(auction);
         bidding.setMember(memberService.findByEmail(email));
+        bidding.setBidStatus(BidStatus.PENDING);
 
         auction.setBiddingCount(auction.getBiddingCount()+1);
         auction.setAuctionNowPrice(price);
@@ -132,5 +133,7 @@ public class BiddingService {
         successBiddingRepository.save(successBidding);
     }
 
-
+    public List<Bidding>getBiddingList(Pageable pageable, Auction auction){
+    	return biddingRepository.findByAuctionOrderByBiddingPriceDesc(auction);
+    }
 }
