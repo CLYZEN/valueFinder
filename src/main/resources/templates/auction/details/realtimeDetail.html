@@ -826,9 +826,11 @@ table {
                                 
                      <div class="form-group row" style="padding-top: 20px;">
                         <div class="col-sm-offset-2" style="text-align: right;">
+
                             <input type="submit" class="btn btn-primary" value="문의하기"
                                    style="border-radius: inherit;"
                                     onclick="location.href='/auction/query/add/' + auctionNo;" />
+
                         </div>
                     </div>
                 </div>
@@ -858,6 +860,9 @@ table {
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
             crossorigin="anonymous"></script>
     <script th:inline="javascript">
+        function moveQuery() {
+            location.href = '/auction/query/add/' + [[${auction.auctionNo}]];
+        }
       //찜 버튼에 대한 기능
        function pushWish(heartIcon) {
             /*
@@ -979,6 +984,7 @@ table {
             });
         }
 
+
         function moveQuery() {
             location.href = '/auction/query/add/' + [[${auction.auctionNo}]];
         }
@@ -1014,6 +1020,7 @@ table {
      	    	} 
     	    	
     	    },1000);
+
 
       function loadPage(pageNumber) {
       	

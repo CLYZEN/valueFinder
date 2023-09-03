@@ -4,6 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.ezen.valuefinder.entity.AuctionReport;
 
-public interface AuctionReportRepository extends JpaRepository<AuctionReport, Long>{
+public interface AuctionReportRepository extends JpaRepository<AuctionReport,Long>{
+
 
 }
+

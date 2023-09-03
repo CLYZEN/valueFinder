@@ -34,4 +34,8 @@ public class SuccessBidding extends BaseEntity {
     private void updateStatus(BidStatus bidStatus) {
         this.bidStatus = bidStatus;
     }
+
+    public void updateShippingNo(String shippingNo) {
+        this.shippingNo = shippingNo;
+    }
 }

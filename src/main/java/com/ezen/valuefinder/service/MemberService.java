@@ -116,6 +116,10 @@ public class MemberService implements UserDetailsService {
     public List<Member> getMemberList() {
         return memberRepository.findByStatus(Status.ACTIVE);
     }
+    
+    public List<Member> getMemberdropList() {
+        return memberRepository.findByStatus(Status.DISABLE);
+    }
     public void memberCaution(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         member.setCaution(member.getCaution() + 1);
@@ -127,12 +131,30 @@ public class MemberService implements UserDetailsService {
             member.setStatus(Status.DISABLE);
 
             memberOut.setMember(member);
-            memberOut.setMemberOutDetail("강제탈퇴");
+            memberOut.setMemberOutDetail("경고누적");
 
             memberOutRepository.save(memberOut);
         }
 
     }
+    
+    
+    public void memberdropCaution(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow();
+        member.setCaution(member.getCaution() - 1);
+
+
+        if (member.getCaution() < 3) {
+   
+    		MemberOut memberOut =  memberOutRepository.findByMember(member);
+    	
+    		memberOutRepository.delete(memberOut);
+        	member.setStatus(Status.ACTIVE);
+
+        }
+
+    }
+    
     public List<MemberReport> getMemberReportList() {
         return memberReportRepository.findAll();
     }

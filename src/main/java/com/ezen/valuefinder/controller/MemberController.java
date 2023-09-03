@@ -303,7 +303,7 @@ public class MemberController {
 
 	@PostMapping(value = "/member/shipping/{id}")
 	public String updateBidStatus(@PathVariable Long id, Authentication authentication,@Valid String data) {
-
+		System.out.println(id);
 		 biddingService.updateBidStatus(id,"SHIPPING");
 		 biddingService.setShippingNo(id,data);
 
@@ -349,6 +349,7 @@ public class MemberController {
 		return "redirect:/";
 	}
 	
+
 	@GetMapping(value = "/member/querydetails/{auctionQueryNo}")
 	public String memberQueryDetail(@PathVariable("auctionQueryNo") Long auctionQueryNo , Model model
 			,  Authentication authentication) {

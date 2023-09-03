@@ -836,9 +836,10 @@
                                 
                      <div class="form-group row" style="padding-top: 20px;">
                         <div class="col-sm-offset-2" style="text-align: right;">
-                            <input type="submit" class="btn btn-primary" value="문의하기"
-                                   style="border-radius: inherit;"
-                                    onclick="location.href='/auction/query/add/' + auctionNo;" />
+
+                            <input onclick="moveQuery()" type="button" class="btn btn-primary" value="문의하기"
+                                   style="border-radius: inherit;"/>
+
                         </div>
                     </div>
                 </div>
@@ -868,15 +869,17 @@
           crossorigin="anonymous"></script>
     <script src="/js/splide.min.js"></script>
     <script th:inline="javascript">
-
+        function moveQuery() {
+            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+        }
         document.addEventListener('DOMContentLoaded', function () {
             var splide = new Splide('.splide');
             splide.mount();
         });
 
-
         let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
         function count(type) {
+
             // 결과를 표시할 element
             const resultElement = document.getElementById('sum');
             const resultElement2 = document.getElementById('price');
@@ -913,6 +916,7 @@
     	    	
     	    	console.log([[${auction.remainingTime}]])
     	    	Time--;
+
     	    	if([[${auction.remainingTime}]] === 'STRING') {
     	    		document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
     	    	
@@ -1012,9 +1016,7 @@
         var method = isWished ? "DELETE" : "POST";
 
 
-        function moveQuery() {
-            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
-        }
+
         
         $.ajax({
             url: url,

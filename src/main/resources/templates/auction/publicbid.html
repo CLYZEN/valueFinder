@@ -139,7 +139,10 @@
     </div>
 
     <!-- 경매 물품 카드 -->
-    <section class="py-5">
+    <section class="py-5" th:if="${auctionList.getContent().isEmpty()}">
+        <h1 style="text-align: center">검색된 물품이 없습니다.</h1>
+    </section>
+    <section class="py-5" th:if="${!auctionList.getContent().isEmpty()}">
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">

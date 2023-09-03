@@ -35,16 +35,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import com.ezen.valuefinder.config.PrincipalDetails;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.dto.AuctionQueryDto;
+import com.ezen.valuefinder.dto.AuctionReportDto;
 import com.ezen.valuefinder.dto.NormalAuctionFormDto;
 import com.ezen.valuefinder.dto.ReverseAuctionFormDto;
 import com.ezen.valuefinder.dto.ReversebidEnterDto;
+
+import com.ezen.valuefinder.entity.Auction;
+import com.ezen.valuefinder.entity.Category;
+import com.ezen.valuefinder.entity.Member;
+import com.ezen.valuefinder.entity.ReverseBidding;
+import com.ezen.valuefinder.service.AuctionReportService;
+
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.ReversebidService;
 import com.ezen.valuefinder.service.WishService;
+
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -61,6 +71,8 @@ public class AuctionController {
     private final CategoryService categoryService;
     private final WishService wishService;
     private final AuctionQueryService auctionQueryService;
+    private final AuctionReportService auctionReportService;
+
 
 	@GetMapping(value = "/auction/add")
 	public String addItem(Model model) {
@@ -276,6 +288,10 @@ public class AuctionController {
 
             Auction auction = auctionService.getAuction(auctionNo);
 
+            if(auction.getItem().getMember().getEmail().equals(principalDetails.getUsername())) {
+                return new ResponseEntity("본인 경매에는 입찰할 수 없습니다.", HttpStatus.LOCKED);
+            }
+
             switch (auction.getAuctionStatus()) {
                 case PENDING -> {
                     return new ResponseEntity("경매 시작 전입니다.", HttpStatus.LOCKED);
@@ -283,7 +299,7 @@ public class AuctionController {
                 case PROGRESS, LAST -> {
 
                     if(price <= 0) {
-                        return new ResponseEntity("0보다 큰 슷자를 입력해주세요.", HttpStatus.BAD_REQUEST);
+                        return new ResponseEntity("0보다 큰 숫자를 입력해주세요.", HttpStatus.BAD_REQUEST);
                     }
 
                     // 비공개 경매라면
@@ -321,9 +337,63 @@ public class AuctionController {
                 }
             }
         } catch (Exception e) {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+
+               return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    //경매 신고 페이지 띄우기
+    @GetMapping(value = "/auction/report/{auctionNo}")
+    public String reportAuction(@PathVariable Long auctionNo,Model model, Authentication authentication) {
+    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    	Member member = principalDetails.getMember();
+    	model.addAttribute("auctionReportDto", new AuctionReportDto());
+    	Auction auction = auctionService.findById(auctionNo);
+    	model.addAttribute("auction",auction); // 신고할 경매
+    	model.addAttribute("member",member); // 지금 접속한 사용자
+    	
+    	
+        return "/auction/report";
+    }
+    
+    //경매 신고글 등록하기
+    @PostMapping(value = "/auction/report/{auctionNo}")
+    public String addReportAuction(@Valid AuctionReportDto auctionReportDto,BindingResult bindingResult,
+    								Model model, Authentication authentication,@PathVariable Long auctionNo) {
+    	PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+    	Member member = principalDetails.getMember();
+    	Auction auction = auctionService.findById(auctionNo);
+    	 if(bindingResult.hasErrors()) {    		 
+    		 model.addAttribute("auction",auction); // 신고할 경매
+    	     model.addAttribute("member",member); // 지금 접속한 사용자
+    		 //model.addAttribute("auctionReportDto", new AuctionReportDto());
+			 return "auction/report";
+		 }
+    	
+    	try {
+    		auctionReportService.saveReport(auctionReportDto, member, auction);
+		} catch (Exception e) {
+			 e.printStackTrace();
+			 model.addAttribute("auction",auction); // 신고할 경매
+ 	    	model.addAttribute("member",member); // 지금 접속한 사용자
+ 		 model.addAttribute("auctionReportDto", new AuctionReportDto());
+			 return "auction/report";
+		}
+    	
+    	return "redirect:/";
+    }
+    
+    
+
+    @GetMapping(value = "/auction/query")
+    public String queryDetail() {
+        return "/auction/query/query";
+    }
+
+    @GetMapping(value = "/auction/reversebid/enter/add")
+    public String enterQuery() {
+        return "/auction/enter/enterForm";
     }
 
 	@GetMapping(value = "/auction/report")
@@ -331,10 +401,6 @@ public class AuctionController {
 		return "/auction/report";
 	}
 
-	@GetMapping(value = "/auction/query")
-	public String queryDetail() {
-		return "/auction/query/query";
-	}
 
 	@GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
 	public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
