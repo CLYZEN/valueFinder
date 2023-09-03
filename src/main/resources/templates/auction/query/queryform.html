@@ -116,7 +116,25 @@
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.forms.namedItem("newProduct");
+            form.addEventListener("submit", function (event) {
+                var auctionQueryTitle = form.elements.namedItem("auctionQueryTitle").value;
+                var auctionQueryDetail = form.elements.namedItem("auctionQueryDetail").value;
+                
+                if (auctionQueryTitle.trim() === "") {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("제목을 입력해주세요.");
+                } else if (auctionQueryDetail.trim() === "") {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("상세설명을 입력해주세요.");
+                }
+            });
+        });
     </script>
 </th:block>
+
 
 </html>

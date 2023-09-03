@@ -88,14 +88,26 @@
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
     <script>
-        //왜 안되는지 모르겠음
-        let errorMessage = /*[[${errorMessage}]]*/ null;
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.querySelector("form");
+            form.addEventListener("submit", function (event) {
+                var email = form.elements.namedItem("email").value;
+                var phone = form.elements.namedItem("phone").value;
 
-        if (errorMessage != null) {
-            alert(errorMessage);
-        }
+                if (!email) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("이메일을 입력해주세요.");
+                } else if (!phone) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("휴대폰 번호를 입력해주세요.");
+                }
+            });
+        });
     </script>
 </th:block>
+
 
 
 </html>

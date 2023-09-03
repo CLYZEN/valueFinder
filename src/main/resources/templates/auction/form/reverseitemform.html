@@ -124,7 +124,33 @@
 
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        document.addEventListener("DOMContentLoaded", function () {
+            var form = document.forms.namedItem("newProduct");
+            form.addEventListener("submit", function (event) {
+                var reverseBiddingTitle = form.elements.namedItem("reverseBiddingTitle").value;
+                var reverseBiddingDetail = form.elements.namedItem("reverseBiddingDetail").value;
+                var hopePrice = form.elements.namedItem("hopePrice").value;
+                var reverseBiddingExpireDate = form.elements.namedItem("reverseBiddingExpireDate").value;
 
+                if (!reverseBiddingTitle) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("상품명을 입력해주세요.");
+                } else if (!reverseBiddingDetail) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("상품 상세정보를 입력해주세요");
+                } else if (!hopePrice) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("희망가격을 입력해주세요.");
+                } else if (!reverseBiddingExpireDate) {
+                    event.preventDefault(); // 폼 제출을 막음
+                    // 알림창 표시
+                    alert("경매 종료기간을 입력해주세요.");
+                }
+            });
+        });
     </script>
 </th:block>
 </html>

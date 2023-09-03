@@ -151,6 +151,34 @@
           reader.readAsDataURL(image);
         }
       }
+      
+      document.addEventListener("DOMContentLoaded", function () {
+        var form = document.forms.namedItem("newProduct");
+        form.addEventListener("submit", function (event) {
+            var title = form.elements.namedItem("title").value;
+            var price = form.elements.namedItem("price").value;
+            var detail = form.elements.namedItem("detail").value;
+            var image = form.elements.namedItem("image").files[0];
+
+            if (!title) {
+                event.preventDefault(); // 폼 제출을 막음
+                // 알림창 표시
+                alert("제목을 입력해주세요.");
+            } else if(!price){
+				 event.preventDefault(); // 폼 제출을 막음
+                // 알림창 표시
+                alert("금액 입력은 필수입니다.");
+			}else if(!detail){
+				 event.preventDefault(); // 폼 제출을 막음
+                // 알림창 표시
+                alert("물품 상세설명은 필수입니다.");
+			}else if(!image){
+				 event.preventDefault(); // 폼 제출을 막음
+                // 알림창 표시
+                alert("첫 번째 이미지 등록은 필수입니다.");
+			}
+        });
+    });
     </script>
 </th:block>
 
