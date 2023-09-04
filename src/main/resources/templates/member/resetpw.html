@@ -7,6 +7,13 @@
 <th:block layout:fragment="css">
   <link rel="stylesheet" type="text/css" href="/css/memberRegister.css">
   <style>
+           .btn-primary {
+            background-color: #DBDBDB;
+        	color : #000000;
+        }
+          .btn-primary:hover{
+            background-color: #C3C7C5;
+        	border-color : #DBDBDB;
   </style>
 </th:block>
 
@@ -100,7 +107,8 @@
       let password = $('#password').val();
       let chkpassword = $('#chkpassword').val();
       let form = $('#updateForm');
-
+		
+      
       if(password == chkpassword) {
         form.submit();
         return;

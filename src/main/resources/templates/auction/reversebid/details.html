@@ -173,6 +173,15 @@ table {
             width: 450px;
             line-height: 35px;
         }
+               .btn-primary {
+            background-color: #DBDBDB;
+        	color : #000000;
+        }
+          .btn-primary:hover{
+            background-color: #C3C7C5;
+        	border-color : #DBDBDB;
+        }
+        
 </style>
 
 </th:block>
@@ -437,7 +446,7 @@ table {
 		<div class="join">
 			<button type="submit" class="btn btn-primary mb-3"
 
-				style="background-color: #355808; opacity:63%; width: 150px;" th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
+			 th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
 
 				참가신청</button>
 		</div>
