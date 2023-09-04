@@ -261,10 +261,10 @@ public class AuctionService {
     public void deleteQuery(Long auctionQueryNo) {
         AuctionQuery auctionQuery = auctionQueryRepository.findById(auctionQueryNo).orElseThrow();
 
-
-
         auctionQueryRepository.delete(auctionQuery);
     }
+    
+    
     public void deleteAuctionReport(Long auctionNo) {
         Auction auction = auctionRepository.findById(auctionNo).orElseThrow();
 

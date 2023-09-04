@@ -67,14 +67,14 @@
  			 <path fill-rule="evenodd"
 						d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
 			</svg>
-				<a href="/static" style="text-decoration: none;">참가신청</a>
+				<a href="/static" style="text-decoration: none;">참가수정</a>
 			</div>
-			<h4 class="">참가신청</h4>
+			<h4 class="">참가수정</h4>
 		</div>
 	</div>
 	<div class="container">
 
-		<form name="reversebidEnter"  method="post" role="form" th:object="${bid}" enctype="multipart/form-data" th:action="'/auction/reversebid/enter/' + ${bidno}"
+		<form name="reversebidEnter"  method="post" role="form" th:object="${reverseBiddingJoin}" enctype="multipart/form-data" th:action="'/auction/reversebid/enter/' + ${bidno}"
 			class="form-horizontal" >
 
 			<div class="form-group row">
@@ -94,8 +94,8 @@
 
 			<div class="form-group row col-sm-cet">
 				<label class="col-sm-2">금액</label>
-				<div class="col-sm-3" >
-					<input type="text"  class="form-control" th:value=${bid.suggestPrice} name ="suggestPrice">
+				<div class="col-sm-3"  >
+					<input type="text"  class="form-control" th:text=${bid.suggestPrice}/>
 				</div>
 			</div>
 
@@ -125,23 +125,20 @@
 			<div class="form-group row"
 				style="margin-top: 40px; border-top: 3px solid; padding-top: 20px;">
 				<div style="display: flex;">
-				<div class="col-sm-offset-2 col-10"
+					<div class="col-sm-offset-2 col-10"
 						 style="text-align: right; width: 1035px;">
-						<button type="submit" class="btn"  id="modify_Btn" onclick="beforeSubmit()"
+						<button type="submit" class="btn"  id="modify_Btn"
 								style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: blue;" >수정하기</button>
 					</div>
 					<div class="col-sm-offset-2" style="margin-left: 20px;">
 						<button type="button" class="btn btn-primary"
-								th:id="${bidno}" th:value="${bidno}"
-									th:onclick="'javascript:deleteEnter(' + ${bidno} +')'"
+								th:value="${bidno}" onclick="deleteEnter(this.value)"
 								style="border-radius: inherit; width: 110px; border: 2px solid #D9D9D9; color: red; background-color: white;">삭제하기</button>
 					</div>
 					<div class="col-sm-offset-2"
 						style=" margin-left: 20px;">
-						<a href="/auction/reversebid/0?category=0" >
-						<input type="button" class="btn btn-primary" value="돌아가기"
+						<input type="submit" class="btn btn-primary" value="돌아가기"
 							style="border-radius: inherit;width: 110px;" />
-					</a>
 					</div>
 				</div>
 			</div>
@@ -174,11 +171,7 @@
         }
       }
       
-      function beforeSubmit() {
-			const f = document.enterForm;
 
-			f.submit();
-		}
       
       function deleteEnter(bidno) {
 			const deleteConf = confirm("삭제하시겠습니까?");

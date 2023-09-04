@@ -3,6 +3,11 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 	<style>
@@ -392,12 +397,15 @@ table {
 							<th>제목</th>
 							<th>제시금액</th>
 							<th>등록자</th>
+							<th >낙찰</th>
 						</tr>
 						<tr th:each="reverseBiddingJoinList:${reverseBiddingJoinList}">
 							<td th:text=${reverseBiddingJoinList.reverseBiddingJoinNo}></td>
 							<td style="color: blue; cursor: pointer;" th:text=${reverseBiddingJoinList.item.itemName} th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
 							<td id="price" th:text=${reverseBiddingJoinList.suggestPrice}></td>
 							<td th:text=${reverseBiddingJoinList.member.nickname}></td>
+							<td th:if="${#authentication.principal.username == reverseBidding.member.email && reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}" 
+								onclick="pushReverse(this)" th:data-memberid="${reverseBidding.member.memberId}" th:data-reversebiddingno="${reverseBidding.reverseBiddingNo}">낙찰하기</td>
 						</tr>
 					</table>
 				</div>
@@ -435,7 +443,7 @@ table {
 
 	<div class="form-group">
 		<div class="join">
-			<button type="submit" class="btn btn-primary mb-3"
+			<button th:if="${#authentication.principal.username != reverseBidding.member.email}" type="submit" class="btn btn-primary mb-3"
 
 				style="background-color: #355808; opacity:63%; width: 150px;" th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
 
@@ -481,6 +489,46 @@ table {
 	            }
 	        });
 	    }
+	 
+	 function pushReverse(heartIcon) {
+		 /*
+		  색있는 하트: <i class="fa-solid fa-heart"></i>
+          빈 하트: <i class="fa-regular fa-heart"></i>
+		 */
+        var memberId = heartIcon.getAttribute('data-memberid');
+        var reverseBiddingNo = heartIcon.getAttribute('data-reversebiddingno');
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var url =  "/addReverseBidding"; //삼항연산자
+        var method = "POST";
+        var bidStatus = "PENDING";
+
+        
+        $.ajax({
+            url: url,
+            type: method,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            data: JSON.stringify({ reverseBiddingNo: reverseBiddingNo }),
+            contentType: "application/json",
+            success: function(result) {
+                // 요청 성공 처리
+                console.log("낙찰 성공");
+                // 찜 상태 토글
+                window.location.reload(true);
+            },
+            error: function(jqXHR, status, error) {
+                // 오류 처리
+                console.log(jqXHR.responseText);
+                alert("에러가 발생했습니다. 다시 시도해 주세요.");
+               
+            }
+        });
+        
+    }
+	 
+	
 	 
 	 
 	</script>

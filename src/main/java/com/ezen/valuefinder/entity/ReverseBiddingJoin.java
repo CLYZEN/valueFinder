@@ -1,5 +1,7 @@
 package com.ezen.valuefinder.entity;
 
+import com.ezen.valuefinder.dto.ReversebidEnterDto;
+
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,4 +31,14 @@ public class ReverseBiddingJoin extends BaseEntity {
 
     @Column(nullable = false)
     private Integer suggestPrice; // 제시가격
+    
+    public void updateReverseBiddingJoin(ReversebidEnterDto reversebidEnterDto) {
+    	this.item = reversebidEnterDto.getItem();
+    	this.member = reversebidEnterDto.getMember();
+    	this.suggestPrice = reversebidEnterDto.getSuggestPrice();
+    }
+    
+    public void deleteReverseBiddingJoin(ReversebidEnterDto reversebidEnterDto) {
+    	deleteReverseBiddingJoin(reversebidEnterDto);
+    }
 }
