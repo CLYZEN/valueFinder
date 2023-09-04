@@ -205,22 +205,29 @@ textarea {
 function checkImageCount(event) {
     var imageInput = event.target;
     var imageCount = imageInput.files.length;
-    var imageContainer = document.getElementById("image_container")
+    var imageContainer = document.getElementById("image_container");
+    var imagePreviews = imageContainer.getElementsByTagName("img"); // "img"로 수정
 
     if (imageCount > 10) {
         alert("이미지 업로드는 최대 10장까지 가능합니다.");
         // 입력한 이미지 초기화
         imageInput.value = "";
-    }
 
-    // 이미지 미리보기 보이거나 숨기기
-    imageContainer.style.display = imageCount <= 10 ? "block" : "block";
+        // 이미지 미리보기 이미지 숨기기
+        for (var i = 0; i < imagePreviews.length; i++) {
+            imagePreviews[i].style.display = "none";
+        }
+    } else {
+        // 이미지 미리보기 이미지 보이기
+        for (var i = 0; i < imagePreviews.length; i++) {
+            imagePreviews[i].style.display = "block";
+        }
+    }
 }
 
 // 이미지 업로드 input 요소에 이벤트 리스너 추가
 var imageInput = document.getElementById("image");
 imageInput.addEventListener("change", checkImageCount);
-
 
 
         var auctionDistinction = document.getElementById("auctionDistinction");
