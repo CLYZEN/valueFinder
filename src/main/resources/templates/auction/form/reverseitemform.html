@@ -6,7 +6,7 @@
 <th:block layout:fragment="css">
 	<style>
 textarea {
-	height: 345px;
+	height: 100%;
 	border: none;
 	resize: none;
 }
@@ -16,7 +16,7 @@ textarea {
 }
 
 .form-control {
-	width: 1080px;
+		width: 100%;
 }
 
 .col-sm-2 {
@@ -90,9 +90,9 @@ textarea {
 			</div>
 
 			<div class="form-group row">
-				<label class="col-sm-2" style="height: 350px; line-height: 350px">상세정보</label>
+				<label class="col-sm-2" style="height: 400px; line-height: 350px">상세정보</label>
 				<div class="col-sm-5">
-					<textarea th:field="*{reverseBiddingDetail}" class="form-control"
+					<textarea name="description" th:field="*{reverseBiddingDetail}" class="form-control"
 						placeholder="상품 상세정보를 입력해주세요."></textarea>
 				</div>
 			</div>
@@ -104,7 +104,7 @@ textarea {
 				<label class="col-sm-2">희망가격</label>
 				<div class="col-sm-3">
 					<input type="text" class="form-control" th:field="*{hopePrice}"
-						placeholder="희망가격을 입력하세요." style="width: 250px; float: left" />
+						placeholder="희망가격을 입력하세요." style="width: 250px; float: left" oninput="inputNumberOnly(this)"/>
 					<p style="float: right;">원</p>
 				</div>
 			</div>
@@ -135,6 +135,8 @@ textarea {
 </div>
 
 <th:block layout:fragment="script">
+		<script
+		src="https://cdn.tiny.cloud/1/wbp6amz0uk92ml3i2koa8kum1gthp9eiebu0ynmvboph9x2j/tinymce/5/tinymce.min.js"></script>
 	<script th:inline="javascript">
 		document.addEventListener("DOMContentLoaded", function() {
 			var form = document.forms.namedItem("newProduct");
@@ -166,6 +168,26 @@ textarea {
 				}
 			});
 		});
+		
+	   <!-- textarea를 리치 텍스트 에디터로 변환 -->
+
+        tinymce.init({
+            selector: 'textarea', // 리치 텍스트 에디터로 변환할 textarea 선택자
+            height: 400,
+            width: 1000,
+            language: 'ko_KR',
+            plugins: 'image',
+            plugins: 'textalignment', // textalignment 플러그인 추가// image 플러그인 활성화
+            
+            file_picker_types: 'image' // 이미지 업로드 기능을 위한 옵션
+            
+
+            // 기타 옵션 설정 가능
+        });
+          function inputNumberOnly(el) {
+            el.value = el.value.replace(/[^0-9]/g, '');
+          }
+
 	</script>
 </th:block>
 </html>

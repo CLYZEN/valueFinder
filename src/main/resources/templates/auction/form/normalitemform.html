@@ -27,14 +27,15 @@ textarea {
 }
 
 .btn-primary {
-	background-color: #DBDBDB;
+	background-color: #8fc7fc;
+	opacity: 63%;
 	color: #000000;
 	margin-top: 1%;
 	width : 10%;
 }
 
 .btn-primary:hover {
-	background-color: #C3C7C5;
+	background-color: #0D6EFD;
 	border-color: #DBDBDB;
 }
 
@@ -99,18 +100,18 @@ textarea {
 
 			<div class="form-group row">
 				<label class="col-sm-2">규격</label>
-				<div class="col-sm-3" style="width: 1000px;">
+				<div class="col-sm-3" style="width: 80%;">
 					<input type="text" th:field="*{itemWidth}" class="form-control"
 						placeholder="가로"
-						style="width: 100px; float: left; margin-right: 10px" />
+						style="width: 10%; float: left; margin-right: 10px" />
 					<p style="float: left">x</p>
 					<input type="text" th:field="*{itemDepth}" class="form-control"
 						placeholder="세로"
-						style="width: 100px; float: left; margin-right: 10px" />
+						style="width: 10%; float: left; margin-right: 10px" />
 					<p style="float: left">x</p>
 					<input type="text" th:field="*{itemHeight}" class="form-control"
 						placeholder="높이"
-						style="width: 100px; float: left; margin-right: 10px" />
+						style="width: 10%; float: left; margin-right: 10px" />
 					<p style="float: left">cm</p>
 				</div>
 			</div>
@@ -131,7 +132,7 @@ textarea {
 			<div class="form-group row">
 
 				<label class="col-sm-2" style="height: 400px; line-height: 350px">상세정보</label>
-				<div class="col-sm-5">
+				<div class="col-sm-5" >
 					<textarea name="description" class="form-control"
 						placeholder="상품 상세정보를 입력해주세요." th:field="*{itemDetail}"></textarea>
 				</div>
@@ -171,14 +172,14 @@ textarea {
 				<label class="col-sm-2" style="height: 150px; line-height: 150px;">경매기간</label>
 				<div class="col-sm-3">
 					<div
-						style="width: 1000px; height: 100%; line-height: 150px; display: flex">
+						style="width: 100%; height: 150px; line-height: 150px; display: flex">
 						<span> <strong>경매시작일</strong> <input type="datetime-local"
 							id="auctionStartTimeInput"
-							style="width: 220px; height: 30px; border: 0px; margin-left: 30px;"
+							style="width: 50%; height: 30px; border: 0px; margin-left: 30px;"
 							th:field="*{auctionStartTime}" />
 						</span> &nbsp; ~ &nbsp; <span> <strong>경매마감일</strong> <input
 							type="datetime-local" id="auctionEndTimeInput"
-							style="width: 220px; height: 30px; border: 0px; margin-left: 30px;"
+							style="width: 50%; height: 30px; border: 0px; margin-left: 30px;"
 							th:field="*{auctionEndTime}" />
 						</span>
 					</div>
@@ -201,30 +202,25 @@ textarea {
 		src="https://cdn.tiny.cloud/1/wbp6amz0uk92ml3i2koa8kum1gthp9eiebu0ynmvboph9x2j/tinymce/5/tinymce.min.js"></script>
 	<script th:inline="javascript">
 
-    function checkImageCount(event) {
-        var imageInput = event.target;
-        var imageCount = imageInput.files.length;
+function checkImageCount(event) {
+    var imageInput = event.target;
+    var imageCount = imageInput.files.length;
+    var imageContainer = document.getElementById("image_container")
 
-        if (imageCount > 10) {
-            alert("이미지 업로드는 최대 10장까지 가능합니다.");
-            // 입력한 이미지 초기화
-            imageInput.value = "";
-            event.preventDefault(); // 양식 제출 방지
-
-            // 이미지 미리보기 숨기기
-            var imageContainer = document.getElementById("image_container");
-            imageContainer.style.display = "none";
-        } else {
-            
-            // 이미지 미리보기 보이기
-            var imageContainer = document.getElementById("image_container");
-            imageContainer.style.display = "block";
-        }
+    if (imageCount > 10) {
+        alert("이미지 업로드는 최대 10장까지 가능합니다.");
+        // 입력한 이미지 초기화
+        imageInput.value = "";
     }
 
-    // 이미지 업로드 input 요소에 이벤트 리스너 추가
-    var imageInput = document.getElementById("image");
-    imageInput.addEventListener("change", checkImageCount);
+    // 이미지 미리보기 보이거나 숨기기
+    imageContainer.style.display = imageCount <= 10 ? "block" : "block";
+}
+
+// 이미지 업로드 input 요소에 이벤트 리스너 추가
+var imageInput = document.getElementById("image");
+imageInput.addEventListener("change", checkImageCount);
+
 
 
         var auctionDistinction = document.getElementById("auctionDistinction");
