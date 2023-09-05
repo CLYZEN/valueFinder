@@ -5,6 +5,7 @@ import com.ezen.valuefinder.repository.ItemImgRepository;
 import jakarta.annotation.Resource;
 import jakarta.servlet.ServletContext;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,10 @@ public class ItemImgService {
 
     ClassLoader classLoader = getClass().getClassLoader();
     URL url = classLoader.getResource("");
-    private String itemImgLocation =  url.getPath();
+    //private String itemImgLocation =  url.getPath();
+    @Value("${itemImgLocation}")
+    private String itemImgLocation;
+
     private final ItemImgRepository itemImgRepository;
     private final FileService fileService;
 
