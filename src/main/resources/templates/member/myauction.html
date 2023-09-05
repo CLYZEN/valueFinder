@@ -75,7 +75,7 @@
             height: 150px;
             border: 1px solid;
             line-height: 70px;
-            font-size: 13px;
+
         }
 
         .tb > div {
@@ -88,16 +88,6 @@
 
         caption {
             caption-side: top;
-        }
-
-        td {
-            width: 12.5%;
-            font-size: 9px;
-        }
-
-        .tdnum {
-            border-right: 1px solid;
-            font-size: 20px;
         }
 
         .btn {
@@ -215,94 +205,92 @@
                 </div>
             </div>
 
-            <table class="table table-hover"
-                   style="border: 1px solid; margin: auto 0; text-align: center; margin-top: 50px;"
-                   th:each="auction:${auctionList}">
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'PUBLIC'"
-                        th:text="공개입찰경매"></caption>
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'SEALED'"
-                        th:text="비공개경매"></caption>
-                <caption
-                        th:if="${auction.auctionType.toString()} == 'REALTIME'"
-                        th:text="실시간경매"></caption>
+            <!-- NEW -->
+            <table class="table table-bordered" th:each="auction:${auctionList}">
+                <caption th:if="${auction.getAuctionType() == 'PUBLIC'}">공개입찰경매</caption>
+                <caption th:if="${auction.getAuctionType() == 'SEALED'}">비공개경매</caption>
+                <caption th:if="${auction.getAuctionType() == 'REALTIME'}">실시간경매</caption>
+                <thead class="table-light">
+                <tr style="text-align: center">
+                    <th>대표이미지</th>
+                    <th>물품번호</th>
+                    <th>물품명</th>
+                    <th>시작가</th>
+                    <th>현재가</th>
+                    <th>입찰횟수</th>
+                    <th>마감일</th>
+                    <th>상태</th>
+                </tr>
 
-                <thead>
-                <th style="border-right: 1px solid;">대표이미지</th>
-                <th style="border-right: 1px solid;">물품번호</th>
-                <th style="border-right: 1px solid;">물품명</th>
-                <th style="border-right: 1px solid;">시작가</th>
-                <th style="border-right: 1px solid;">현재가</th>
-                <th style="border-right: 1px solid;">입찰횟수</th>
-                <th style="border-right: 1px solid;">마감일</th>
-                <th style="border-right: 1px solid;">상태</th>
                 </thead>
                 <tbody>
-                <tr style="height: 100px; line-height: 100px;">
-                    <td class=tdnum><img src="/images/thumb-bananas.png"
-                                         class="tab-image"></td>
-                    <td class=tdnum th:text="${auction.auctionNo}">5</td>
-                    <td class=tdnum th:text="${auction.item.itemName}">바나나</td>
-                    <td class=tdnum th:text="${auction.auctionStartPrice}">1500원</td>
-                    <td class=tdnum th:text="${auction.auctionNowPrice}">2500원</td>
-                    <td class=tdnum th:text="${auction.biddingCount}">5</td>
-                    <td class=tdnum th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">
-                        2023/08/15
-                    </td>
-                    <td th:if="${auction.bidStatus} == null" th:text="유찰"></td>
-                    <td th:if="${auction.bidStatus.toString()} == 'NO'" th:text="유찰"></td>
 
-                    <td th:if="${auction.bidStatus} != null">
-                        <button type="button" class="btn btn-primary" th:if="${auction.bidStatus.toString()} == 'OK'"
-                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">입금확인
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'CONFIRM'"
-                                data-bs-toggle="modal" th:data-bs-target="'#exampleModal'+${auction.successBiddingNo}">운송장번호입력
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'SHIPPING'" disabled>배송중
-                        </button>
-                        <button type="button" class="btn btn-primary" th:if="${auction.bidStatus.toString()} == 'END'"
-                                disabled>판매자인수완료
-                        </button>
-                        <button type="button" class="btn btn-primary"
-                                th:if="${auction.bidStatus.toString()} == 'PENDING'" disabled>대기중
-                        </button>
-                        <div class="modal fade" th:id="'exampleModal'+${auction.successBiddingNo}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                             aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <form th:action="'/member/shipping/'+${auction.successBiddingNo}" method="post">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <div class="input-group mb-3">
+                <td><img th:src="${auction.getItemImageUrl()}" th:alt="${auction.getItemName()}"
+                         class="tab-image"></td>
+                <td th:text="${auction.auctionNo}"></td>
+                <td ><a th:href="'/auction/detail/'+${auction.getAuctionNo()}">[[${auction.getItemName()}]]</a></td>
+                <td th:text="${auction.getAuctionStartPrice()}">5</td>
+                <td th:text="${auction.getAuctionNowPrice()}">5</td>
+                <td th:text="${auction.getBiddingCount()}">5</td>
+                <td th:text="${#temporals.format(auction.getAuctionEndTime(), 'yyyy년 MM월 dd일 HH시 mm분')}">5</td>
+                <td th:if="${auction.getBidStatus() == null || auction.getBidStatus().toString() == 'NO'}">
+                    <button type="button" class="btn btn-primary"
+                            disabled>유찰</button>
+                </td>
+
+
+                <td th:if="${auction.getBidStatus() != null && auction.getBidStatus().toString() != 'NO'}" >
+                    <button type="button" class="btn btn-primary" th:if="${auction.getBidStatus().toString()} == 'OK'"
+                            th:onclick="'javascript:update(' + ${auction.getSuccessBiddingNo()} + ', \'CONFIRM\')'">입금확인
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            th:if="${auction.getBidStatus().toString()} == 'CONFIRM'"
+                            data-bs-toggle="modal" th:data-bs-target="'#exampleModal'+${auction.getSuccessBiddingNo()}">운송장번호입력
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            th:if="${auction.getBidStatus().toString()} == 'SHIPPING'" disabled>배송중
+                    </button>
+                    <button type="button" class="btn btn-primary" th:if="${auction.getBidStatus().toString()} == 'END'"
+                            disabled>판매자인수완료
+                    </button>
+                    <button type="button" class="btn btn-primary"
+                            th:if="${auction.getBidStatus().toString()} == 'PENDING'" disabled>대기중
+                    </button>
+                </td>
+                </tbody>
+                <!--                배송정보 관련 모달-->
+                <div class="modal fade" th:id="'exampleModal'+${auction.getSuccessBiddingNo()}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form th:action="'/member/shipping/'+${auction.getSuccessBiddingNo()}" method="post">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="input-group mb-3">
                                                 <span class="input-group-text"
                                                       id="inputGroup-sizing-default">배송정보</span>
-                                                <input type="text" name="data" class="form-control"
-                                                       aria-label="Sizing example input"
-                                                       aria-describedby="inputGroup-sizing-default"
-                                                       placeholder="택배사 : 운송장번호">
-                                            </div>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="submit" class="btn btn-secondary">입력</button>
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기
-                                            </button>
-                                        </div>
-                                    </form>
+                                        <input type="text" name="data" class="form-control"
+                                               aria-label="Sizing example input"
+                                               aria-describedby="inputGroup-sizing-default"
+                                               placeholder="택배사 : 운송장번호">
+                                    </div>
                                 </div>
-                            </div>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-secondary">입력</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기
+                                    </button>
+                                </div>
+                            </form>
                         </div>
-                    </td>
-                </tr>
-                </tbody>
+                    </div>
+                </div>
+<!--                배송정보 관련 모달-->
             </table>
+            <!--NEW -->
 
 
             <!-- 페이징 버튼 -->

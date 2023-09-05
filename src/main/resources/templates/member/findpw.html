@@ -87,7 +87,7 @@
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
-    <script>
+    <script th:inline="javascript">
         //왜 안되는지 모르겠음
         let errorMessage = /*[[${errorMessage}]]*/ null;
 

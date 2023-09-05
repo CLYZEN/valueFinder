@@ -96,11 +96,6 @@
             width: 12.5%;
         }
 
-        .tdnum {
-            border-right: 1px solid;
-            font-size: 20px;
-        }
-
         .btn {
             background-color: #fcfcfc;
             border-radius: 0%;
@@ -189,7 +184,7 @@
 
     <div class="wrap">
         <div class="container"
-             style="width: 100%; height: 150px; border: 1px solid;">
+             style="width: 100%; height: 100%; border: 1px solid">
             <div
                     style="width: 25%; height: 150px; text-align: center; line-height: 150px; font-size: 30px; float: left;"
                     th:text="|${member.nickname}님 안녕하세요!|">
@@ -261,183 +256,197 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-hover" th:each="auction : ${successBiddingList}"
-                   style="border: 1px solid; margin: auto 0; text-align: center; margin-top: 50px;">
-                <caption>공개입찰경매</caption>
-                <thead>
-                <th style="border-right: 1px solid;">대표이미지</th>
-                <th style="border-right: 1px solid;">물품번호</th>
-                <th style="border-right: 1px solid;">물품명</th>
-                <th style="border-right: 1px solid;">시작가</th>
-                <th style="border-right: 1px solid;">낙찰가</th>
-                <th style="border-right: 1px solid;">입찰</th>
-                <th style="border-right: 1px solid;">마감일</th>
-                <th style="border-right: 1px solid;">비고</th>
+
+        </div>
+        <div class="table-responsive container">
+            <table class="table table-bordered" th:each="auction : ${successBiddingList}">
+                <caption th:if="${auction.auction.auctionType.toString() == 'PUBLIC'}">공개입찰경매</caption>
+                <caption th:if="${auction.auction.auctionType.toString() == 'SEALED'}">비공개경매</caption>
+                <caption th:if="${auction.auction.auctionType.toString() == 'REALTIME'}">실시간경매</caption>
+                <thead class="table-light">
+                <tr style="text-align: center">
+                    <th>대표이미지</th>
+                    <th>물품번호</th>
+                    <th>물품명</th>
+                    <th>시작가</th>
+                    <th>낙찰가</th>
+                    <th>입찰횟수</th>
+                    <th>마감일</th>
+                    <th>비고</th>
+                </tr>
+
                 </thead>
                 <tbody>
-                <tr style="height: 100px; line-height: 100px;">
-                    <td class=tdnum><img src="/images/thumb-bananas.png"
-                                         class="tab-image"></td>
-                    <td class=tdnum th:text="${auction.auction.auctionNo}">5</td>
-                    <td class=tdnum th:text="${auction.auction.item.itemName}">바나나</td>
-                    <td class=tdnum th:text="${auction.auction.auctionStartPrice}">1500원</td>
-                    <td class=tdnum th:text="${auction.auction.auctionNowPrice}">2500원</td>
-                    <td class=tdnum th:text="${auction.auction.biddingCount}">5</td>
-                    <td class=tdnum
-                        th:text="${#temporals.format(auction.auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">
-                        2023/08/15
-                    </td>
-                    <td class=tdnum>
-                        <div class="btn-group-vertical" role="group"
-                             aria-label="Vertical button group">
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'PENDING'"
-                                    th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'OK\')'">낙찰확인
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'PENDING'"
-                                    th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'NO\')'">낙찰포기
-                            </button>
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" th:if="${auction.bidStatus.toString()} == 'OK'">판매자
-                                정보보기
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'OK'"
-                                    th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">입금확인요청
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'OK'"
-                                    >판매자 입금확인중
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'NO'">삭제하기
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'SHIPPING'"
-                                    data-bs-toggle="modal" data-bs-target="#exampleModal2">배송정보확인
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'SHIPPING'"
-                                    th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'END\')'">인수확인
-                            </button>
-                            <button type="button" class="btn btn-primary"
-                                    th:if="${auction.bidStatus.toString()} == 'END'" data-bs-toggle="modal"
-                                    data-bs-target="#reviewModal">경매후기등록
-                            </button>
-                            <!-- 리뷰모달 -->
-                            <div class="modal fade" id="reviewModal" tabindex="-1"
-                                 aria-labelledby="reviewModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form method="post" th:action="'/auction/review/add/'+${auction.auction.auctionNo}" th:object="${reviewFormDto}">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title">리뷰작성</h5>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="container">
 
-                                                    <div class="form-group row col-sm-top" style="text-align: center;">
-                                                        <label class="col-sm-2">닉네임</label>
-                                                        <div class="col-sm-10" style="width: 60%;">
-                                                            <input type="text" name="pname" class="form-control" th:value="${member.nickname}"
-                                                                   disabled/>
-                                                        </div>
-                                                    </div>
+                <td><img th:src="${auction.auction.item.itemImgList[0].itemImageUrl}" th:alt="${auction.auction.item.itemName}"
+                         class="tab-image"></td>
+                <td th:text="${auction.auction.auctionNo}"></td>
+                <td><a th:href="'/auction/detail/'+${auction.auction.auctionNo}">[[${auction.auction.item.itemName}]]</a></td>
+                <td th:text="${auction.auction.auctionStartPrice}">5</td>
+                <td th:text="${auction.auction.auctionNowPrice}">5</td>
+                <td th:text="${auction.auction.biddingCount}">5</td>
+                <td th:text="${#temporals.format(auction.auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">5</td>
+                <td>
 
-                                                    <div class="form-group row col-sm-12"
-                                                         style="text-align: center; padding-bottom: 20px;">
-                                                        <label class="col-sm-2">별점</label>
-                                                        <div class="col-sm-10 star-rating" id="myform">
-                                                            <fieldset>
-                                                                <input type="radio" th:field="*{auctionReviewSocre}" value="1" id="rate1"><label
-                                                                    for="rate1">★</label>
-                                                                <input type="radio" th:field="*{auctionReviewSocre}" value="2" id="rate2"><label
-                                                                    for="rate2">★</label>
-                                                                <input type="radio" th:field="*{auctionReviewSocre}" value="3" id="rate3"><label
-                                                                    for="rate3">★</label>
-                                                                <input type="radio" th:field="*{auctionReviewSocre}" value="4" id="rate4"><label
-                                                                    for="rate4">★</label>
-                                                                <input type="radio" th:field="*{auctionReviewSocre}" value="5" id="rate5"><label
-                                                                    for="rate5">★</label>
-                                                            </fieldset>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row col-sm-12">
-                                                        <label class="col-sm-12">리뷰제목</label>
-                                                        <input type="text" th:field="*{auctionReviewTitle}">
-                                                    </div>
-                                                    <div class="form-group row col-sm-12" style="text-align: center;">
-                                                        <label class="col-sm-12">리뷰내용</label>
-                                                        <div class="col-sm-12" style="width: 100%;">
-                                                         <textarea name="description" class="form-control"
-                                                         style="line-height: 100px;" th:field="*{auctionReviewDetail}"></textarea>
-                                                        </div>
-                                                    </div>
+                    <div class="btn-group-vertical" role="group"
+                         aria-label="Vertical button group">
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'PENDING'"
+                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'OK\')'">낙찰확인
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'PENDING'"
+                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'NO\')'">낙찰포기
+                        </button>
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#exampleModal" th:if="${auction.bidStatus.toString()} == 'OK'">판매자
+                            정보보기
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'OK'"
+                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'CONFIRM\')'">
+                            입금확인요청
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'OK'"
+                        >판매자 입금확인중
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'NO'">삭제하기
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'SHIPPING'"
+                                data-bs-toggle="modal" data-bs-target="#exampleModal2">배송정보확인
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'SHIPPING'"
+                                th:onclick="'javascript:update(' + ${auction.successBiddingNo} + ', \'END\')'">인수확인
+                        </button>
+                        <button type="button" class="btn btn-primary"
+                                th:if="${auction.bidStatus.toString()} == 'END'" data-bs-toggle="modal"
+                                data-bs-target="#reviewModal">경매후기등록
+                        </button>
+                        <!--&lt;!&ndash; 리뷰모달 &ndash;&gt;-->
+                        <div class="modal fade" id="reviewModal" tabindex="-1"
+                             aria-labelledby="reviewModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <form method="post" th:action="'/auction/review/add/'+${auction.auction.auctionNo}"
+                                      th:object="${reviewFormDto}">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title">리뷰작성</h5>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="container">
 
-
+                                                <div class="form-group row col-sm-top" style="text-align: center;">
+                                                    <label class="col-sm-2">닉네임</label>
+                                                    <div class="col-sm-10" style="width: 60%;">
+                                                        <input type="text" name="pname" class="form-control"
+                                                               th:value="${member.nickname}"
+                                                               disabled/>
+                                                    </div>
                                                 </div>
 
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">등록취소</button>
-                                                <button type="submit" class="btn btn-primary">등록</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <!-- 리뷰모달 end -->
+                                                <div class="form-group row col-sm-12"
+                                                     style="text-align: center; padding-bottom: 20px;">
+                                                    <label class="col-sm-2">별점</label>
+                                                    <div class="col-sm-10 star-rating" id="myform">
+                                                        <fieldset>
+                                                            <input type="radio" th:field="*{auctionReviewSocre}"
+                                                                   value="1" id="rate1"><label
+                                                                for="rate1">★</label>
+                                                            <input type="radio" th:field="*{auctionReviewSocre}"
+                                                                   value="2" id="rate2"><label
+                                                                for="rate2">★</label>
+                                                            <input type="radio" th:field="*{auctionReviewSocre}"
+                                                                   value="3" id="rate3"><label
+                                                                for="rate3">★</label>
+                                                            <input type="radio" th:field="*{auctionReviewSocre}"
+                                                                   value="4" id="rate4"><label
+                                                                for="rate4">★</label>
+                                                            <input type="radio" th:field="*{auctionReviewSocre}"
+                                                                   value="5" id="rate5"><label
+                                                                for="rate5">★</label>
+                                                        </fieldset>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row col-sm-12">
+                                                    <label class="col-sm-12">리뷰제목</label>
+                                                    <input type="text" th:field="*{auctionReviewTitle}">
+                                                </div>
+                                                <div class="form-group row col-sm-12" style="text-align: center;">
+                                                    <label class="col-sm-12">리뷰내용</label>
+                                                    <div class="col-sm-12" style="width: 100%;">
+                                                         <textarea name="description" class="form-control"
+                                                                   style="line-height: 100px;"
+                                                                   th:field="*{auctionReviewDetail}"></textarea>
+                                                    </div>
+                                                </div>
 
-<!--                            판매자 정보 모달-->
-                            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            이름 : <span th:text="${auction.member.name}"></span> <br>
-                                            휴대폰번호 : <span th:text="${auction.member.phone}"></span> <br>
-                                            계좌 : <span th:text="${auction.member.bank.bankName}"></span>
-                                            <span th:text="${auction.member.bankAddress}"></span>
+
+                                            </div>
+
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
+                                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">등록취소
                                             </button>
+                                            <button type="submit" class="btn btn-primary">등록</button>
                                         </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
-                            <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
-                                 aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h1 class="modal-title fs-5" id="exampleModalLabel2">배송정보</h1>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <span th:text="${auction.shippingNo}"></span>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                                Close
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!--                            판매자 정보 모달-->
-
                         </div>
-                    </td>
-                </tr>
+                        <!--lt;!&ndash; 리뷰모달 end &ndash;&gt;-->
+
+                        <!--&lt;!&ndash;                            판매자 정보 모달&ndash;&gt;-->
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        이름 : <span th:text="${auction.member.name}"></span> <br>
+                                        휴대폰번호 : <span th:text="${auction.member.phone}"></span> <br>
+                                        계좌 : <span th:text="${auction.member.bank.bankName}"></span>
+                                        <span th:text="${auction.member.bankAddress}"></span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel"
+                             aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel2">배송정보</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <span th:text="${auction.shippingNo}"></span>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--&lt;!&ndash;                            판매자 정보 모달&ndash;&gt;-->
+
+                    </div>
+                </td>
                 </tbody>
             </table>
 
@@ -470,82 +479,81 @@
             </div>
         </div>
 
+
+        <div class="quickmenu">
+            <ul>
+                <li><a href="/member/mypage">내 정보 </a></li>
+                <li><a href="/member/mypage/bidding">입찰 현황</a></li>
+                <li><a href="/member/mypage/successfulbid">낙찰 현황</a></li>
+                <li><a href="/member/mypage/myauction">내 물품 확인</a></li>
+                <li><a href="/member/mypage/sentquery">내 문의내역</a></li>
+                <li><a href="/member/mypage/receivedquery">받은문의내역</a></li>
+                <li><a href="/member/mypage/coupon">쿠폰함</a></li>
+                <li><a href="/member/mypage/like">찜목록</a></li>
+                <li><a href="/member/mypage/modify/checkpwd">내정보 수정</a></li>
+                <li><a href="/member/mypage/modify/password">비밀번호 변경</a></li>
+                <li><a href="/member/mypage/outmember">회원탈퇴</a></li>
+            </ul>
+        </div>
+
+
     </div>
 
-    <div class="quickmenu">
-        <ul>
-            <li><a href="/member/mypage">내 정보 </a></li>
-            <li><a href="/member/mypage/bidding">입찰 현황</a></li>
-            <li><a href="/member/mypage/successfulbid">낙찰 현황</a></li>
-            <li><a href="/member/mypage/myauction">내 물품 확인</a></li>
-            <li><a href="/member/mypage/sentquery">내 문의내역</a></li>
-            <li><a href="/member/mypage/receivedquery">받은문의내역</a></li>
-            <li><a href="/member/mypage/coupon">쿠폰함</a></li>
-            <li><a href="/member/mypage/like">찜목록</a></li>
-            <li><a href="/member/mypage/modify/checkpwd">내정보 수정</a></li>
-            <li><a href="/member/mypage/modify/password">비밀번호 변경</a></li>
-            <li><a href="/member/mypage/outmember">회원탈퇴</a></li>
-        </ul>
-    </div>
+    <th:block layout:fragment="script">
+        <script th:inline="javascript">
+            let errorMessage = [[${errorMessage}]];
+            if (errorMessage != null) {
+                alert(errorMessage);
+            }
 
-
-</div>
-
-<th:block layout:fragment="script">
-    <script th:inline="javascript">
-        let errorMessage = [[${errorMessage}]];
-        if(errorMessage != null) {
-            alert(errorMessage);
-        }
-
-        $(document).ready(function () {
-            var currentPosition = parseInt($(".quickmenu").css("top"));
-            $(window).scroll(function () {
-                var position = $(window).scrollTop();
-                $(".quickmenu").stop().animate({
-                    "top": position + currentPosition + "px"
-                }, 1000);
+            $(document).ready(function () {
+                var currentPosition = parseInt($(".quickmenu").css("top"));
+                $(window).scroll(function () {
+                    var position = $(window).scrollTop();
+                    $(".quickmenu").stop().animate({
+                        "top": position + currentPosition + "px"
+                    }, 1000);
+                });
             });
-        });
 
-        function update(no, status) {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+            function update(no, status) {
+                var token = $("meta[name='_csrf']").attr("content");
+                var header = $("meta[name='_csrf_header']").attr("content");
 
-            var url = '/member/mypage/updateStatus';
-            var method = "POST";
+                var url = '/member/mypage/updateStatus';
+                var method = "POST";
 
-            $.ajax({
-                url: url,
-                type: method,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
-                data: JSON.stringify({
-                    no: no,
-                    status: status
-                }),
-                contentType: "application/json",
-                success: function (result, status, jqXHR) {
-                    // 요청 성공 처리
-                    alert('등록 완료');
-                    location.href = document.referrer;
-                },
-                error: function (jqXHR, status, error) {
-                    if (jqXHR.status == '401') {
-                        alert('로그인 후 이용해주세요.');
-                        location.href = '/member/login';
-                    } else {
-                        //alert(jqXHR.responseText);
-                        console.log(jqXHR.responseText);
+                $.ajax({
+                    url: url,
+                    type: method,
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader(header, token);
+                    },
+                    data: JSON.stringify({
+                        no: no,
+                        status: status
+                    }),
+                    contentType: "application/json",
+                    success: function (result, status, jqXHR) {
+                        // 요청 성공 처리
+                        alert('등록 완료');
                         location.href = document.referrer;
+                    },
+                    error: function (jqXHR, status, error) {
+                        if (jqXHR.status == '401') {
+                            alert('로그인 후 이용해주세요.');
+                            location.href = '/member/login';
+                        } else {
+                            //alert(jqXHR.responseText);
+                            console.log(jqXHR.responseText);
+                            location.href = document.referrer;
+                        }
+
                     }
+                });
+            }
+        </script>
 
-                }
-            });
-        }
-    </script>
-
-</th:block>
+    </th:block>
 
 </html>

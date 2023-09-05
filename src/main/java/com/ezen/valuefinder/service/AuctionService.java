@@ -174,6 +174,10 @@ public class AuctionService {
 
     }
 
+    public Page<Auction> getTodayViewAuctionList(List<Long> auctionNo, Pageable pageable) {
+        return auctionRepository.findByAuctionNoIn(auctionNo,pageable);
+    }
+
     public List<Auction> getItemAuctionList() {
         return auctionRepository.findAll();
     }
@@ -209,6 +213,7 @@ public class AuctionService {
         reverseBidding.setHopePrice(reverseAuctionFormDto.getHopePrice());
         reverseBidding.setReverseBiddingExpireDate(reverseAuctionFormDto.getReverseBiddingExpireDate());
         reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
+        reverseBidding.setReverseBiddingCount(0);
         reverseBidding.setReversebidAuctionStatus(ReversebidAuctionStatus.PROGRESS);
 
         Member member = memberRepository.findByEmail(email);
@@ -389,7 +394,7 @@ public class AuctionService {
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
 
-    public Page<MemberAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
+    public Page<MemberMyAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         return auctionRepository.findAuctionsByMemberId(memberId, pageable);
     }

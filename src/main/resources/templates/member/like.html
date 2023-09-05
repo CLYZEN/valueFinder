@@ -210,38 +210,37 @@ img {
 					</div>
 				</div>
 			</div>
-
-			<table class="table table-hover" th:each="wish:${wishList}"
-				style="border: 1px solid; margin: auto 0; text-align: center; margin-top: 50px;">
+<!--new-->
+			<table class="table table-bordered" th:each="wish : ${wishList}">
 				<caption th:if="${wish.auction.auctionType.toString()} == 'PUBLIC'" th:text="공개입찰경매"></caption>
 				<caption th:if="${wish.auction.auctionType.toString()} == 'SEALED'" th:text="비공개경매"></caption>
 				<caption th:if="${wish.auction.auctionType.toString()} == 'REALTIME'" th:text="실시간경매"></caption>
-				<thead>
-					<th style="border-right: 1px solid;">대표이미지</th>
-					<th style="border-right: 1px solid;">물품번호</th>
-					<th style="border-right: 1px solid;">물품명</th>
-					<th style="border-right: 1px solid;">시작가</th>
-					<th style="border-right: 1px solid;">현재가</th>
-					<th style="border-right: 1px solid;">입찰</th>
-					<th style="border-right: 1px solid;">시작일</th>
-					<th style="border-right: 1px solid;">마감일</th>
+				<thead class="table-light">
+				<tr style="text-align: center">
+					<th>대표이미지</th>
+					<th>물품번호</th>
+					<th>물품명</th>
+					<th>시작가</th>
+					<th>현재가</th>
+					<th>입찰횟수</th>
+					<th>경매기간</th>
+				</tr>
 				</thead>
 				<tbody>
-					<tr style="height: 100px; line-height: 100px;" th:onclick="'javascript:location.href=/auction/detail/'+${wish.auction.auctionNo}">
-						<td class=tdnum><img th:src="${wish.auction.item.itemImgList[0].itemImageUrl}"
-							class="tab-image"></td>
-						<td class=tdnum th:text="${wish.auction.auctionNo}">5</td>
-						<a th:href="'/auction/detail/'+${wish.auction.auctionNo}"><td class=tdnum th:text="${wish.auction.item.itemName}">바나나</td></a>
-						<td class=tdnum th:text="${wish.auction.auctionStartPrice}">1500원</td>
-						<td class=tdnum th:text="${wish.auction.auctionNowPrice}">2500원</td>
-						<td class=tdnum th:text="${wish.auction.biddingCount}">5</td>
-						<td class=tdnum th:text="${#temporals.format(wish.auction.auctionStartTime, 'MM/dd HH:mm')}">08/07 02:21</td>
-						<td class=tdnum th:text="${#temporals.format(wish.auction.auctionEndTime, 'MM/dd HH:mm')}">08/10 06:00</td>
-					</tr>
+				<td >
+					<img th:src="${wish.auction.item.itemImgList[0].itemImageUrl}" th:alt="${wish.auction.item.itemName}"/>
+				</td>
+				<td th:text="${wish.auction.auctionNo}"></td>
+				<td><a th:href="'/auction/detail/'+${wish.auction.auctionNo}">[[${wish.auction.item.itemName}]]</a></td>
+				<td th:text="${wish.auction.auctionStartPrice}">5</td>
+				<td th:text="${wish.auction.auctionNowPrice}">5</td>
+				<td th:text="${wish.auction.biddingCount}">5</td>
+				<th:block th:with="formattedTime=${#temporals.format(wish.auction.auctionStartTime, 'MM월 dd일 HH시 mm분') + ' ~ ' + #temporals.format(wish.auction.auctionEndTime, 'MM월 dd일 HH시 mm분')}">
+					<td th:text="${formattedTime}"></td>
+				</th:block>
 				</tbody>
 			</table>
-
-
+			<!--new-->
 
 			<!-- 페이징 버튼 -->
 			<div class="d-flex justify-content-center">

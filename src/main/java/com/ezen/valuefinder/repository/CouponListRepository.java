@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface CouponListRepository extends JpaRepository<CouponList, Long> {
     List<CouponList> findAll();
+
 }

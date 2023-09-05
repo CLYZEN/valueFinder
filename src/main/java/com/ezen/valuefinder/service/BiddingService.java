@@ -3,6 +3,7 @@ package com.ezen.valuefinder.service;
 import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.constant.BidStatus;
+import com.ezen.valuefinder.dto.BiddingCountsDTO;
 import com.ezen.valuefinder.entity.Auction;
 import com.ezen.valuefinder.entity.Bidding;
 import com.ezen.valuefinder.entity.Member;
@@ -135,5 +136,20 @@ public class BiddingService {
 
     public List<Bidding>getBiddingList(Pageable pageable, Auction auction){
     	return biddingRepository.findByAuctionOrderByBiddingPriceDesc(auction);
+    }
+
+    public BiddingCountsDTO getMypageCount(AuctionType auctionType,Member member) {
+        BiddingCountsDTO biddingCountsDTO = new BiddingCountsDTO();
+        Long maxBiddingCount = biddingRepository.getMaxBiddingCountForMemberAndAuctionStatus(member,auctionType);
+        Long biddingCount = biddingRepository.getBiddingInProgressCount(member,auctionType);
+        List<Bidding> biddingList = biddingRepository.getBiddingInProgress(member,auctionType);
+        List<Bidding> maxBiddingList = biddingRepository.getMaxBiddingsForMemberAndAuctionStatus(member,auctionType);
+
+        biddingCountsDTO.setCountBiddingInProgress(biddingCount);
+        biddingCountsDTO.setCountTopBidder(maxBiddingCount);
+        biddingCountsDTO.setBiddingInProgress(biddingList);
+        biddingCountsDTO.setTopBidder(maxBiddingList);
+
+        return biddingCountsDTO;
     }
 }

@@ -230,121 +230,58 @@
             </div>
 
             <div class="container"
-                 style="width: 100%; height: 1000px; border: 1px solid; margin-top: 5%;">
-                <div class="form-group row" style="margin-bottom: 5%;">
-                    <div class="col-md-123"
-                         style="margin-top: 5%; display: flex; justify-content: center">
-                        <label class="text-black">할인쿠폰 등록</label> <input type="text"
-                                                                         class="form-control"
-                                                                         placeholder="-제외 숫자만 입력해주세요">
-                        <button class="btn btn-primary" type="button"
-                                style="margin-left: 25px;">확인
-                        </button>
-                    </div>
-                </div>
+                 style="width: 100%;  margin-top: 5%;">
 
-                <div style="display: flex; justify-content: center;">
-                    <table class="table table-hover"
-                           style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-                        <tbody>
-                        <tr>
-                            <td style="border-right: 1px solid;">쿠폰번호</td>
-                            <td style="border-right: 1px solid;">쿠폰명</td>
-                            <td style="border-right: 1px solid; width: 10%">할인금액</td>
-                            <td style="border-right: 1px solid; width: 30%">쿠폰설명</td>
-                            <td style="border-right: 1px solid;">사용기한</td>
-                        </tr>
-                        <tr style="height: 100px; line-height: 100px;">
-                            <td class=tdnum>1qer-23sd-f1f3-cc32</td>
-                            <td class=tdnum>회원가입 감사쿠폰</td>
-                            <td class=tdnum style="width: 10%">2000</td>
-                            <td class=tdnum style="width: 30%">구매,판매 수수료 2000원 할인</td>
-                            <td class=tdnum>23/08/20</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <!-- NEW -->
+                <table class="table table-bordered" th:each="coupon : ${couponPage}">
+                    <thead class="table-light">
+                    <tr style="text-align: center">
+                        <th>쿠폰명</th>
+                        <th>등록일자</th>
+                        <th>유효기간</th>
+                        <th>쿠폰설명</th>
+                        <th>쿠폰할인율</th>
+                        <th>쿠폰사용여부</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <td th:text="${coupon.couponList.couponTitle}"></td>
+                    <td th:text="${coupon.couponRegistDate}"></td>
+                    <td th:text="|${coupon.couponList.startDate} ~ ${coupon.couponList.expireDate}|"></td>
+                    <td th:text="${coupon.couponList.couponDetail}">5</td>
+                    <td th:text="${coupon.couponList.couponDiscount}"></td>
+                    <td th:if="${coupon.couponUsedDate != null}" th:text="${coupon.couponUsedDate}"></td>
+                    <td th:if="${coupon.couponUsedDate == null}">미사용</td>
 
-                <div style="display: flex; justify-content: center;">
-                    <table class="table table-hover"
-                           style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-                        <tbody>
-                        <tr>
-                            <td style="border-right: 1px solid;">쿠폰번호</td>
-                            <td style="border-right: 1px solid;">쿠폰명</td>
-                            <td style="border-right: 1px solid; width: 10%">할인금액</td>
-                            <td style="border-right: 1px solid; width: 30%">쿠폰설명</td>
-                            <td style="border-right: 1px solid;">사용기한</td>
-                        </tr>
-                        <tr style="height: 100px; line-height: 100px;">
-                            <td class=tdnum>1qer-23sd-f1f3-cc32</td>
-                            <td class=tdnum>회원가입 감사쿠폰</td>
-                            <td class=tdnum style="width: 10%">2000</td>
-                            <td class=tdnum style="width: 30%">구매,판매 수수료 2000원 할인</td>
-                            <td class=tdnum>23/08/20</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div style="display: flex; justify-content: center;">
-                    <table class="table table-hover"
-                           style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center;">
-                        <tbody>
-                        <tr>
-                            <td style="border-right: 1px solid;">쿠폰번호</td>
-                            <td style="border-right: 1px solid;">쿠폰명</td>
-                            <td style="border-right: 1px solid; width: 10%">할인금액</td>
-                            <td style="border-right: 1px solid; width: 30%">쿠폰설명</td>
-                            <td style="border-right: 1px solid;">사용기한</td>
-                        </tr>
-                        <tr style="height: 100px; line-height: 100px;">
-                            <td class=tdnum>1qer-23sd-f1f3-cc32</td>
-                            <td class=tdnum>회원가입 감사쿠폰</td>
-                            <td class=tdnum style="width: 10%">2000</td>
-                            <td class=tdnum style="width: 30%">구매,판매 수수료 2000원 할인</td>
-                            <td class=tdnum>23/08/20</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <div style="display: flex; justify-content: center;">
-                    <table class="table table-hover"
-                           style="border: 1px solid; margin: auto 0; margin-top: 20px; text-align: center; margin-bottom: 3%;">
-                        <tbody>
-                        <tr>
-                            <td style="border-right: 1px solid;">쿠폰번호</td>
-                            <td style="border-right: 1px solid;">쿠폰명</td>
-                            <td style="border-right: 1px solid; width: 10%">할인금액</td>
-                            <td style="border-right: 1px solid; width: 30%">쿠폰설명</td>
-                            <td style="border-right: 1px solid;">사용기한</td>
-                        </tr>
-                        <tr style="height: 100px; line-height: 100px;">
-                            <td class=tdnum>1qer-23sd-f1f3-cc32</td>
-                            <td class=tdnum>회원가입 감사쿠폰</td>
-                            <td class=tdnum style="width: 10%">2000</td>
-                            <td class=tdnum style="width: 30%">구매,판매 수수료 2000원 할인</td>
-                            <td class=tdnum>23/08/20</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                    </tbody>
+                </table>
+                <!--NEW -->
 
             </div>
             <!-- 페이징 버튼 -->
             <div class="d-flex justify-content-center" style="margin-top:1%;">
-                <nav aria-label="Page navigation example">
-                    <ul class="pagination">
-                        <li class="page-item"><a class="page-link" href="#"
-                                                 aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
-                        </a></li>
-                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                        <li class="page-item"><a class="page-link" href="#">2</a></li>
-                        <li class="page-item"><a class="page-link" href="#">3</a></li>
-                        <li class="page-item"><a class="page-link" href="#"
-                                                 aria-label="Next"> <span aria-hidden="true">&raquo;</span>
-                        </a></li>
+                <nav
+                        th:with="start=${(couponPage.number/maxPage)*maxPage + 1}
+			                 ,end=(${(couponPage.totalPages == 0) ? 1 : (start + (maxPage - 1) < couponPage.totalPages ? start + (maxPage - 1) : couponPage.totalPages)})"
+                        aria-label="Page navigation example">
+                    <ul class="pagination d-flex justify-content-center">
+                        <li class="page-item" th:classappend="${couponPage.first}?'disabled'">
+                            <a class="page-link"
+                               th:href="@{'/member/mypage/coupon/' +  ${couponPage.number - 1}}">이전</a>
+                        </li>
+
+                        <li class="page-item"
+                            th:each="page: ${#numbers.sequence(start, end)}"
+                            th:classappend="${couponPage.number eq page - 1}?'active':''">
+                            <a
+                                    class="page-link" th:inline="text"
+                                    th:href="@{'/member/mypage/coupon/' + ${page - 1}}">[[${page}]]</a>
+                        </li>
+
+                        <li class="page-item" th:classappend="${couponPage.last}?'disabled'">
+                            <a class="page-link"
+                               th:href="@{'/member/mypage/coupon/' +  ${couponPage.number + 1}}">다음</a>
+                        </li>
                     </ul>
                 </nav>
             </div>

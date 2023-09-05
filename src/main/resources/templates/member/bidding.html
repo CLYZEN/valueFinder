@@ -69,8 +69,27 @@
 			border-bottom: 0;
 		}
 
-		img {
+		.swiper {
+			margin-top: 20px;
 			height: 140px;
+			width: 80%;
+
+		}
+
+		.swiper-slide {
+			text-align: center;
+			font-size: 18px;
+			background: #fff;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.swiper-slide img {
+			display: block;
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
 		}
 	</style>
 </th:block>
@@ -180,20 +199,25 @@
 					<div class="row row-cols-2" style="width:20%; float: left; margin-top: 20px; ">
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">입찰중</div>
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">최고입찰중</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${publicBidCount.countBiddingInProgress}">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${publicBidCount.countTopBidder}">5</div>
+					</div>
+					<div class="swiper mySwiper">
+						<div class="swiper-wrapper">
+							<th:block th:each="bidding : ${publicBidCount.biddingInProgress}">
+								<div class="swiper-slide"><img th:each = "item : ${bidding.auction.item.itemImgList}"
+															   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+							</th:block>
+							<th:block th:each="topBidding : ${publicBidCount.topBidder}">
+								<div class="swiper-slide"><img th:each = "item : ${topBidding.auction.item.itemImgList}"
+															   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+							</th:block>
+						</div>
+						<div class="swiper-pagination"></div>
 					</div>
 				</div>
 
-				<div
-					style="border: 1px solid; width: 65%; height: 140px; float: left; margin-left: 10%; margin-top: 20px;">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
 
-				</div>
 			</div>
 
 			<div class="container" style="width: 100%; height: 250px;">
@@ -202,19 +226,28 @@
 					<div class="row row-cols-2" style="width:20%; float: left; margin-top: 20px; ">
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">입찰중</div>
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">최고입찰중</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${sealedBidCount.countBiddingInProgress}">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${sealedBidCount.countBiddingInProgress}">5</div>
+
+					</div>
+					<div class="swiper mySwiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-wrapper">
+								<th:block th:each="bidding : ${sealedBidCount.biddingInProgress}">
+									<div class="swiper-slide"><img th:each = "item : ${bidding.auction.item.itemImgList}"
+																   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+								</th:block>
+								<th:block th:each="topBidding : ${sealedBidCount.topBidder}">
+									<div class="swiper-slide"><img th:each = "item : ${topBidding.auction.item.itemImgList}"
+																   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+								</th:block>
+							</div>
+						</div>
+						<div class="swiper-pagination"></div>
 					</div>
 				</div>
 
-				<div
-					style="border: 1px solid; width: 65%; height: 140px; float: left; margin-left: 10%; margin-top: 20px;">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-				</div>
+
 			</div>
 
 
@@ -224,18 +257,22 @@
 					<div class="row row-cols-2" style="width:20%; float: left; margin-top: 20px; ">
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">입찰중</div>
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">최고입찰중</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
-						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${realtimeBidCount.countBiddingInProgress}">5</div>
+						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;" th:text="${realtimeBidCount.countTopBidder}">5</div>
 					</div>
-				</div>
-
-				<div
-					style="border: 1px solid; width: 65%; height: 140px; float: left; margin-left: 10%; margin-top: 20px;">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
+					<div class="swiper mySwiper">
+						<div class="swiper-wrapper">
+							<th:block th:each="bidding : ${realtimeBidCount.biddingInProgress}">
+								<div class="swiper-slide"><img th:each = "item : ${bidding.auction.item.itemImgList}"
+															   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+							</th:block>
+							<th:block th:each="topBidding : ${realtimeBidCount.topBidder}">
+								<div class="swiper-slide"><img th:each = "item : ${topBidding.auction.item.itemImgList}"
+															   th:src="${item.itemImageUrl}" th:alt="${item.itemOriImageName}"></div>
+							</th:block>
+						</div>
+						<div class="swiper-pagination"></div>
+					</div>
 				</div>
 			</div>
 
@@ -247,17 +284,24 @@
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">진행중 경매</div>
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
 						<div class="col" style="border: 1px solid; height: 70px; line-height: 70px;">5</div>
+
+					</div>
+					<div class="swiper mySwiper">
+						<div class="swiper-wrapper">
+							<div class="swiper-slide">Slide 1</div>
+							<div class="swiper-slide">Slide 2</div>
+							<div class="swiper-slide">Slide 3</div>
+							<div class="swiper-slide">Slide 4</div>
+							<div class="swiper-slide">Slide 5</div>
+							<div class="swiper-slide">Slide 6</div>
+							<div class="swiper-slide">Slide 7</div>
+							<div class="swiper-slide">Slide 8</div>
+							<div class="swiper-slide">Slide 9</div>
+						</div>
+						<div class="swiper-pagination"></div>
 					</div>
 				</div>
 
-				<div
-					style="border: 1px solid; width: 65%; height: 140px; float: left; margin-left: 10%; margin-top: 20px;">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-					<img src="/images/thumb-bananas.png" class="tab-image">
-				</div>
 			</div>
 
 
@@ -285,7 +329,17 @@
 </div>
 
 <th:block layout:fragment="script">
-	<script>
+	<!-- Swiper JS -->
+	<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+	<script th:inline="javascript">
+		var swiper = new Swiper(".mySwiper", {
+			slidesPerView: 3,
+			spaceBetween: 30,
+			pagination: {
+				el: ".swiper-pagination",
+				clickable: true,
+			},
+		});
 		$(document).ready(function () {
 			var currentPosition = parseInt($(".quickmenu").css("top"));
 			$(window).scroll(function () {

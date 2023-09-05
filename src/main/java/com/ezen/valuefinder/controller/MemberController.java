@@ -1,14 +1,18 @@
 package com.ezen.valuefinder.controller;
 
 import com.ezen.valuefinder.config.PrincipalDetails;
+import com.ezen.valuefinder.constant.AuctionType;
 import com.ezen.valuefinder.constant.BidStatus;
 import com.ezen.valuefinder.dto.*;
 import com.ezen.valuefinder.entity.*;
 import com.ezen.valuefinder.repository.BiddingRepository;
+import com.ezen.valuefinder.repository.CouponRepository;
 import com.ezen.valuefinder.service.AuctionQueryService;
 import com.ezen.valuefinder.service.AuctionService;
 import com.ezen.valuefinder.service.BiddingService;
 import com.ezen.valuefinder.service.MemberService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -19,20 +23,21 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.io.Console;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -43,6 +48,8 @@ public class MemberController {
 	private final AuctionService auctionService;
 	private final BiddingService biddingService;
 	private final AuctionQueryService auctionQueryService;
+	private final CouponRepository couponRepository;
+
 	 @GetMapping(value = "/member/login")
 	 public String login() {
 	 	return "member/login";
@@ -130,6 +137,14 @@ public class MemberController {
 	 @GetMapping(value ="member/mypage/bidding")
 	 public String bidding(Authentication authentication, Model model) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+
+		 BiddingCountsDTO publicBidCount = biddingService.getMypageCount(AuctionType.PUBLIC,principalDetails.getMember());
+		 BiddingCountsDTO sealedBidCount =  biddingService.getMypageCount(AuctionType.SEALED,principalDetails.getMember());
+		 BiddingCountsDTO realtimeBidCount = biddingService.getMypageCount(AuctionType.REALTIME,principalDetails.getMember());
+
+		 model.addAttribute("realtimeBidCount",realtimeBidCount);
+		 model.addAttribute("sealedBidCount",sealedBidCount);
+		 model.addAttribute("publicBidCount",publicBidCount);
 		 Member member = principalDetails.getMember();
 		 model.addAttribute("member",member);
 		 return "member/bidding";
@@ -141,6 +156,11 @@ public class MemberController {
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		 Member member = principalDetails.getMember();
 		 Page<SuccessBidding> successBiddingList = biddingService.getMemberSuccessBiddingList(member,pageable);
+
+		 for(SuccessBidding successBidding : successBiddingList) {
+			 biddingService.chkStatus(successBidding.getAuction());
+		 }
+
 		 model.addAttribute("reviewFormDto", new ReviewFormDto());
 		 model.addAttribute("successBiddingList",successBiddingList);
 		 model.addAttribute("maxPage",5);
@@ -153,7 +173,15 @@ public class MemberController {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
 		 Member member = principalDetails.getMember();
-		 Page<MemberAuctionDto> auctionList = auctionService.getMemberAuctionList(member.getMemberId(),pageable);
+		 Page<MemberMyAuctionDto> auctionList = auctionService.getMemberAuctionList(member.getMemberId(),pageable);
+		 List<Auction> auctions = new ArrayList<>();
+		 for(MemberMyAuctionDto dto : auctionList.getContent()) {
+			 auctions.add(auctionService.getAuction(dto.getAuctionNo()));
+		 }
+		 for(Auction auction : auctions) {
+			 biddingService.chkStatus(auction);
+		 }
+
 		 model.addAttribute("auctionList",auctionList);
 		 model.addAttribute("maxPage", 5);
 		 model.addAttribute("member",member);
@@ -184,8 +212,40 @@ public class MemberController {
 		 }
 	 }
 
-	 @GetMapping(value = "member/mypage/todayview")
-	 public String todayViewAuction() {
+	 @GetMapping(value = {"member/mypage/todayview","member/mypage/todayview/{page}"})
+	 public String todayViewAuction(HttpServletRequest request,Model model,Authentication authentication, @PathVariable("page") Optional<Integer> page) {
+		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		 Member member = principalDetails.getMember();
+
+		 String cookieName = "auctionNoCookie";
+		 // 쿠키에서 기존 auctionNo 가져오기
+		 String existingAuctionNos = null;
+		 Cookie[] cookies = request.getCookies();
+		 if (cookies != null) {
+			 for (Cookie cookie : cookies) {
+				 if (cookie.getName().equals(cookieName)) {
+					 existingAuctionNos = cookie.getValue();
+					 break;
+				 }
+			 }
+		 }
+
+		 // 쿠키에서 가져온 문자열을 '/'로 나누어 배열로 변환
+		 String[] auctionNosArray = existingAuctionNos != null ? existingAuctionNos.split("/") : new String[0];
+		 List<Long> auctionNoList = Arrays.stream(auctionNosArray)
+				 .map(Long::parseLong)
+				 .collect(Collectors.toList());
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+
+		Page<Auction> auctionList = auctionService.getTodayViewAuctionList(auctionNoList,pageable);
+
+		for(Auction auction : auctionList) {
+			biddingService.chkStatus(auction);
+		}
+
+		model.addAttribute("maxPage",5);
+		model.addAttribute("member",member);
+		model.addAttribute("auctionList",auctionList);
 		 return "member/todayviewauction";
 	 }
 
@@ -193,10 +253,37 @@ public class MemberController {
 	 public String changepwd(Model model, Authentication authentication) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
+		 model.addAttribute("modifyPasswordDto",new ModifyPasswordDto());
 		 model.addAttribute("member",member);
 		 return "member/changepwd";
 	 }
-	 
+
+	@PostMapping(value ="member/mypage/modify/password")
+	public String changepwd(Model model, Authentication authentication,@Valid ModifyPasswordDto modifyPasswordDto,BindingResult bindingResult) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+		Member member = principalDetails.getMember();
+		boolean passwordResult = passwordEncoder.matches(modifyPasswordDto.getNowPassword(),member.getPassword());
+
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("member",member);
+			return "member/changePwd";
+		}
+
+		if (!modifyPasswordDto.getUpdatePassword().equals(modifyPasswordDto.getConfirmPassword())) {
+			model.addAttribute("errorMessage","비밀번호가 같지 않습니다.");
+			model.addAttribute("modifyPasswordDto",new ModifyPasswordDto());
+			model.addAttribute("member",member);
+			return "member/changePwd";
+		} else if (!passwordResult) {
+			model.addAttribute("errorMessage","현재 비밀번호가 다릅니다.");
+			model.addAttribute("modifyPasswordDto",new ModifyPasswordDto());
+			model.addAttribute("member",member);
+			return "member/changePwd";
+		}
+		memberService.updatePwd(modifyPasswordDto.getUpdatePassword(),principalDetails.getUsername(),passwordEncoder);
+		return "redirect:/";
+	}
+
 	 @GetMapping(value ="member/mypage/outmember")
 	 public String outmember(Model model, Authentication authentication) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
@@ -214,9 +301,14 @@ public class MemberController {
 	 }
 	 
 	 @GetMapping(value ="member/mypage/coupon")
-	 public String coupon(Model model,Authentication authentication) {
+	 public String coupon(Model model,Authentication authentication,@PathVariable("page") Optional<Integer> page) {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Member member = principalDetails.getMember();
+		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 4);
+
+		 Page<Coupon> couponPage = couponRepository.findByMember(member,pageable);
+		 model.addAttribute("maxPage",5);
+		 model.addAttribute("couponPage",couponPage);
 		 model.addAttribute("member",member);
 		 return "member/coupon";
 	 }
@@ -226,6 +318,10 @@ public class MemberController {
 		 PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
 		 Page<AuctionQuery> auctionQueryList = auctionQueryService.getAuctionQueryPage(pageable,principalDetails.getMember());
+
+		 for (AuctionQuery auctionQuery : auctionQueryList) {
+			 biddingService.chkStatus(auctionQuery.getAuction());
+		 }
 		 Member member = principalDetails.getMember();
 		 model.addAttribute("auctionQueryList",auctionQueryList);
 		 model.addAttribute("member",member);
@@ -242,7 +338,9 @@ public class MemberController {
 		 Member member = principalDetails.getMember();
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
 		Page<AuctionQuery> auctionQueryList = auctionQueryService.getReceiveQueryPage(pageable,member);
-
+		 for (AuctionQuery auctionQuery : auctionQueryList) {
+			 biddingService.chkStatus(auctionQuery.getAuction());
+		 }
 		model.addAttribute("auctionQueryList", auctionQueryList);
 		 model.addAttribute("member",member);
 		 model.addAttribute("maxPage",5);
@@ -256,6 +354,11 @@ public class MemberController {
 		 Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 5);
 
 		 Page<Wish> wishList = memberService.getMemberWishList(member,pageable);
+
+		 for(Wish wish : wishList) {
+			 biddingService.chkStatus(wish.getAuction());
+		 }
+
 		 model.addAttribute("wishList", wishList);
 		 model.addAttribute("maxPage",5);
 		 model.addAttribute("member",member);
@@ -298,7 +401,9 @@ public class MemberController {
 			 model.addAttribute("errorMessage","아이디 또는 비밀번호가 틀렸습니다.");
 			 return "member/repairmember";
 		 }
+		memberService.deleteMemberOut(member);
 		 memberService.repairMember(email);
+
 		 return "redirect:/member/login";
 	}
 

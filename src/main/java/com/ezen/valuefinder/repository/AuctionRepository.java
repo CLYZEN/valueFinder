@@ -1,5 +1,6 @@
 package com.ezen.valuefinder.repository;
 
+import com.ezen.valuefinder.dto.MemberMyAuctionDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,8 +39,15 @@ public interface AuctionRepository extends JpaRepository<Auction,Long> {
 
 	Page<Auction> findAllByOrderByRegTime(Pageable pageable);
 
-	@Query("SELECT new com.ezen.valuefinder.dto.MemberAuctionDto(a.auctionNo, a.item, a.auctionType, a.auctionStartPrice, a.auctionNowPrice, a.auctionStartTime, a.auctionEndTime, a.auctionStatus, a.auctionCount, a.remainingTime, a.biddingCount, sb.successBiddingNo, sb.member, sb.bidStatus, sb.shippingNo) " +
-			"FROM Auction a LEFT JOIN FETCH SuccessBidding sb ON a = sb.auction WHERE sb.member.memberId = :memberId")
-	Page<MemberAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+	@Query(value = "SELECT DISTINCT a.auction_no as auctionNo, a.auction_type as auctionType, a.auction_start_price as auctionStartPrice, a.auction_now_price as auctionNowPrice, a.bidding_count as biddingCount, a.auction_end_time as auctionEndTime, i.item_name as itemName, sb.bid_status as bidStatus, ii.item_image_url as itemImageUrl,sb.success_bidding_no as successBiddingNo" +
+			"	FROM auction a" +
+			"         INNER JOIN item i ON a.item_no = i.item_no" +
+			"         INNER JOIN member m ON i.member_id = m.member_id" +
+			"         LEFT JOIN success_bidding sb ON a.auction_no = sb.auction_no" +
+			"         LEFT JOIN item_img ii ON i.item_no = ii.item_no" +
+			"	WHERE i.member_id = :memberId" +
+			"  AND ii.rep_image_yn = true",nativeQuery = true)
+	Page<MemberMyAuctionDto> findAuctionsByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
+	Page<Auction> findByAuctionNoIn(List<Long> auctionNo,Pageable pageable);
 }

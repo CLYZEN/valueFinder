@@ -8,6 +8,8 @@ import com.ezen.valuefinder.entity.Member;
 import com.ezen.valuefinder.repository.CouponListRepository;
 import com.ezen.valuefinder.repository.CouponRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,5 +49,9 @@ public class CouponService {
         coupon.setCouponRegistDate(LocalDateTime.now());
 
         couponRepository.save(coupon);
+    }
+
+    public Page<Coupon> getMemberCouponPage(Member member, Pageable pageable) {
+        return couponRepository.findByMember(member,pageable);
     }
 }

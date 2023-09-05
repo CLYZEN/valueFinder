@@ -22,7 +22,7 @@ import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
-public class    MainController {
+public class MainController {
 
     private final CouponService couponService;
     private final AuctionService auctionService;

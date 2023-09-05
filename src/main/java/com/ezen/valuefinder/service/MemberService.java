@@ -158,4 +158,10 @@ public class MemberService implements UserDetailsService {
     public List<MemberReport> getMemberReportList() {
         return memberReportRepository.findAll();
     }
+
+    public void deleteMemberOut(Member member) {
+        MemberOut dropMember = memberOutRepository.findByMember(member);
+
+        memberOutRepository.delete(dropMember);
+    }
 }
