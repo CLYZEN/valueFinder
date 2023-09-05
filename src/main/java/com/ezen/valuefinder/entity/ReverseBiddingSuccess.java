@@ -2,7 +2,13 @@ package com.ezen.valuefinder.entity;
 
 import com.ezen.valuefinder.constant.BidStatus;
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@ToString
 @Entity
 @Table(name = "reverse_bidding_success")
 public class ReverseBiddingSuccess extends BaseEntity {

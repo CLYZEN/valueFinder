@@ -8,6 +8,8 @@ import lombok.ToString;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.ezen.valuefinder.dto.ItemImgDto;
+
 @Entity
 @Table(name = "item")
 @Getter
@@ -41,5 +43,8 @@ public class Item extends BaseEntity {
 
     @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ItemImg> itemImgList = new ArrayList<>();
+
+	public void setItemImgList(List<ItemImgDto> itemImgList) {
+	}
     
 }
