@@ -14,7 +14,7 @@ public class ReverseBiddingSuccess extends BaseEntity {
     @JoinColumn(name = "reverse_bidding_no")
     private ReverseBidding reverseBidding; // 역경매
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 
