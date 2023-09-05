@@ -106,12 +106,5 @@ public class Member extends BaseEntity {
     public void updatePassword(String password,PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }
-    /* ???
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<MemberOut> memberOuts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Coupon> couponts = new ArrayList<>();
-
-     */
 }

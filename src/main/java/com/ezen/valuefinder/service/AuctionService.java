@@ -60,6 +60,10 @@ public class AuctionService {
     public List<Category> getCategoryList() {
         return categoryRepository.findAll();
     }
+    
+    public Auction findById(Long id) {
+    	return auctionRepository.findById(id).orElseThrow();
+    }
 
     public Long createAuction(NormalAuctionFormDto normalAuctionFormDto, List<MultipartFile> itemImgFiles, String email) throws Exception {
         Category category;
@@ -142,11 +146,11 @@ public class AuctionService {
 
 
         if (auctionQueryDto.getAuctionQueryDistinction() == 1) {
-            auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
-        } else if (auctionQueryDto.getAuctionQueryDistinction() == 2) {
             auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ITEM);
-        } else if (auctionQueryDto.getAuctionQueryDistinction() == 3) {
+        } else if (auctionQueryDto.getAuctionQueryDistinction() == 2) {
             auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.SHIPPING);
+        } else if (auctionQueryDto.getAuctionQueryDistinction() == 3) {
+            auctionQuery.setAuctionQueryDistinction(AuctionQueryDistinction.ETC);
         }
 
         auctionQueryRepository.save(auctionQuery);
@@ -384,14 +388,17 @@ public class AuctionService {
         }
         return auctionRepository.findByAuctionTypeOrderByAuctionEndTimeDesc(auctionType, pageable);
     }
+
     public Page<MemberAuctionDto> getMemberAuctionList(Long memberId, Pageable pageable) {
         Member member = memberRepository.findById(memberId).orElseThrow();
         return auctionRepository.findAuctionsByMemberId(memberId, pageable);
     }
-
-    public List<Auction> getDetailPageAuctionList(Member member) {
-        return auctionRepository.findByItemMemberOrderByAuctionEndTimeDesc(member);
+    
+    public Page<Auction> getDetailPageAuctionList(Member member, Pageable pageable) {
+        return auctionRepository.findByItemMemberOrderByAuctionEndTimeDesc(member, pageable);
     }
+
+
 
     public Page<Auction> getSearchList(Pageable pageable,Long categoryCode) {
         if(categoryCode==0) {
@@ -453,4 +460,3 @@ public class AuctionService {
 
     }
 }
-

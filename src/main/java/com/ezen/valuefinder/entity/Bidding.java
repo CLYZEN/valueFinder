@@ -7,6 +7,8 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+import com.ezen.valuefinder.constant.BidStatus;
+
 @Entity
 @Table(name = "bidding")
 @ToString
@@ -30,4 +32,8 @@ public class Bidding extends BaseEntity {
 
     @Column(nullable = false)
     private LocalDateTime biddingTime; // 입찰시간
+    
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private BidStatus bidStatus;
 }
