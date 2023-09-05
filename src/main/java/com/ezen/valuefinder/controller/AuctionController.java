@@ -326,9 +326,24 @@ public class AuctionController {
 		return "/auction/query/query";
 	}	
 	
-
 	//참가등록 디테일 페이지
-  @GetMapping(value = "/auction/reversebid/enter/{reverseBiddingJoinNo}")
+	  @GetMapping(value = "/auction/reversebid/enter/details/{reverseBiddingJoinNo}")
+	    public String enterDetails(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo) {
+	        
+		  try {
+			
+			  ReversebidEnterDto reversebidEnterDto = reversebidService.getReversebidDtl(reverseBiddingJoinNo);
+			  model.addAttribute("reversebidEnterDto", reversebidEnterDto);
+		} catch (Exception e) {
+			  model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+			  return "/auction/enter/enter";
+		}
+	    	
+	    	return "/auction/enter/enter";
+	    }
+	  
+	//참가등록 디테일 페이지
+  @GetMapping(value = "/auction/reversebid/enter/enterModifyForm/{reverseBiddingJoinNo}")
     public String enterDetail(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo) {
         
 	  try {
@@ -343,14 +358,12 @@ public class AuctionController {
     	return "/auction/enter/enterModifyForm";
     }
   
-  @PostMapping(value = "/auction/reversebid/enter/{reverseBiddingJoinNo}")
+  @PostMapping(value = "/auction/reversebid/enter/enterModifyForm/{reverseBiddingJoinNo}")
 	public String enterDetail(@Valid ReversebidEnterDto reversebidEnterDto, Model model,BindingResult bindingResult, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo
 			,@RequestParam("image") List<MultipartFile> itemImgFiles,Authentication authentication ) {
 
 		
 	  ReversebidEnterDto reversebidEnterDtod = reversebidService.getReversebidDtl(reverseBiddingJoinNo);
-	  PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-      Member member = principalDetails.getMember();	
 	  
 	  if (bindingResult.hasErrors()) {
 			return "auction/enter/enterModifyForm";

@@ -54,15 +54,38 @@ public class ReversebidService {
     public Long updateReverseBiddingJoin(ReversebidEnterDto reversebidEnterDto, List<MultipartFile> itemImgFiles) throws Exception {
 	
         ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reversebidEnterDto.getReverseBiddingJoinNo()).orElseThrow(EntityNotFoundException::new);       
-        // 엔티티를 업데이트합니다.
-        reverseBiddingJoin.updateReverseBiddingJoin(reversebidEnterDto);
-        // 변경된 엔티티를 저장합니다.
-        reverseBiddingJoinRepository.save(reverseBiddingJoin);      
+       
+        Item reversebidItem = reverseBiddingJoin.getItem();
+        reversebidItem.setItemDetail(reversebidEnterDto.getItemDetail());
+        reversebidItem.setItemName(reversebidEnterDto.getItemName());
+        
+        Long itemImgNo = reversebidItem.getItemNo();
         
         
+        for (int i = 0; i < itemImgFiles.size(); i++) {
+
+            ItemImg itemImg = new ItemImg();
+            itemImg.saveItem(reversebidItem);
+            
+            List<ItemImg> itemImg2 = itemImgRepository.findByItemItemNo(itemImgNo);
+         
+           
+            
+            itemImgService.updateItemImg(itemImg2.get(i), itemImgFiles.get(i));
+            
+            if (i == 0) {
+                itemImg.setRepImageYn(true);
+            } else {
+                itemImg.setRepImageYn(false);
+            }
+
+        }
+        
+        reverseBiddingJoin.setSuggestPrice(reversebidEnterDto.getSuggestPrice());
+        reverseBiddingJoin.setItem(reversebidItem);
+         
         return reverseBiddingJoin.getReverseBiddingJoinNo();
     }
-    
     
 
     

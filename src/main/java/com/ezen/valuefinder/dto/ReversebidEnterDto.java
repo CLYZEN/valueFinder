@@ -15,7 +15,6 @@ import com.ezen.valuefinder.entity.ReverseBiddingJoin;
 @Getter
 @Setter
 public class ReversebidEnterDto {
-    private List<ItemImgDto> itemImgDtoList;
 
     
     private Long reverseBiddingJoinNo;
@@ -30,9 +29,11 @@ public class ReversebidEnterDto {
     
     private String email; // 이메일(아이디)
     
-    private ReverseBiddingJoin reverseBiddingJoin;
-    private Member member;    
-    private Item item;
+	// 상품 이미지 정보를 저장
+	private List<ItemImgDto> itemImgDtoList = new ArrayList<>();
+	
+	// 상품 이미지에 아이디를 저장 -> 수정시에 이미지 아이디들을 담아둘 용도
+	private List<Long> itemImgIds = new ArrayList<>();
     
     
     private static ModelMapper modelMapper = new ModelMapper();
