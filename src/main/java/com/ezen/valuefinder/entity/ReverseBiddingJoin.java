@@ -37,6 +37,7 @@ public class ReverseBiddingJoin extends BaseEntity {
     	this.item.setItemImgList(reversebidEnterDto.getItemImgDtoList());
     	this.item.setItemDetail(reversebidEnterDto.getItemDetail());
     	this.item.setItemName(reversebidEnterDto.getItemName());
+    	this.item.setItemImgList(reversebidEnterDto.getItemImgDtoList());
     }
 
 

@@ -53,34 +53,18 @@ public class ReversebidService {
     @Transactional
     public Long updateReverseBiddingJoin(ReversebidEnterDto reversebidEnterDto, List<MultipartFile> itemImgFiles) throws Exception {
 	
-        ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reversebidEnterDto.getReverseBiddingJoinNo()).orElseThrow(EntityNotFoundException::new);
-        
+        ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reversebidEnterDto.getReverseBiddingJoinNo()).orElseThrow(EntityNotFoundException::new);       
         // 엔티티를 업데이트합니다.
         reverseBiddingJoin.updateReverseBiddingJoin(reversebidEnterDto);
-
         // 변경된 엔티티를 저장합니다.
-        reverseBiddingJoinRepository.save(reverseBiddingJoin);
-
+        reverseBiddingJoinRepository.save(reverseBiddingJoin);      
         
-        Item item = itemRepository.findById(reversebidEnterDto.getItem().getItemNo())
-				  .orElseThrow(EntityNotFoundException::new);
-        
-        for (int i = 0; i < itemImgFiles.size(); i++) {
-
-            ItemImg itemImg = new ItemImg();
-            itemImg.saveItem(item);
-
-            if (i == 0) {
-                itemImg.setRepImageYn(true);
-            } else {
-                itemImg.setRepImageYn(false);
-            }
-
-            itemImgService.saveItemImg(itemImg, itemImgFiles.get(i));
-        }
         
         return reverseBiddingJoin.getReverseBiddingJoinNo();
     }
+    
+    
+
     
     
     public void saveReversebidEnter(ReversebidEnterDto reversebidEnterDto, Member member, Long bidno, List<MultipartFile> itemImgFiles) throws Exception {
@@ -88,14 +72,11 @@ public class ReversebidService {
 
         Item item = new Item();
         item.setMember(member);
-        item.setItemDetail(reversebidEnterDto.getDetail());
-        item.setItemName(reversebidEnterDto.getTitle());
         item.setCategory(reverseBidding.getCategory());
         itemRepository.save(item);
 
         ReverseBiddingJoin reverseBiddingJoin = new ReverseBiddingJoin();
         reverseBiddingJoin.setMember(member);
-        reverseBiddingJoin.setSuggestPrice(reversebidEnterDto.getPrice());
         reverseBiddingJoin.setReverseBidding(reverseBidding);
         reverseBiddingJoin.setItem(item);
 

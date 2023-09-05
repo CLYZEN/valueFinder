@@ -97,6 +97,8 @@
 				<label class="col-sm-2">금액</label>
 				<div class="col-sm-3" th:text=${reversebidEnterDto.suggestPrice}>
 					<input type="text"  class="form-control" />
+				<div class="col-sm-3" >
+					<input type="text"  class="form-control" th:value=${bid.suggestPrice} name ="suggestPrice">
 				</div>
 			</div>
 
@@ -177,6 +179,7 @@
       
       function beforeSubmit() {
 			const f = document.reversebidEnter;
+			const f = document.enterForm;
 
 			f.submit();
 		}

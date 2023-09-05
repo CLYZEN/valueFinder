@@ -3,11 +3,18 @@
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> f4a29719052e92a7e79485df64a004aafeaaac64
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
+<<<<<<< HEAD
+=======
+
+>>>>>>> f4a29719052e92a7e79485df64a004aafeaaac64
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 	<style>
@@ -489,6 +496,46 @@ table {
 	            }
 	        });
 	    }
+	 
+	 function pushReverse(heartIcon) {
+		 /*
+		  색있는 하트: <i class="fa-solid fa-heart"></i>
+          빈 하트: <i class="fa-regular fa-heart"></i>
+		 */
+        var memberId = heartIcon.getAttribute('data-memberid');
+        var reverseBiddingNo = heartIcon.getAttribute('data-reversebiddingno');
+        var token = $("meta[name='_csrf']").attr("content");
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var url =  "/addReverseBidding"; //삼항연산자
+        var method = "POST";
+        var bidStatus = "PENDING";
+
+        
+        $.ajax({
+            url: url,
+            type: method,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader(header, token);
+            },
+            data: JSON.stringify({ reverseBiddingNo: reverseBiddingNo }),
+            contentType: "application/json",
+            success: function(result) {
+                // 요청 성공 처리
+                console.log("낙찰 성공");
+                // 찜 상태 토글
+                window.location.reload(true);
+            },
+            error: function(jqXHR, status, error) {
+                // 오류 처리
+                console.log(jqXHR.responseText);
+                alert("에러가 발생했습니다. 다시 시도해 주세요.");
+               
+            }
+        });
+        
+    }
+	 
+	
 	 
 	 
 	 function pushReverse(heartIcon) {

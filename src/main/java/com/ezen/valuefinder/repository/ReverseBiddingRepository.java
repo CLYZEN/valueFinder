@@ -15,6 +15,7 @@ public interface ReverseBiddingRepository extends JpaRepository<ReverseBidding,L
 	int reverseBiddingCount(Long id);
 
 
+
     Page<ReverseBidding> findAllByOrderByReverseBiddingExpireDate(Pageable pageable);
     
     Page<ReverseBidding> findByCategoryOrderByReverseBiddingExpireDate(Pageable pageable, Category category);
