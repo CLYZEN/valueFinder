@@ -950,36 +950,37 @@ table {
 	    resultElement.value = number;
 	}
 	
-var remainingTimeElement = document.getElementById("remainTime");
-var countdownInterval;
+	 var remainingTimeElement = document.getElementById("remainTime");
+     var countdownInterval;
 
-var durationText = remainingTimeElement.textContent.trim();
-var regex = /[^0-9]/g;
+     var durationText = remainingTimeElement.textContent.trim();
+     var regex = /[^0-9]/g;
 
-var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
-var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
-var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
-var Time = (hours * 3600) + (minutes * 60) + seconds;
+     var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+     var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+     var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+     var Time = (hours * 3600) + (minutes * 60) + seconds;
 
-var updateTime = setInterval(function() {
-    hours = parseInt(Time/3600);
-    minutes = parseInt((Time%3600) / 60);
-    seconds = Time%60;
+     var updateTime = setInterval(function() {
+         hours = parseInt(Time/3600);
+         minutes = parseInt((Time%3600) / 60);
+         seconds = Time%60;
 
-    console.log([[${auction.remainingTime}]]);
-    Time--;
-    
-    if([[${auction.remainingTime}]] === 'STRING') {
-        document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
-        clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
-      if(Time < 0) {
-        clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
-        document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
-      }
-    } else if(Time > 0){
-        document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
-    } 
-}, 1000);
+         Time--;
+        
+     countdownInterval = setInterval(updateTime, 10000);
+        if([[${auction.remainingTime}]] === '대기중인 경매') {
+             document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
+             return;
+             clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+         } else if([[${auction.remainingTime}]] === '종료된 경매') {
+             document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
+             return;
+             clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+         } else if(Time > 0){
+             document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+         } 
+     }, 1000 ); 
 
 
 	    
