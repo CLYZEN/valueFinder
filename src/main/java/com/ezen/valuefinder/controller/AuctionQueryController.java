@@ -42,7 +42,7 @@ public class AuctionQueryController {
             return "auction/query/add/" + auctionNo;
         }
 
-        return "redirect:/";
+        return "redirect:/auction/detail/" + auctionNo;
     }
 
     @GetMapping(value = "/auction/query/add/{auctionNo}")
@@ -115,4 +115,26 @@ public class AuctionQueryController {
         return "/auction/query/query";
     }
 
+
+    @GetMapping(value = "/auction/query/detail/{auctionQueryNo}")
+    public String memberQueryDetail(@PathVariable("auctionQueryNo") Long auctionQueryNo , Model model
+            ,  Authentication authentication) {
+        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+        Member member = principalDetails.getMember();
+
+        try {
+            AuctionQuery auctionQuery = auctionService.getAuctionDtl(auctionQueryNo);
+            System.out.println("here");
+            model.addAttribute("auctionQuery",auctionQuery);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage" , "상품정보를 가져오지 못했습니다.");
+
+            return "member/receivedquery";
+
+        }
+
+        return "/member/querydetails";
+
+
+    }
 }

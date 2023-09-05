@@ -13,9 +13,7 @@ public interface ReverseBiddingRepository extends JpaRepository<ReverseBidding,L
 	@Modifying
 	@Query("update ReverseBidding r set r.reverseBiddingCount = r.reverseBiddingCount+1 where r.reverseBiddingNo = :id")
 	int reverseBiddingCount(Long id);
-
-
-    Page<ReverseBidding> findAllByOrderByReverseBiddingExpireDate(Pageable pageable);
+    Page<ReverseBidding> findAllByOrderByReverseBiddingExpireDateDesc(Pageable pageable);
     
     Page<ReverseBidding> findByCategoryOrderByReverseBiddingExpireDate(Pageable pageable, Category category);
 }

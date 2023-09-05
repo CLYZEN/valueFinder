@@ -2,7 +2,6 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
-
 <head>
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
@@ -17,55 +16,6 @@
             max-width: 1600px;
         }
 
-        .banner-blocks {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(2, 1fr);
-            grid-gap: 2rem;
-        }
-
-        .block-1 {
-            grid-area: 2/2/18/8;
-            border: 1px solid gray;
-            width: 500px;
-            height: 500px;
-        }
-
-        .block-2 {
-            grid-area: 2/8/18/13;
-        }
-
-        .block-3 {
-            grid-area: 18/2/18/8;
-        }
-
-        .block-4 {
-            grid-area: 18/8/18/13;
-        }
-
-        .col-sm-2 {
-            background-color: #D9D9D9;
-            font-weight: 900;
-            color: black;
-            text-align: center;
-            border: 1px solid gray;
-            border-left: 0px;
-            border-right: 0px;
-            line-height: 39px;
-            width: 140px;
-        }
-
-        .col-sm-3 {
-            border: 1px solid gray;
-            border-left: 0px;
-            width: 450px;
-            line-height: 35px;
-        }
-
-        .col-sm-cet {
-            margin-bottom: 65px;
-        }
-
         .splide__arrow--prev {
             left: -50px;
         }
@@ -78,33 +28,25 @@
             top: 190px;
         }
 
+        /* 더보기버튼 */
         .btn-primary {
-            background-color: #355808;
+            background-color: #8fc7f7;
             opacity: 63%;
-            border: 0px;
+            border: 1px;
         }
 
-        /*
-        상단 css
-        */
+        /*상단 css*/
         .category {
             border-top: 1px solid black;
             border-bottom: 1px solid black;
             padding: 0;
-            margin-left: 151.5px;
-            /* 좌측 여백 */
-            margin-right: 151.5px;
-            /* 우측 여백 */
             text-align: center;
-            /* 내용 가운데 정렬 */
         }
 
         .category_list {
             list-style-type: none;
             display: flex;
-            /*메뉴 가로정렬*/
-            justify-content: space-between;
-            /* 공간 균등 분배 */
+            justify-content: space-between; /* 공간 균등 분배 */
             font-family: var(--heading-font);
             color: var(--dark-color);
             font-weight: 700;
@@ -114,18 +56,7 @@
 
         /* home>현재페이지 */
         .tabs_header {
-            margin-left: 151.5px;
-            /* 좌측 여백 */
-            margin-right: 151.5px;
-            /* 우측 여백 */
             margin-bottom: 10px;
-        }
-
-        .location {
-            margin-left: 151.5px;
-            /* 좌측 여백 */
-            margin-right: 151.5px;
-            /* 우측 여백 */
         }
 
         .category_list > li {
@@ -139,9 +70,7 @@
             padding: 0.5rem 1rem;
         }
 
-        /*
-        하단 css
-          */
+        /*하단 css*/
         table {
             border-collapse: collapse;
             border-top: 1px solid;
@@ -158,15 +87,11 @@
             padding: 30px;
         }
 
+
         .wishful {
             background-color: #D9D9D9;
             height: 150px;
             padding: 15px 20px;
-        }
-
-        .join_customer th {
-            background-color: #D9D9D9;
-            text-align: center;
         }
 
         .join_customer td {
@@ -235,17 +160,35 @@
 
         .review-message {
             margin: 10px 0;
-            /* 여백을 위 아래 10px, 좌 우 0px로 조절 */
             font-size: 16px;
-            /* 필요한 폰트 사이즈로 조절 */
         }
 
         .custom-pagination .page-item .page-link {
-            padding: 8px 12px;
-            /* 원하는 패딩 값으로 조절 */
-            line-height: 1;
-            /* 텍스트 센터 정렬을 위한 라인 높이 조절 */
+            padding: 8px 12px; /* 원하는 패딩 값으로 조절 */
+            line-height: 1; /* 텍스트 센터 정렬을 위한 라인 높이 조절 */
             margin-bottom: 15px;
+        }
+
+        /* swiper slide */
+        .swiper {
+            width: 100%;
+            height: 30%;
+        }
+
+        .swiper-slide {
+            text-align: center;
+            font-size: 18px;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .swiper-slide img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
     </style>
 </th:block>
@@ -253,631 +196,696 @@
 <div layout:fragment="content"
      th:with="enterPrice=${#numbers.formatInteger(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')}">
 
-    <section>
-        <div class="tabs_header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-house-door-fill"
-                 viewBox="0 0 16 16">
-                <path
-                        d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
-            </svg>
-            <a href="/" style="text-decoration: none;">홈</a>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                 fill="currentColor" class="bi bi-chevron-compact-right"
-                 viewBox="0 0 16 16">
-                <path fill-rule="evenodd"
-                      d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-            </svg>
-            <a href="/">공개입찰경매</a>
-        </div>
-        <div class="location">
-            <h3 style="font-weight: 700;">공개입찰경매</h3>
-        </div>
+    <div class="row">
+        <div class="col-sm-1"></div>
 
-        <div class="category">
-            <ul class="category_list">
-                <li><a th:href="'/auction/publicbid?category=0'" class="nav-link">전체</a></li>
-                <li><a th:href="'/auction/publicbid?category=0'" class="nav-link">인기매물</a></li>
-                <li><a th:href="'/auction/publicbid?category=1'" class="nav-link">디지털기기</a></li>
-                <li><a th:href="'/auction/publicbid?category=2'" class="nav-link">가구/인테리어</a></li>
-                <li><a th:href="'/auction/publicbid?category=3'"class="nav-link">여성의류</a></li>
-                <li><a th:href="'/auction/publicbid?category=4'" class="nav-link">여성잡화</a></li>
-                <li><a th:href="'/auction/publicbid?category=5'" class="nav-link">남성패션/잡화</a></li>
-                <li><a th:href="'/auction/publicbid?category=6'" class="nav-link">생활가전</a></li>
-            </ul>
+        <div class="col-sm-10">
 
-            <ul class="category_list">
-                <li><a th:href="'/auction/publicbid?category=7'" class="nav-link">생활/주방</a></li>
-                <li><a th:href="'/auction/publicbid?category=8'" class="nav-link">가공식품</a></li>
-                <li><a th:href="'/auction/publicbid?category=9'" class="nav-link">스포츠/레져</a></li>
-                <li><a th:href="'/auction/publicbid?category=10'" class="nav-link">취미/게임/음반</a></li>
-                <li><a th:href="'/auction/publicbid?category=11'" class="nav-link">뷰티/미용</a></li>
-                <li><a th:href="'/auction/publicbid?category=12'" class="nav-link">식물</a></li>
-                <li><a th:href="'/auction/publicbid?category=13'" class="nav-link">반려동물용품</a></li>
-                <li><a th:href="'/auction/publicbid?category=14'" class="nav-link">티켓/교환권</a></li>
-            </ul>
+            <section>
+                <!-- 카테고리 start -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-house-door-fill"
+                     viewBox="0 0 16 16">
+                    <path
+                            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+                </svg>
+                <a href="/" style="text-decoration: none;">홈</a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-chevron-compact-right"
+                     viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                </svg>
+                <a href="/">공개입찰경매</a>
 
-            <ul class="category_list">
-                <li><a th:href="'/auction/publicbid?category=15'" class="nav-link">도서</a></li>
-                <li><a th:href="'/auction/publicbid?category=16'" class="nav-link">유아도서</a></li>
-                <li><a th:href="'/auction/publicbid?category=17'" class="nav-link">기타</a></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
-        </div>
-    </section>
+                <div class="location">
+                    <h3>공개입찰경매</h3>
+                </div>
+                <div class="category">
+                    <ul class="category_list">
+                        <li><a th:href="'/auction/publicbid?category=0'"
+                               class="nav-link">전체</a></li>
+                        <li><a th:href="'/auction/publicbid?category=0'"
+                               class="nav-link">인기매물</a></li>
+                        <li><a th:href="'/auction/publicbid?category=1'"
+                               class="nav-link">디지털기기</a></li>
+                        <li><a th:href="'/auction/publicbid?category=2'"
+                               class="nav-link">가구/인테리어</a></li>
+                        <li><a th:href="'/auction/publicbid?category=3'"
+                               class="nav-link">여성의류</a></li>
+                        <li><a th:href="'/auction/publicbid?category=4'"
+                               class="nav-link">여성잡화</a></li>
+                        <li><a th:href="'/auction/publicbid?category=5'"
+                               class="nav-link">남성패션/잡화</a></li>
+                        <li><a th:href="'/auction/publicbid?category=6'"
+                               class="nav-link">생활가전</a></li>
+                    </ul>
 
-    <h6 style="text-align: right; width: 1750px; padding: 10px;"
-        th:text="|조회수: ${auction.auctionCount}|"></h6>
+                    <ul class="category_list">
+                        <li><a th:href="'/auction/publicbid?category=7'"
+                               class="nav-link">생활/주방</a></li>
+                        <li><a th:href="'/auction/publicbid?category=8'"
+                               class="nav-link">가공식품</a></li>
+                        <li><a th:href="'/auction/publicbid?category=9'"
+                               class="nav-link">스포츠/레져</a></li>
+                        <li><a th:href="'/auction/publicbid?category=10'"
+                               class="nav-link">취미/게임/음반</a></li>
+                        <li><a th:href="'/auction/publicbid?category=11'"
+                               class="nav-link">뷰티/미용</a></li>
+                        <li><a th:href="'/auction/publicbid?category=12'"
+                               class="nav-link">식물</a></li>
+                        <li><a th:href="'/auction/publicbid?category=13'"
+                               class="nav-link">반려동물용품</a></li>
+                        <li><a th:href="'/auction/publicbid?category=14'"
+                               class="nav-link">티켓/교환권</a></li>
+                    </ul>
 
-    <section class="py-3">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
+                    <ul class="category_list">
+                        <li><a th:href="'/auction/publicbid?category=15'"
+                               class="nav-link">도서</a></li>
+                        <li><a th:href="'/auction/publicbid?category=16'"
+                               class="nav-link">유아도서</a></li>
+                        <li><a th:href="'/auction/publicbid?category=17'"
+                               class="nav-link">기타</a></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                        <li></li>
+                    </ul>
+                </div>
+            </section>
+            <!-- 카테고리 end -->
 
-                    <div class="banner-blocks">
-
-
-                        <div class="banner-ad block-1" style="place-self: center;">
-                            <img th:src="${auction.item.itemImgList[0].itemImageUrl}"
-                                 th:alt="${auction.item.itemName}"
-                                 style="width: 100%; height: 100%">
-                        </div>
-                        <div class="block-2">
-                            <div style="display: flex;">
-                                <div>
-                                    <h4 th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
-                                </div>
-                                <div style="width: 415px;">
-                                    <h4
-                                            style="text-align: right; margin-right: 60px; margin-bottom: 15px;"
-                                           th:text="|${auction.remainingTime}|" id="remainTime"></h4>
-
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2">물품 이름</label>
-                                <div class="col-sm-3" th:text="${auction.item.itemName}"></div>
-                            </div>
-
-                            <div class="form-group row"
-                                 style="flex-flow: nowrap; width: 300px;">
-                                <label class="col-sm-2">경매예정기간</label>
-                                <div class="col-sm-3" style="border-right: 0px; width: 110px;"
-                                     th:text="${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')}"></div>
-                                <div class="col-sm-3"
-                                     style="width: 100px; border-right: 0px; text-align: center;">~
-                                </div>
-                                <div class="col-sm-3" style="width: 240px;"
-                                     th:text="${#temporals.format(auction.auctionEndTime,'yyyy-MM-dd HH:mm')}"></div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2">시작가</label>
-                                <div class="col-sm-3"
-                                     th:text="|${#numbers.formatInteger(auction.auctionStartPrice, 0, 'COMMA')}원|"></div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2">입찰단위</label>
-                                <div class="col-sm-3" style="display: flex; line-height: 39px;">
-                                    <div id='price' type='text' name="price"></div>
-                                    <span th:text="${enterPrice + '원'}"></span>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label class="col-sm-2">입찰수</label>
-                                <div class="col-sm-3" th:text="|${auction.biddingCount} 회|"></div>
-
-                            </div>
-
-                            <div class="form-group row col-sm-cet">
-                                <label class="col-sm-2">진행상태</label>
-                                <div class="col-sm-3"
-                                     th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행
-                                    중
-                                </div>
-                                <div class="col-sm-3"
-                                     th:if="${auction.auctionStatus.toString().equals('END')}">마감
-                                </div>
-                                <div class="col-sm-3"
-                                     th:if="${auction.auctionStatus.toString().equals('LAST')}">1분
-                                    남음
-                                </div>
-                                <div class="col-sm-3"
-                                     th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기
-                                </div>
-                            </div>
+            <h6 style="text-align: right; padding: 10px;"
+                th:text="|조회수: ${auction.auctionCount}|"></h6>
+            <h4 style="text-align: right;"
+                th:text="|현재금액: ${#numbers.formatInteger(auction.auctionNowPrice,3,'COMMA')}원|"></h4>
 
 
-                            <div class="form-group row" style="height: 72px;">
-                                <label class="col-sm-2" style="line-height: 71px;">판매자
-                                    닉네임</label>
-                                <div class="col-sm-3" style="line-height: 71px; display: flex;">
-                                    <div style="width: 50px; text-align: center;"
-                                         th:text="${auction.item.member.nickname}"></div>
-                                    <div class="col-sm-offset-2" style="margin-left: 20px;">
-                                        <button type="button" class="btn btn-primary"
-                                                style="border-radius: inherit; width: 110px;"
-                                                data-bs-toggle="modal" data-bs-target="#reviewModal">
-                                            후기
-                                        </button>
+            <!-- <h4 style="text-align: right"; th:text="|현재금액:${auction.auctionNowPrice}원|"></h4> -->
+
+            <h4 style="text-align: right;" th:text="|남은시간 : ${auction.remainingTime}|"></h4>
+
+            <!-- 물품 설명 카드 start -->
+            <section class="py-3">
+                <div class="container-fluid">
+                    <div>
+                        <div class="container text-center">
+                            <div class="row d-flex flex-row">
+                                <div class="col-sm-5">
+                                    <!-- 대표이미지 -->
+                                    <div class="banner-ad block-1" style="place-self: center;">
+                                        <img src="https://source.unsplash.com/random"
+                                             style="width:100%; height:100%;"
+                                             th:alt="${auction.item.itemName}">
                                     </div>
-
-
-                                  <!-- 모달 창 -->
-									<div class="modal fade" id="reviewModal" tabindex="-1"
-										aria-labelledby="reviewModalLabel" aria-hidden="true">
-										<div class="modal-dialog modal-lg" style="--bs-modal-width: 1200px !important;">
-											<div class="modal-content">
-												<div class="modal-header">
-													<h5 class="modal-title" id="reviewModalLabel"
-														th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
-													<button type="button" class="btn-close"
-														data-bs-dismiss="modal" aria-label="Close"></button>
-												</div>
-												<div class="modal-body itemmodal">
-													<p class="review-message" th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
-													<table class="table">
-														<thead>
-															<tr class="review">																
-																<th scope="col" style="width: 250px;">물품명</th>
-																<th scope="col">리뷰</th>
-																<th scope="col" style="width: 300px;">별점</th>
-																<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
-
-															</tr>
-														</thead>
-														<tbody>
-															<tr th:each="auctionReview:${auctionReview}" class="review" id="review">
-																
-																<td th:text=${auctionReview.auction.item.itemName}></td>
-																<td th:text=${auctionReview.auctionReviewTitle}></td>
-																<td >
-																	<!-- 별점 -->
-																	<form class="mb-3" name="myform" id="myform"
-																		method="post" style="margin-bottom: 0px !important;">
-																		<fieldset>
-																			<input type="radio" name="reviewStar" value="5" id="rate1" th:if="${auctionReview.auctionReviewScore.toString() == '5'}" checked ><label for="rate1">★</label>
-																			<input type="radio" name="reviewStar" value="4" id="rate2" th:if="${auctionReview.auctionReviewScore.toString() == '4'}" checked ><label for="rate2">★</label>
-																			<input type="radio" name="reviewStar" value="3" id="rate3" th:if="${auctionReview.auctionReviewScore.toString() == '3'}" checked ><label for="rate3">★</label>
-																			<input type="radio" name="reviewStar" value="2" id="rate4" th:if="${auctionReview.auctionReviewScore.toString() == '2'}" checked ><label for="rate4">★</label>
-																			<input type="radio" name="reviewStar" value="1" id="rate5" th:if="${auctionReview.auctionReviewScore.toString() == '1'}" checked ><label for="rate5">★</label>
-																		</fieldset>
-																	</form>
-
-																</td>
-															
-																<td scope="row" th:text=${auctionReview.member.nickname} style="border-right: 0px;"></td>
-															</tr>
-														</tbody>
-													</table>
-												</div>
-
-												<!-- 페이징 버튼 -->
-												<div class="d-flex justify-content-center"
-													style="margin-top: 1%;">
-													<nav
-														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
-			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
-														aria-label="Page navigation example">
-														<ul class="pagination d-flex justify-content-center">
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(start, start)}"
-																th:classappend="${auctionReview.number eq page }?'active':''"><a
-																class="page-link"
-																th:onclick="'loadPage(' + ${0} +')'">이전</a>
-															</li>
-
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(start, end)}"
-																th:classappend="${auctionReview.number eq page + 1}?'active':''">
-																<a class="page-link" th:inline="text"
-																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
-															</li>
-
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(end, end)}"
-																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
-																class="page-link"
-																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
-															</li>
-														</ul>
-													</nav>
-												</div>
-
-												<div class="modal-footer d-flex justify-content-center">
-													<button type="button" class="btn btn-secondary "
-														data-bs-dismiss="modal">닫기</button>
-
-												</div>
-											</div>
-										</div>
-									</div>
-
-
-                                    <div class="col-sm-offset-2" style="margin-left: 20px;">
-                                        <input type="submit" class="btn btn-primary" value="신고"
-                                               style="border-radius: inherit; width: 110px;"
-                                               onclick="location.href='/auction/report';"/>
+                                    <!-- 물품 상세 이미지 -->
+                                    <div class="swiper mySwiper">
+                                        <div class="swiper-wrapper" style="margin-top: 10px; width:50%; height:50%;">
+                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
+                                                                           style="height:100%;"></div>
+                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
+                                                                           style="height:100%;"></div>
+                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
+                                                                           style="height:100%;"></div>
+                                        </div>
+                                        <div class="swiper-pagination"></div>
                                     </div>
+                                    <!-- 물품 상세 이미지 -->
                                 </div>
-                            </div>
-                            <div class="form-group row" style="height: 72px;">
-                                <label class="col-sm-2"
-                                       style="line-height: 71px; padding-right: 0px; padding-left: 0px;">판매자
-                                    다른물품</label>
-                                <div class="col-sm-3" style="line-height: 71px; display: flex;">
-                                    <div style="width: 50px; text-align: center;"
-                                         th:text=|${itemCount}건|></div>
-                                    <div class="col-sm-offset-2" style="margin-left: 20px;">
-                                        <input type="submit" class="btn btn-primary" value="더보기"
-                                               style="border-radius: inherit; width: 110px;"
-                                               data-bs-toggle="modal" data-bs-target="#otherItemModal"/>
-                                    </div>
 
-                                    <div class="modal fade" id="otherItemModal" tabindex="-1"
-                                         aria-labelledby="reviewModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="reviewModalLabel"
-                                                        th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
-                                                    <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                </div>
-                                                <div class="item-modal-body ">
-                                                    <table class="table">
-                                                        <thead>
-                                                        <tr>
-                                                            <th scope="col">물품이름</th>
-                                                            <th scope="col">가격</th>
-                                                            <th scope="col">진행상태</th>
-                                                            <th scope="col">경매구분</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        <tr th:each="reviewAuction: ${auctionList} ">
-                                                            <th scope="row" th:text="${reviewAuction.item.itemName}"></th>
-                                                            <td th:text="${reviewAuction.auctionNowPrice}"></td>
-                                                            <td
-                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
-                                                                진행중
-                                                            </td>
-                                                            <td
-                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
-                                                                마감
-                                                            </td>
-                                                            <td
-                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
-                                                                지난
-                                                                경매
-                                                            </td>
-                                                            <td
-                                                                    th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
-                                                                보류중
-                                                            </td>
-                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'" th:text="실시간경매"></td>
-                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'" th:text="공개입찰경매"></td>
-                                                            <td th:if="${reviewAuction.auctionType.toString()} == 'SEALED'" th:text="비공개경매"></td>
-                                                        </tr>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
 
-                                                <!-- 페이징 버튼 -->
+                                <div class="col-sm-2"></div>
 
-                                                <div class="d-flex justify-content-center"
-													style="margin-top: 1%;">
-													<nav
-														th:with="start=${(auctionList.number/maxPage)*maxPage + 1}
-			                									 ,end=(${(auctionList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionList.totalPages ? start + (maxPage - 1) : auctionList.totalPages)})"
-														aria-label="Page navigation example">
-														<ul class="pagination d-flex justify-content-center">
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(start, start)}"
-																th:classappend="${auctionList.number eq page }?'active':''"><a
-																class="page-link"
-																th:onclick="'loadItemPage(' + ${0} +')'">이전</a>
-															</li>
 
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(start, end)}"
-																th:classappend="${auctionList.number eq page + 1}?'active':''">
-																<a class="page-link" th:inline="text"
-																	th:onclick="'loadItemPage(' + ${page - 1} +')'">[[${page}]]</a>
-															</li>
+                                <div class="col-sm-5">
 
-															<li class="page-item"
-																th:each="page: ${#numbers.sequence(end, end)}"
-																th:classappend="${auctionList.number eq page - 1}?'active':''"><a
-																class="page-link"
-																th:onclick="'loadItemPage(' + ${auctionList.totalPages - 1} +')'">다음</a>
-															</li>
-														</ul>
-													</nav>
-												</div>
+                                    <!-- 상품 상태설명 시작 -->
+                                    <table class="table" style="width: 100%">
+                                        <tbody>
+                                        <tr>
+                                            <th scope="col">물품 이름</th>
+                                            <td scope="col" th:text="${auction.item.itemName}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">경매예정기간</th>
+                                            <td scope="col"
+                                                th:text="|${#temporals.format(auction.auctionStartTime,'yyyy-MM-dd HH:mm')} ~ ${#temporals.format(auction.auctionEndTime,'yyyy-MM-dd HH:mm')}|"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="col">시작가</th>
+                                            <td scope="col"
+                                                th:text="|${#numbers.formatInteger(auction.auctionStartPrice, 0, 'COMMA')}원|"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">입찰단위</th>
+                                            <td scope="col" th:text="${enterPrice + '원'}"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">입찰수</th>
+                                            <td scope="col" th:text="|${auction.biddingCount} 회|"></td>
+                                        </tr>
+                                        <tr>
+                                            <th scope="row">진행상태</th>
+                                            <td scope="col"
+                                                th:if="${auction.auctionStatus.toString().equals('PROGRESS')}">진행중
+                                            </td>
+                                            <td scope="col"
+                                                th:if="${auction.auctionStatus.toString().equals('END')}">마감
+                                            </td>
+                                            <td scope="col"
+                                                th:if="${auction.auctionStatus.toString().equals('LAST')}">1분
+                                                남음
+                                            </td>
+                                            <td scope="col"
+                                                th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기
+                                            </td>
+                                        </tr>
 
-                                                <div class="modal-footer d-flex justify-content-center">
-                                                    <button type="button" class="btn btn-secondary "
-                                                            data-bs-dismiss="modal">닫기
+                                        <tr>
+                                            <th scope="row">판매자 닉네임</th>
+                                            <td scope="col">[[${auction.item.member.nickname}]]
+                                                <div style="float: right;">
+                                                    <button type="button" class="btn btn-primary"
+                                                            data-bs-toggle="modal" data-bs-target="#otherItemModal">후기
                                                     </button>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- 모달종료 -->
+                                                    <button type="button" class="btn btn-primary"
+                                                            onclick='moveReport()'>신고
+                                                    </button>
+                                            </td>
                                 </div>
+                                </tr>
+                                <tr>
+                                    <th scope="row">판매자 다른 물품</th>
+                                    <td scope="col">[[|${itemCount}건|]]
+                                        <div style="float: right;">
+                                            <button type="button" class="btn btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#otherItemModal">더보기
+                                            </button>
+                                    </td>
                             </div>
-                        </div>
-
-
-                        <div class="banner-ad large block-3" style="place-self: center;">
-
-                            <section class="splide" id="main-img" aria-label="main"
-                                     style="width: 560px;">
-                                <div class="splide__track">
-                                    <ul class="splide__list">
-                                        <li class="splide__slide" style="flex: auto;">
-                                            <div class="splide__slide__container"
-                                                 style="background-size: contain;">
-                                                <img src="/images/ad-image-1.png"
-                                                     style="width: 180px; height: 180px; margin-right: 10px; border: 1px solid gray;">
-                                            </div>
-                                        </li>
-                                        <li class="splide__slide" style="flex: auto;">
-                                            <div class="splide__slide__container">
-                                                <img src="/images/ad-image-2.png"
-                                                     style="width: 180px; height: 180px; margin-right: 10px; border: 1px solid gray;">
-                                            </div>
-                                        </li>
-                                        <li class="splide__slide" style="flex: auto;">
-                                            <div class="splide__slide__container">
-                                                <img src="/images/ad-image-3.png"
-                                                     style="width: 180px; height: 180px; margin-right: 10px; border: 1px solid gray;">
-                                            </div>
-                                        </li>
-                                        <li class="splide__slide" style="flex: auto;">
-                                            <div class="splide__slide__container">
-                                                <img src="/images/ad-image-2.png"
-                                                     style="width: 180px; height: 180px; margin-right: 10px; border: 1px solid gray;">
-                                            </div>
-                                        </li>
-                                        <li class="splide__slide" style="flex: auto;">
-                                            <div class="splide__slide__container">
-                                                <img src="/images/ad-image-1.png"
-                                                     style="width: 180px; height: 180px; border: 1px solid gray;">
-                                            </div>
-                                        </li>
-                                    </ul>
-
-                                </div>
-                            </section>
-
-                        </div>
-
-                        <div class="banner-ad block-4" style="justify-self: right;">
-                            <div class="row banner-content"
-                                 style="margin-right: 0px; flex-wrap: nowrap;">
-
-                                <div style="width: 80px;">
-                                    <img alt="" src="/img/badge.png"
-                                         style="width: 150px; margin-left: 100px; height: 150px;">
-                                </div>
-
-                                <div style="width: 670px;">
-                                    <div
-                                            style="display: flex; width: 600px; justify-content: right;">
-                                        <div style="line-height: 40px; margin-right: 20px;">입찰금액
-                                        </div>
-                                        <div>
-                                            <input id='sum' type='text' disabled
-                                                   th:value="${(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP) * 100) + auction.auctionNowPrice }"
-                                                   name="sum"
-                                                   style="width: 165px; height: 40px; text-align: end;"/>
-                                        </div>
-                                    </div>
-                                     <div style="text-align: right; width: 600px;">
-                                        <input type='button' onclick='count("minus")'
-                                               th:value="|-${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-                                               style="margin-top: 10px; width: 80px; height: 40px;" /> <input
-                                            type='button' onclick='count("plus")'
-                                            th:value="|+${#numbers.formatInteger(	new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100,0,'COMMA')
-									}원|"
-                                            style="margin-top: 10px; width: 80px; height: 40px;" />
-                                    </div>
-                                    <div style="text-align: right; width: 600px;">
-                                        <div>
-
-                                            	<button class="heartbutton" th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}" 
-											onclick="pushWish(this)" th:data-auctionno="${auction.auctionNo}">
-										<i th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
-										</button>
-                                            <input type='button' onclick="bidding()" value='입찰'
-                                                   style="margin-top: 10px; width: 80px; height: 40px;"/>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-        </div>
-    </section>
-
-
-    <section
-            style="margin-top: 50px; text-align: -webkit-center; height: 250px; padding-top: 50px;">
-        <div class="middlebox" id="myTabContent" style="width: 950px;">
-            <h1 style="margin-bottom: 20px;">입찰현황</h1>
-            <div class="box2 scrollnone">
-                <table class="colr_table2"
-                       style="border-bottom: none; border-top: none;">
-                    <tr>
-                        <th scope="col">번호</th>
-                        <th>입찰자</th>
-                        <th>입찰날짜</th>
-                        <th>입찰금액</th>
-                        <th>결과</th>
-                    </tr>
-                      <tr th:each= "bidding, stat: ${biddingList}">
-                  		<td th:text = "${stat.count}"></td>
-                  		<td th:text = "${bidding.member.nickname}"></td>
-                  		<td th:text = "${#temporals.format(bidding.biddingTime,'yyyy-MM-dd HH:mm')}"></td>
-                  		<td th:text = "${bidding.biddingPrice}"></td>
-                 		<td th:if = "|${stat.count.toString.equals('1')}|">최고입찰자</td>
-                		<td th:unless = "|${stat.count.toString.equals('1')}|">유찰</td>
-                 	 </tr>
-                </table>
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <section style="margin-top: 100px;">
-        <div class="tab col-mb-8" id="bthtab">
-            <ul class="nav nav-tabs" id="myTab" role="tablist"
-                style="border-bottom: 1px solid #52A8E0;">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-                            data-bs-target="#home" type="button" role="tab"
-                            aria-controls="home" aria-selected="true">물품정보
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-                            data-bs-target="#profile" type="button" role="tab"
-                            aria-controls="profile" aria-selected="false">물품문의
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation"
-                    th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
-                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-                            data-bs-target="#standard" type="button" role="tab"
-                            aria-controls="standard" aria-selected="false">규격
-                    </button>
-                </li>
-
-            </ul>
-            <div class="tab-content" id="myTabContent">
-                <div class="tab-pane fade show active" id="home" role="tabpanel"
-                     aria-labelledby="home-tab">
-                    <div class="wishful">
-                        <span th:utext="${auction.item.itemDetail}"></span>
-                    </div>
-                </div>
-                <div class="tab-pane fade query" id="profile" role="tabpanel"
-                     aria-labelledby="profile-tab">
-                        <div class="join_customer">
-                        <table>
-                            <tr>
-                                <th scope="col">번호</th>
-                                <th>질문구분</th>
-                                <th>제목</th>
-                                <th>등록자</th>
-                                <th>등록일자</th>
                             </tr>
-                           <tr th:each= "query, stat: ${auctionQueryList}">
-                  				<td th:text = "${stat.count}"></td>
-                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('ETC')}">기타</td>
-                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('ITEM')}">물품</td>
-                  				<td th:if = "${query.auctionQueryDistinction.toString.equals('SHIPPING')}">배송</td>
-                  				<td th:text = "${query.auctionQueryTitle}" th:onclick="'javascript:moveDetail(' + ${query.auctionQueryNo} +')'"></td>
-                  				<td th:text = "${query.member.nickname}"></td>
-                  				<td th:text = "${#temporals.format(query.regTime,'yyyy-MM-dd HH:mm')}"></td>
-                 		 </tr>
+
+                            </table>
+                            <!-- 모달 시작 -->
+                            <div class="modal fade" id="otherItemModal" tabindex="-1"
+                                 aria-labelledby="reviewModalLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-lg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="reviewModalLabel"
+                                                th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
+                                            <button type="button" class="btn-close"
+                                                    data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body ">
+                                            <table class="table">
+                                                <thead>
+                                                <tr>
+                                                    <th scope="col">물품이름</th>
+                                                    <th scope="col">가격</th>
+                                                    <th scope="col">진행상태</th>
+                                                    <th scope="col">경매구분</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr th:each="reviewAuction: ${auctionList} ">
+                                                    <th scope="row"
+                                                        th:text="${reviewAuction.item.itemName}"></th>
+                                                    <td th:text="${reviewAuction.auctionNowPrice}"></td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
+                                                        진행중
+                                                    </td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
+                                                        마감
+                                                    </td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
+                                                        지난 경매
+                                                    </td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
+                                                        대기중
+                                                    </td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'"
+                                                            th:text="실시간경매"></td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'"
+                                                            th:text="공개입찰경매"></td>
+                                                    <td
+                                                            th:if="${reviewAuction.auctionType.toString()} == 'SEALED'"
+                                                            th:text="비공개경매"></td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="d-flex justify-content-center"
+                                             style="margin-top: 1%;">
+                                            <nav
+                                                    th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+                                                    aria-label="Page navigation example">
+                                                <ul class="pagination d-flex justify-content-center">
+                                                    <li class="page-item"
+                                                        th:each="page: ${#numbers.sequence(start, start)}"
+                                                        th:classappend="${auctionReview.number eq page }?'active':''"><a
+                                                            class="page-link"
+                                                            th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
+
+                                                    <li class="page-item"
+                                                        th:each="page: ${#numbers.sequence(start, end)}"
+                                                        th:classappend="${auctionReview.number eq page + 1}?'active':''">
+                                                        <a class="page-link" th:inline="text"
+                                                           th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+                                                    </li>
+
+                                                    <li class="page-item"
+                                                        th:each="page: ${#numbers.sequence(end, end)}"
+                                                        th:classappend="${auctionReview.number eq page - 1}?'active':''">
+                                                        <a
+                                                                class="page-link"
+                                                                th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                        </div>
+
+                                        <div class="modal-footer d-flex justify-content-center">
+                                            <button type="button" class="btn btn-secondary "
+                                                    data-bs-dismiss="modal">닫기
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- 모달 종료 -->
+
+                            <!-- 상품상태설명 end -->
+
+                            <!-- 입찰 금액, +,-,♥,입찰 세션 start-->
+                            <div style="justify-self: right;">
+                                <div class="row banner-content"
+                                     style="margin-right: 0px; flex-wrap: nowrap;">
+
+                                    <div>
+                                        <div style="display: flex; justify-content: right;">
+                                            <div style="line-height: 40px; margin-right: 20px;">입찰금액
+                                            </div>
+                                            <div>
+                                                <input id='sum' type='text' disabled
+                                                       th:value="${(new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP) * 100) + auction.auctionNowPrice }"
+                                                       name="sum"/>
+                                            </div>
+                                        </div>
+                                        <div style="display: flex; justify-content: right;">
+                                            <input type='button' onclick='count("minus")'
+                                                   th:value="${'-' + enterPrice}"
+                                                   style="margin-top: 10px; width: 80px; height: 40px; margin-right: 10px;"/>
+                                            <input
+                                                    type='button' onclick='count("plus")'
+                                                    th:value="${'+' + enterPrice}"
+                                                    style="margin-top: 10px; width: 80px; height: 40px;"/>
+                                        </div>
+                                        <div>
+                                            <div style="display: flex; justify-content: right;">
+                                                <button class="heartbutton"
+                                                        style="margin-top: 10px; width: 80px; height: 40px; border: 1px solid; border-radius: 3px; margin-right: 10px;"
+                                                        th:class="${checkWish ? 'be bi-heart' : 'bi bi-heart'}"
+                                                        onclick="pushWish(this)"
+                                                        th:data-auctionno="${auction.auctionNo}">
+                                                    <i
+                                                            th:class="${checkWish ? 'fa-solid fa-heart' : 'fa-regular fa-heart'}"></i>
+                                                </button>
+                                                <input
+                                                        style="margin-top: 10px; width: 80px; height: 40px; border: 1px solid; border-radius: 3px;"
+                                                        type='button' onclick="bidding()" value='입찰'/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <!-- 입찰 금액, +,-,♥,입찰 세션 end-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+
+        </section>
+        <!-- 물품카드 end -->
+
+        <div class="modal fade" id="otherItemModal" tabindex="-1"
+             aria-labelledby="reviewModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="reviewModalLabel"
+                            th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body ">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th scope="col">물품이름</th>
+                                <th scope="col">가격</th>
+                                <th scope="col">진행상태</th>
+                                <th scope="col">경매구분</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="reviewAuction: ${auctionList} ">
+                                <th scope="row"><a th:href="'/auction/detail/' + ${reviewAuction.auctionNo}">[[${reviewAuction.item.itemName}]]</a>
+                                </th>
+                                <td th:text="${reviewAuction.auctionNowPrice}"></td>
+                                <td
+                                        th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
+                                    진행중
+                                </td>
+                                <td
+                                        th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
+                                    마감
+                                </td>
+                                <td
+                                        th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
+                                    지난 경매
+                                </td>
+                                <td
+                                        th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
+                                    보류중
+                                </td>
+                                <td
+                                        th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'"
+                                        th:text="실시간경매"></td>
+                                <td
+                                        th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'"
+                                        th:text="공개입찰경매"></td>
+                                <td
+                                        th:if="${reviewAuction.auctionType.toString()} == 'SEALED'"
+                                        th:text="비공개경매"></td>
+                            </tr>
+                            </tbody>
                         </table>
                     </div>
-                    
-                                <!-- 페이징 버튼 -->
 
-                                <div class="d-flex justify-content-center"
-                                     style="margin-top: 1%;">
-                                    <nav
-                                            th:with="start=${(auctionQueryList.number/maxPage)*maxPage + 1}
-			                									 ,end=(${(auctionQueryList.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionQueryList.totalPages ? start + (maxPage - 1) : auctionQueryList.totalPages)})"
-                                            aria-label="Page navigation example">
-                                        <ul class="pagination d-flex justify-content-center">
-                                            <li class="page-item"
-                                                th:each="page: ${#numbers.sequence(start, start)}"
-                                                th:classappend="${auctionQueryList.number eq page }?'active':''"><a
-                                                    class="page-link"
-                                                    th:onclick="'loadQueryPage(' + ${0} +')'">이전</a>
-                                            </li>
 
-                                            <li class="page-item"
-                                                th:each="page: ${#numbers.sequence(start, end)}"
-                                                th:classappend="${auctionQueryList.number eq page + 1}?'active':''">
-                                                <a class="page-link" th:inline="text"
-                                                   th:onclick="'loadQueryPage(' + ${page - 1} +')'">[[${page}]]</a>
-                                            </li>
+                    <div class="d-flex justify-content-center" style="margin-top: 1%;">
+                        <nav
+                                th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+                                aria-label="Page navigation example">
+                            <ul class="pagination d-flex justify-content-center">
+                                <li class="page-item"
+                                    th:each="page: ${#numbers.sequence(start, start)}"
+                                    th:classappend="${auctionReview.number eq page }?'active':''"><a
+                                        class="page-link" th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
 
-                                            <li class="page-item"
-                                                th:each="page: ${#numbers.sequence(end, end)}"
-                                                th:classappend="${auctionQueryList.number eq page - 1}?'active':''"><a
-                                                    class="page-link"
-                                                    th:onclick="'loadQueryPage(' + ${auctionQueryList.totalPages - 1} +')'">다음</a>
-                                            </li>
-                                        </ul>
-                                    </nav>
-                                </div>
-                                
-                     <div class="form-group row" style="padding-top: 20px;">
-                        <div class="col-sm-offset-2" style="text-align: right;">
+                                <li class="page-item"
+                                    th:each="page: ${#numbers.sequence(start, end)}"
+                                    th:classappend="${auctionReview.number eq page + 1}?'active':''">
+                                    <a class="page-link" th:inline="text"
+                                       th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+                                </li>
 
-                            <input onclick="moveQuery()" type="button" class="btn btn-primary" value="문의하기"
-                                   style="border-radius: inherit;"/>
-
-                        </div>
+                                <li class="page-item"
+                                    th:each="page: ${#numbers.sequence(end, end)}"
+                                    th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+                                        class="page-link"
+                                        th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+                                </li>
+                            </ul>
+                        </nav>
                     </div>
-                </div>
-                
-                <div class="tab-pane fade" id="standard" role="tabpanel"
-                     aria-labelledby="standard-tab">
-                    <div class="standard wishful">
-                        <p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
-                        <p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
-                        <p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
+
+
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type="button" class="btn btn-secondary "
+                                data-bs-dismiss="modal">닫기
+                        </button>
+
                     </div>
                 </div>
             </div>
         </div>
+        <!-- 판매자 다른물품 모달 -->
 
-    </section>
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-sm-1"></div>
+                <div class="col-sm-10">
+                    <section>
+                        <div>
+                            <h1 style="margin-bottom: 20px;">입찰현황</h1>
+                            <div class="box2 scrollnone">
+                                <table class="colr_table2"
+                                       style="border-bottom: none; border-top: none;">
+                                    <tr>
+                                        <th scope="col">번호</th>
+                                        <th>입찰자</th>
+                                        <th>입찰날짜</th>
+                                        <th>입찰금액</th>
+                                        <th>결과</th>
+                                    </tr>
+                                    <tr th:each="bidding, stat: ${biddingList}">
+                                        <td th:text="${stat.count}"></td>
+                                        <td th:text="${bidding.member.nickname}"></td>
+                                        <td th:text="${#temporals.format(bidding.biddingTime,'yyyy-MM-dd HH:mm')}"></td>
+                                        <td th:text="${bidding.biddingPrice}"></td>
+                                        <td th:if="|${stat.count.toString.equals('1')}|">최고입찰자</td>
+                                        <td th:unless="|${stat.count.toString.equals('1')}|">유찰</td>
+                                    </tr>
+                                </table>
+                            </div>
 
+                        </div>
 
+                    </section>
+                </div>
+                <div class="col-sm-1"></div>
+            </div>
+        </div>
+
+        <section style="margin-top: 100px;">
+            <div class="tab col-mb-8" id="bthtab">
+                <ul class="nav nav-tabs" id="myTab" role="tablist"
+                    style="border-bottom: 1px solid #52A8E0;">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="home-tab"
+                                data-bs-toggle="tab" data-bs-target="#home" type="button"
+                                role="tab" aria-controls="home" aria-selected="true">물품정보
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#profile" type="button" role="tab"
+                                aria-controls="profile" aria-selected="false">물품문의
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation"
+                        th:if="${auction.item.itemWidth != NULL && auction.item.itemDepth != NULL && auction.item.itemHeight != NULL }">
+                        <button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+                                data-bs-target="#standard" type="button" role="tab"
+                                aria-controls="standard" aria-selected="false">규격
+                        </button>
+                    </li>
+
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel"
+                         aria-labelledby="home-tab">
+                        <div class="wishful">
+                            <span th:utext="${auction.item.itemDetail}"></span>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="profile" role="tabpanel"
+                         aria-labelledby="profile-tab">
+                        <div class="join_customer">
+                            <table >
+                                <tr style="text-align: center;">
+                                    <th scope="col">번호</th>
+                                    <th>질문구분</th>
+                                    <th>제목</th>
+                                    <th>등록자</th>
+                                    <th>등록일자</th>
+                                </tr>
+                                <tr th:each="query, stat: ${auctionQueryList}">
+                                    <td th:text="${stat.count}"></td>
+                                    <td th:if="${query.auctionQueryDistinction.toString.equals('ETC')}">기타</td>
+                                    <td th:if="${query.auctionQueryDistinction.toString.equals('ITEM')}">물품</td>
+                                    <td th:if="${query.auctionQueryDistinction.toString.equals('SHIPPING')}">배송</td>
+                                    <td th:text="${query.auctionQueryTitle}"
+                                        th:onclick="'javascript:moveDetail(' + ${query.auctionQueryNo} +')'"></td>
+                                    <td th:text="${query.member.nickname}"></td>
+                                    <td th:text="${#temporals.format(query.regTime,'yyyy-MM-dd HH:mm')}"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="form-group row" style="padding-top: 20px;">
+                            <div class="col-sm-offset-2" style="text-align: right;">
+
+                                <input onclick="moveQuery()" type="button"
+                                       class="btn btn-primary" value="문의하기"
+                                       style="inherit;"/>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="standard" role="tabpanel"
+                         aria-labelledby="standard-tab">
+                        <div class="standard wishful">
+                            <p th:text="|가로 : ${auction.item.itemWidth}cm|"></p>
+                            <p th:text="|세로 : ${auction.item.itemDepth}cm|"></p>
+                            <p th:text="|높이 : ${auction.item.itemHeight}cm|"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="col-sm-1"></div>
+    </div>
+    <!-- 후기 모달 -->
+    <div class="modal fade" id="reviewModal" tabindex="-1"
+         aria-labelledby="reviewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"
+             style="--bs-modal-width: 1200px !important;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reviewModalLabel"
+                        th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                </div>
+                <div class="modal-body ">
+                    <p class="review-message"
+                       th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
+                    <table class="table">
+                        <thead>
+                        <tr class="review">
+                            <th scope="col" style="width: 250px;">물품명</th>
+                            <th scope="col">리뷰</th>
+                            <th scope="col" style="width: 300px;">별점</th>
+                            <th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="auctionReview:${auctionReview}" class="review"
+                            id="review">
+
+                            <td th:text=${auctionReview.auction.item.itemName}></td>
+                            <td th:text=${auctionReview.auctionReviewTitle}></td>
+                            <td>
+                                <!-- 별점 -->
+                                <form class="mb-3" name="myform" id="myform" method="post"
+                                      style="margin-bottom: 0px !important;">
+                                    <fieldset>
+                                        <input type="radio" name="reviewStar" value="5" id="rate1"
+                                               th:if="${auctionReview.auctionReviewScore.toString() == '5'}"
+                                               checked><label for="rate1">★</label> <input
+                                            type="radio" name="reviewStar" value="4" id="rate2"
+                                            th:if="${auctionReview.auctionReviewScore.toString() == '4'}"
+                                            checked><label for="rate2">★</label> <input
+                                            type="radio" name="reviewStar" value="3" id="rate3"
+                                            th:if="${auctionReview.auctionReviewScore.toString() == '3'}"
+                                            checked><label for="rate3">★</label> <input
+                                            type="radio" name="reviewStar" value="2" id="rate4"
+                                            th:if="${auctionReview.auctionReviewScore.toString() == '2'}"
+                                            checked><label for="rate4">★</label> <input
+                                            type="radio" name="reviewStar" value="1" id="rate5"
+                                            th:if="${auctionReview.auctionReviewScore.toString() == '1'}"
+                                            checked><label for="rate5">★</label>
+                                    </fieldset>
+                                </form>
+
+                            </td>
+
+                            <td scope="row" th:text="${auctionReview.member.nickname}"
+                                style="border-right: 0px;"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="d-flex justify-content-center" style="margin-top: 1%;">
+                    <nav
+                            th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
+			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+                            aria-label="Page navigation example">
+                        <ul class="pagination d-flex justify-content-center">
+                            <li class="page-item"
+                                th:each="page: ${#numbers.sequence(start, start)}"
+                                th:classappend="${auctionReview.number eq page }?'active':''"><a
+                                    class="page-link" th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
+
+                            <li class="page-item"
+                                th:each="page: ${#numbers.sequence(start, end)}"
+                                th:classappend="${auctionReview.number eq page + 1}?'active':''">
+                                <a class="page-link" th:inline="text"
+                                   th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
+                            </li>
+
+                            <li class="page-item"
+                                th:each="page: ${#numbers.sequence(end, end)}"
+                                th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
+                                    class="page-link"
+                                    th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-secondary "
+                            data-bs-dismiss="modal">닫기
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- end s-content -->
 
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
+    <script
+            src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+    <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 
-	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
-          crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <script src="/js/splide.min.js"></script>
     <script th:inline="javascript">
         function moveQuery() {
-            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+            location.href = '/auction/query/add/' + [[${auction.auctionNo}]];
         }
+
+        //신고하기
+        function moveReport() {
+            location.href = '/auction/report/' + [[${auction.auctionNo}]];
+        }
+
+        var swiper = new Swiper(".mySwiper", {
+            pagination: {
+                el: ".swiper-pagination",
+            },
+        });
         document.addEventListener('DOMContentLoaded', function () {
             var splide = new Splide('.splide');
             splide.mount();
         });
 
         let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
+
         function count(type) {
 
             // 결과를 표시할 element
@@ -896,45 +904,42 @@
         }
 
 
-        
         var remainingTimeElement = document.getElementById("remainTime");
-    	var countdownInterval;
+        var countdownInterval;
 
-    	    var durationText = remainingTimeElement.textContent.trim();
-    	    var regex = /[^0-9]/g;
+        var durationText = remainingTimeElement.textContent.trim();
+        var regex = /[^0-9]/g;
 
-    	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
-    	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
-    	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
-    	    var Time = (hours * 3600) + (minutes * 60) + seconds;
+        var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+        var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+        var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+        var Time = (hours * 3600) + (minutes * 60) + seconds;
 
-    	    var updateTime = setInterval(function() {
-    	    	
-    	    	hours = parseInt(Time/3600);
-    	    	minutes = parseInt((Time%3600) / 60);
-    	    	seconds = Time%60;
-    	    	
-    	    	console.log([[${auction.remainingTime}]])
-    	    	Time--;
+        var updateTime = setInterval(function () {
 
-    	    	if([[${auction.remainingTime}]] === 'STRING') {
-    	    		document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
-    	    	
-    	    	if(Time < 0 ){
-    	    		clearInterval(updateTime);
-    	    		document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
-    	    		}
-    	    	}
-    	    	 else if(Time > 0){
-     	    		document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
-     	    	} 
-    	    	
-    	    },1000);
+            hours = parseInt(Time / 3600);
+            minutes = parseInt((Time % 3600) / 60);
+            seconds = Time % 60;
 
+            console.log([[${auction.remainingTime}]])
+            Time--;
 
-        let auctionNo = [[${auction.auctionNo}]];
+            if ([[${auction.remainingTime}]] === 'STRING') {
+                document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
+
+                if (Time < 0) {
+                    clearInterval(updateTime);
+                    document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
+                }
+            } else if (Time > 0) {
+                document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+            }
+
+        }, 1000);
+
 
         function bidding() {
+            let auctionNo = [[${auction.auctionNo}]];
             var token = $("meta[name='_csrf']").attr("content");
             var header = $("meta[name='_csrf_header']").attr("content");
 
@@ -971,91 +976,92 @@
                 }
             });
         }
-      function loadPage(pageNumber) {
-    	
-        $.ajax({
-            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-            type: 'GET',
-            success: function(response) {
-                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
-            }
-        });
-    }
-      
-      function loadItemPage(pageNumber) {
-    	    $.ajax({
-    	    	 url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-    	        type: 'GET',
-    	        success: function(response) {
-    	            $('#otherItemModal .item-modal-body').html($(response).find('.item-modal-body').html());
-    	        }
-    	    });
-    	}
-      
-      function loadQueryPage(pageNumber) {
-    	    $.ajax({
-    	    	 url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-    	        type: 'GET',
-    	        success: function(response) {
-    	            $('#myTabContent .query').html($(response).find('.query').html());
-    	        }
-    	    });
-    	}
 
-	//찜 버튼에 대한 기능
-	function pushWish(heartIcon) {
-		 /*
-		  색있는 하트: <i class="fa-solid fa-heart"></i>
-          빈 하트: <i class="fa-regular fa-heart"></i>
-		 */
-        var isWished = heartIcon.classList.contains( 'be');
-        var auctionNo = heartIcon.getAttribute('data-auctionno');
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
-        var method = isWished ? "DELETE" : "POST";
+        function loadPage(pageNumber) {
+
+            $.ajax({
+                url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+                type: 'GET',
+                success: function (response) {
+                    $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+                }
+            });
+        }
+
+        function loadItemPage(pageNumber) {
+            $.ajax({
+                url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+                type: 'GET',
+                success: function (response) {
+                    $('#otherItemModal .item-modal-body').html($(response).find('.item-modal-body').html());
+                }
+            });
+        }
+
+        function loadQueryPage(pageNumber) {
+            $.ajax({
+                url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+                type: 'GET',
+                success: function (response) {
+                    $('#myTabContent .query').html($(response).find('.query').html());
+                }
+            });
+        }
 
 
+        //찜 버튼에 대한 기능
+        function pushWish(heartIcon) {
+            /*
+             색있는 하트: <i class="fa-solid fa-heart"></i>
+             빈 하트: <i class="fa-regular fa-heart"></i>
+            */
+            var isWished = heartIcon.classList.contains('be');
+            var auctionNo = heartIcon.getAttribute('data-auctionno');
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
+            var method = isWished ? "DELETE" : "POST";
 
-        
-        $.ajax({
-            url: url,
-            type: method,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            data: JSON.stringify({ auctionNo: auctionNo }),
-            contentType: "application/json",
-            success: function(result) {
-                // 요청 성공 처리
-                console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
-                // 찜 상태 토글
-                	if(method == "DELETE") {
-                		heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
-                    	heartIcon.classList.toggle('be'); // 찜 미완료
-                	} else {
-                		heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
+
+            $.ajax({
+                url: url,
+                type: method,
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader(header, token);
+                },
+                data: JSON.stringify({auctionNo: auctionNo}),
+                contentType: "application/json",
+                success: function (result) {
+                    // 요청 성공 처리
+                    console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
+                    // 찜 상태 토글
+                    if (method == "DELETE") {
+                        heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
+                        heartIcon.classList.toggle('be'); // 찜 미완료
+                    } else {
+                        heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
                         heartIcon.classList.toggle('bi'); //찜 완료
-                	}
-                window.location.reload(true);
-            },
-            error: function(jqXHR, status, error) {
-                // 오류 처리
-                console.log(jqXHR.responseText);
-                alert("에러가 발생했습니다. 다시 시도해 주세요.");
-               
-            }
-        });
-        
-    }
-	
-	 function moveDetail(auctionQueryNo) {
-         location.href='/member/querydetails/' + auctionQueryNo;
-     }
+                    }
+                    window.location.reload(true);
+                },
+                error: function (jqXHR, status, error) {
+                    // 오류 처리
+                    console.log(jqXHR.responseText);
+                    alert("에러가 발생했습니다. 다시 시도해 주세요.");
+
+                }
+            });
+
+        }
+
+        function moveDetail(auctionQueryNo) {
+            location.href = '/member/querydetails/' + auctionQueryNo;
+        }
 
     </script>
 
 
 </th:block>
+
 
 </html>
