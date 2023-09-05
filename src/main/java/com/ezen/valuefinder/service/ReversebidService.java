@@ -6,9 +6,12 @@ import com.ezen.valuefinder.constant.AuctionStatus;
 import com.ezen.valuefinder.constant.ReversebidAuctionStatus;
 import com.ezen.valuefinder.dto.ReversebidEnterDto;
 import com.ezen.valuefinder.entity.*;
+import com.ezen.valuefinder.repository.ItemImgRepository;
 import com.ezen.valuefinder.repository.ItemRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingJoinRepository;
 import com.ezen.valuefinder.repository.ReverseBiddingRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
 
@@ -32,28 +35,71 @@ public class ReversebidService {
     private final ReverseBiddingJoinRepository reverseBiddingJoinRepository;
     private final ItemRepository itemRepository;
     private final ItemImgService itemImgService;
+    private final ItemImgRepository itemImgRepository;
     public ReverseBidding getReversebidById(Long id) {
         return reverseBiddingRepository.findById(id).orElseThrow();
     }
 
-    public ReverseBiddingJoin getReversebidJoinById(Long id) {
-    	return reverseBiddingJoinRepository.findById(id).orElseThrow();
-    }
 
+    @Transactional(readOnly = true)
+    public ReversebidEnterDto getReversebidDtl(Long reverseBiddingJoinNo) {
+    	ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reverseBiddingJoinNo).orElseThrow(EntityNotFoundException::new);
+    	
+    	ReversebidEnterDto reversebidEnterDto = ReversebidEnterDto.of(reverseBiddingJoin);
+    	
+    	return reversebidEnterDto;
+    }
    
+    @Transactional
+    public Long updateReverseBiddingJoin(ReversebidEnterDto reversebidEnterDto, List<MultipartFile> itemImgFiles) throws Exception {
+	
+        ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(reversebidEnterDto.getReverseBiddingJoinNo()).orElseThrow(EntityNotFoundException::new);       
+       
+        Item reversebidItem = reverseBiddingJoin.getItem();
+        reversebidItem.setItemDetail(reversebidEnterDto.getItemDetail());
+        reversebidItem.setItemName(reversebidEnterDto.getItemName());
+        
+        Long itemImgNo = reversebidItem.getItemNo();
+        
+        
+        for (int i = 0; i < itemImgFiles.size(); i++) {
+
+            ItemImg itemImg = new ItemImg();
+            itemImg.saveItem(reversebidItem);
+            
+            List<ItemImg> itemImg2 = itemImgRepository.findByItemItemNo(itemImgNo);
+         
+           
+            
+            itemImgService.updateItemImg(itemImg2.get(i), itemImgFiles.get(i));
+            
+            if (i == 0) {
+                itemImg.setRepImageYn(true);
+            } else {
+                itemImg.setRepImageYn(false);
+            }
+
+        }
+        
+        reverseBiddingJoin.setSuggestPrice(reversebidEnterDto.getSuggestPrice());
+        reverseBiddingJoin.setItem(reversebidItem);
+         
+        return reverseBiddingJoin.getReverseBiddingJoinNo();
+    }
+    
+
+    
+    
     public void saveReversebidEnter(ReversebidEnterDto reversebidEnterDto, Member member, Long bidno, List<MultipartFile> itemImgFiles) throws Exception {
         ReverseBidding reverseBidding = reverseBiddingRepository.findById(bidno).orElseThrow();
 
         Item item = new Item();
         item.setMember(member);
-        item.setItemDetail(reversebidEnterDto.getDetail());
-        item.setItemName(reversebidEnterDto.getTitle());
         item.setCategory(reverseBidding.getCategory());
         itemRepository.save(item);
 
         ReverseBiddingJoin reverseBiddingJoin = new ReverseBiddingJoin();
         reverseBiddingJoin.setMember(member);
-        reverseBiddingJoin.setSuggestPrice(reversebidEnterDto.getPrice());
         reverseBiddingJoin.setReverseBidding(reverseBidding);
         reverseBiddingJoin.setItem(item);
 
@@ -96,7 +142,11 @@ public class ReversebidService {
         return String.format("%d일 %d시간 %d분 %d초", days, hours, minutes, seconds);
     }
     
-
+    public void deleteReverseBiddingJoin(Long bidno) {
+    	ReverseBiddingJoin reverseBiddingJoin = reverseBiddingJoinRepository.findById(bidno).orElseThrow();
+    	
+    	reverseBiddingJoinRepository.delete(reverseBiddingJoin);
+    }
 
     public Page<ReverseBiddingJoin> getReverseJoinList(Pageable pageable, Long reverseBiddingJoinNo) {
     	return reverseBiddingJoinRepository.findByReverseBiddingReverseBiddingNoOrderByReverseBiddingJoinNo(pageable, reverseBiddingJoinNo);

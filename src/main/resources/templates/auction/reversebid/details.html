@@ -3,6 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
+<head>
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
 <!-- 각 페이지의 CSS가 작성될 위치 -->
 <th:block layout:fragment="css">
 
@@ -371,7 +375,6 @@
                                 </div>
                             </div>
                             <!-- home -->
-
                             <!-- profile -->
                             <div class="tab-pane fade" id="profile" role="tabpanel"
                                  aria-labelledby="profile-tab">
@@ -384,19 +387,21 @@
                                             <th>제시금액</th>
                                             <th>등록자</th>
                                         </tr>
-                                        <tr th:each="reverseBiddingJoin:${reverseBiddingJoinList}">
-                                            <td th:text=${reverseBiddingJoin.reverseBiddingJoinNo}></td>
-                                            <td style="color: blue; cursor: pointer;"
-                                                th:text=${reverseBiddingJoin.item.itemName}
-                                                th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoin.reverseBiddingJoinNo} +')'"></td>
-                                            <td id="price" th:text=${reverseBiddingJoin.suggestPrice}></td>
-                                            <td th:text=${reverseBiddingJoin.member.nickname}></td>
+                                        <tr th:each="reverseBiddingJoinList:${reverseBiddingJoinList}">
+                                            <td th:text=${reverseBiddingJoinList.reverseBiddingJoinNo}></td>
+                                            <td th:if="${#authentication.principal.username != reverseBiddingJoinList.member.email}" style="color: blue; cursor: pointer;" th:text=${reverseBiddingJoinList.item.itemName} th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
+                                            <td th:if="${#authentication.principal.username == reverseBiddingJoinList.member.email}" style="color: blue; cursor: pointer;" th:text=${reverseBiddingJoinList.item.itemName} th:onclick="'javascript:moveEnterModifyForm(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
+                                            <td id="price" th:text=${reverseBiddingJoinList.suggestPrice}></td>
+                                            <td th:text=${reverseBiddingJoinList.member.nickname}></td>
+                                            <td th:if="${#authentication.principal.username == reverseBidding.member.email && reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}"
+                                                onclick="pushReverse(this)" th:data-memberid="${reverseBidding.member.memberId}" th:data-reversebiddingno="${reverseBidding.reverseBiddingNo}">낙찰하기</td>
                                         </tr>
                                     </table>
                                 </div>
                                 <div class="d-flex justify-content-center">
                                     <nav
                                             th:with="start=${(reverseBiddingJoinList.number/maxPage)*maxPage + 1}
+
 			                 ,end=(${(reverseBiddingJoinList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reverseBiddingJoinList.totalPages ? start + (maxPage - 1) : reverseBiddingJoinList.totalPages)})"
 
                                             aria-label="Page navigation example">
@@ -406,6 +411,7 @@
                                                 <a class="page-link"
                                                    th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number - 1} +')'">이전</a>
                                             </li>
+
 
                                             <li class="page-item"
                                                 th:each="page: ${#numbers.sequence(start, end)}"
@@ -450,7 +456,6 @@
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
-
         var reverseBidding = [[${reverseBidding.reverseBiddingNo}]];
 
         function page(page) {
@@ -460,13 +465,12 @@
             location.href = "/auction/reversebid/detail/" + reverseBidding + "/" + page;
         }
 
-        function moveDetail(reverseBiddingNo) {
-            location.href = '/auction/reversebid/enter/add/' + reverseBiddingNo;
+        function moveEnterModifyForm(reverseBiddingNo) {
+            location.href='/auction/reversebid/enter/enterModifyForm/' + reverseBiddingNo;
         }
 
         function moveEnterDetail(reverseBiddingNo) {
-            location.href = '/auction/reversebid/detail/' + reverseBiddingNo;
-
+            location.href='/auction/reversebid/enter/details/' + reverseBiddingNo;
         }
 
         function loadPage(pageNumber) {
@@ -478,8 +482,45 @@
                 }
             });
         }
+function pushReverse(heartIcon) {
+    /*
+     색있는 하트: <i class="fa-solid fa-heart"></i>
+     빈 하트: <i class="fa-regular fa-heart"></i>
+    */
+    var memberId = heartIcon.getAttribute('data-memberid');
+    var reverseBiddingNo = heartIcon.getAttribute('data-reversebiddingno');
+    var token = $("meta[name='_csrf']").attr("content");
+    var header = $("meta[name='_csrf_header']").attr("content");
+    var url =  "/addReverseBidding"; //삼항연산자
+    var method = "POST";
+    var bidStatus = "PENDING";
 
+
+    $.ajax({
+        url: url,
+        type: method,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader(header, token);
+        },
+        data: JSON.stringify({ reverseBiddingNo: reverseBiddingNo }),
+        contentType: "application/json",
+        success: function(result) {
+            // 요청 성공 처리
+            console.log("낙찰 성공");
+            // 찜 상태 토글
+            window.location.reload(true);
+        },
+        error: function(jqXHR, status, error) {
+            // 오류 처리
+            console.log(jqXHR.responseText);
+            alert("에러가 발생했습니다. 다시 시도해 주세요.");
+
+        }
+    });
+
+}
     </script>
+
 </th:block>
 
 </html>

@@ -72,6 +72,8 @@ public class AuctionController {
     private final WishService wishService;
     private final AuctionQueryService auctionQueryService;
     private final AuctionReportService auctionReportService;
+    private final ReversebidSuccessService reversebidSuccessService;
+
 
 
     @GetMapping(value = "/auction/add")
@@ -113,7 +115,21 @@ public class AuctionController {
         }
         return "redirect:/";
     }
+    //참가등록 디테일 페이지
+    @GetMapping(value = "/auction/reversebid/enter/enterModifyForm/{reverseBiddingJoinNo}")
+    public String enterDetail(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo) {
 
+        try {
+
+            ReversebidEnterDto reversebidEnterDto = reversebidService.getReversebidDtl(reverseBiddingJoinNo);
+            model.addAttribute("reversebidEnterDto", reversebidEnterDto);
+        } catch (Exception e) {
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            return "/auction/enter/enter";
+        }
+
+        return "/auction/enter/enterModifyForm";
+    }
     @GetMapping(value = "/auction/reverse/add")
     public String addReverseItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
@@ -139,6 +155,7 @@ public class AuctionController {
         // 생성할 쿠키 이름
         String cookieName = "auctionNoCookie";
 
+
 // 쿠키에서 기존 auctionNo 가져오기
         String existingAuctionNos = null;
         Cookie[] cookies = request.getCookies();
@@ -147,6 +164,7 @@ public class AuctionController {
                 if (cookie.getName().equals(cookieName)) {
                     existingAuctionNos = cookie.getValue();
                     break;
+
                 }
             }
         }
@@ -199,78 +217,100 @@ public class AuctionController {
             return "/auction/details/sealedDetail";
         }
     }
+  
+  @PostMapping(value = "/auction/reversebid/enter/enterModifyForm/{reverseBiddingJoinNo}")
+	public String enterDetail(@Valid ReversebidEnterDto reversebidEnterDto, Model model,BindingResult bindingResult, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo
+			,@RequestParam("image") List<MultipartFile> itemImgFiles,Authentication authentication ) {
 
-    @GetMapping(value = "/auction/reversebid/enter/add")
-    public String enterQuery() {
-        return "/auction/enter/enterForm";
-    }
+		
+	  ReversebidEnterDto reversebidEnterDtod = reversebidService.getReversebidDtl(reverseBiddingJoinNo);
+	  
+	  if (bindingResult.hasErrors()) {
+			return "auction/enter/enterModifyForm";
+		}
+		try {
+			reversebidService.updateReverseBiddingJoin(reversebidEnterDto, itemImgFiles);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
+			model.addAttribute("reversebidEnterDto", reversebidEnterDtod);
+			return "/auction/enter/enterModifyForm";
+		}
 
-    @GetMapping(value = "/auction/report")
-    public String reportAuction() {
-        return "/auction/report";
-    }
+		return "redirect:/";
+	}
+  
+  //참가 삭제하기
+  @DeleteMapping(value = "/auction/enter/{bidno}/delete")
+  public @ResponseBody ResponseEntity deleteReversebidEnter(@RequestBody @PathVariable("bidno") Long bidno
+          , Principal principal) {
+
+	  try {
+		
+		  reversebidService.deleteReverseBiddingJoin(bidno);
+	} catch (Exception e) {
+		e.printStackTrace();
+	}
+
+      return new ResponseEntity<Long>(bidno , HttpStatus.OK);
+  }
 
 
-    @GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
-    public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Member member = principalDetails.getMember();
-        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+//참가 등록 화면
+		@GetMapping(value = "/auction/reversebid/enter/add/{bidno}")
+		public String enterReversebid(Authentication authentication, Model model, @PathVariable Long bidno) {
+			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+			Member member = principalDetails.getMember();
+			ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
 
-        model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
-        model.addAttribute("bid", reverseBidding);
-        model.addAttribute("member", member);
+			model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+			model.addAttribute("bid", reverseBidding);
+			model.addAttribute("member", member);
 
-        return "/auction/enter/enterForm";
-    }
+			return "/auction/enter/enterForm";
+		}
+		
+		@PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
+		public String enterReversebid(Authentication authentication, Model model,
+				@Valid ReversebidEnterDto reversebidEnterDto, @RequestParam("image") List<MultipartFile> itemImgFiles,
+				@PathVariable Long bidno) {
+			PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
+			Member member = principalDetails.getMember();
+			ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
+			if (itemImgFiles.get(0).isEmpty()) {
+				model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
+				model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+				model.addAttribute("bid", reverseBidding);
+				model.addAttribute("member", member);
+				return "/auction/enter/enterForm";
+			}
+			try {
+				reversebidService.saveReversebidEnter(reversebidEnterDto, member, bidno, itemImgFiles);
+			} catch (Exception e) {
+				model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
+				model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+				model.addAttribute("bid", reverseBidding);
+				model.addAttribute("member", member);
+				return "/auction/enter/enterForm";
+			}
 
-    @PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
-    public String enterReversebid(Authentication authentication, Model model,
-                                  @Valid ReversebidEnterDto reversebidEnterDto, @RequestParam("image") List<MultipartFile> itemImgFiles,
-                                  @PathVariable Long bidno) {
-        PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
-        Member member = principalDetails.getMember();
-        ReverseBidding reverseBidding = reversebidService.getReversebidById(bidno);
-        if (itemImgFiles.get(0).isEmpty()) {
-            model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
-            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
-            model.addAttribute("bid", reverseBidding);
-            model.addAttribute("member", member);
-            return "/auction/enter/enterForm";
-        }
-        try {
-            reversebidService.saveReversebidEnter(reversebidEnterDto, member, bidno, itemImgFiles);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
-            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
-            model.addAttribute("bid", reverseBidding);
-            model.addAttribute("member", member);
-            return "/auction/enter/enterForm";
-        }
+			return "redirect:/auction/reversebid/detail/" + bidno;
+		}
 
-        return "redirect:/auction/reversebid/enter/" + bidno;
-    }
 
-    @GetMapping(value = "/auction/reversebid/enter/{bidno}")
-    public String enterDetail(Model model, @PathVariable("bidno") Long bidno) {
-
-        ReverseBiddingJoin reverseBiddingJoin = reversebidService.getReversebidJoinById(bidno);
-
-        model.addAttribute("bid", reverseBiddingJoin);
-        return "/auction/enter/enter";
-    }
 
     @PostMapping(value = "/auction/review/add/{auctionNo}")
     public String addAuctionReview(@PathVariable Long auctionNo, Authentication authentication, @Valid ReviewFormDto reviewFormDto, Model model
             , RedirectAttributes redirectAttributes) {
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         Member member = principalDetails.getMember();
-        if (auctionService.chkAuctionReview(auctionNo)) {
-            auctionService.addAuctionReview(reviewFormDto, auctionNo, member);
+        if(auctionService.chkAuctionReview(auctionNo)){
+            auctionService.addAuctionReview(reviewFormDto,auctionNo,member);
             return "redirect:/member/mypage/successfulbid";
         } else {
             model.addAttribute("reviewFormDto", new ReviewFormDto());
-            redirectAttributes.addFlashAttribute("errorMessage", "이미 리뷰를 작성한 경매입니다.");
+            redirectAttributes.addFlashAttribute("errorMessage","이미 리뷰를 작성한 경매입니다.");
             return "redirect:/member/mypage/successfulbid";
         }
     }
@@ -304,6 +344,21 @@ public class AuctionController {
         return "auction/reversebid";
     }
 
+    //참가등록 디테일 페이지
+    @GetMapping(value = "/auction/reversebid/enter/details/{reverseBiddingJoinNo}")
+    public String enterDetails(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo) {
+
+        try {
+
+            ReversebidEnterDto reversebidEnterDto = reversebidService.getReversebidDtl(reverseBiddingJoinNo);
+            model.addAttribute("reversebidEnterDto", reversebidEnterDto);
+        } catch (Exception e) {
+            model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
+            return "/auction/enter/enter";
+        }
+
+        return "/auction/enter/enter";
+    }
     @GetMapping(value = {"/auction/reversebid/detail/{reverseBiddingNo}", "/auction/reversebid/detail/{reverseBiddingNo}/{page}"})
     public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,
                             @PathVariable("page") Optional<Integer> page) {
@@ -386,5 +441,22 @@ public class AuctionController {
 
         return "auction/searchview";
     }
+   
+   @PostMapping("/addReverseBidding")
+	public @ResponseBody ResponseEntity<String> addreverseBidding(@RequestBody ReversebidSuccessDto reversebidSuccessDto, Authentication authentication) {
+		PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal(); // 사용자 정보 가져옴.
+		Long memberId = principalDetails.getMember().getMemberId();
+		
+		try {
+			
+				reversebidSuccessService.addReverseBidding(reversebidSuccessDto.getReverseBiddingNo(), memberId);	        
+						
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
+		}
+		
+		return new ResponseEntity<String>("success", HttpStatus.OK); //성공시
+	}
 
 }
