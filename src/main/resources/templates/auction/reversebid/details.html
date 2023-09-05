@@ -14,19 +14,6 @@ table {
 	width: 100%;
 }
 
-/*이중선 제거*/
-.item_box2 {
-	width: 800px;
-}
-
-.item_box {
-	width: 800px;
-}
-
-.item_box2 button {
-	margin: 0px 20px;
-}
-
 .reverseForm th {
 	width: 150px;
 	height: 50px;
@@ -75,14 +62,16 @@ table {
 	padding: 30px;
 }
 
+ .wishful {
+	background-color: #D9D9D9;
+	height: 150px;
+	padding: 15px 20px;
+} 
+
+
 .tab-content h2 {
 	margin-top: 20px;
 	margin-bottom: 30px;
-}
-
-.wishful {
-	background-color: #D9D9D9;
-	height: 150px;
 }
 
 .form-group {
@@ -98,10 +87,6 @@ table {
 
 .join_customer td {
 	text-align: center;
-}
-
-.sublogo {
-	margin: 0px 30px;
 }
 
 .pagination {
@@ -146,15 +131,19 @@ table {
 
 .review-message {
 	margin: 10px 0;
-	/* 여백을 위 아래 10px, 좌 우 0px로 조절 */
 	font-size: 16px;
-	/* 필요한 폰트 사이즈로 조절 */
 }
 
 .custom-pagination .page-item .page-link {
-	padding: 8px 12px; /* 원하는 패딩 값으로 조절 */
-	line-height: 1; /* 텍스트 센터 정렬을 위한 라인 높이 조절 */
+	padding: 8px 12px;
+	line-height: 1;
 	margin-bottom: 15px;
+}
+
+.btn-primary {
+	background-color: #8fc7f7;
+	opacity: 63%;
+	border: 1px;
 }
 </style>
 
@@ -224,8 +213,8 @@ table {
 						<th scope="row">판매자 닉네임</th>
 						<td scope="col">[[${reverseBidding.member.nickname}]]
 							<div style="float: right;">
-								<button type="button" class="btn btn-primary" style="inherit;"
-                                        data-bs-toggle="modal" data-bs-target="#reviewModal">후기</button>
+								<button type="button" class="btn btn-primary"
+									data-bs-toggle="modal" data-bs-target="#reviewModal">후기</button>
 								<button type="button" class="btn btn-primary"
 									onclick="location.href='/auction/report';">신고</button>
 							</div>
@@ -336,95 +325,119 @@ table {
 			</div>
 
 		</div>
+		<!-- OLD  -->
+		
+		
+		<div class="container text-center">
+		<div class="row">
+		 <div class="col-sm-1"></div>
+		 <div class="col-sm-10">
+		<div class="tab col-mb-8" id="bthtab">
+			<ul class="nav nav-tabs" id="myTab" role="tablist">
+				<!--home  -->
+				<li class="nav-item" role="presentation">
+					<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
+						data-bs-target="#home" type="button" role="tab"
+						aria-controls="home" aria-selected="true">구매자 희망사항</button>
+				</li>
+				<!--home  -->
 
-	</div>
-	<div class="col-sm-1"></div>
-</div>
+				<!-- profile -->
+				<li class="nav-item" role="presentation">
+					<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
+						data-bs-target="#profile" type="button" role="tab"
+						aria-controls="profile" aria-selected="false">참가 현황</button>
+				</li>
+				<!-- profile -->
+			</ul>
 
 
-<div class="tab col-mb-8" id="bthtab">
-	<ul class="nav nav-tabs" id="myTab" role="tablist">
-		<li class="nav-item" role="presentation">
-			<button class="nav-link active" id="home-tab" data-bs-toggle="tab"
-				data-bs-target="#home" type="button" role="tab" aria-controls="home"
-				aria-selected="true">구매자 희망사항</button>
-		</li>
-		<li class="nav-item" role="presentation">
-			<button class="nav-link" id="profile-tab" data-bs-toggle="tab"
-				data-bs-target="#profile" type="button" role="tab"
-				aria-controls="profile" aria-selected="false">참가 현황</button>
-		</li>
+			<div class="tab-content" id="myTabContent">
+				<!-- home -->
+				<div class="tab-pane fade show active" id="home" role="tabpanel"
+					aria-labelledby="home-tab">
+					<div class="wishful">
+						<span th:text="${reverseBidding.reverseBiddingDetail}"></span>
+					</div>
+				</div>
+				<!-- home -->
 
-	</ul>
-	<div class="tab-content" id="myTabContent">
-		<div class="tab-pane fade show active" id="home" role="tabpanel"
-			aria-labelledby="home-tab">
-			<div class="wishful">
-				<span th:text="${reverseBidding.reverseBiddingDetail}"></span>
-			</div>
-		</div>
-		<div class="tab-pane fade" id="profile" role="tabpanel"
-			aria-labelledby="profile-tab">
-			<h2>참가자</h2>
-			<div class="join_customer">
-				<table>
-					<tr>
-						<th scope="col">번호</th>
-						<th>제목</th>
-						<th>제시금액</th>
-						<th>등록자</th>
-					</tr>
-					<tr th:each="reverseBiddingJoinList:${reverseBiddingJoinList}">
-						<td th:text=${reverseBiddingJoinList.reverseBiddingJoinNo}></td>
-						<td style="color: blue; cursor: pointer;"
-							th:text=${reverseBiddingJoinList.item.itemName}
-							th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
-						<td id="price" th:text=${reverseBiddingJoinList.suggestPrice}></td>
-						<td th:text=${reverseBiddingJoinList.member.nickname}></td>
-					</tr>
-				</table>
-			</div>
-			<div class="d-flex justify-content-center">
-				<nav
-					th:with="start=${(reverseBiddingJoinList.number/maxPage)*maxPage + 1}
+				<!-- profile -->
+				<div class="tab-pane fade" id="profile" role="tabpanel"
+					aria-labelledby="profile-tab">
+					<h2>참가자</h2>
+					<div class="join_customer">
+						<table>
+							<tr>
+								<th scope="col">번호</th>
+								<th>제목</th>
+								<th>제시금액</th>
+								<th>등록자</th>
+							</tr>
+							<tr th:each="reverseBiddingJoin:${reverseBiddingJoinList}">
+								<td th:text=${reverseBiddingJoin.reverseBiddingJoinNo}></td>
+								<td style="color: blue; cursor: pointer;"
+									th:text=${reverseBiddingJoin.item.itemName}
+									th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoin.reverseBiddingJoinNo} +')'"></td>
+								<td id="price" th:text=${reverseBiddingJoin.suggestPrice}></td>
+								<td th:text=${reverseBiddingJoin.member.nickname}></td>
+							</tr>
+						</table>
+					</div>
+					<div class="d-flex justify-content-center">
+						<nav
+							th:with="start=${(reverseBiddingJoinList.number/maxPage)*maxPage + 1}
 			                 ,end=(${(reverseBiddingJoinList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reverseBiddingJoinList.totalPages ? start + (maxPage - 1) : reverseBiddingJoinList.totalPages)})"
-					aria-label="Page navigation example">
-					<ul class="pagination d-flex justify-content-center">
-						<li class="page-item"
-							th:classappend="${reverseBiddingJoinList.first}?'disabled'">
-							<a class="page-link"
-							th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number - 1} +')'">이전</a>
-						</li>
+							aria-label="Page navigation example">
+							<ul class="pagination d-flex justify-content-center">
+								<li class="page-item"
+									th:classappend="${reverseBiddingJoinList.first}?'disabled'">
+									<a class="page-link"
+									th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number - 1} +')'">이전</a>
+								</li>
 
-						<li class="page-item"
-							th:each="page: ${#numbers.sequence(start, end)}"
-							th:classappend="${reverseBiddingJoinList.number eq page-1}?'active':''">
-							<a class="page-link" th:inline="text"
-							th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
-						</li>
+								<li class="page-item"
+									th:each="page: ${#numbers.sequence(start, end)}"
+									th:classappend="${reverseBiddingJoinList.number eq page-1}?'active':''">
+									<a class="page-link" th:inline="text"
+									th:onclick="'javascript:page(' + ${page - 1} +')'">[[${page}]]</a>
+								</li>
 
-						<li class="page-item"
-							th:classappend="${reverseBiddingJoinList.last}?'disabled'">
-							<a class="page-link"
-							th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number + 1} +')'">다음</a>
-						</li>
-					</ul>
-				</nav>
+								<li class="page-item"
+									th:classappend="${reverseBiddingJoinList.last}?'disabled'">
+									<a class="page-link"
+									th:onclick="'javascript:page(' + ${reverseBiddingJoinList.number + 1} +')'">다음</a>
+								</li>
+							</ul>
+						</nav>
+					</div>
+				</div>
+				<!-- profile -->
+			</div>
+
+		</div>
+		
+		<!-- OLD  -->
+
+
+		<div class="form-group">
+			<div class="join">
+				<button type="submit" class="btn btn-primary"
+					th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
+					참가신청</button>
 			</div>
 		</div>
+		</div>
+		<div class="col-sm-1"></div>
+		</div>
+		</div> <!-- row -->
+		</div> <!-- container text-center -->
+	</div> <!-- content -->
 
-	</div>
 
-</div>
 
-<div class="form-group">
-	<div class="join">
-		<button type="submit" class="btn btn-primary mb-3"
-			style="background-color: #355808; opacity: 63%;"
-			th:onclick="'javascript:moveDetail(' + ${reverseBidding.reverseBiddingNo} +')'">
-			참가신청</button>
-	</div>
-</div>
+
+
 
 <!-- 각 페이지의 스크립트가 작성될 위치 -->
 <th:block layout:fragment="script">

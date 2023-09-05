@@ -87,7 +87,7 @@ table {
 	padding: 30px;
 }
 
-/* 찜 전 하트 색 */
+
  .wishful {
 	background-color: #D9D9D9;
 	height: 150px;
@@ -279,8 +279,12 @@ table {
 
 			<h6 style="text-align: right; padding: 10px;"
 				th:text="|조회수: ${auction.auctionCount}|"></h6>
-				<h4 style="text-align: right"; th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
-				<h4 style="text-align: right"; th:text="|남은시간 : ${auction.remainingTime}|"></h4>
+				<h4 style="text-align: right;" th:text="|현재금액: ${#numbers.formatInteger(auction.auctionNowPrice,3,'COMMA')}원|"></h4>
+
+				
+				<!-- <h4 style="text-align: right"; th:text="|현재금액:${auction.auctionNowPrice}원|"></h4> -->
+
+				<h4 style="text-align: right;" th:text="|남은시간 : ${auction.remainingTime}|"></h4>
 
 			<!-- 물품 설명 카드 start -->
 			<section class="py-3">
@@ -296,7 +300,7 @@ table {
 											th:alt="${auction.item.itemName}">
 									</div>
 									<!-- 물품 상세 이미지 -->
-									<div class="swiper mySwiper" style="border-radius:5px;">
+									<div class="swiper mySwiper">
 										<div class="swiper-wrapper" style="margin-top: 10px; width:50%; height:50%;">
 											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
 											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>

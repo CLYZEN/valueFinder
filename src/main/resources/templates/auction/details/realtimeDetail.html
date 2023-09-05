@@ -45,7 +45,7 @@
 
 .category_list {
 	list-style-type: none;
-	display: flex; 
+	display: flex;
 	justify-content: space-between; /* 공간 균등 분배 */
 	font-family: var(--heading-font);
 	color: var(--dark-color);
@@ -88,11 +88,11 @@ table {
 }
 
 /* 찜 전 하트 색 */
- .wishful {
+.wishful {
 	background-color: #D9D9D9;
 	height: 150px;
 	padding: 15px 20px;
-} 
+}
 
 .join_customer td {
 	text-align: center;
@@ -279,8 +279,10 @@ table {
 
 			<h6 style="text-align: right; padding: 10px;"
 				th:text="|조회수: ${auction.auctionCount}|"></h6>
-				<h4 style="text-align: right"; th:text="|현재금액:${auction.auctionNowPrice}원|"></h4>
-				<h4 style="text-align: right"; th:text="|남은시간 : ${auction.remainingTime}|"></h4>
+			<h4 style="text-align: right"
+				; th:text="|현재금액: ${#numbers.formatInteger(auction.auctionNowPrice,3,'COMMA')}원|"></h4>
+			<h4 style="text-align: right"
+				; th:text="|남은시간 : ${auction.remainingTime}|"></h4>
 
 			<!-- 물품 설명 카드 start -->
 			<section class="py-3">
@@ -288,15 +290,15 @@ table {
 					<div>
 						<div class="container text-center">
 							<div class="row d-flex flex-row">
-								<div class="col-sm-5">
+								<div class="col-sm-5" style="height:70%;">
 									<!-- 대표이미지 -->
 									<div class="banner-ad block-1" style="place-self: center;">
-											<img src="https://source.unsplash.com/random"
-											style="width:100%; height:100%;"
+										<img src="https://source.unsplash.com/random"
+											style="width: 100%; height: 100%;"
 											th:alt="${auction.item.itemName}">
 									</div>
 									<!-- 물품 상세 이미지 -->
-									<div class="swiper mySwiper" style="border-radius:5px;">
+									<div class="swiper mySwiper">
 										<div class="swiper-wrapper" style="margin-top: 10px; width:50%; height:50%;">
 											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
 											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
@@ -364,103 +366,101 @@ table {
 												<th scope="row">판매자 다른 물품</th>
 												<td scope="col">[[|${itemCount}건|]]
 													<div style="float: right;">
-														<button type="button" class="btn btn-primary" 
+														<button type="button" class="btn btn-primary"
 															data-bs-toggle="modal" data-bs-target="#otherItemModal">더보기</button>
 												</td>
 												</div>
 											</tr>
-
 									</table>
 									<!-- 모달 시작 -->
 									<div class="modal fade" id="otherItemModal" tabindex="-1"
 										aria-labelledby="reviewModalLabel" aria-hidden="true">
-													<div class="modal-dialog modal-lg">
-														<div class="modal-content">
-															<div class="modal-header">
-																<h5 class="modal-title" id="reviewModalLabel"
+										<div class="modal-dialog modal-lg">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" id="reviewModalLabel"
 														th:text="|${auction.item.member.nickname}님의 다른 판매 물품|"></h5>
-																<button type="button" class="btn-close"
+													<button type="button" class="btn-close"
 														data-bs-dismiss="modal" aria-label="Close"></button>
-															</div>
-															<div class="modal-body ">
-																<table class="table">
-																	<thead>
-																		<tr>
-																			<th scope="col">물품이름</th>
-																			<th scope="col">가격</th>
-																			<th scope="col">진행상태</th>
-																			<th scope="col">경매구분</th>
-																		</tr>
-																	</thead>
-																	<tbody>
-																		<tr th:each="reviewAuction: ${auctionList} ">
-																			<th scope="row"
-																	th:text="${reviewAuction.item.itemName}"></th>
-																			<td th:text="${reviewAuction.auctionNowPrice}"></td>
-																			<td
+												</div>
+												<div class="modal-body ">
+													<table class="table">
+														<thead>
+															<tr>
+																<th scope="col">물품이름</th>
+																<th scope="col">가격</th>
+																<th scope="col">진행상태</th>
+																<th scope="col">경매구분</th>
+															</tr>
+														</thead>
+														<tbody>
+															<tr th:each="reviewAuction: ${auctionList} ">
+																<th scope="row" th:text="${reviewAuction.item.itemName}"></th>
+																<td th:text="${reviewAuction.auctionNowPrice}"></td>
+																<td
 																	th:if="${reviewAuction.auctionStatus.toString().equals('PROGRESS')}">
-																				진행중</td>
-																			<td
+																	진행중</td>
+																<td
 																	th:if="${reviewAuction.auctionStatus.toString().equals('END')}">
-																				마감</td>
-																			<td
+																	마감</td>
+																<td
 																	th:if="${reviewAuction.auctionStatus.toString().equals('LAST')}">
-																				지난 경매</td>
-																			<td
+																	지난 경매</td>
+																<td
 																	th:if="${reviewAuction.auctionStatus.toString().equals('PENDING')}">
-																				보류중</td>
-																			<td
+																	보류중</td>
+																<td
 																	th:if="${reviewAuction.auctionType.toString()} == 'REALTIME'"
 																	th:text="실시간경매"></td>
-																			<td
+																<td
 																	th:if="${reviewAuction.auctionType.toString()} == 'PUBLIC'"
 																	th:text="공개입찰경매"></td>
-																			<td
+																<td
 																	th:if="${reviewAuction.auctionType.toString()} == 'SEALED'"
 																	th:text="비공개경매"></td>
-																		</tr>
-																	</tbody>
-																</table>
-															</div>
+															</tr>
+														</tbody>
+													</table>
+												</div>
 
-															<div class="d-flex justify-content-center"
+												<div class="d-flex justify-content-center"
 													style="margin-top: 1%;">
-																<nav
+													<nav
 														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
 			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
 														aria-label="Page navigation example">
-																	<ul class="pagination d-flex justify-content-center">
-																		<li class="page-item"
+														<ul class="pagination d-flex justify-content-center">
+															<li class="page-item"
 																th:each="page: ${#numbers.sequence(start, start)}"
 																th:classappend="${auctionReview.number eq page }?'active':''"><a
 																class="page-link" th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
 
-																		<li class="page-item"
+															<li class="page-item"
 																th:each="page: ${#numbers.sequence(start, end)}"
 																th:classappend="${auctionReview.number eq page + 1}?'active':''">
-																			<a class="page-link" th:inline="text"
+																<a class="page-link" th:inline="text"
 																th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
-																		</li>
+															</li>
 
-																		<li class="page-item"
+															<li class="page-item"
 																th:each="page: ${#numbers.sequence(end, end)}"
 																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
 																class="page-link"
 																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
-																		</li>
-																	</ul>
-																</nav>
-															</div>
+															</li>
+														</ul>
+													</nav>
+												</div>
 
-															<div class="modal-footer d-flex justify-content-center">
-																<button type="button" class="btn btn-secondary "
+												<div class="modal-footer d-flex justify-content-center">
+													<button type="button" class="btn btn-secondary "
 														data-bs-dismiss="modal">닫기</button>
 
-															</div>
-														</div>
-													</div>
 												</div>
-												<!-- 모달 종료 -->
+											</div>
+										</div>
+									</div>
+									<!-- 모달 종료 -->
 
 									<!-- 상품상태설명 end -->
 
@@ -482,8 +482,8 @@ table {
 												<div style="display: flex; justify-content: right;">
 													<input type='button' onclick='count("minus")'
 														th:value="${'-' + enterPrice}"
-														style="margin-top: 10px; width: 80px; height: 40px; margin-right: 10px;" /> <input
-														type='button' onclick='count("plus")'
+														style="margin-top: 10px; width: 80px; height: 40px; margin-right: 10px;" />
+													<input type='button' onclick='count("plus")'
 														th:value="${'+' + enterPrice}"
 														style="margin-top: 10px; width: 80px; height: 40px;" />
 												</div>
@@ -503,19 +503,28 @@ table {
 													</div>
 												</div>
 											</div>
-										
+
+										</div>
+										<!-- 타이머 -->
+										<div style="display: flex col;">
+											<svg xmlns="http://www.w3.org/2000/svg" width="40" 
+												height="40" fill="currentColor" class="bi bi-stopwatch"
+												viewBox="0 0 16 16" style="margin-top:20px;">
+  <path
+													d="M8.5 5.6a.5.5 0 1 0-1 0v2.9h-3a.5.5 0 0 0 0 1H8a.5.5 0 0 0 .5-.5V5.6z" />
+  <path
+													d="M6.5 1A.5.5 0 0 1 7 .5h2a.5.5 0 0 1 0 1v.57c1.36.196 2.594.78 3.584 1.64a.715.715 0 0 1 .012-.013l.354-.354-.354-.353a.5.5 0 0 1 .707-.708l1.414 1.415a.5.5 0 1 1-.707.707l-.353-.354-.354.354a.512.512 0 0 1-.013.012A7 7 0 1 1 7 2.071V1.5a.5.5 0 0 1-.5-.5zM8 3a6 6 0 1 0 .001 12A6 6 0 0 0 8 3z" />
+</svg>
+											<h4 th:text="|남은시간 : ${auction.remainingTime}|"
+												id="remainTime"></h4>
+										</div>
+
+										<!-- 입찰 금액, +,-,♥,입찰 세션 end-->
 									</div>
-									<!-- 타이머 -->
-									<div style="display: flex;">
-                                    <h4 th:text="|남은시간 : ${auction.remainingTime}|" id="remainTime" ></h4></div>
-									
-									<!-- 입찰 금액, +,-,♥,입찰 세션 end-->
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-			
 			</section>
 			<!-- 물품카드 end -->
 
@@ -607,68 +616,68 @@ table {
 			</div>
 			<!-- 판매자 다른물품 모달 -->
 
-		<div class="container text-center">
- 		<div class="row">
- 		  <div class="col-sm-1"></div>
- 		  <div class="col-sm-10">
-			<section>
-				<div>
-					<h1 style="margin-bottom: 20px;">입찰현황</h1>
-					<div class="box2 scrollnone">
-						<table class="colr_table2"
+			<div class="container text-center">
+				<div class="row">
+					<div class="col-sm-1"></div>
+					<div class="col-sm-10">
+						<section>
+							<div>
+								<h1 style="margin-bottom: 20px;">입찰현황</h1>
+								<div class="box2 scrollnone">
+									<table class="colr_table2"
 										style="border-bottom: none; border-top: none;">
-							<tr>
-								<th scope="col">번호</th>
-								<th>입찰자</th>
-								<th>입찰날짜</th>
-								<th>입찰금액</th>
-								<th>결과</th>
-							</tr>
-							<tr>
-								<td>5</td>
-								<td>에디</td>
-								<td>08/07 18:15</td>
-								<td>10,500원</td>
-								<td>유찰</td>
-							</tr>
-							<tr>
-								<td>4</td>
-								<td>루피</td>
-								<td>08/07 18:15</td>
-								<td>10,500원</td>
-								<td>유찰</td>
-							</tr>
-							<tr>
-								<td>3</td>
-								<td>크롱</td>
-								<td>08/07 18:15</td>
-								<td>10,500원</td>
-								<td>유찰</td>
-							</tr>
-							<tr>
-								<td>2</td>
-								<td>포비</td>
-								<td>08/07 18:15</td>
-								<td>10,500원</td>
-								<td>유찰</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>뽀로로</td>
-								<td>08/07 18:15</td>
-								<td>10,500원</td>
-								<td>유찰</td>
-							</tr>
-						</table>
+										<tr>
+											<th scope="col">번호</th>
+											<th>입찰자</th>
+											<th>입찰날짜</th>
+											<th>입찰금액</th>
+											<th>결과</th>
+										</tr>
+										<tr>
+											<td>5</td>
+											<td>에디</td>
+											<td>08/07 18:15</td>
+											<td>10,500원</td>
+											<td>유찰</td>
+										</tr>
+										<tr>
+											<td>4</td>
+											<td>루피</td>
+											<td>08/07 18:15</td>
+											<td>10,500원</td>
+											<td>유찰</td>
+										</tr>
+										<tr>
+											<td>3</td>
+											<td>크롱</td>
+											<td>08/07 18:15</td>
+											<td>10,500원</td>
+											<td>유찰</td>
+										</tr>
+										<tr>
+											<td>2</td>
+											<td>포비</td>
+											<td>08/07 18:15</td>
+											<td>10,500원</td>
+											<td>유찰</td>
+										</tr>
+										<tr>
+											<td>1</td>
+											<td>뽀로로</td>
+											<td>08/07 18:15</td>
+											<td>10,500원</td>
+											<td>유찰</td>
+										</tr>
+									</table>
+								</div>
+
+							</div>
+
+						</section>
 					</div>
-
+					<div class="col-sm-1"></div>
 				</div>
-
-			</section>
 			</div>
-		 <div class="col-sm-1"></div>	
-</div>
-</div>
 
 			<section style="margin-top: 100px;">
 				<div class="tab col-mb-8" id="bthtab">
@@ -723,10 +732,9 @@ table {
 								<div class="col-sm-offset-2" style="text-align: right;">
 
 									<input onclick="moveQuery()" type="button"
-										class="btn btn-primary" value="문의하기"
-										style="inherit;" />
+										class="btn btn-primary" value="문의하기" style="" />
 								</div>
-								
+
 							</div>
 						</div>
 						<div class="tab-pane fade" id="standard" role="tabpanel"
@@ -741,46 +749,46 @@ table {
 				</div>
 			</section>
 
-		
-		<div class="col-sm-1"></div>
-	</div>
-	<!-- 후기 모달 -->
-	<div class="modal fade" id="reviewModal" tabindex="-1"
-			aria-labelledby="reviewModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg"
-				style="--bs-modal-width: 1200px !important;">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="reviewModalLabel"
-							th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-				</div>
-				<div class="modal-body ">
-					<p class="review-message"
-							th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
-					<table class="table">
-						<thead>
-							<tr class="review">
-								<th scope="col" style="width: 250px;">물품명</th>
-								<th scope="col">리뷰</th>
-								<th scope="col" style="width: 300px;">별점</th>
-								<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
 
-							</tr>
-						</thead>
-						<tbody>
-							<tr th:each="auctionReview:${auctionReview}" class="review"
+			<div class="col-sm-1"></div>
+		</div>
+		<!-- 후기 모달 -->
+		<div class="modal fade" id="reviewModal" tabindex="-1"
+			aria-labelledby="reviewModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg"
+				style="--bs-modal-width: 1200px !important;">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="reviewModalLabel"
+							th:text="|${auction.item.member.nickname}님의 후기 리스트|"></h5>
+						<button type="button" class="btn-close" data-bs-dismiss="modal"
+							aria-label="Close"></button>
+					</div>
+					<div class="modal-body ">
+						<p class="review-message"
+							th:text="후기가 + '&nbsp' + ${reviewCount} + 건 + '&nbsp' +검색되었습니다."></p>
+						<table class="table">
+							<thead>
+								<tr class="review">
+									<th scope="col" style="width: 250px;">물품명</th>
+									<th scope="col">리뷰</th>
+									<th scope="col" style="width: 300px;">별점</th>
+									<th scope="col" style="border-right: 0px; width: 150px;">작성자</th>
+
+								</tr>
+							</thead>
+							<tbody>
+								<tr th:each="auctionReview:${auctionReview}" class="review"
 									id="review">
 
-								<td th:text=${auctionReview.auction.item.itemName}></td>
-								<td th:text=${auctionReview.auctionReviewTitle}></td>
-								<td>
-									<!-- 별점 -->
-									<form class="mb-3" name="myform" id="myform" method="post"
+									<td th:text=${auctionReview.auction.item.itemName}></td>
+									<td th:text=${auctionReview.auctionReviewTitle}></td>
+									<td>
+										<!-- 별점 -->
+										<form class="mb-3" name="myform" id="myform" method="post"
 											style="margin-bottom: 0px !important;">
-										<fieldset>
-											<input type="radio" name="reviewStar" value="5" id="rate1"
+											<fieldset>
+												<input type="radio" name="reviewStar" value="5" id="rate1"
 													th:if="${auctionReview.auctionReviewScore.toString() == '5'}"
 													checked><label for="rate1">★</label> <input
 													type="radio" name="reviewStar" value="4" id="rate2"
@@ -795,68 +803,68 @@ table {
 													type="radio" name="reviewStar" value="1" id="rate5"
 													th:if="${auctionReview.auctionReviewScore.toString() == '1'}"
 													checked><label for="rate5">★</label>
-										</fieldset>
-									</form>
+											</fieldset>
+										</form>
 
-								</td>
+									</td>
 
-								<td scope="row" th:text=${auctionReview.member.nickname}
+									<td scope="row" th:text=${auctionReview.member.nickname}
 										style="border-right: 0px;"></td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 
-				<div class="d-flex justify-content-center" style="margin-top: 1%;">
-					<nav
+					<div class="d-flex justify-content-center" style="margin-top: 1%;">
+						<nav
 							th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
 			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
 							aria-label="Page navigation example">
-						<ul class="pagination d-flex justify-content-center">
-							<li class="page-item"
+							<ul class="pagination d-flex justify-content-center">
+								<li class="page-item"
 									th:each="page: ${#numbers.sequence(start, start)}"
 									th:classappend="${auctionReview.number eq page }?'active':''"><a
 									class="page-link" th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
 
-							<li class="page-item"
+								<li class="page-item"
 									th:each="page: ${#numbers.sequence(start, end)}"
 									th:classappend="${auctionReview.number eq page + 1}?'active':''">
-								<a class="page-link" th:inline="text"
+									<a class="page-link" th:inline="text"
 									th:onclick="'loadPage(' + ${page - 1} +')'">[[${page}]]</a>
-							</li>
+								</li>
 
-							<li class="page-item"
+								<li class="page-item"
 									th:each="page: ${#numbers.sequence(end, end)}"
 									th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
 									class="page-link"
 									th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
-							</li>
-						</ul>
-					</nav>
-				</div>
+								</li>
+							</ul>
+						</nav>
+					</div>
 
-				<div class="modal-footer d-flex justify-content-center">
-					<button type="button" class="btn btn-secondary "
+					<div class="modal-footer d-flex justify-content-center">
+						<button type="button" class="btn btn-secondary "
 							data-bs-dismiss="modal">닫기</button>
 
+					</div>
 				</div>
 			</div>
 		</div>
+		<!-- 후기 모달 -->
+
 	</div>
-	<!-- 후기 모달 -->
-
-</div>
-<!-- end s-content -->
+	<!-- end s-content -->
 
 
-<!-- 각 페이지의 스크립트가 작성될 위치 -->
-<th:block layout:fragment="script">
-	<script
+	<!-- 각 페이지의 스크립트가 작성될 위치 -->
+	<th:block layout:fragment="script">
+		<script
 			src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
-	<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
+		<script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js"
 			crossorigin="anonymous"></script>
-	<script src="/js/splide.min.js"></script>
-	<script th:inline="javascript">
+		<script src="/js/splide.min.js"></script>
+		<script th:inline="javascript">
 	//신고하기
 	function moveReport() {
 		location.href='/auction/report/' + [[${auction.auctionNo}]];
@@ -1019,7 +1027,5 @@ table {
     </script>
 
 
-</th:block>
-
-
+	</th:block>
 </html>
