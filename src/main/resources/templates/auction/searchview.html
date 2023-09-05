@@ -5,6 +5,8 @@
 <head>
     <link rel="stylesheet"
           href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="/css/card.css">
     <style>
 
         .category {
@@ -44,7 +46,7 @@
         그냥 btn은 다른버튼까지 다 적용되어 네이밍바꿈. */
         .btn2 {
             border: none;
-            background: rgb(152, 194, 229);
+
             font-weight: 600;
             width: 200px;
             padding: 6px 0;
@@ -80,30 +82,42 @@
             text-align: left;
         }
 
+        .row {
+            justify-content: center;
+        }
 
     </style>
 </head>
 
 <div layout:fragment="content">
     <!-- 현재위치 -->
-    <div class="tabs_header">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
-            <path
-                    d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
-        </svg>
-        <a href="/" style="text-decoration: none;">홈</a>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-             fill="currentColor" class="bi bi-chevron-compact-right"
-             viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
-        </svg>
-        <a href="/">카테고리별</a>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="tabs_header col-md-12">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                    <path
+                            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+                </svg>
+                <a href="/" style="text-decoration: none;">홈</a>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                     fill="currentColor" class="bi bi-chevron-compact-right"
+                     viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z"/>
+                </svg>
+                <a href="/">카테고리별</a>
+            </div>
+        </div>
     </div>
-    <div class="location">
-        <h3 style="font-weight: 700;" th:if="${category} == null">인기순</h3>
-        <h3 style="font-weight: 700;" th:if="${category} != null" th:text="${category.categoryName}">카테고리별</h3>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="location col-md-12">
+                <h3 style="font-weight: 700;" th:if="${category} == null">인기순</h3>
+                <h3 style="font-weight: 700;" th:if="${category} != null" th:text="${category.categoryName}">카테고리별</h3>
+            </div>
+        </div>
     </div>
     <section class="py-5" th:if="${auctionList.getContent().isEmpty()}">
         <h1 style="text-align: center">검색된 물품이 없습니다.</h1>
@@ -121,56 +135,58 @@
                                 <div class="product-grid row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
 
                                     <div class="col" th:each="auction:${auctionList}">
+                                        <div class="badge">
                                         <span th:if="${auction.auctionType.toString()} == 'PUBLIC'"
-                                        th:text="공개입찰경매"></span>
-                                        <span th:if="${auction.auctionType.toString()} == 'SEALED'"
-                                              th:text="비공개경매"></span>
-                                        <span th:if="${auction.auctionType.toString()} == 'REALTIME'"
-                                              th:text="실시간경매"></span>
-										<a th:href="'/auction/detail/'+ ${auction.auctionNo}">
-                                        <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
-                                            <figure>
-                                                <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
-                                                    <img src="images/thumb-bananas.png" class="tab-image">
-                                                </a>
-                                            </figure>
-                                            <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'PENDING'"
-                                                    th:text="대기중" disabled></button>
-                                            <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료"
-                                                    disabled></button>
-                                            <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'LAST'"
-                                                    th:text="마감임박"></button>
-                                            <button class="btn2 d-flex justify-content-center"
-                                                    th:if="${auction.auctionStatus.toString()} == 'PROGRESS'"
-                                                    th:text="진행중"></button>
+                                              th:text="공개입찰경매"></span>
+                                            <span th:if="${auction.auctionType.toString()} == 'SEALED'"
+                                                  th:text="비공개경매"></span>
+                                            <span th:if="${auction.auctionType.toString()} == 'REALTIME'"
+                                                  th:text="실시간경매"></span>
+                                        </div>
+                                        <a th:href="'/auction/detail/'+ ${auction.auctionNo}">
+                                            <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
+                                                <figure>
+                                                    <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
+                                                        <img src="images/thumb-bananas.png" class="tab-image">
+                                                    </a>
+                                                </figure>
+                                                <button class="btn2 d-flex justify-content-center"
+                                                        id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'PENDING'"
+                                                        th:text="대기중" disabled></button>
+                                                <button class="btn2 d-flex justify-content-center"
+                                                        id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'END'" th:text="종료"
+                                                        disabled></button>
+                                                <button class="btn2 d-flex justify-content-center"
+                                                        id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'LAST'"
+                                                        th:text="마감임박"></button>
+                                                <button class="btn2 d-flex justify-content-center"
+                                                        id="btn-status"      th:if="${auction.auctionStatus.toString()} == 'PROGRESS'"
+                                                        th:text="진행중"></button>
 
-                                            <div class="d-flex justify-content-center">
-                                                <span class="time_action" th:text="${auction.remainingTime}"></span>
+                                                <div class="d-flex justify-content-center">
+                                                    <span class="time_action" th:text="${auction.remainingTime}"></span>
 
-                                            </div>
+                                                </div>
 
-                                            <div class="item_detail">
-                                                <h3>물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
-                                                <h3>시작가 : <span th:text="${auction.auctionStartPrice}"></span>
-                                                    <span>원</span></h3>
-                                                <h3 th:if="${auction.auctionType.toString()} != 'SEALED'">현재가 : <span th:text="${auction.auctionNowPrice}"></span>
-                                                    <span>원</span></h3>
-                                                <h3>입찰수 : <span th:text="${auction.biddingCount}">0</span>
-                                                    <span>회</span></h3>
-                                                <h3>마감
-                                                    <span th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+                                                <div class="item_detail">
+                                                    <h3 id="itemNameText">물건 이름 : <span th:text="${auction.item.itemName}"></span></h3>
+                                                    <h3>시작가 : <span th:text="${auction.auctionStartPrice}"></span>
+                                                        <span>원</span></h3>
+                                                    <h3 th:if="${auction.auctionType.toString()} != 'SEALED'">현재가 : <span class="product-price" th:text="${auction.auctionNowPrice}"></span>
+                                                        <span>원</span></h3>
+                                                    <h3>입찰수 : <span th:text="${auction.biddingCount}">0</span>
+                                                        <span>회</span></h3>
+                                                    <h3>마감
+                                                        <span th:text="${#temporals.format(auction.auctionEndTime, 'yyyy년 MM월 dd일 HH시 mm분')}">8</span>
+                                                    </h3>
+                                                </div>
                                                 </h3>
-                                            </div>
-                                            </h3>
-                                            <div class="d-flex align-items-center justify-content-between">
-                                                <div class="input-group product-qty">
+                                                <div class="d-flex align-items-center justify-content-between">
+                                                    <div class="input-group product-qty">
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-										</a>
+                                        </a>
                                     </div>
 
                                 </div>
