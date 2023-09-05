@@ -25,7 +25,6 @@
             padding: 20px;
             font-size: 15px;
         }
-
         .view_count {
             text-align: end;
             margin: 0px 20px;
@@ -141,11 +140,15 @@
         }
 
         .btn-primary {
-            background-color: #8fc7f7;
-            opacity: 63%;
-            border: 1px;
+            background-color: #DBDBDB;
+            color : #000000;
+        }
+        .btn-primary:hover{
+            background-color: #C3C7C5;
+            border-color : #DBDBDB;
         }
     </style>
+
 
 </th:block>
 
@@ -395,6 +398,7 @@
                                     <nav
                                             th:with="start=${(reverseBiddingJoinList.number/maxPage)*maxPage + 1}
 			                 ,end=(${(reverseBiddingJoinList.totalPages == 0) ? 1 : (start + (maxPage - 1) < reverseBiddingJoinList.totalPages ? start + (maxPage - 1) : reverseBiddingJoinList.totalPages)})"
+
                                             aria-label="Page navigation example">
                                         <ul class="pagination d-flex justify-content-center">
                                             <li class="page-item"

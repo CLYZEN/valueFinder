@@ -292,6 +292,7 @@ table {
 											<img src="https://source.unsplash.com/random"
 											style="width:100%; height:100%;"
 											th:alt="${auction.item.itemName}">
+
 									</div>
 									<!-- 물품 상세 이미지 -->
 									<div class="swiper mySwiper" style="border-radius:5px;">
@@ -814,23 +815,82 @@ table {
   <script src="/js/splide.min.js"></script>
 	<script th:inline="javascript">
 		let auctionNo = [[${auction.auctionNo}]];
-	function moveReport() {
-		location.href='/auction/report/' + auctionNo;
-	}
-	   var swiper = new Swiper(".mySwiper", {
-		      pagination: {
-		        el: ".swiper-pagination",
-		      },
-		    });
-        document.addEventListener('DOMContentLoaded', function () {
-            var splide = new Splide('.splide');
-            splide.mount();
-        });
-	
-	
+		function moveReport() {
+			location.href='/auction/report/' + [[${auction.auctionNo}]];
+		}
+
+		function moveQuery() {
+			location.href='/auction/query/add/' +  [[${auction.auctionNo}]];
+		}
+
+		var swiper = new Swiper(".mySwiper", {
+			pagination: {
+				el: ".swiper-pagination",
+			},
+		});
+		document.addEventListener('DOMContentLoaded', function () {
+			var splide = new Splide('.splide');
+			splide.mount();
+		});
+
+
+		let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]];
+		function count(type) {
+			// 결과를 표시할 element
+			const resultElement = document.getElementById('sum');
+			const resultElement2 = document.getElementById('price');
+			// 현재 화면에 표시된 값
+			let number = resultElement.value;
+			// 더하기/빼기
+			if (type === 'plus') {
+				number = parseInt(number) + auctionPrice;
+			} else if (type === 'minus') {
+				number = parseInt(number) - auctionPrice;
+			}
+			// 결과 출력
+			resultElement.value = number;
+		}
+
+
+		var remainingTimeElement = document.getElementById("remainTime");
+		var countdownInterval;
+
+		var durationText = remainingTimeElement.textContent.trim();
+		var regex = /[^0-9]/g;
+
+		var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+		var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+		var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+		var Time = (hours * 3600) + (minutes * 60) + seconds;
+
+		var updateTime = setInterval(function() {
+			hours = parseInt(Time/3600);
+			minutes = parseInt((Time%3600) / 60);
+			seconds = Time%60;
+
+			Time--;
+			countdownInterval = setInterval(updateTime, 10000);
+			if([[${auction.remainingTime}]] === '대기중인 경매') {
+				document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
+				return;
+				clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+			} else if([[${auction.remainingTime}]] === '종료된 경매') {
+				document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
+				return;
+				clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+			} else if(Time > 0){
+				document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+			}
+		}, 1000 );
+
+
+
+
 		function bidding() {
+
 			var token = $("meta[name='_csrf']").attr("content");
 			var header = $("meta[name='_csrf_header']").attr("content");
+
 
 			var price = $("#sum").val();
 			var url = '/auction/bidding';
@@ -850,7 +910,7 @@ table {
 				success: function (result, status, jqXHR) {
 					// 요청 성공 처리
 					alert('등록 완료');
-					location.href = document.referrer;
+					window.location.reload();
 				},
 				error: function (jqXHR, status, error) {
 					if (jqXHR.status == '401') {
@@ -858,149 +918,72 @@ table {
 						location.href = '/member/login';
 					} else {
 						alert(jqXHR.responseText);
-						location.href = document.referrer;
+						window.location.reload();
 					}
 
 				}
 			});
 		}
-    
-     //찜 버튼에 대한 기능
-	function pushWish(heartIcon) {
-		 /*
-		  색있는 하트: <i class="fa-solid fa-heart"></i>
-          빈 하트: <i class="fa-regular fa-heart"></i>
-		 */
-        var isWished = heartIcon.classList.contains( 'be');
-        var auctionNo = heartIcon.getAttribute('data-auctionno');
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
-        var method = isWished ? "DELETE" : "POST";
-
-        
-        $.ajax({
-            url: url,
-            type: method,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            data: JSON.stringify({ auctionNo: auctionNo }),
-            contentType: "application/json",
-            success: function(result) {
-                // 요청 성공 처리
-                console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
-                // 찜 상태 토글
-                	if(method == "DELETE") {
-                		heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
-                    	heartIcon.classList.toggle('be'); // 찜 미완료
-                	} else {
-                		heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
-                        heartIcon.classList.toggle('bi'); //찜 완료
-                	}
-                window.location.reload(true);
-            },
-            error: function(jqXHR, status, error) {
-                // 오류 처리
-                console.log(jqXHR.responseText);
-                alert("에러가 발생했습니다. 다시 시도해 주세요.");
-               
-            }
-        });
-        
-    }  
-		document.addEventListener('DOMContentLoaded', function () {
-			var splide = new Splide('.splide');
-			splide.mount();
-		});
-
-	let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]]
-	function count(type) {
-	    // 결과를 표시할 element
-	    const resultElement = document.getElementById('sum');
-	    const resultElement2 = document.getElementById('price');
-	    // 현재 화면에 표시된 값
-	    let number = resultElement.value;
-	    // 더하기/빼기
-	    if (type === 'plus') {
-	        number = parseInt(number) + auctionPrice;
-	    } else if (type === 'minus') {
-	        number = parseInt(number) - auctionPrice;
-	    }
-	    // 결과 출력
-	    resultElement.value = number;
-	}
-	
-	var remainingTimeElement = document.getElementById("remainTime");
-	var countdownInterval;
-
-	    var durationText = remainingTimeElement.textContent.trim();
-	    var regex = /[^0-9]/g;
-
-	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
-	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
-	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
-	    var Time = (hours * 3600) + (minutes * 60) + seconds;
-
-	    var updateTime = setInterval(function() {
-	    	
-	    	hours = parseInt(Time/3600);
-	    	minutes = parseInt((Time%3600) / 60);
-	    	seconds = Time%60;
-	    	
-	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
-	    	Time--;
-	    	
-	    	if(Time < 0 ){
-	    		clearInterval(updateTime);
-	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
-	    	}
-	    },1000);
-	    
-
-	    
+		function loadPage(pageNumber) {
 
 
-		function moveQuery() {
-			location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+			$.ajax({
+				url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+				type: 'GET',
+				success: function(response) {
+					$('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+				}
+			});
 		}
 
+		//찜 버튼에 대한 기능
+		function pushWish(heartIcon) {
+			/*
+             색있는 하트: <i class="fa-solid fa-heart"></i>
+             빈 하트: <i class="fa-regular fa-heart"></i>
+            */
+			var isWished = heartIcon.classList.contains( 'be');
+			var auctionNo = heartIcon.getAttribute('data-auctionno');
+			var token = $("meta[name='_csrf']").attr("content");
+			var header = $("meta[name='_csrf_header']").attr("content");
+			var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
+			var method = isWished ? "DELETE" : "POST";
 
-		   function loadPage(pageNumber) {
-		    	
-		        $.ajax({
-		            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-		            type: 'GET',
-		            success: function(response) {
-		                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
-		            }
-		        });
-		    }
-		      
-		      function loadItemPage(pageNumber) {
-		    	    $.ajax({
-		    	    	 url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-		    	        type: 'GET',
-		    	        success: function(response) {
-		    	            $('#otherItemModal .item-modal-body').html($(response).find('.item-modal-body').html());
-		    	        }
-		    	    });
-		    	}
-		      
-		      function loadQueryPage(pageNumber) {
-		    	    $.ajax({
-		    	    	 url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-		    	        type: 'GET',
-		    	        success: function(response) {
-		    	            $('#myTabContent .query').html($(response).find('.query').html());
-		    	        }
-		    	    });
-		    	}
-		      
-		      function moveDetail(auctionQueryNo) {
-		          location.href='/auction/query/detail/' + auctionQueryNo;
-		      }
 
+			function moveQuery() {
+				location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+			}
+
+			$.ajax({
+				url: url,
+				type: method,
+				beforeSend: function(xhr) {
+					xhr.setRequestHeader(header, token);
+				},
+				data: JSON.stringify({ auctionNo: auctionNo }),
+				contentType: "application/json",
+				success: function(result) {
+					// 요청 성공 처리
+					console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
+					// 찜 상태 토글
+					if(method == "DELETE") {
+						heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
+						heartIcon.classList.toggle('be'); // 찜 미완료
+					} else {
+						heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
+						heartIcon.classList.toggle('bi'); //찜 완료
+					}
+					window.location.reload(true);
+				},
+				error: function(jqXHR, status, error) {
+					// 오류 처리
+					console.log(jqXHR.responseText);
+					alert("에러가 발생했습니다. 다시 시도해 주세요.");
+
+				}
+			});
+
+		}
 </script>
 </th:block>
 

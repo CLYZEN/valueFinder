@@ -1,10 +1,12 @@
 <!DOCTYPE html>
+
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
 	layout:decorate="~{layouts/layout1}">
+
 <head>
-<meta name="_csrf" th:content="${_csrf.token}" />
-<meta name="_csrf_header" th:content="${_csrf.headerName}" />
+	<meta name="_csrf" th:content="${_csrf.token}" />
+	<meta name="_csrf_header" th:content="${_csrf.headerName}" />
 </head>
 
 <!-- 각 페이지의 CSS가 작성될 위치 -->
@@ -12,21 +14,10 @@
 	<link rel="stylesheet" href="/css/splide.min.css">
 
 	<style>
-.container-fluid {
-	max-width: 1600px;
-}
+		.container-fluid {
+			max-width: 1600px;
+		}
 
-.splide__arrow--prev {
-	left: -50px;
-}
-
-.splide__arrow--next {
-	right: -50px;
-}
-
-.splide__pagination--ltr {
-	top: 190px;
-}
 
 /* 더보기버튼 */
 .btn-primary {
@@ -66,9 +57,8 @@
 	text-align: left;
 }
 
-.nav-link {
-	padding: 0.5rem 1rem;
-}
+
+
 
 /*하단 css*/
 table {
@@ -77,15 +67,15 @@ table {
 	border-bottom: 1px solid;
 	width: 100%;
 }
+		#myTab {
+			margin: 0px 100px;
+		}
 
-#myTab {
-	margin: 0px 100px;
-}
+		.tab-content {
+			margin: 0px 100px;
+			padding: 30px;
+		}
 
-.tab-content {
-	margin: 0px 100px;
-	padding: 30px;
-}
 
 /* 찜 전 하트 색 */
 .wishful {
@@ -98,65 +88,68 @@ table {
 	text-align: center;
 }
 
-.box2 th {
-	background-color: #D9D9D9;
-	text-align: center;
-}
+		.box2 th {
+			background-color: #D9D9D9;
+			text-align: center;
+		}
 
-.box2 td {
-	text-align: center;
-}
+		.box2 td {
+			text-align: center;
+		}
 
-.active {
-	border-color: #52A8E0 #52A8E0 white !important;
-}
+		.active {
+			border-color: #52A8E0 #52A8E0 white !important;
+		}
 
-.box2 {
-	top: 0;
-	left: 0;
-	height: 150px;
-	overflow-y: scroll;
-	margin: 0 auto;
-	width: 100%;
-	float: left;
-	border-collapse: collapse;
-	border: 2px solid #52A8E0;
-}
+		.box2 {
+			top: 0;
+			left: 0;
+			height: 150px;
+			overflow-y: scroll;
+			margin: 0 auto;
+			width: 100%;
+			float: left;
+			border-collapse: collapse;
+			border: 2px solid #52A8E0;
+		}
 
-#myform fieldset {
-	display: inline-block;
-	direction: rtl;
-	border: 0;
-}
+		#myform fieldset {
+			display: inline-block;
+			direction: rtl;
+			border: 0;
+		}
 
-#myform fieldset legend {
-	text-align: right;
-}
+		#myform fieldset legend {
+			text-align: right;
+		}
 
-#myform input[type=radio] {
-	display: none;
-}
+		#myform input[type=radio] {
+			display: none;
+		}
 
-#myform label {
-	font-size: 3em;
-	color: transparent;
-	text-shadow: 0 0 0 #f0f0f0;
-}
+		#myform label {
+			font-size: 3em;
+			color: transparent;
+			text-shadow: 0 0 0 #f0f0f0;
+		}
+
 
 #myform input[type=radio]:checked ~ label {
 	text-shadow: 0 0 0 rgba(250, 208, 0, 0.99);
 }
 
-#reviewContents {
-	width: 100%;
-	height: 150px;
-	padding: 10px;
-	box-sizing: border-box;
-	border: solid 1.5px #D3D3D3;
-	border-radius: 5px;
-	font-size: 16px;
-	resize: none;
-}
+
+		#reviewContents {
+			width: 100%;
+			height: 150px;
+			padding: 10px;
+			box-sizing: border-box;
+			border: solid 1.5px #D3D3D3;
+			border-radius: 5px;
+			font-size: 16px;
+			resize: none;
+		}
+
 
 .review-message {
 	margin: 10px 0;
@@ -198,6 +191,7 @@ table {
 
 	<div class="row">
 		<div class="col-sm-1"></div>
+
 
 		<div class="col-sm-10">
 
@@ -309,9 +303,11 @@ table {
 									<!-- 물품 상세 이미지 -->
 								</div>
 
+
 								<div class="col-sm-2"></div>
 
 								<div class="col-sm-5">
+
 
 									<!-- 상품 상태설명 시작 -->
 									<table class="table" style="width: 100%">
@@ -350,6 +346,7 @@ table {
 												<td scope="col"
 													th:if="${auction.auctionStatus.toString().equals('PENDING')}">경매대기</td>
 											</tr>
+
 
 											<tr>
 												<th scope="row">판매자 닉네임</th>
@@ -428,10 +425,12 @@ table {
 													<nav
 														th:with="start=${(auctionReview.number/maxPage)*maxPage + 1}
 			                									 ,end=(${(auctionReview.totalPages == 0) ? 1 : (start + (maxPage - 1) < auctionReview.totalPages ? start + (maxPage - 1) : auctionReview.totalPages)})"
+
 														aria-label="Page navigation example">
 														<ul class="pagination d-flex justify-content-center">
 															<li class="page-item"
 																th:each="page: ${#numbers.sequence(start, start)}"
+
 																th:classappend="${auctionReview.number eq page }?'active':''"><a
 																class="page-link" th:onclick="'loadPage(' + ${0} +')'">이전</a></li>
 
@@ -447,6 +446,7 @@ table {
 																th:classappend="${auctionReview.number eq page - 1}?'active':''"><a
 																class="page-link"
 																th:onclick="'loadPage(' + ${auctionReview.totalPages - 1} +')'">다음</a>
+
 															</li>
 														</ul>
 													</nav>
@@ -454,12 +454,15 @@ table {
 
 												<div class="modal-footer d-flex justify-content-center">
 													<button type="button" class="btn btn-secondary "
+
 														data-bs-dismiss="modal">닫기</button>
+
 
 												</div>
 											</div>
 										</div>
 									</div>
+
 									<!-- 모달 종료 -->
 
 									<!-- 상품상태설명 end -->
@@ -829,6 +832,7 @@ table {
 
 
 
+
 	<!-- 각 페이지의 스크립트가 작성될 위치 -->
 	<th:block layout:fragment="script">
 		<script
@@ -837,172 +841,177 @@ table {
 			crossorigin="anonymous"></script>
 		<script src="/js/splide.min.js"></script>
 		<script th:inline="javascript">
-	//신고하기
-	function moveReport() {
-		location.href='/auction/report/' + [[${auction.auctionNo}]];
-	}
-	   var swiper = new Swiper(".mySwiper", {
-		      pagination: {
-		        el: ".swiper-pagination",
-		      },
-		    });
-        document.addEventListener('DOMContentLoaded', function () {
-            var splide = new Splide('.splide');
-            splide.mount();
-        });
+			let auctionNo = [[${auction.auctionNo}]];
+			function moveReport() {
+				location.href='/auction/report/' + [[${auction.auctionNo}]];
+			}
+
+			function moveQuery() {
+				location.href='/auction/query/add/' +  [[${auction.auctionNo}]];
+			}
+
+			var swiper = new Swiper(".mySwiper", {
+				pagination: {
+					el: ".swiper-pagination",
+				},
+			});
+			document.addEventListener('DOMContentLoaded', function () {
+				var splide = new Splide('.splide');
+				splide.mount();
+			});
+
+
+			let auctionPrice = [[${new java.math.BigDecimal(auction.auctionStartPrice * 0.0005).setScale(0, T(java.math.BigDecimal).ROUND_HALF_UP)*100	}]];
+			function count(type) {
+				// 결과를 표시할 element
+				const resultElement = document.getElementById('sum');
+				const resultElement2 = document.getElementById('price');
+				// 현재 화면에 표시된 값
+				let number = resultElement.value;
+				// 더하기/빼기
+				if (type === 'plus') {
+					number = parseInt(number) + auctionPrice;
+				} else if (type === 'minus') {
+					number = parseInt(number) - auctionPrice;
+				}
+				// 결과 출력
+				resultElement.value = number;
+			}
+
+
+			var remainingTimeElement = document.getElementById("remainTime");
+			var countdownInterval;
+
+			var durationText = remainingTimeElement.textContent.trim();
+			var regex = /[^0-9]/g;
+
+			var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
+			var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
+			var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
+			var Time = (hours * 3600) + (minutes * 60) + seconds;
+
+			var updateTime = setInterval(function() {
+				hours = parseInt(Time/3600);
+				minutes = parseInt((Time%3600) / 60);
+				seconds = Time%60;
+
+				Time--;
+				countdownInterval = setInterval(updateTime, 10000);
+				if([[${auction.remainingTime}]] === '대기중인 경매') {
+					document.getElementById("remainTime").innerHTML = "대기중인 경매 입니다.";
+					return;
+					clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+				} else if([[${auction.remainingTime}]] === '종료된 경매') {
+					document.getElementById("remainTime").innerHTML = "종료된 경매입니다.";
+					return;
+					clearInterval(updateTime); // 함수를 종료하기 위해 clearInterval을 호출합니다.
+				} else if(Time > 0){
+					document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
+				}
+			}, 1000 );
 
 
 
-        let auctionPrice = [[${auction.auctionStartPrice}]];
-        function count(type) {
-            // 결과를 표시할 element
-            const resultElement = document.getElementById('sum');
-            const resultElement2 = document.getElementById('price');
-            // 현재 화면에 표시된 값
-            let number = resultElement.value;
-            // 더하기/빼기
-            if (type === 'plus') {
-                number = parseInt(number) + auctionPrice;
-            } else if (type === 'minus') {
-                number = parseInt(number) - auctionPrice;
-            }
-            // 결과 출력
-            resultElement.value = number;
-        }
 
-        
-        var remainingTimeElement = document.getElementById("remainTime");
-    	var countdownInterval;
+			function bidding() {
 
-    	    var durationText = remainingTimeElement.textContent.trim();
-    	    var regex = /[^0-9]/g;
-
-    	    var hours = parseInt((durationText.match(/\d+(?=시)/) || [])[0] || 0);
-    	    var minutes = parseInt((durationText.match(/\d+(?=분)/) || [])[0] || 0);
-    	    var seconds = parseInt((durationText.match(/\d+(?=초)/) || [])[0] || 0);
-    	    var Time = (hours * 3600) + (minutes * 60) + seconds;
-
-    	    var updateTime = setInterval(function() {
-    	    	
-    	    	hours = parseInt(Time/3600);
-    	    	minutes = parseInt((Time%3600) / 60);
-    	    	seconds = Time%60;
-    	    	
-    	    	document.getElementById("remainTime").innerHTML = "남은시간 : " + hours + "시간" + minutes + "분" + seconds + "초";
-    	    	Time--;
-    	    	
-    	    	if(Time < 0 ){
-    	    		clearInterval(updateTime);
-    	    		document.getElementById("remainTime").innerHTML = "종료된 경매 입니다.";
-    	    	}
-    	    },1000);
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
 
 
-        let auctionNo = [[${auction.auctionNo}]];
+				var price = $("#sum").val();
+				var url = '/auction/bidding';
+				var method = "POST";
 
-        function bidding() {
-            var token = $("meta[name='_csrf']").attr("content");
-            var header = $("meta[name='_csrf_header']").attr("content");
+				$.ajax({
+					url: url,
+					type: method,
+					beforeSend: function (xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					data: JSON.stringify({
+						auctionNo: auctionNo,
+						price: price
+					}),
+					contentType: "application/json",
+					success: function (result, status, jqXHR) {
+						// 요청 성공 처리
+						alert('등록 완료');
+						window.location.reload();
+					},
+					error: function (jqXHR, status, error) {
+						if (jqXHR.status == '401') {
+							alert('로그인 후 이용해주세요.');
+							location.href = '/member/login';
+						} else {
+							alert(jqXHR.responseText);
+							window.location.reload();
+						}
 
-
-            var price = $("#sum").val();
-            var url = '/auction/bidding';
-            var method = "POST";
-
-            $.ajax({
-                url: url,
-                type: method,
-                beforeSend: function (xhr) {
-                    xhr.setRequestHeader(header, token);
-                },
-                data: JSON.stringify({
-                    auctionNo: auctionNo,
-                    price: price
-                }),
-                contentType: "application/json",
-                success: function (result, status, jqXHR) {
-                    // 요청 성공 처리
-                    alert('등록 완료');
-                    location.href = document.referrer;
-                },
-                error: function (jqXHR, status, error) {
-                    if (jqXHR.status == '401') {
-                        alert('로그인 후 이용해주세요.');
-                        location.href = '/member/login';
-                    } else {
-                        alert(jqXHR.responseText);
-                        location.href = document.referrer;
-                    }
-
-                }
-            });
-        }
-
-      function loadPage(pageNumber) {
-    	
-    	
-        $.ajax({
-            url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
-            type: 'GET',
-            success: function(response) {
-                $('#reviewModal .modal-body').html($(response).find('.modal-body').html());
-            }
-        });
-    }
-
-	//찜 버튼에 대한 기능
-	function pushWish(heartIcon) {
-		 /*
-		  색있는 하트: <i class="fa-solid fa-heart"></i>
-          빈 하트: <i class="fa-regular fa-heart"></i>
-		 */
-        var isWished = heartIcon.classList.contains( 'be');
-        var auctionNo = heartIcon.getAttribute('data-auctionno');
-        var token = $("meta[name='_csrf']").attr("content");
-        var header = $("meta[name='_csrf_header']").attr("content");
-        var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
-        var method = isWished ? "DELETE" : "POST";
+					}
+				});
+			}
+			function loadPage(pageNumber) {
 
 
-        function moveQuery() {
-            location.href='/auction/query/add/' + [[${auction.auctionNo}]];
-        }
-        
-        $.ajax({
-            url: url,
-            type: method,
-            beforeSend: function(xhr) {
-                xhr.setRequestHeader(header, token);
-            },
-            data: JSON.stringify({ auctionNo: auctionNo }),
-            contentType: "application/json",
-            success: function(result) {
-                // 요청 성공 처리
-                console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
-                // 찜 상태 토글
-                	if(method == "DELETE") {
-                		heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
-                    	heartIcon.classList.toggle('be'); // 찜 미완료
-                	} else {
-                		heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
-                        heartIcon.classList.toggle('bi'); //찜 완료
-                	}
-                window.location.reload(true);
-            },
-            error: function(jqXHR, status, error) {
-                // 오류 처리
-                console.log(jqXHR.responseText);
-                alert("에러가 발생했습니다. 다시 시도해 주세요.");
-               
-            }
-        });
-        
-    }
-	function moveQuery() {
-		location.href = '/auction/query/add/' + [[${auction.auctionNo}]];
-	}
+				$.ajax({
+					url: '/auction/detail/' + [[${auctionNo}]] + '/' + pageNumber,
+					type: 'GET',
+					success: function(response) {
+						$('#reviewModal .modal-body').html($(response).find('.modal-body').html());
+					}
+				});
+			}
+
+			//찜 버튼에 대한 기능
+			function pushWish(heartIcon) {
+				/*
+                 색있는 하트: <i class="fa-solid fa-heart"></i>
+                 빈 하트: <i class="fa-regular fa-heart"></i>
+                */
+				var isWished = heartIcon.classList.contains( 'be');
+				var auctionNo = heartIcon.getAttribute('data-auctionno');
+				var token = $("meta[name='_csrf']").attr("content");
+				var header = $("meta[name='_csrf_header']").attr("content");
+				var url = isWished ? "/deleteWish" : "/addWish"; //삼항연산자
+				var method = isWished ? "DELETE" : "POST";
+
+
+				function moveQuery() {
+					location.href='/auction/query/add/' + [[${auction.auctionNo}]];
+				}
+
+				$.ajax({
+					url: url,
+					type: method,
+					beforeSend: function(xhr) {
+						xhr.setRequestHeader(header, token);
+					},
+					data: JSON.stringify({ auctionNo: auctionNo }),
+					contentType: "application/json",
+					success: function(result) {
+						// 요청 성공 처리
+						console.log("찜 " + (isWished ? "취소" : "추가") + "성공");
+						// 찜 상태 토글
+						if(method == "DELETE") {
+							heartIcon.innerHTML = "<i class='fa-regular fa-heart'></i>";
+							heartIcon.classList.toggle('be'); // 찜 미완료
+						} else {
+							heartIcon.innerHTML = "<i class='fa-solid fa-heart'></i>";
+							heartIcon.classList.toggle('bi'); //찜 완료
+						}
+						window.location.reload(true);
+					},
+					error: function(jqXHR, status, error) {
+						// 오류 처리
+						console.log(jqXHR.responseText);
+						alert("에러가 발생했습니다. 다시 시도해 주세요.");
+
+					}
+				});
+
+			}
     </script>
-
 
 	</th:block>
 </html>

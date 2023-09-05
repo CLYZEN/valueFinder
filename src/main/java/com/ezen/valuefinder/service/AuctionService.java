@@ -215,7 +215,7 @@ public class AuctionService {
         reverseBidding.setCategory(reverseAuctionFormDto.getCategory());
         reverseBidding.setReverseBiddingCount(0);
         reverseBidding.setReversebidAuctionStatus(ReversebidAuctionStatus.PROGRESS);
-
+        reverseBidding.setReverseBiddingCount(0);
         Member member = memberRepository.findByEmail(email);
 
         reverseBidding.setMember(member);
