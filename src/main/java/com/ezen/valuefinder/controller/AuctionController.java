@@ -130,6 +130,14 @@ public class AuctionController {
 
         return "auction/enter/enterModifyForm";
     }
+
+    @GetMapping(value = "/auction/reversebid/enter/{bidno}")
+    public String enterDetail(Model model, @PathVariable("bidno") Long bidno,Authentication authentication) {
+        ReversebidEnterDto reversebidEnterDto = reversebidService.getReversebidDtl(bidno);
+
+        model.addAttribute("bid", reversebidEnterDto);
+        return "/auction/enter/enter";
+    }
     @GetMapping(value = "/auction/reverse/add")
     public String addReverseItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
