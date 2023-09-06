@@ -21,7 +21,7 @@ public class AuctionQuery extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionQueryNo; // 경매문의식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 

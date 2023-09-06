@@ -19,7 +19,7 @@ public class AuctionReview extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member; // 회원
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 

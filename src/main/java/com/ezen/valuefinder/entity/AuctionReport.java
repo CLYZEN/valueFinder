@@ -16,7 +16,7 @@ public class AuctionReport extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long auctionReportNo; // 경매신고식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매식별자
 

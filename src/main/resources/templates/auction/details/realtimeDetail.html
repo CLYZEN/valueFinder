@@ -210,7 +210,7 @@ table {
                 <path fill-rule="evenodd"
 						d="M6.776 1.553a.5.5 0 0 1 .671.223l3 6a.5.5 0 0 1 0 .448l-3 6a.5.5 0 1 1-.894-.448L9.44 8 6.553 2.224a.5.5 0 0 1 .223-.671z" />
             </svg>
-				<a href="/">공개입찰경매</a>
+				<a href="/">실시간경매</a>
 
 				<div class="location">
 					<h3>공개입찰경매</h3>
@@ -286,16 +286,16 @@ table {
 								<div class="col-sm-5" style="height:70%;">
 									<!-- 대표이미지 -->
 									<div class="banner-ad block-1" style="place-self: center;">
-										<img src="https://source.unsplash.com/random"
+										<img th:src="${auction.item.itemImgList[0].itemImageUrl}"
 											style="width: 100%; height: 100%;"
 											th:alt="${auction.item.itemName}">
 									</div>
 									<!-- 물품 상세 이미지 -->
 									<div class="swiper mySwiper">
 										<div class="swiper-wrapper" style="margin-top: 10px; width:50%; height:50%;">
-											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
-											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
-											<div class="swiper-slide"><img src="https://source.unsplash.com/random" style="height:100%;"></div>
+											<th:block th:each="img : ${auction.item.itemImgList}">
+												<div class="swiper-slide"><img th:src="${img.itemImageUrl}" style="height:100%;"></div>
+											</th:block>
 										</div>
 										<div class="swiper-pagination"></div>
 									</div>
@@ -352,7 +352,7 @@ table {
 												<td scope="col">[[${auction.item.member.nickname}]]
 													<div style="float: right;">
 														<button type="button" class="btn btn-primary"
-															data-bs-toggle="modal" data-bs-target="#otherItemModal">후기</button>
+															data-bs-toggle="modal" data-bs-target="#reviewModal">후기</button>
 														<button type="button" class="btn btn-primary"
 															onclick='moveReport()'>신고</button>
 												</td>

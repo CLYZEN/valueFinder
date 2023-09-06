@@ -17,7 +17,7 @@ public class SuccessBidding extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long successBiddingNo; // 낙찰식별자
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 

@@ -19,7 +19,7 @@ public class Bidding extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long biddingNo; // 입찰식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 

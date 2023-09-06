@@ -17,7 +17,7 @@ public class Wish extends BaseEntity {
     @Column(name = "wish_no")
     private Long wishNo; // 찜 식별자
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.REMOVE)
     @JoinColumn(name = "auction_no")
     private Auction auction; // 경매
 

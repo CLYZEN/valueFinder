@@ -296,19 +296,16 @@
                                 <div class="col-sm-5">
                                     <!-- 대표이미지 -->
                                     <div class="banner-ad block-1" style="place-self: center;">
-                                        <img src="https://source.unsplash.com/random"
+                                        <img th:src="${auction.item.itemImgList[0].itemImageUrl}"
                                              style="width:100%; height:100%;"
                                              th:alt="${auction.item.itemName}">
                                     </div>
                                     <!-- 물품 상세 이미지 -->
                                     <div class="swiper mySwiper">
                                         <div class="swiper-wrapper" style="margin-top: 10px; width:50%; height:50%;">
-                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
-                                                                           style="height:100%;"></div>
-                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
-                                                                           style="height:100%;"></div>
-                                            <div class="swiper-slide"><img src="https://source.unsplash.com/random"
-                                                                           style="height:100%;"></div>
+                                            <th:block th:each="img : ${auction.item.itemImgList}">
+                                                <div class="swiper-slide"><img th:src="${img.itemImageUrl}" style="height:100%;"></div>
+                                            </th:block>
                                         </div>
                                         <div class="swiper-pagination"></div>
                                     </div>
@@ -368,7 +365,7 @@
                                             <td scope="col">[[${auction.item.member.nickname}]]
                                                 <div style="float: right;">
                                                     <button type="button" class="btn btn-primary"
-                                                            data-bs-toggle="modal" data-bs-target="#otherItemModal">후기
+                                                            data-bs-toggle="modal" data-bs-target="#reviewModal">후기
                                                     </button>
                                                     <button type="button" class="btn btn-primary"
                                                             onclick='moveReport()'>신고
@@ -639,6 +636,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- 판매자 다른물품 모달 -->
 
             <div class="container text-center">
