@@ -96,10 +96,14 @@ public class ReversebidService {
         Item item = new Item();
         item.setMember(member);
         item.setCategory(reverseBidding.getCategory());
+        item.setItemDetail(reversebidEnterDto.getDetail());
+        item.setItemName(reversebidEnterDto.getTitle());
+        item.setCategory(reverseBidding.getCategory());
         itemRepository.save(item);
 
         ReverseBiddingJoin reverseBiddingJoin = new ReverseBiddingJoin();
         reverseBiddingJoin.setMember(member);
+        reverseBiddingJoin.setSuggestPrice(reversebidEnterDto.getPrice());
         reverseBiddingJoin.setReverseBidding(reverseBidding);
         reverseBiddingJoin.setItem(item);
 
