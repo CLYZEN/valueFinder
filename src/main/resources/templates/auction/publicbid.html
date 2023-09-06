@@ -197,7 +197,7 @@
                                             <figure>
                                                 <a th:href="'/auction/detail/'+ ${auction.auctionNo}"
                                                    title="Product Title"> <img
-                                                        src="images/thumb-bananas.png" class="tab-image">
+                                                        th:src="${auction.item.itemImgList[0].itemImageUrl}" class="tab-image">
                                                 </a>
                                             </figure>
 

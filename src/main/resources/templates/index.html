@@ -156,7 +156,7 @@
                                                 <figure>
                                                     <a th:href="'/auction/detail/'+ ${popular.auctionNo}"
                                                        title="Product Title">
-                                                        <img src="images/thumb-bananas.png" class="tab-image">
+                                                        <img th:src="${popular.item.itemImgList[0].itemImageUrl}" class="tab-image">
                                                     </a>
                                                 </figure>
                                                 <button class="btn2 d-flex justify-content-center"
@@ -246,7 +246,7 @@
                                                 <figure>
                                                     <a th:href="'/auction/detail/'+ ${last.auctionNo}"
                                                        title="Product Title">
-                                                        <img src="images/thumb-bananas.png" class="tab-image">
+                                                        <img th:src="${last.item.itemImgList[0].itemImageUrl}" class="tab-image">
                                                     </a>
                                                 </figure>
                                                 <button class="btn2 d-flex justify-content-center"
@@ -336,7 +336,7 @@
                                                 <figure>
                                                     <a th:href="'/auction/detail/'+ ${newauction.auctionNo}"
                                                        title="Product Title">
-                                                        <img src="https://source.unsplash.com/random" class="tab-image">
+                                                        <img th:src="${newauction.item.itemImgList[0].itemImageUrl}" class="tab-image">
                                                     </a>
                                                 </figure>
                                                 <button class="btn2 d-flex justify-content-center"

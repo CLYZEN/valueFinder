@@ -147,7 +147,7 @@
                                             <div class="product-item" th:onclick="'javascript:moveDetail(' + ${auction.auctionNo} +')'" style="cursor: pointer">
                                                 <figure>
                                                     <a th:href="'/auction/detail/'+ ${auction.auctionNo}" title="Product Title">
-                                                        <img src="images/thumb-bananas.png" class="tab-image">
+                                                        <img th:src="${auction.item.itemImgList[0].itemImageUrl}" class="tab-image">
                                                     </a>
                                                 </figure>
                                                 <button class="btn2 d-flex justify-content-center"
