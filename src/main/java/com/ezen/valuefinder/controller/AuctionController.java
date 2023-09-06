@@ -354,7 +354,7 @@ public class AuctionController {
 
     //참가등록 디테일 페이지
     @GetMapping(value = "/auction/reversebid/enter/details/{reverseBiddingJoinNo}")
-    public String enterDetails(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo) {
+    public String enterDetails(Model model, @PathVariable("reverseBiddingJoinNo") Long reverseBiddingJoinNo,Authentication authentication) {
 
         try {
 
