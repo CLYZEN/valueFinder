@@ -473,7 +473,7 @@ public class MemberController {
 				
 		}
 		
-		return "/member/querydetails";
+		return "member/querydetails";
 		
 		
 	}

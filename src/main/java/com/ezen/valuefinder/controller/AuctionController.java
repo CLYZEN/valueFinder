@@ -79,7 +79,7 @@ public class AuctionController {
         List<Category> categoryList = auctionService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-        return "/auction/form/normalitemform";
+        return "auction/form/normalitemform";
     }
 
     @PostMapping(value = "/auction/add")
@@ -91,7 +91,7 @@ public class AuctionController {
             List<Category> categoryList = auctionService.getCategoryList();
             model.addAttribute("categoryList", categoryList);
             model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-            return "/auction/form/normalitemform";
+            return "auction/form/normalitemform";
         }
 
         if (itemImgFiles.get(0).isEmpty()) {
@@ -99,7 +99,7 @@ public class AuctionController {
             List<Category> categoryList = auctionService.getCategoryList();
             model.addAttribute("categoryList", categoryList);
             model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-            return "/auction/form/normalitemform";
+            return "auction/form/normalitemform";
         }
         try {
             auctionService.createAuction(normalAuctionFormDto, itemImgFiles, principalDetails.getUsername());
@@ -119,7 +119,7 @@ public class AuctionController {
         List<Category> categoryList = auctionService.getCategoryList();
         model.addAttribute("reverseAuctionFromDto", new ReverseAuctionFormDto());
         model.addAttribute("categoryList", categoryList);
-        return "/auction/form/reverseitemform";
+        return "auction/form/reverseitemform";
     }
 
     @PostMapping(value = "/auction/reverse/add")
@@ -192,22 +192,22 @@ public class AuctionController {
         model.addAttribute("remainingTime", auction.getRemainingTime());
 
         if (auction.getAuctionType() == AuctionType.PUBLIC) {
-            return "/auction/details/publicDetail";
+            return "auction/details/publicDetail";
         } else if (auction.getAuctionType() == AuctionType.REALTIME) {
-            return "/auction/details/realtimeDetail";
+            return "auction/details/realtimeDetail";
         } else {
-            return "/auction/details/sealedDetail";
+            return "auction/details/sealedDetail";
         }
     }
 
     @GetMapping(value = "/auction/reversebid/enter/add")
     public String enterQuery() {
-        return "/auction/enter/enterForm";
+        return "auction/enter/enterForm";
     }
 
     @GetMapping(value = "/auction/report")
     public String reportAuction() {
-        return "/auction/report";
+        return "auction/report";
     }
 
 
@@ -221,7 +221,7 @@ public class AuctionController {
         model.addAttribute("bid", reverseBidding);
         model.addAttribute("member", member);
 
-        return "/auction/enter/enterForm";
+        return "auction/enter/enterForm";
     }
 
     @PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
@@ -236,7 +236,7 @@ public class AuctionController {
             model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
             model.addAttribute("bid", reverseBidding);
             model.addAttribute("member", member);
-            return "/auction/enter/enterForm";
+            return "auction/enter/enterForm";
         }
         try {
             reversebidService.saveReversebidEnter(reversebidEnterDto, member, bidno, itemImgFiles);
@@ -257,7 +257,7 @@ public class AuctionController {
         ReverseBiddingJoin reverseBiddingJoin = reversebidService.getReversebidJoinById(bidno);
 
         model.addAttribute("bid", reverseBiddingJoin);
-        return "/auction/enter/enter";
+        return "auction/enter/enter";
     }
 
     @PostMapping(value = "/auction/review/add/{auctionNo}")

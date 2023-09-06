@@ -96,7 +96,7 @@ public class AuctionQueryController {
             return "auction/query/queryForm";
         }
 
-        return "/auction/query/query";
+        return "auction/query/query";
     }
 
     @DeleteMapping("/auction/query/{auctionQueryNo}/delete")
@@ -112,7 +112,7 @@ public class AuctionQueryController {
 
     @GetMapping(value = "/auction/query")
     public String queryDetail() {
-        return "/auction/query/query";
+        return "auction/query/query";
     }
 
 }
