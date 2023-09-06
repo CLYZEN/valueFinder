@@ -81,7 +81,7 @@ public class AuctionController {
         List<Category> categoryList = auctionService.getCategoryList();
         model.addAttribute("categoryList", categoryList);
         model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-        return "/auction/form/normalitemform";
+        return "auction/form/normalitemform";
     }
 
     @PostMapping(value = "/auction/add")
@@ -93,7 +93,7 @@ public class AuctionController {
             List<Category> categoryList = auctionService.getCategoryList();
             model.addAttribute("categoryList", categoryList);
             model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-            return "/auction/form/normalitemform";
+            return "auction/form/normalitemform";
         }
 
         if (itemImgFiles.get(0).isEmpty()) {
@@ -101,7 +101,7 @@ public class AuctionController {
             List<Category> categoryList = auctionService.getCategoryList();
             model.addAttribute("categoryList", categoryList);
             model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
-            return "/auction/form/normalitemform";
+            return "auction/form/normalitemform";
         }
         try {
             auctionService.createAuction(normalAuctionFormDto, itemImgFiles, principalDetails.getUsername());
@@ -111,7 +111,7 @@ public class AuctionController {
             model.addAttribute("categoryList", categoryList);
             model.addAttribute("normalAuctionFromDto", new NormalAuctionFormDto());
             model.addAttribute("errorMessage", "등록 중 오류 발생");
-            return "/auction/form/normalitemform";
+            return "auction/form/normalitemform";
         }
         return "redirect:/";
     }
@@ -125,17 +125,17 @@ public class AuctionController {
             model.addAttribute("reversebidEnterDto", reversebidEnterDto);
         } catch (Exception e) {
             model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
-            return "/auction/enter/enter";
+            return "auction/enter/enter";
         }
 
-        return "/auction/enter/enterModifyForm";
+        return "auction/enter/enterModifyForm";
     }
     @GetMapping(value = "/auction/reverse/add")
     public String addReverseItem(Model model) {
         List<Category> categoryList = auctionService.getCategoryList();
         model.addAttribute("reverseAuctionFromDto", new ReverseAuctionFormDto());
         model.addAttribute("categoryList", categoryList);
-        return "/auction/form/reverseitemform";
+        return "auction/form/reverseitemform";
     }
 
     @PostMapping(value = "/auction/reverse/add")
@@ -210,11 +210,11 @@ public class AuctionController {
         model.addAttribute("remainingTime", auction.getRemainingTime());
 
         if (auction.getAuctionType() == AuctionType.PUBLIC) {
-            return "/auction/details/publicDetail";
+            return "auction/details/publicDetail";
         } else if (auction.getAuctionType() == AuctionType.REALTIME) {
-            return "/auction/details/realtimeDetail";
+            return "auction/details/realtimeDetail";
         } else {
-            return "/auction/details/sealedDetail";
+            return "auction/details/sealedDetail";
         }
     }
   
@@ -235,7 +235,7 @@ public class AuctionController {
 			e.printStackTrace();
 			model.addAttribute("errorMessage", "첫번째 이미지는 필수입니다.");
 			model.addAttribute("reversebidEnterDto", reversebidEnterDtod);
-			return "/auction/enter/enterModifyForm";
+			return "auction/enter/enterModifyForm";
 		}
 
 		return "redirect:/";
@@ -268,7 +268,7 @@ public class AuctionController {
 			model.addAttribute("bid", reverseBidding);
 			model.addAttribute("member", member);
 
-			return "/auction/enter/enterForm";
+			return "auction/enter/enterForm";
 		}
 		
 		@PostMapping(value = "/auction/reversebid/enter/add/{bidno}")
@@ -283,7 +283,7 @@ public class AuctionController {
 				model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
 				model.addAttribute("bid", reverseBidding);
 				model.addAttribute("member", member);
-				return "/auction/enter/enterForm";
+				return "auction/enter/enterForm";
 			}
 			try {
 				reversebidService.saveReversebidEnter(reversebidEnterDto, member, bidno, itemImgFiles);
@@ -292,7 +292,7 @@ public class AuctionController {
 				model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
 				model.addAttribute("bid", reverseBidding);
 				model.addAttribute("member", member);
-				return "/auction/enter/enterForm";
+				return "auction/enter/enterForm";
 			}
 
 			return "redirect:/auction/reversebid/detail/" + bidno;
@@ -354,10 +354,10 @@ public class AuctionController {
             model.addAttribute("reversebidEnterDto", reversebidEnterDto);
         } catch (Exception e) {
             model.addAttribute("reversebidEnterDto", new ReversebidEnterDto());
-            return "/auction/enter/enter";
+            return "auction/enter/enter";
         }
 
-        return "/auction/enter/enter";
+        return "auction/enter/enter";
     }
     @GetMapping(value = {"/auction/reversebid/detail/{reverseBiddingNo}", "/auction/reversebid/detail/{reverseBiddingNo}/{page}"})
     public String redetails(Model model, @PathVariable("reverseBiddingNo") Long reverseBiddingNo,

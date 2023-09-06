@@ -112,7 +112,7 @@ public class AuctionQueryController {
 
     @GetMapping(value = "/auction/query")
     public String queryDetail() {
-        return "/auction/query/query";
+        return "auction/query/query";
     }
 
 
@@ -133,7 +133,7 @@ public class AuctionQueryController {
 
         }
 
-        return "/member/querydetails";
+        return "member/querydetails";
 
 
     }
