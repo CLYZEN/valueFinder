@@ -34,7 +34,7 @@ public class ReportController {
         model.addAttribute("member",member); // 지금 접속한 사용자
 
 
-        return "/auction/report";
+        return "auction/report";
     }
 
     //경매 신고글 등록하기

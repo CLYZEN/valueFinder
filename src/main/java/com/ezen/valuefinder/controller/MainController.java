@@ -29,7 +29,7 @@ public class MainController {
 
     @GetMapping(value = "/")
     public String main(Authentication authentication, Model model, Optional<Integer> page) {
-
+/*
         if(isAuthenticated()) {
             PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
             Member member = principalDetails.getMember();
@@ -39,7 +39,7 @@ public class MainController {
                 model.addAttribute("message", "첫 로그인 쿠폰이 발급되었습니다!");
                 return "index";
             }
-        }
+        }*/
         Pageable pageable = PageRequest.of(page.isPresent() ? page.get() : 0, 10);
         Page<Auction> popularList = auctionService.getPopularList(pageable);
         for (Auction auction : popularList) {
