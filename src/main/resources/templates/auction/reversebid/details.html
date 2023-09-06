@@ -378,8 +378,11 @@
                                         <td style="color: blue; cursor: pointer;" th:text=${reverseBiddingJoinList.item.itemName} th:onclick="'javascript:moveEnterDetail(' + ${reverseBiddingJoinList.reverseBiddingJoinNo} +')'"></td>
                                         <td id="price" th:text=${reverseBiddingJoinList.suggestPrice}></td>
                                         <td th:text=${reverseBiddingJoinList.member.nickname}></td>
-                                        <td th:if="${#authentication.principal.username == reverseBidding.member.email && reverseBidding.ReversebidAuctionStatus.toString().equals('PROGRESS')}"
-                                            onclick="pushReverse(this)" th:data-memberid="${reverseBidding.member.memberId}" th:data-reversebiddingno="${reverseBidding.reverseBiddingNo}">낙찰하기</td>
+                                        <td
+                                            onclick="pushReverse(this)" th:data-membe
+
+
+                                            rid="${reverseBidding.member.memberId}" th:data-reversebiddingno="${reverseBidding.reverseBiddingNo}">낙찰하기</td>
                                     </tr>
                                 </table>
                             </div>
