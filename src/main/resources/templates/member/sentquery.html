@@ -250,7 +250,7 @@ td {
 					<tbody>
 						<td th:text="${auctionQuery.auction.auctionNo}"></td>
 						<td><a th:href="'/auction/detail/'+${auctionQuery.auction.auctionNo}" >[[${auctionQuery.auction.item.itemName}]]</a></td>
-						<td><a th:href="'/member/querydetails/'+${auctionQuery.auctionQueryNo}">[[${auctionQuery.auctionQueryDetail}]]</a></td>
+						<td><a th:href="'/auction/query/'+${auctionQuery.auctionQueryNo}">[[${auctionQuery.auctionQueryDetail}]]</a></td>
 						<td th:text="${auctionQuery.auction.item.member.nickname}">5</td>
 						<td th:text="${#temporals.format(auctionQuery.regTime, 'yyyy년 MM월 dd일 HH시 mm분')}">5</td>
 					</tbody>

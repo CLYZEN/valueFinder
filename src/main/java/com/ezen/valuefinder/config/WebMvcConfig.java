@@ -12,6 +12,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     ClassLoader classLoader = getClass().getClassLoader();
     URL url = classLoader.getResource("");
+
     //String uploadPath = url.getPath();
     @Value("${uploadPath}")
     String uploadPath;
