@@ -16,6 +16,9 @@ import com.ezen.valuefinder.entity.ReverseBiddingJoin;
 @Setter
 public class ReversebidEnterDto {
 
+    private String title;
+    private Integer price;
+    private String detail;
     
     private Long reverseBiddingJoinNo;
     
