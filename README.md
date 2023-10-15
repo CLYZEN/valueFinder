@@ -1,6 +1,5 @@
 <img src="./images/logo.png" alt="Logo of the project" align="right">
 
-# 개발중
 
 # valueFinder
 > 사용자의 물건에 가치를 찾아주는 개인간 경매 서비스
