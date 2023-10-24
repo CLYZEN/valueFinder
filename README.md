@@ -63,7 +63,7 @@ ValueFinder는 사용자들이 소유한 물건의 정확한 가치를 찾아주
 
 ### 경매는 어떤식으로 진행되나요?
 
-```
+``` java
 1. Ajax로 Controller에 요청.
 
 function bidding() {
@@ -221,7 +221,7 @@ function bidding() {
 ```
 
 ### 경매에 대한 실시간성은 어떻게 보장하나요 ?
-```
+``` java
 1. 경매를 호출하는 모든 Controller 요청에 해당 메소드 호출하여 실시간성을 보장합니다.
 주기적으로 업데이트 할 수 있으나, AWS FreeTier 서버 스펙을 고려하여 유저가 Auction을 호출하는 경우에만 Update 할 수 있도록 하였습니다.
 
